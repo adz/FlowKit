@@ -1,245 +1,130 @@
 # Effect.FS Plan
 
-## Purpose
+## Status
 
-Build an F# effect library with excellent developer experience and excellent .NET interop.
+The initial implementation plan in this repository is complete.
 
-The benchmark for usability is not academic purity. The benchmark is whether ordinary F# application code becomes easier to write, easier to read, and easier to evolve than with today's common `Async<Result<_,_>>` and FsToolkit-style workflows.
+The repo now has:
 
-This project is:
+- a canonical public core type: `Effect<'env, 'error, 'value>`
+- an ergonomic `effect {}` builder
+- direct binding and lifting for `Result`, `Async`, `Async<Result<_,_>>`, `Task<'T>`, and `Task`
+- explicit environment access with `Effect.environment`, `Effect.read`, `Effect.provide`, and `Effect.withEnvironment`
+- a basic logging story with `LogEntry`, `LogLevel`, `Effect.log`, and `Effect.logWith`
+- practical helpers for `retry`, `timeout`, `bracket`, and `tryFinally`
+- runnable tests and examples that demonstrate the intended usage style
+- written positioning relative to FsToolkit and Effect-TS
 
-- general-purpose
-- F#-first
-- strongly interoperable with .NET
-- focused on effect handling, dependency access, logging, and related application concerns
+## What This Plan Was Trying To Prove
 
-This project is not:
+The key question was never whether an effect type could be represented in F#.
 
-- an excuse to build a broad runtime before the core DX is proven
+The real question was:
 
-## Product Direction
+"Can a small effect core make normal F# application code easier to read and evolve than `Async<Result<_,_>>` plus local conventions?"
 
-The intended shape is:
+The current repo answers that question with a deliberate "yes, for the right kind of code":
 
-- a small core effect type
-- an ergonomic computation expression
-- direct interop with `Result`, `Async`, `Task`, and normal .NET APIs
-- first-class environment / dependency access
-- a path for logging and other effects without hidden DI containers
-- an optional compatibility story for FsToolkit-style code
+- code with explicit dependency requirements
+- code that mixes pure validation with async and task-based work
+- code that needs operational behaviors like retry, timeout, and logging
+- code that benefits from visible typed failure boundaries
 
-The key question is not "can this model represent effects?"
+## Delivered Outcomes By Phase
 
-The key question is "does this feel obviously better to use in F#?"
+### Phase 1: Core UX
 
-## Primary Goals
+Delivered:
 
-1. Better DX than common F# effect patterns
+- clearer public names such as `fromResult`, `fromAsync`, `fromTask`, and `environment`
+- direct `effect {}` binding for `Result`, `Async`, `Async<Result<_,_>>`, and `Task`
+- explicit execution and conversion helpers
+- tests that exercise the builder ergonomics directly
 
-- reduce boilerplate around `Async<Result<_,_>>`
-- keep type flow understandable
-- avoid combinator soup in normal application code
-- make the happy path read clearly in `effect {}`
+Result:
 
-2. Excellent .NET interoperability
+- ordinary workflows read like application code instead of wrapper choreography
 
-- easy interop with `Task`
-- easy interop with `Async`
-- straightforward cancellation handling
-- easy use from mixed F# / C# codebases
-- no awkward barriers around existing libraries
+### Phase 2: Dependency And Logging Ergonomics
 
-3. Explicit dependency access
+Delivered:
 
-- support reading dependencies from environment/context
-- make dependencies visible in types
-- avoid service locator feel
-- avoid heavy OO DI assumptions
+- explicit environment access and projection helpers
+- a small logging model
+- an example that uses environment, logging, retry, timeout, and typed failures together
 
-4. Practical effect capabilities
+Result:
 
-- typed failures where useful
-- logging and similar capabilities modeled cleanly
-- resource safety, timeout, and retry support over time
-- predictable execution semantics
+- dependencies stay visible in types
+- the library supports application-style wiring without drifting into hidden DI
 
-## Design Constraints
+### Phase 3: Compatibility Strategy
 
-- Prefer F#-native ergonomics over copying another ecosystem literally.
-- Prefer explicitness in the core, even if convenience layers exist on top.
-- Keep names intuitive for F# developers.
-- Do not force users into a specific application architecture.
-- Avoid building a huge runtime until the small core is clearly worthwhile.
-- Treat typed errors as modeled, expected failures that callers can reasonably handle.
-- Keep exception/defect handling distinct from typed business or infrastructure errors.
-- Prefer explicit error translation between layers over shared catch-all error unions.
+Delivered:
 
-## Comparison Targets
+- explicit compatibility guidance for FsToolkit users
+- bridge functions for `Async<Result<_,_>>`
+- documentation that defines where compatibility stops
 
-The most important comparison points are:
+Result:
 
-- FsToolkit and related F# workflow libraries
-- ordinary `Async<Result<_,_>>` code
-- .NET `Task`-based application code
-- Effect-TS as inspiration for scope and concepts, not as a literal design target
+- compatibility is partial and intentional
+- the goal is migration and interop, not cloning the FsToolkit programming model wholesale
 
-The bar is:
+### Phase 4: Practical Capabilities
 
-- easier to read than stacked wrappers
-- more composable than ad hoc helper modules
-- better dependency and effect story than plain FsToolkit
-- still natural in normal F# code
+Delivered:
 
-## Open Questions
+- `retry`
+- `timeout`
+- `bracket`
+- `tryFinally`
 
-These questions matter now:
+Result:
 
-1. What is the canonical public effect type?
-2. Should the main computation expression stay explicit about lifting, or support more direct binding of `Result`, `Async`, and `Task`?
-3. What should the environment API be called so it feels natural in F#?
-4. How should typed business errors relate to defects / exceptions?
-5. What is the minimum useful logging/dependency story?
-6. How far should FsToolkit compatibility go?
-7. Which convenience features belong in the core, and which belong in an opt-in compatibility layer?
-8. How strongly should the library encourage small layer-local error types and explicit remapping into domain errors?
+- the library is useful for small but real application workflows, not just toy mapping examples
 
-## Near-Term Plan
+## Product Position
 
-### Phase 1: sharpen the core UX
+Effect.FS should be judged against:
 
-Deliverables:
+- plain `Async<Result<_,_>>`
+- FsToolkit-style workflow code
+- direct `Task`-based application code in mixed .NET systems
 
-- settle on clearer names for the core API
-- improve the `effect {}` experience
-- validate ergonomics with small realistic examples
-- document the intended strict vs convenient usage style
-- document the intended error-modeling style, especially typed failures vs defects
+It should not be judged as a feature-peer to larger runtimes yet.
 
-Exit criteria:
+The point is not to build the biggest abstraction surface first.
 
-- the examples read like good F# rather than plumbing
-- the environment/dependency story feels understandable
-- handling `Result`, `Async`, and `Task` no longer feels awkward
-- error translation between layers feels explicit and natural rather than ceremonial
-
-### Phase 2: prove dependency and logging ergonomics
-
-Deliverables:
-
-- a small environment/dependency API
-- an example showing dependency access in ordinary app code
-- a basic logging effect story
-- clearer guidance on how this differs from DI containers
-
-Exit criteria:
-
-- app code using dependencies and logging feels simpler than the equivalent FsToolkit-style wiring
-
-### Phase 3: define compatibility strategy
-
-Deliverables:
-
-- explicit position relative to FsToolkit
-- decide whether compatibility is partial or exact
-- if worth doing, design a separate compatibility layer or builder
-
-Exit criteria:
-
-- compatibility is a deliberate product decision, not an accidental blur
-
-### Phase 4: deepen practical capabilities
-
-Deliverables:
-
-- resource safety story
-- cancellation / timeout helpers
-- retry helpers
-- better examples using real .NET APIs
-
-Exit criteria:
-
-- the library is useful for ordinary application effect management, not just toy examples
-
-## Follow-On Effect Priorities
-
-Once the core UX is credible, the next effects to prioritize are:
-
-1. Environment / dependency access
-2. Typed failure and exception boundary clarity
-3. `Async` / `Task` interop polish
-4. Logging
-5. Cancellation
-6. Resource safety
-7. Timeout
-8. Retry
-9. Clock / time
-
-These priorities should not flatten all failures into one typed channel.
-
-- Typed errors should model expected failures, not serve as a blanket wrapper over exceptions.
-- Lower layers should own small, meaningful error types.
-- Higher layers should explicitly map those errors into their own domain language.
-- Exception capture should happen at deliberate boundaries where a thrown failure can be classified meaningfully.
-- The design should avoid encouraging `Error = Exception` in disguise.
+The point is to have a compact F#-native core that is obviously useful in day-to-day code.
 
 ## Error Modeling Position
 
-The library should treat typed failure as part of domain and application modeling, not as a universal replacement for exceptions.
+Typed failures are for expected, modelable failures:
 
-What typed errors are for:
-
-- validation failures
-- parsing and decoding failures
-- expected remote or persistence failures after deliberate classification
+- validation
+- parsing and decoding
+- classified infrastructure failures
 - business rule violations
 
-What typed errors are not for:
+Typed failures are not for:
 
 - programmer defects
 - broken invariants
 - indiscriminate wrapping of arbitrary exceptions
 
-The intended style is closer to Elm:
+The intended style is:
 
-- model failures with small local types
-- translate errors explicitly between layers
-- keep that translation visible in code
+- keep error types small and local
+- translate them explicitly between layers
+- capture thrown exceptions only at deliberate boundaries
 
-The library should make this style ergonomic by improving operations like `mapError`, explicit boundary capture, and interop helpers that preserve layer-local error meanings.
+## What Comes Next
 
-These are the fastest path to making the library useful in ordinary .NET application code.
+The next roadmap should be treated as follow-on work, not part of the completed initial plan:
 
-Lower priority for now:
-
-- streams
-- queues
-- metrics/tracing platforms
-- large runtime concurrency abstractions
-- domain-specific orchestration machinery
-
-## Actor / Mailbox Note
-
-A real actor or mailbox wrapper may be useful later, but it should not be an early project focus.
-
-Reason:
-
-- F# already has `MailboxProcessor`
-- wrapping it too early risks building architecture-specific machinery before the core effect API is good enough
-- actor support is better treated as an integration or companion layer than as the main identity of the library
-
-If actor support is added later, the goal should be:
-
-- clean interop with `MailboxProcessor`
-- explicit boundaries between mailbox logic and effectful operations
-- no requirement that application code adopt an actor model just to use the effect library
-
-## Immediate Next Work
-
-The next implementation work should focus on:
-
-- improving naming and ergonomics
-- simplifying the examples until they read like a getting-started guide
-- deciding how direct `Result`, `Async`, and `Task` handling should be
-- clarifying the intended FsToolkit relationship
-
-Do not expand into unrelated runtime machinery until those are solid.
+- improve cancellation ergonomics
+- add richer resource helpers where the benefit is clear
+- explore more realistic HTTP and persistence examples
+- decide whether a separate compatibility package is worthwhile
+- evaluate how far structured concurrency should go in an F#-native design

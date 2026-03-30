@@ -69,6 +69,11 @@ let writeLog (environment: AppEnvironment) (entry: LogEntry) : unit =
 let logInformation (message: string) : Effect<AppEnvironment, AppError, unit> =
     Effect.log writeLog LogLevel.Information message
 
+let createEnvironment (config: AppConfig) : AppEnvironment =
+    { Config = config
+      AttemptCount = ref 0
+      WriteLog = fun entry -> printfn "[%A] %s" entry.Level entry.Message }
+
 let validateConfig : Effect<AppConfig, AppError, RequestPlan> =
     effect {
         let! config = Effect.environment<AppConfig, AppError>
@@ -142,16 +147,8 @@ let runLegacyBoundary : Effect<AppConfig, AppError, unit> =
 
 let program : Effect<AppConfig, AppError, string> =
     effect {
-        let environment =
-            { Config = Unchecked.defaultof<AppConfig>
-              AttemptCount = ref 0
-              WriteLog = ignore }
-
         let! appConfig = Effect.environment<AppConfig, AppError>
-        let appEnvironment =
-            { environment with
-                Config = appConfig
-                WriteLog = fun entry -> printfn "[%A] %s" entry.Level entry.Message }
+        let appEnvironment = createEnvironment appConfig
 
         let! () =
             Effect.withEnvironment (fun (_: AppConfig) -> appEnvironment) (logInformation "starting program")

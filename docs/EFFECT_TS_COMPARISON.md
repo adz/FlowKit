@@ -2,23 +2,22 @@
 
 This project is inspired by Effect-TS, but the goal is not to reproduce that ecosystem in F#.
 
-The current goal is narrower:
+The useful comparison is about direction, not parity.
 
-- make effectful F# application code feel better to write
-- stay highly interoperable with `Async`, `Task`, and normal .NET APIs
-- support dependency access and related effects without awkward architecture
-- improve on the ergonomics of today's common F# workflow patterns
+Effect-TS is a broad, mature effect platform. Effect.FS is currently a small F#-native core that is trying to make ordinary application code feel better than today's common `Async<Result<_,_>>` style.
 
-## Where The Comparison Is Useful
+## What Effect.FS Takes Seriously From Effect-TS
 
-Effect-TS is useful here as a source of ideas:
+The inspiration is real in a few places:
 
 - effect values as a central abstraction
 - environment / dependency access as part of the model
 - typed success and error channels
-- a larger ambition around application effects
+- practical helpers around operational concerns like timeout and retry
 
-But the direct comparison breaks down quickly because the host language matters a lot.
+That said, the host language changes everything.
+
+## Why The F# Version Has To Be Different
 
 F# has:
 
@@ -28,9 +27,13 @@ F# has:
 - strong existing habits around `Result`
 - an ecosystem shaped by wrappers like `Async<Result<_,_>>`
 
-So the main design challenge is not "how close can this get to Effect-TS?"
+So the design question is not:
 
-It is "what is the most natural way to bring effect-style capabilities into normal F# code?"
+"How close can this get to Effect-TS?"
+
+It is:
+
+"What is the most natural way to bring effect-style capabilities into normal F# code?"
 
 ## Comparable Features Today
 
@@ -41,11 +44,12 @@ Current `Effect.FS` features that map cleanly to core effect-system ideas:
 - typed business error channel
 - typed success value
 - composition through `effect {}`
-- lifting from `Result`
-- lifting from `Async`
-- lifting from `Task`
+- direct binding of `Result`, `Async`, `Async<Result<_,_>>`, and `Task`
 - explicit execution with environment and cancellation token
 - error mapping and exception capture helpers
+- environment projection
+- logging helpers
+- retry, timeout, and resource-safety helpers
 
 The current core type:
 
@@ -53,7 +57,7 @@ The current core type:
 Effect<'env, 'error, 'value>
 ```
 
-is conceptually similar to a three-parameter effect type in other ecosystems, but the usability question in F# is mostly about CE ergonomics and interop rather than type shape alone.
+is conceptually similar to a three-parameter effect type in other ecosystems, but the real F# question is whether the CE and interop story are actually better than stacked wrappers.
 
 ## Important Differences
 
@@ -61,12 +65,12 @@ is conceptually similar to a three-parameter effect type in other ecosystems, bu
 
 Effect-TS can rely on TypeScript generators and its own runtime conventions.
 
-Effect.FS needs to feel good inside ordinary F# code. That means the project should be judged heavily on:
+Effect.FS has to feel good inside ordinary F# code. That means the project should be judged heavily on:
 
 - builder ergonomics
 - naming
 - clarity of type flow
-- direct handling of `Result`, `Async`, and `Task`
+- direct handling of `Result`, `Async`, `Async<Result<_,_>>`, and `Task`
 
 ### 2. .NET interop is a first-class requirement
 
@@ -77,13 +81,20 @@ That means:
 - easy use with existing libraries
 - straightforward cancellation handling
 - minimal friction around `Task`
-- a good story for mixed F# / C# codebases
+- a realistic story for mixed F# / C# codebases
 
 ### 3. Dependency access should stay explicit
 
 Effect-TS has a rich service/context story.
 
-Effect.FS likely needs a simpler and more F#-readable environment model first, one that improves on ad hoc dependency passing without becoming a hidden DI container.
+Effect.FS deliberately stays smaller and more explicit. The current shape is:
+
+- an environment type in the effect itself
+- `Effect.environment`, `Effect.read`, and `Effect.withEnvironment`
+- no hidden service locator
+- no requirement to adopt a runtime container
+
+That is a better fit for early F# usability work than importing a large service platform wholesale.
 
 ### 4. The main comparison target is often FsToolkit, not Effect-TS
 
@@ -95,7 +106,7 @@ It is:
 - is this better than FsToolkit-style workflows?
 - does this improve dependency and logging ergonomics enough to justify learning it?
 
-That is the comparison this project ultimately has to win.
+That is the comparison Effect.FS has to win first.
 
 ## Missing Features Relative to Effect-TS
 
@@ -104,16 +115,17 @@ Effect-TS is much broader today. Missing areas include:
 - richer context/service systems
 - structured concurrency runtime
 - resource scopes and finalizers
-- schedules and retry machinery
+- schedules and retry machinery beyond the current minimal helpers
 - streams, channels, and broader runtime primitives
 - integrated observability tooling
 - a mature platform ecosystem
 
-At the moment, `Effect.FS` should be viewed as an early F# effect-library experiment, not as a feature-peer to Effect-TS.
+At the moment, `Effect.FS` should be viewed as an F#-focused experiment in practical effect ergonomics, not as a feature-peer to Effect-TS.
 
 ## Current Conclusion
 
 - If you want a mature broad effect platform today, Effect-TS is far ahead.
 - If you want an F#-native effect library, the real standard is not conceptual ambition alone. It is whether the DX is clearly better than current F# patterns.
+- The relevant near-term contest for Effect.FS is FsToolkit-style application code, not the full breadth of the Effect-TS runtime.
 
 That is the standard this project should optimize for.
