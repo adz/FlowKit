@@ -1,26 +1,27 @@
 # Coming From FsToolkit
 
-If you already use FsToolkit, the important question is not "is this better in theory?"
+If you already use FsToolkit, the real question is not:
 
-The practical question is:
+"Is this abstraction more ambitious?"
+
+The real question is:
 
 "When does `Effect<'env, 'error, 'value>` produce cleaner application code than `Async<Result<'value, 'error>>` with helper builders?"
 
-## The Short Answer
+## Short Answer
 
-FsToolkit is still a strong fit when:
+FsToolkit remains a strong fit when:
 
-- your main problem is wrapper composition
-- dependencies are already trivial
-- you do not need a first-class environment story
-- `Async<Result<_,_>>` already matches your application boundary cleanly
+- the main problem is wrapper composition
+- dependencies are trivial
+- the natural application boundary is already `Async<Result<_,_>>`
 
-Effect.FS starts to help when:
+Effect.FS starts to pay for itself when:
 
-- you want dependencies visible in the type, not just threaded manually
-- you are mixing `Result`, `Async`, `Async<Result<_,_>>`, and `Task`
-- logging, retry, timeout, and resource safety are part of the workflow itself
-- you want one effect type instead of several local wrapper conventions
+- dependencies should be explicit in the type
+- workflows mix `Result`, `Async`, `Async<Result<_,_>>`, `Task`, and `Task<Result<_,_>>`
+- retry, timeout, cleanup, and logging belong close to the workflow
+- expected failures should stay typed without pretending every exception is a domain error
 
 ## Mental Model Shift
 
@@ -36,11 +37,11 @@ With Effect.FS, the center becomes:
 Effect<'env, 'error, 'value>
 ```
 
-The extra type parameter matters because it makes dependencies explicit instead of implicit.
+The extra type parameter matters because it makes dependency requirements first-class.
 
-## A Simple Comparison
+## Simple Comparison
 
-FsToolkit-style code often looks roughly like this:
+A typical FsToolkit-style shape:
 
 ```fsharp
 let runCommand config =
@@ -52,13 +53,7 @@ let runCommand config =
     }
 ```
 
-That is fine as long as:
-
-- dependency access is simple
-- the wrapper stack is stable
-- operational behavior stays outside the core workflow
-
-The same shape in Effect.FS becomes:
+The same kind of use case in Effect.FS:
 
 ```fsharp
 let runCommand : Effect<AppEnv, AppError, Payload> =
@@ -66,56 +61,61 @@ let runCommand : Effect<AppEnv, AppError, Payload> =
         let! env = Effect.environment<AppEnv, AppError>
         let! validated = validate env.Config |> Result.mapError ValidationFailed
         do! Effect.log (fun e entry -> e.WriteLog entry) LogLevel.Information "validated command"
-        let! payload = loadPayload validated
+        let! payload = env.Gateway.Load(validated, CancellationToken.None) |> Effect.fromTaskResultValue
         return payload
     }
 ```
 
-The difference is not just syntax.
+The gain is not only syntax.
 
-The workflow now says, in its type:
+The workflow type now tells you:
 
 - what environment it needs
-- what typed failures it produces
+- what failures it produces
 - what value it returns
 
-## Compatibility Story
+## Migration Surface
 
-The library deliberately supports interop rather than demanding a flag day migration.
+The compatibility strategy is partial and deliberate.
 
-Use these bridges when moving from FsToolkit-style code:
+Available bridges:
 
-- `Effect.fromAsyncResult` to lift existing `Async<Result<_,_>>`
-- `Effect.toAsyncResult` to expose an effect back as `Async<Result<_,_>>`
-- direct `let!` binding of `Result`, `Async`, `Async<Result<_,_>>`, and `Task`
+- `Effect.fromAsyncResult`
+- `Effect.toAsyncResult`
+- `AsyncResultCompat.ofAsyncResult`
+- `AsyncResultCompat.toAsyncResult`
 
-That means you can migrate one workflow at a time instead of rewriting a whole codebase.
+Inside `effect {}` you can also bind directly from:
+
+- `Result`
+- `Async`
+- `Async<Result<_,_>>`
+- `Task`
+- `Task<Result<_,_>>`
+
+That means migration can happen one workflow at a time.
 
 ## Where Effect.FS Really Helps
 
 The strongest cases are:
 
-- application services with 2-5 dependencies
+- application services with a visible dependency graph
 - workflows that combine validation, IO, logging, and retries
-- systems that touch both F# `Async` and .NET `Task`
-- codebases where dependency flow is becoming hard to see
-- domains where expected failures should stay typed and local
+- codebases that touch both `Async` and `Task`
+- systems where operational concerns have started to blur the happy path
 
 ## Where It May Not Be Worth It
 
-Do not force Effect.FS into places where it adds ceremony:
+Do not force Effect.FS into places where it only adds ceremony:
 
 - pure functions
 - tiny scripts
-- code that is already clear with plain `Result`
-- boundaries that naturally want `Task<'T>` and nothing more
+- boundaries that are already clear as `Task<'T>`
+- code that is already easy to read with plain `Result`
 
-## Recommended Adoption Path
+## Open Discussion For FsToolkit Users
 
-1. Keep pure validation and transformation in plain F# functions.
-2. Introduce `Effect` at the application boundary where dependencies and IO begin.
-3. Lift existing `Async<Result<_,_>>` code with `Effect.fromAsyncResult`.
-4. Move logging, retry, and timeout behavior into the effect workflow only where it improves readability.
-5. Keep exceptions and typed errors distinct. Translate deliberately.
+The migration path is implemented, but two product decisions still deserve discussion:
 
-That path gives you the upside without turning migration into a rewrite project.
+- whether `AsyncResultCompat` belongs in the core package or a separate compatibility package
+- whether the library should ever offer a more FsToolkit-shaped convenience layer, or stay opinionated around the current explicit core

@@ -2,105 +2,109 @@
 
 ## Status
 
-The initial implementation plan in this repository is complete.
+The original four-phase plan in this repository is now complete.
 
-The repo now has:
+The codebase currently includes:
 
-- a canonical public core type: `Effect<'env, 'error, 'value>`
-- an ergonomic `effect {}` builder
-- direct binding and lifting for `Result`, `Async`, `Async<Result<_,_>>`, `Task<'T>`, and `Task`
-- explicit environment access with `Effect.environment`, `Effect.read`, `Effect.provide`, and `Effect.withEnvironment`
-- a basic logging story with `LogEntry`, `LogLevel`, `Effect.log`, and `Effect.logWith`
-- practical helpers for `retry`, `timeout`, `bracket`, and `tryFinally`
-- runnable tests and examples that demonstrate the intended usage style
-- written positioning relative to FsToolkit and Effect-TS
+- the canonical core type `Effect<'env, 'error, 'value>`
+- an `effect {}` computation expression with direct binding for `Result`, `Async`, `Async<Result<_,_>>`, `Task<'T>`, `Task`, and `Task<Result<_,_>>`
+- explicit environment operations: `environment`, `read`, `provide`, and `withEnvironment`
+- a typed logging surface with `LogEntry`, `LogLevel`, `log`, and `logWith`
+- interop and migration helpers for FsToolkit-style `Async<Result<_,_>>` code
+- cancellation helpers including token access, explicit token-aware execution, cancellation checks, and cancellation capture
+- practical runtime helpers: `retry`, `timeout`, `bracket`, `bracketAsync`, `usingAsync`, and `tryFinally`
+- runnable tests and a realistic example using gateway and persistence dependencies
 
-## What This Plan Was Trying To Prove
+## What The Plan Needed To Prove
 
-The key question was never whether an effect type could be represented in F#.
+The central question was:
 
-The real question was:
+"Can a small F# effect core beat `Async<Result<_,_>>` plus local conventions in day-to-day application code?"
 
-"Can a small effect core make normal F# application code easier to read and evolve than `Async<Result<_,_>>` plus local conventions?"
+The answer from the finished repository is:
 
-The current repo answers that question with a deliberate "yes, for the right kind of code":
+- yes, when the code has explicit dependencies
+- yes, when it mixes pure validation with async and task-based work
+- yes, when retry, timeout, logging, and resource cleanup need to live near the workflow
+- yes, when typed expected failures should remain distinct from defects and arbitrary exceptions
 
-- code with explicit dependency requirements
-- code that mixes pure validation with async and task-based work
-- code that needs operational behaviors like retry, timeout, and logging
-- code that benefits from visible typed failure boundaries
+## Phase Completion
 
-## Delivered Outcomes By Phase
+### Phase 1: Sharpen The Core UX
 
-### Phase 1: Core UX
-
-Delivered:
+Completed:
 
 - clearer public names such as `fromResult`, `fromAsync`, `fromTask`, and `environment`
-- direct `effect {}` binding for `Result`, `Async`, `Async<Result<_,_>>`, and `Task`
-- explicit execution and conversion helpers
-- tests that exercise the builder ergonomics directly
+- direct `effect {}` binding across the common F# and .NET wrapper shapes
+- explicit execution helpers including token-aware execution
+- tests that prove the builder ergonomics instead of only describing them
 
-Result:
+Outcome:
 
-- ordinary workflows read like application code instead of wrapper choreography
+- the happy path reads like ordinary application code rather than wrapper choreography
 
-### Phase 2: Dependency And Logging Ergonomics
+### Phase 2: Prove Dependency And Logging Ergonomics
 
-Delivered:
+Completed:
 
-- explicit environment access and projection helpers
-- a small logging model
-- an example that uses environment, logging, retry, timeout, and typed failures together
+- first-class environment access and projection helpers
+- a minimal but usable logging model
+- a realistic example that shows dependency access, logging, retry, timeout, persistence, and cleanup in one workflow
 
-Result:
+Outcome:
 
 - dependencies stay visible in types
-- the library supports application-style wiring without drifting into hidden DI
+- the code reads like explicit F# wiring rather than a hidden DI container
 
-### Phase 3: Compatibility Strategy
+### Phase 3: Define Compatibility Strategy
 
-Delivered:
+Completed:
 
-- explicit compatibility guidance for FsToolkit users
-- bridge functions for `Async<Result<_,_>>`
-- documentation that defines where compatibility stops
+- partial and explicit compatibility with FsToolkit-style `Async<Result<_,_>>`
+- bridge helpers: `fromAsyncResult`, `toAsyncResult`, and `AsyncResultCompat`
+- documentation that explains migration and where compatibility intentionally stops
 
-Result:
+Outcome:
 
-- compatibility is partial and intentional
-- the goal is migration and interop, not cloning the FsToolkit programming model wholesale
+- compatibility is a migration path, not an attempt to clone FsToolkit wholesale
 
-### Phase 4: Practical Capabilities
+### Phase 4: Deepen Practical Capabilities
 
-Delivered:
+Completed:
 
 - `retry`
 - `timeout`
 - `bracket`
-- `tryFinally`
+- `bracketAsync`
+- `usingAsync`
+- cancellation capture and explicit token support
+- a more realistic example built around .NET `Task`-based dependencies
 
-Result:
+Outcome:
 
-- the library is useful for small but real application workflows, not just toy mapping examples
+- the library is useful for small but real application workflows, not only toy combinator examples
 
 ## Product Position
 
 Effect.FS should be judged against:
 
 - plain `Async<Result<_,_>>`
-- FsToolkit-style workflow code
+- FsToolkit-style application code
 - direct `Task`-based application code in mixed .NET systems
 
-It should not be judged as a feature-peer to larger runtimes yet.
+It should not be judged as a feature-peer to large runtimes yet.
 
-The point is not to build the biggest abstraction surface first.
+The product direction remains:
 
-The point is to have a compact F#-native core that is obviously useful in day-to-day code.
+- compact core
+- explicit dependencies
+- typed expected failures
+- pragmatic .NET interop
+- operational concerns modeled close to the workflow
 
 ## Error Modeling Position
 
-Typed failures are for expected, modelable failures:
+Typed failures are for expected and modelable failures:
 
 - validation
 - parsing and decoding
@@ -119,12 +123,12 @@ The intended style is:
 - translate them explicitly between layers
 - capture thrown exceptions only at deliberate boundaries
 
-## What Comes Next
+## Discussion Left Beyond The Plan
 
-The next roadmap should be treated as follow-on work, not part of the completed initial plan:
+The original plan is complete, but there are still product decisions that deserve discussion before a larger expansion:
 
-- improve cancellation ergonomics
-- add richer resource helpers where the benefit is clear
-- explore more realistic HTTP and persistence examples
-- decide whether a separate compatibility package is worthwhile
-- evaluate how far structured concurrency should go in an F#-native design
+- whether `AsyncResultCompat` should stay in the core package or move to a dedicated compatibility package
+- how far cancellation and structured concurrency should go before the library becomes runtime-heavy
+- whether richer resource and scope abstractions add enough value over the current small helpers
+- what a credible mixed F# / C# story should look like if the library grows beyond F#-only ergonomics
+- whether the next examples should be HTTP/database integrations or a thinner application template
