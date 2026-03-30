@@ -96,7 +96,8 @@ See [`docs/FSTOOLKIT_MIGRATION.md`](docs/FSTOOLKIT_MIGRATION.md).
 2. [`examples/README.md`](examples/README.md)
 3. [`docs/FSTOOLKIT_MIGRATION.md`](docs/FSTOOLKIT_MIGRATION.md)
 4. [`docs/WEIRD_SHAPES.md`](docs/WEIRD_SHAPES.md)
-5. [`src/EffectFs/Effect.fs`](src/EffectFs/Effect.fs)
+5. [`docs/SEMANTICS.md`](docs/SEMANTICS.md)
+6. [`src/EffectFs/Effect.fs`](src/EffectFs/Effect.fs)
 
 ## Run The Repo
 

@@ -218,6 +218,127 @@ module Tests =
         Assert.equal true started.Value
         Assert.equal (Ok 42) result
 
+    let coldTaskAliasesRemainColdUntilExecution () : unit =
+        let valueStarted = ref false
+        let resultStarted = ref false
+        let unitStarted = ref false
+
+        let valueWorkflow : Effect<unit, string, int> =
+            Effect.fromColdTask(fun _ ->
+                valueStarted.Value <- true
+                Task.FromResult 42)
+
+        let resultWorkflow : Effect<unit, string, int> =
+            Effect.fromColdTaskResult(fun _ ->
+                resultStarted.Value <- true
+                Task.FromResult(Ok 42))
+
+        let unitWorkflow : Effect<unit, string, unit> =
+            Effect.fromColdTaskUnit(fun _ ->
+                unitStarted.Value <- true
+                Task.CompletedTask)
+
+        Assert.equal false valueStarted.Value
+        Assert.equal false resultStarted.Value
+        Assert.equal false unitStarted.Value
+
+        let valueResult =
+            valueWorkflow
+            |> Effect.execute ()
+            |> Async.RunSynchronously
+
+        let resultResult =
+            resultWorkflow
+            |> Effect.execute ()
+            |> Async.RunSynchronously
+
+        let unitResult =
+            unitWorkflow
+            |> Effect.execute ()
+            |> Async.RunSynchronously
+
+        Assert.equal true valueStarted.Value
+        Assert.equal true resultStarted.Value
+        Assert.equal true unitStarted.Value
+        Assert.equal (Ok 42) valueResult
+        Assert.equal (Ok 42) resultResult
+        Assert.equal (Ok ()) unitResult
+
+    let hotTaskValueStartsBeforeExecution () : unit =
+        let started = ref false
+
+        let hotTask =
+            started.Value <- true
+            Task.FromResult 42
+
+        let workflow : Effect<unit, string, int> =
+            Effect.fromTaskValue hotTask
+
+        Assert.equal true started.Value
+
+        let result =
+            workflow
+            |> Effect.execute ()
+            |> Async.RunSynchronously
+
+        Assert.equal (Ok 42) result
+
+    let effectExpressionCanNormalizeAsyncAsyncResult () : unit =
+        let nested : Async<Async<Result<int, string>>> =
+            async {
+                return async { return Ok 42 }
+            }
+
+        let workflow : Effect<unit, string, int> =
+            effect {
+                let! next = nested
+                let! (value: int) = next
+                return value
+            }
+
+        let result =
+            workflow
+            |> Effect.execute ()
+            |> Async.RunSynchronously
+
+        Assert.equal (Ok 42) result
+
+    let effectExpressionCanNormalizeResultOfAsync () : unit =
+        let nested : Result<Async<int>, string> =
+            Ok(async { return 42 })
+
+        let workflow : Effect<unit, string, int> =
+            effect {
+                let! next = nested
+                let! value = next
+                return value
+            }
+
+        let result =
+            workflow
+            |> Effect.execute ()
+            |> Async.RunSynchronously
+
+        Assert.equal (Ok 42) result
+
+    let effectExpressionCanNormalizeNestedResults () : unit =
+        let nested : Result<Result<int, string>, string> =
+            Ok(Ok 42)
+
+        let workflow : Effect<unit, string, int> =
+            effect {
+                let! next = nested
+                let! value = next
+                return value
+            }
+
+        let result =
+            workflow
+            |> Effect.execute ()
+            |> Async.RunSynchronously
+
+        Assert.equal (Ok 42) result
+
     let executeWithCancellationPassesTokenToTaskFactory () : unit =
         let seen = ref CancellationToken.None
         use cts = new CancellationTokenSource()
@@ -280,6 +401,26 @@ module Tests =
 
         Assert.equal (Error "timed out") result
 
+    let timeoutDoesNotCancelUnderlyingWorkByItself () : unit =
+        let completed = TaskCompletionSource<unit>()
+
+        let workflow : Effect<unit, string, int> =
+            Effect.fromTask(fun _ ->
+                task {
+                    do! Task.Delay 50
+                    completed.SetResult ()
+                    return 42
+                })
+            |> Effect.timeout (TimeSpan.FromMilliseconds 10) "timed out"
+
+        let result =
+            workflow
+            |> Effect.execute ()
+            |> Async.RunSynchronously
+
+        Assert.equal (Error "timed out") result
+        Assert.true' (completed.Task.Wait 200)
+
     let retryRepeatsFailuresUntilSuccess () : unit =
         let attempts = ref 0
 
@@ -321,6 +462,23 @@ module Tests =
         Assert.equal (Ok 8) result
         Assert.true' disposed.Value
 
+    let bracketReleasesResourcesOnTypedFailure () : unit =
+        let disposed = ref false
+
+        let workflow : Effect<unit, string, int> =
+            Effect.bracket
+                (Effect.succeed "resource")
+                (fun _ -> disposed.Value <- true)
+                (fun _ -> Effect.fail "failed")
+
+        let result =
+            workflow
+            |> Effect.execute ()
+            |> Async.RunSynchronously
+
+        Assert.equal (Error "failed") result
+        Assert.true' disposed.Value
+
     let bracketAsyncReleasesResourcesOnSuccess () : unit =
         let disposed = ref false
 
@@ -340,6 +498,52 @@ module Tests =
         Assert.equal (Ok 8) result
         Assert.true' disposed.Value
 
+    let bracketAsyncReleasesResourcesOnTypedFailure () : unit =
+        let disposed = ref false
+
+        let workflow : Effect<unit, string, int> =
+            Effect.bracketAsync
+                (Effect.succeed "resource")
+                (fun _ _ ->
+                    disposed.Value <- true
+                    Task.CompletedTask)
+                (fun _ -> Effect.fail "failed")
+
+        let result =
+            workflow
+            |> Effect.execute ()
+            |> Async.RunSynchronously
+
+        Assert.equal (Error "failed") result
+        Assert.true' disposed.Value
+
+    let bracketAsyncReleasesResourcesOnCancellation () : unit =
+        let disposed = ref false
+        use cts = new CancellationTokenSource()
+        cts.Cancel()
+
+        let workflow : Effect<unit, string, int> =
+            Effect.bracketAsync
+                (Effect.succeed "resource")
+                (fun _ _ ->
+                    disposed.Value <- true
+                    Task.CompletedTask)
+                (fun _ ->
+                    Effect.fromTask(fun cancellationToken ->
+                        task {
+                            do! Task.Delay(50, cancellationToken)
+                            return 42
+                        }))
+            |> Effect.catchCancellation (fun _ -> "canceled")
+
+        let result =
+            workflow
+            |> Effect.executeWithCancellation () cts.Token
+            |> Async.RunSynchronously
+
+        Assert.equal (Error "canceled") result
+        Assert.true' disposed.Value
+
     let usingAsyncDisposesResourcesOnSuccess () : unit =
         let resource = AsyncDisposableFlag()
 
@@ -353,6 +557,49 @@ module Tests =
 
         Assert.equal (Ok 42) result
         Assert.true' resource.Disposed.Value
+
+    let usingAsyncDisposesResourcesOnTypedFailure () : unit =
+        let resource = AsyncDisposableFlag()
+
+        let workflow : Effect<unit, string, int> =
+            Effect.usingAsync resource (fun _ -> Effect.fail "failed")
+
+        let result =
+            workflow
+            |> Effect.execute ()
+            |> Async.RunSynchronously
+
+        Assert.equal (Error "failed") result
+        Assert.true' resource.Disposed.Value
+
+    let catchConvertsSynchronousExceptionsIntoTypedErrors () : unit =
+        let workflow : Effect<unit, string, int> =
+            Effect.delay(fun () ->
+                invalidOp "boom"
+                Effect.succeed 42)
+            |> Effect.catch (fun error -> error.Message)
+
+        let result =
+            workflow
+            |> Effect.execute ()
+            |> Async.RunSynchronously
+
+        Assert.equal (Error "boom") result
+
+    let catchConvertsAsynchronousExceptionsIntoTypedErrors () : unit =
+        let workflow : Effect<unit, string, int> =
+            Effect.fromTask(fun _ ->
+                task {
+                    return raise (InvalidOperationException "boom")
+                })
+            |> Effect.catch (fun error -> error.GetBaseException().Message)
+
+        let result =
+            workflow
+            |> Effect.execute ()
+            |> Async.RunSynchronously
+
+        Assert.equal (Error "boom") result
 
 [<EntryPoint>]
 let main _ =
@@ -370,13 +617,25 @@ let main _ =
           Tests.run "AsyncResultCompat provides migration path" Tests.asyncResultCompatModuleProvidesMigrationPath
           Tests.run "log writes through environment dependency" Tests.logWritesThroughEnvironmentDependency
           Tests.run "task interop remains cold until execution" Tests.taskInteropRemainsColdUntilExecution
+          Tests.run "cold task aliases remain cold until execution" Tests.coldTaskAliasesRemainColdUntilExecution
+          Tests.run "hot task value starts before execution" Tests.hotTaskValueStartsBeforeExecution
+          Tests.run "effect expression can normalize Async Async Result" Tests.effectExpressionCanNormalizeAsyncAsyncResult
+          Tests.run "effect expression can normalize Result of Async" Tests.effectExpressionCanNormalizeResultOfAsync
+          Tests.run "effect expression can normalize nested Results" Tests.effectExpressionCanNormalizeNestedResults
           Tests.run "executeWithCancellation passes token to task factory" Tests.executeWithCancellationPassesTokenToTaskFactory
           Tests.run "ensureNotCanceled turns canceled token into typed error" Tests.ensureNotCanceledTurnsCanceledTokenIntoTypedError
           Tests.run "catchCancellation turns task cancellation into typed error" Tests.catchCancellationTurnsTaskCancellationIntoTypedError
           Tests.run "timeout turns slow work into typed error" Tests.timeoutTurnsSlowWorkIntoTypedError
+          Tests.run "timeout does not cancel underlying work by itself" Tests.timeoutDoesNotCancelUnderlyingWorkByItself
           Tests.run "retry repeats failures until success" Tests.retryRepeatsFailuresUntilSuccess
           Tests.run "bracket releases resources on success" Tests.bracketReleasesResourcesOnSuccess
+          Tests.run "bracket releases resources on typed failure" Tests.bracketReleasesResourcesOnTypedFailure
           Tests.run "bracketAsync releases resources on success" Tests.bracketAsyncReleasesResourcesOnSuccess
-          Tests.run "usingAsync disposes resources on success" Tests.usingAsyncDisposesResourcesOnSuccess ]
+          Tests.run "bracketAsync releases resources on typed failure" Tests.bracketAsyncReleasesResourcesOnTypedFailure
+          Tests.run "bracketAsync releases resources on cancellation" Tests.bracketAsyncReleasesResourcesOnCancellation
+          Tests.run "usingAsync disposes resources on success" Tests.usingAsyncDisposesResourcesOnSuccess
+          Tests.run "usingAsync disposes resources on typed failure" Tests.usingAsyncDisposesResourcesOnTypedFailure
+          Tests.run "catch converts synchronous exceptions into typed errors" Tests.catchConvertsSynchronousExceptionsIntoTypedErrors
+          Tests.run "catch converts asynchronous exceptions into typed errors" Tests.catchConvertsAsynchronousExceptionsIntoTypedErrors ]
 
     if List.forall id results then 0 else 1
