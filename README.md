@@ -1,10 +1,11 @@
 # Effect.FS
 
-Practical F# effect handling for application code that mixes dependencies, async work, tasks, logging, retries, timeouts, resource cleanup, and typed failures.
+Effect.FS is a small F# library for workflows that need:
 
-The design target is not academic purity. The design target is whether ordinary F# code becomes easier to read and evolve than the usual `Async<Result<_,_>>` plus helper-module approach.
-
-## What It Is
+- dependencies from an application environment
+- typed failures
+- a mix of `Result`, `Async`, and `Task`
+- operational steps such as logging, retry, timeout, and cleanup
 
 The core type is:
 
@@ -12,112 +13,76 @@ The core type is:
 Effect<'env, 'error, 'value>
 ```
 
-Read that as:
+Use it when plain `Result` is no longer enough, but `Async<Result<_,_>>` plus helper modules is starting to hide the happy path.
 
-- `'env`: the dependencies or context the workflow needs
-- `'error`: the typed failures callers are expected to handle
-- `'value`: the success value
+## What You Get
 
-The library is cold by default. Constructing an effect does not run it.
-
-## Why It Exists
-
-The common F# path today is often:
-
-- plain `Result` for pure validation
-- `Async<Result<_,_>>` when IO arrives
-- FsToolkit builders to recover readability
-- ad hoc records or containers for dependencies
-
-That works, but the costs show up over time:
-
-- the happy path gets buried inside wrapper handling
-- dependency access is not modeled directly
-- logging, retry, timeout, and cleanup become conventions instead of API
-- `Async` and `Task` interop keeps leaking into business code
-
-Effect.FS is trying to give that code a cleaner center:
-
-- one effect type
-- one computation expression
+- one workflow type for dependencies, async work, and typed failures
+- one computation expression: `effect {}`
+- direct binding from `Result`, `Async`, `Async<Result<_,_>>`, `Task`, and `Task<Result<_,_>>`
 - explicit environment access
-- direct interop with `Result`, `Async`, `Async<Result<_,_>>`, and `Task`
-- practical helpers for operational concerns
+- built-in helpers for retry, timeout, logging, and resource cleanup
 
-## Where It Really Helps
+Effects are cold by default. Building an effect does not run it.
 
-Effect.FS is most useful when:
-
-- a workflow depends on 2-5 services or context values
-- validation, IO, logging, and retries all live in the same use case
-- the code touches both F# `Async` and .NET `Task`
-- you want expected failures modeled explicitly
-- you want dependencies visible in types instead of hidden behind lookup
-
-It is less useful when:
-
-- the code is mostly pure
-- plain `Result` is already enough
-- a direct `Task<'T>` is the clearest boundary type
-
-## Current Capability Surface
-
-The core currently includes:
-
-- `effect {}`
-- `fromResult`, `fromAsync`, `fromAsyncResult`, `fromTask`, and `fromTaskResult`
-- direct `let!` binding for common wrapper types
-- `environment`, `read`, `provide`, and `withEnvironment`
-- `log` and `logWith`
-- `retry`
-- `timeout`
-- `bracket`, `bracketAsync`, and `usingAsync`
-- `executeWithCancellation`, `ensureNotCanceled`, and `catchCancellation`
-- `AsyncResultCompat` as a migration bridge for FsToolkit-style code
-
-## Minimal Example
+## A Small Example
 
 ```fsharp
-let runCommand : Effect<AppEnv, AppError, Response> =
+type AppEnv =
+    { Prefix: string }
+
+type AppError =
+    | MissingName
+
+let validateName name =
+    if System.String.IsNullOrWhiteSpace name then
+        Error MissingName
+    else
+        Ok name
+
+let greet name : Effect<AppEnv, AppError, string> =
     effect {
-        let! env = Effect.environment<AppEnv, AppError>
-        let! validated = validate env.Config |> Result.mapError ValidationFailed
-
-        do! Effect.log (fun e entry -> e.WriteLog entry) LogLevel.Information "validated request"
-
-        let! response =
-            env.Gateway.Ping(validated, CancellationToken.None)
-            |> Effect.fromTaskResultValue
-            |> Effect.mapError GatewayFailed
-
-        return response
+        let! env = Effect.environment
+        let! validName = validateName name
+        return $"{env.Prefix} {validName}"
     }
+
+let result =
+    greet "Ada"
+    |> Effect.execute { Prefix = "Hello" }
+    |> Async.RunSynchronously
 ```
 
-The full runnable example in [`examples/EffectFs.Examples/Program.fs`](examples/EffectFs.Examples/Program.fs) goes further:
+## When Effect.FS Fits Well
 
-- gateway dependency
-- persistence dependency
-- logging
-- retries
-- timeout
-- async scope cleanup
-- typed failure translation
+Effect.FS is a good fit when:
 
-## Coming From FsToolkit
+- a workflow needs 2 to 5 dependencies
+- validation, IO, and error translation all belong in one use case
+- your code touches both `Async` and .NET `Task`
+- you want expected failures in the type rather than scattered exception handling
+- retry, timeout, and cleanup belong close to the business flow
 
-Effect.FS is not trying to replace every use of FsToolkit.
+Effect.FS is usually not worth it when:
 
-FsToolkit is a strong fit when the main problem is wrapper composition around `Async<Result<_,_>>`.
+- the code is mostly pure
+- plain `Result` already reads well
+- a direct `Task<'T>` boundary is the clearest option
 
-Effect.FS becomes more compelling when you also want:
+## If You Already Use FsToolkit
 
-- explicit dependency access in the type
+Effect.FS is not a replacement for every FsToolkit workflow.
+
+Stay with FsToolkit when your main problem is composing `Async<Result<_,_>>` and your dependency story is already simple.
+
+Effect.FS starts to help when you also want:
+
+- environment requirements in the type
 - one workflow model across `Result`, `Async`, and `Task`
-- operational behaviors like retry and timeout close to the business flow
-- a deliberate distinction between typed failures and thrown defects
+- operational helpers close to the workflow
+- a clearer split between expected failures and defects
 
-Migration support is built in:
+Migration can happen one workflow at a time through:
 
 - `Effect.fromAsyncResult`
 - `Effect.toAsyncResult`
@@ -125,56 +90,30 @@ Migration support is built in:
 
 See [`docs/FSTOOLKIT_MIGRATION.md`](docs/FSTOOLKIT_MIGRATION.md).
 
-## Getting Started
+## Learn The Library In This Order
 
-If you want the shortest path into the library, start with [`docs/GETTING_STARTED.md`](docs/GETTING_STARTED.md).
+1. [`docs/GETTING_STARTED.md`](docs/GETTING_STARTED.md)
+2. [`examples/README.md`](examples/README.md)
+3. [`docs/FSTOOLKIT_MIGRATION.md`](docs/FSTOOLKIT_MIGRATION.md)
+4. [`docs/WEIRD_SHAPES.md`](docs/WEIRD_SHAPES.md)
+5. [`src/EffectFs/Effect.fs`](src/EffectFs/Effect.fs)
 
-One important note from that guide: you usually do not need to write:
+## Run The Repo
 
-```fsharp
-let! env = Effect.environment<AppEnv, AppError>
-```
-
-If the surrounding workflow type is already known, F# can usually infer the shorter form:
-
-```fsharp
-let! env = Effect.environment
-```
-
-The explicit generic arguments are mainly a fallback for places where type inference does not yet know the environment or error type.
-
-If you prefer getting the environment once as a lambda parameter, there is now also:
-
-```fsharp
-Effect.environmentWith (fun env ->
-    effect {
-        return env
-    })
-```
-
-That is a convenience helper for the common "bind environment once, then keep using it" shape.
-
-## Running It
-
-Run the test harness:
+Run the test suite:
 
 ```bash
 dotnet run --project tests/EffectFs.Tests/EffectFs.Tests.fsproj --nologo
 ```
 
-Run the example application:
+Run the main example:
 
 ```bash
 dotnet run --project examples/EffectFs.Examples/EffectFs.Examples.fsproj --nologo
 ```
 
-## Orientation
+Run the maintenance example:
 
-Start here:
-
-1. [`examples/EffectFs.Examples/Program.fs`](examples/EffectFs.Examples/Program.fs)
-2. [`docs/GETTING_STARTED.md`](docs/GETTING_STARTED.md)
-3. [`src/EffectFs/Effect.fs`](src/EffectFs/Effect.fs)
-4. [`docs/FSTOOLKIT_MIGRATION.md`](docs/FSTOOLKIT_MIGRATION.md)
-5. [`docs/EFFECT_TS_COMPARISON.md`](docs/EFFECT_TS_COMPARISON.md)
-6. [`PLAN.md`](PLAN.md)
+```bash
+dotnet run --project examples/EffectFs.MaintenanceExamples/EffectFs.MaintenanceExamples.fsproj --nologo
+```

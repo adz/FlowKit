@@ -1,68 +1,62 @@
 # Examples
 
-The `examples/` area is meant to answer one question quickly:
+Read this page when you want to see what Effect.FS looks like in code before reading the API surface in detail.
 
-"What does ordinary application code look like with this library?"
+## Run The Examples
 
-Run the example:
+Main example:
 
 ```bash
 dotnet run --project examples/EffectFs.Examples/EffectFs.Examples.fsproj --nologo
 ```
 
-## What The Current Example Shows
+Maintenance example:
 
-The example is intentionally application-shaped rather than tutorial-shaped.
+```bash
+dotnet run --project examples/EffectFs.MaintenanceExamples/EffectFs.MaintenanceExamples.fsproj --nologo
+```
 
-It includes:
+## Main Example
 
-- plain `Result`-based validation
-- explicit environment creation
-- a `Task<Result<_,_>>` gateway dependency
-- a `Task`-based persistence dependency
-- direct logging through environment capabilities
-- retry and timeout around the gateway call
-- async cleanup with `usingAsync`
-- typed failure mapping for validation, gateway, persistence, timeout, cancellation, and legacy exceptions
+The main example in [`examples/EffectFs.Examples/Program.fs`](./EffectFs.Examples/Program.fs) shows a small application-shaped workflow:
 
-## Why This Matters
-
-This is the point where the library either becomes credible or not.
-
-If the example only showed `map` and `bind`, it would not prove much.
-
-The current example is trying to show a workflow that looks like real .NET application code:
-
-- validate configuration
-- call an external dependency
+- validate configuration with plain `Result`
+- build an application environment
+- call a `Task<Result<_,_>>` dependency
 - retry transient failures
-- persist an audit record
-- clean up a scope
-- surface typed application errors
+- apply a timeout
+- persist an audit record through a `Task` boundary
+- clean up an async scope
+- translate failures into a small application error type
 
-## Reading Order
-
-Read the example in this order:
+Read it in this order:
 
 1. `validateConfig`
 2. `fetchResponse`
 3. `saveAudit`
 4. `program`
 
-That sequence shows the pure validation layer, the dependency/operational layer, the persistence layer, and the full composed workflow.
+That gives you the pure validation layer first, then the dependency boundary, then persistence, then the composed workflow.
 
-## Inference Note
+## Maintenance Example
 
-You will notice the example usually uses:
+The maintenance example in [`examples/EffectFs.MaintenanceExamples/Program.fs`](./EffectFs.MaintenanceExamples/Program.fs) is smaller and more focused. It shows:
 
-```fsharp
-let! env = Effect.environment
-```
+- how to normalize awkward nested wrapper shapes one layer at a time
+- the difference between cold task factories and already-created task values
 
-not:
+Use it when your question is not "how do I build a workflow?" but "how do I keep weird boundaries readable?"
 
-```fsharp
-let! env = Effect.environment<AppEnvironment, AppError>
-```
+## What To Notice
 
-That shorter form works because the surrounding workflow type already fixes the environment and error types. Use the longer form only when F# cannot infer them.
+Across both examples, the main patterns are:
+
+- pure checks stay as plain `Result`
+- `Effect` starts at the boundary where dependencies or async work begin
+- environment access is explicit
+- task boundaries are handled directly
+- retry, timeout, and cleanup sit close to the workflow that needs them
+
+## Next
+
+If you want the smallest introduction, read [`docs/GETTING_STARTED.md`](../docs/GETTING_STARTED.md). If you are migrating from FsToolkit, read [`docs/FSTOOLKIT_MIGRATION.md`](../docs/FSTOOLKIT_MIGRATION.md).
