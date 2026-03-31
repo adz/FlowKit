@@ -1,18 +1,18 @@
 open System
 open System.Threading
 open System.Threading.Tasks
-open EffectFs
+open EffectfulFlow
 
 let run label workflow =
     let result =
         workflow
-        |> Effect.execute ()
+        |> Flow.run () CancellationToken.None
         |> Async.RunSynchronously
 
     printfn "%s: %A" label result
 
-let asyncAsyncResultExample : Effect<unit, string, int> =
-    effect {
+let asyncAsyncResultExample : Flow<unit, string, int> =
+    flow {
         let! (next: Async<Result<int, string>>) =
             async {
                 return async { return Ok 42 }
@@ -22,41 +22,41 @@ let asyncAsyncResultExample : Effect<unit, string, int> =
         return value
     }
 
-let resultOfAsyncExample : Effect<unit, string, int> =
-    effect {
+let resultOfAsyncExample : Flow<unit, string, int> =
+    flow {
         let! (next: Async<int>) = Ok(async { return 42 })
         let! value = next
         return value
     }
 
-let nestedResultExample : Effect<unit, string, int> =
-    effect {
+let nestedResultExample : Flow<unit, string, int> =
+    flow {
         let! (next: Result<int, string>) = Ok(Ok 42)
         let! value = next
         return value
     }
 
-let coldTaskExample : Effect<unit, string, int> =
+let coldTaskExample : Flow<unit, string, int> =
     let started = ref false
 
-    Effect.fromColdTask(fun (_: CancellationToken) ->
+    Flow.Task.fromCold(fun (_: CancellationToken) ->
         started.Value <- true
         Task.FromResult 42)
-    |> Effect.tap (fun value ->
-        effect {
+    |> Flow.tap (fun _ ->
+        flow {
             printfn "cold task started at execution time: %b" started.Value
             return ()
         })
 
-let hotTaskValueExample () : Effect<unit, string, int> =
+let hotTaskValueExample () : Flow<unit, string, int> =
     let started = ref false
 
     let taskValue =
         started.Value <- true
         Task.FromResult 42
 
-    printfn "hot task started before effect execution: %b" started.Value
-    Effect.fromTaskValue taskValue
+    printfn "hot task started before flow execution: %b" started.Value
+    Flow.Task.fromHot taskValue
 
 [<EntryPoint>]
 let main _ =

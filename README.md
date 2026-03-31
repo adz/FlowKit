@@ -1,16 +1,17 @@
-# Effect.FS
+# EffectfulFlow
 
-Effect.FS is a small F# library for workflows that need:
+EffectfulFlow is a small F# library built around composable flows:
 
-- dependencies from an application environment
+- explicit environment requirements
 - typed failures
-- a mix of `Result`, `Async`, and `Task`
-- operational steps such as logging, retry, timeout, and cleanup
+- explicit cancellation
+- direct `Async` and `.NET Task` interop
+- runtime helpers for retry, timeout, logging, and scoped cleanup
 
 The core type is:
 
 ```fsharp
-Effect<'env, 'error, 'value>
+Flow<'env, 'error, 'value>
 ```
 
 Use it when plain `Result` is no longer enough, but `Async<Result<_,_>>` plus helper modules is starting to hide the happy path.
@@ -18,12 +19,13 @@ Use it when plain `Result` is no longer enough, but `Async<Result<_,_>>` plus he
 ## What You Get
 
 - one workflow type for dependencies, async work, and typed failures
-- one computation expression: `effect {}`
-- direct binding from `Result`, `Async`, `Async<Result<_,_>>`, `Task`, and `Task<Result<_,_>>`
-- explicit environment access
-- built-in helpers for retry, timeout, logging, and resource cleanup
+- one computation expression: `flow {}`
+- explicit environment access through `Flow.env` and `Flow.read`
+- explicit execution through `Flow.run env cancellationToken flow`
+- task interop in `Flow.Task`
+- runtime helpers in `Flow.Runtime`
 
-Effects are cold by default. Building an effect does not run it.
+Flows are cold by default. Building a flow does not run it.
 
 ## A Small Example
 
@@ -40,89 +42,79 @@ let validateName name =
     else
         Ok name
 
-let greet name : Effect<AppEnv, AppError, string> =
-    effect {
-        let! env = Effect.environment
+let greet name : Flow<AppEnv, AppError, string> =
+    flow {
         let! validName = validateName name
-        return $"{env.Prefix} {validName}"
+        let! prefix = Flow.read _.Prefix
+        return $"{prefix} {validName}"
     }
 
 let result =
     greet "Ada"
-    |> Effect.execute { Prefix = "Hello" }
+    |> Flow.run { Prefix = "Hello" } System.Threading.CancellationToken.None
     |> Async.RunSynchronously
 ```
 
-## When Effect.FS Fits Well
+## When EffectfulFlow Fits Well
 
-Effect.FS is a good fit when:
+EffectfulFlow is a good fit when:
 
 - a workflow needs 2 to 5 dependencies
 - validation, IO, and error translation all belong in one use case
-- your code touches both `Async` and .NET `Task`
+- your code touches both `Async` and `.NET Task`
 - you want expected failures in the type rather than scattered exception handling
 - retry, timeout, and cleanup belong close to the business flow
 
-Effect.FS is usually not worth it when:
+EffectfulFlow is usually not worth it when:
 
 - the code is mostly pure
 - plain `Result` already reads well
 - a direct `Task<'T>` boundary is the clearest option
 
-## If You Already Use FsToolkit
-
-Effect.FS is not a replacement for every FsToolkit workflow.
-
-Stay with FsToolkit when your main problem is composing `Async<Result<_,_>>` and your dependency story is already simple.
-
-Effect.FS starts to help when you also want:
-
-- environment requirements in the type
-- one workflow model across `Result`, `Async`, and `Task`
-- operational helpers close to the workflow
-- a clearer split between expected failures and defects
-
-Migration can happen one workflow at a time through:
-
-- `Effect.fromAsyncResult`
-- `Effect.toAsyncResult`
-- `AsyncResultCompat`
-
-See [`docs/FSTOOLKIT_MIGRATION.md`](docs/FSTOOLKIT_MIGRATION.md).
-
 ## Learn The Library In This Order
 
 1. [`docs/GETTING_STARTED.md`](docs/GETTING_STARTED.md)
-2. [`examples/README.md`](examples/README.md)
-3. [`docs/FSTOOLKIT_MIGRATION.md`](docs/FSTOOLKIT_MIGRATION.md)
-4. [`docs/WEIRD_SHAPES.md`](docs/WEIRD_SHAPES.md)
-5. [`docs/SEMANTICS.md`](docs/SEMANTICS.md)
-6. [`src/EffectFs/Effect.fs`](src/EffectFs/Effect.fs)
+2. [`docs/SEMANTICS.md`](docs/SEMANTICS.md)
+3. [`examples/README.md`](examples/README.md)
+4. [`docs/FSTOOLKIT_MIGRATION.md`](docs/FSTOOLKIT_MIGRATION.md)
+5. [`docs/TROUBLESHOOTING_TYPES.md`](docs/TROUBLESHOOTING_TYPES.md)
+6. [`src/EffectfulFlow/Flow.fs`](src/EffectfulFlow/Flow.fs)
 
 ## Compatibility
 
-NativeAOT is verified in this repo through a small publish-and-run probe application.
+The current design is `.NET`-first. Cancellation is explicit in the `Flow` execution model, and task interop is part of the first-class public surface.
 
-Fable is not currently supported. The public API depends on .NET-specific runtime surfaces such as `Task`, `CancellationToken`, `IAsyncDisposable`, `TimeSpan`, `DateTimeOffset`, `Async.AwaitTask`, `Task.Delay`, and `Async.StartChild`.
+The repo no longer keeps separate compatibility modules for old `Async<Result<_,_>>` or FsToolkit-style workflows. Migration is through direct adapters such as:
+
+- `Flow.fromAsyncResult`
+- `Flow.toAsyncResult`
+
+NativeAOT is still verified in this repo through a small publish-and-run probe application.
 
 ## Run The Repo
 
 Run the test suite:
 
 ```bash
-dotnet run --project tests/EffectFs.Tests/EffectFs.Tests.fsproj --nologo
+dotnet run --project tests/EffectfulFlow.Tests/EffectfulFlow.Tests.fsproj --nologo
 ```
 
 Run the main example:
 
 ```bash
-dotnet run --project examples/EffectFs.Examples/EffectFs.Examples.fsproj --nologo
+dotnet run --project examples/EffectfulFlow.Examples/EffectfulFlow.Examples.fsproj --nologo
 ```
 
 Run the maintenance example:
 
 ```bash
-dotnet run --project examples/EffectFs.MaintenanceExamples/EffectFs.MaintenanceExamples.fsproj --nologo
+dotnet run --project examples/EffectfulFlow.MaintenanceExamples/EffectfulFlow.MaintenanceExamples.fsproj --nologo
+```
+
+Run the playground example:
+
+```bash
+dotnet run --project examples/EffectfulFlow.Playground/EffectfulFlow.Playground.fsproj --nologo
 ```
 
 Run the NativeAOT probe:

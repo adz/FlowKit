@@ -1,19 +1,25 @@
 # Examples
 
-Read this page when you want to see what Effect.FS looks like in code before reading the API surface in detail.
+Read this page when you want to see what EffectfulFlow looks like in code before reading the API surface in detail.
 
 ## Run The Examples
 
 Main example:
 
 ```bash
-dotnet run --project examples/EffectFs.Examples/EffectFs.Examples.fsproj --nologo
+dotnet run --project examples/EffectfulFlow.Examples/EffectfulFlow.Examples.fsproj --nologo
 ```
 
 Maintenance example:
 
 ```bash
-dotnet run --project examples/EffectFs.MaintenanceExamples/EffectFs.MaintenanceExamples.fsproj --nologo
+dotnet run --project examples/EffectfulFlow.MaintenanceExamples/EffectfulFlow.MaintenanceExamples.fsproj --nologo
+```
+
+Playground example:
+
+```bash
+dotnet run --project examples/EffectfulFlow.Playground/EffectfulFlow.Playground.fsproj --nologo
 ```
 
 NativeAOT probe:
@@ -24,16 +30,16 @@ bash scripts/run-aot-probe.sh
 
 ## Main Example
 
-The main example in [`examples/EffectFs.Examples/Program.fs`](./EffectFs.Examples/Program.fs) shows a small application-shaped workflow:
+The main example in [`examples/EffectfulFlow.Examples/Program.fs`](./EffectfulFlow.Examples/Program.fs) shows a small application-shaped set of flows:
 
 - validate configuration with plain `Result`
-- build an application environment
+- build a smaller runtime environment from config
 - call a `Task<Result<_,_>>` dependency
 - retry transient failures
 - apply a timeout
 - persist an audit record through a `Task` boundary
-- clean up an async scope
-- translate failures into a small application error type
+- scope an async resource with `use`
+- compose smaller flows into a larger config-driven flow with `Flow.mapEnv`
 
 Read it in this order:
 
@@ -42,27 +48,22 @@ Read it in this order:
 3. `saveAudit`
 4. `program`
 
-That gives you the pure validation layer first, then the dependency boundary, then persistence, then the composed workflow.
-
 ## Maintenance Example
 
-The maintenance example in [`examples/EffectFs.MaintenanceExamples/Program.fs`](./EffectFs.MaintenanceExamples/Program.fs) is smaller and more focused. It shows:
+The maintenance example in [`examples/EffectfulFlow.MaintenanceExamples/Program.fs`](./EffectfulFlow.MaintenanceExamples/Program.fs) is smaller and more focused. It shows:
 
 - how to normalize awkward nested wrapper shapes one layer at a time
 - the difference between cold task factories and already-created task values
 
-Use it when your question is not "how do I build a workflow?" but "how do I keep weird boundaries readable?"
+## Playground Example
 
-## What To Notice
+The playground example in [`examples/EffectfulFlow.Playground/Program.fs`](./EffectfulFlow.Playground/Program.fs) is the quickest way to feel the new surface in practice. It shows:
 
-Across both examples, the main patterns are:
-
-- pure checks stay as plain `Result`
-- `Effect` starts at the boundary where dependencies or async work begin
-- environment access is explicit
-- task boundaries are handled directly
-- retry, timeout, and cleanup sit close to the workflow that needs them
+- plain `Result` validation first
+- a small `flow {}` workflow
+- projected environment reads through `Flow.read`
+- one `.NET` boundary through `Flow.Task.fromCold`
 
 ## Next
 
-If you want the smallest introduction, read [`docs/GETTING_STARTED.md`](../docs/GETTING_STARTED.md). If you are migrating from FsToolkit, read [`docs/FSTOOLKIT_MIGRATION.md`](../docs/FSTOOLKIT_MIGRATION.md).
+If you want the smallest introduction, read [`docs/GETTING_STARTED.md`](../docs/GETTING_STARTED.md). If you are migrating from `Async<Result<_,_>>`, read [`docs/FSTOOLKIT_MIGRATION.md`](../docs/FSTOOLKIT_MIGRATION.md).

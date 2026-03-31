@@ -1,4 +1,4 @@
-# Effect.FS Tasks
+# EffectfulFlow Tasks
 
 This backlog is driven by one question:
 
@@ -8,11 +8,23 @@ The current answer is not mainly "the core idea is bad." The current answer is t
 
 ## Top Priorities
 
+- Add XML doc comments to the new public `Flow` surface and its nested `Task` and `Runtime` modules.
 - Rewrite all user-facing docs so they speak to the library user only, not to the repo author, reviewer, or an implied chat partner.
 - Add XML doc comments to every public data type, union case where appropriate, module, and function, each with a minimal example suitable for generated API docs.
 - Prove the library's value against FsToolkit with sharper side-by-side examples and explicit "choose this when / do not choose this when" guidance.
 - Lock down semantics for timeout, cancellation, exception capture, and cleanup, then test those semantics directly.
 - Improve trust signals: standard test project structure, stronger edge-case coverage, and docs that read like a maintained product rather than a design memo.
+
+## Flow Follow-Up Work
+
+Problem:
+The public API and repo identity now center on `EffectfulFlow` plus the `Flow` programming model, but the Flow API itself still needs final polishing.
+
+Tasks:
+
+- Add XML doc comments for the public `Flow<'env, 'error, 'value>` type, `Flow` module, `Flow.Task`, `Flow.Runtime`, the `flow` builder, and all public functions in [`src/EffectfulFlow/Flow.fs`](/home/adam/projects/mylibs/effect.fs/main/src/EffectfulFlow/Flow.fs).
+- Review whether `Flow.value` should remain as a convenience alias or be removed in favor of the canonical `Flow.succeed` name.
+- Review whether direct `Task` bind support in `flow {}` is sufficient now that task interop has a more explicit `Flow.Task` home.
 
 ## 1. Rewrite The Documentation Voice
 
@@ -24,7 +36,7 @@ Tasks:
 - Rewrite [`README.md`](/home/adam/projects/mylibs/effect.fs/main/README.md) so it opens with user value, then shows the shortest credible example, then gives adoption guidance.
 - Rewrite [`docs/GETTING_STARTED.md`](/home/adam/projects/mylibs/effect.fs/main/docs/GETTING_STARTED.md) as a journey-based guide for a new user building their first small workflow.
 - Rewrite [`docs/FSTOOLKIT_MIGRATION.md`](/home/adam/projects/mylibs/effect.fs/main/docs/FSTOOLKIT_MIGRATION.md) as a practical migration guide, not a positioning essay.
-- Rewrite [`docs/WEIRD_SHAPES.md`](/home/adam/projects/mylibs/effect.fs/main/docs/WEIRD_SHAPES.md) so it teaches boundary normalization without sounding like wrapper pain is still the user's burden everywhere.
+- Rewrite the type-troubleshooting guide so it teaches boundary normalization through real compiler errors rather than vague “weird shapes” framing.
 - Rewrite [`docs/EFFECT_TS_COMPARISON.md`](/home/adam/projects/mylibs/effect.fs/main/docs/EFFECT_TS_COMPARISON.md) so it is brief, factual, and clearly secondary to the F# adoption story.
 - Rewrite [`examples/README.md`](/home/adam/projects/mylibs/effect.fs/main/examples/README.md) so it tells the reader what to run, what to look at first, and what each example proves.
 - Remove rhetorical question-and-answer framing that sounds like a transcript rather than docs.
@@ -54,12 +66,11 @@ Generated API docs will currently be thin and unhelpful. A library competing on 
 
 Tasks:
 
-- Add XML doc comments for the public `Effect<'env, 'error, 'value>` type in [`src/EffectFs/Effect.fs`](/home/adam/projects/mylibs/effect.fs/main/src/EffectFs/Effect.fs).
-- Add XML doc comments for public data types in [`src/EffectFs/Effect.fs`](/home/adam/projects/mylibs/effect.fs/main/src/EffectFs/Effect.fs): `LogLevel`, `LogEntry`, and `RetryPolicy<'error>`.
-- Add XML doc comments for public modules in [`src/EffectFs/Effect.fs`](/home/adam/projects/mylibs/effect.fs/main/src/EffectFs/Effect.fs): `RetryPolicy` and `Effect`.
-- Add XML doc comments for every public function in [`src/EffectFs/Effect.fs`](/home/adam/projects/mylibs/effect.fs/main/src/EffectFs/Effect.fs).
-- Add XML doc comments for the public builder type and `effect` entry point in [`src/EffectFs/Effect.fs`](/home/adam/projects/mylibs/effect.fs/main/src/EffectFs/Effect.fs).
-- Add XML doc comments for the public compatibility module and functions in [`src/EffectFs/FsToolkitCompat.fs`](/home/adam/projects/mylibs/effect.fs/main/src/EffectFs/FsToolkitCompat.fs).
+- Add XML doc comments for the public `Flow<'env, 'error, 'value>` type in [`src/EffectfulFlow/Flow.fs`](/home/adam/projects/mylibs/effect.fs/main/src/EffectfulFlow/Flow.fs).
+- Add XML doc comments for public data types in [`src/EffectfulFlow/Flow.fs`](/home/adam/projects/mylibs/effect.fs/main/src/EffectfulFlow/Flow.fs): `LogLevel`, `LogEntry`, and `RetryPolicy<'error>`.
+- Add XML doc comments for public modules in [`src/EffectfulFlow/Flow.fs`](/home/adam/projects/mylibs/effect.fs/main/src/EffectfulFlow/Flow.fs): `RetryPolicy`, `Flow`, `Flow.Task`, and `Flow.Runtime`.
+- Add XML doc comments for every public function in [`src/EffectfulFlow/Flow.fs`](/home/adam/projects/mylibs/effect.fs/main/src/EffectfulFlow/Flow.fs).
+- Add XML doc comments for the public builder type and `flow` entry point in [`src/EffectfulFlow/Flow.fs`](/home/adam/projects/mylibs/effect.fs/main/src/EffectfulFlow/Flow.fs).
 - Give every doc comment a small example with minimal boilerplate.
 - Keep examples short enough to work inside generated API docs without scrolling through app setup.
 - Ensure examples focus on one function at a time rather than embedding full applications.
@@ -72,12 +83,12 @@ The API should not rely on readers opening the source to guess semantics.
 
 Tasks:
 
-- Document constructors and lifting functions: `succeed`, `fail`, `fromResult`, `ofResult`, `fromAsync`, `ofAsync`, `fromAsyncResult`, `fromTask`, `fromColdTask`, `ofTask`, `fromTaskValue`, `fromTaskResult`, `fromColdTaskResult`, `fromTaskResultValue`, `fromTaskUnit`, and `fromColdTaskUnit`.
-- Document environment functions: `ask`, `environment`, `read`, `environmentWith`, `provide`, and `withEnvironment`.
-- Document execution functions: `run`, `execute`, `executeWithCancellation`, and `toAsyncResult`.
+- Document constructors and lifting functions: `succeed`, `value`, `fail`, `fromResult`, `fromAsync`, `fromAsyncResult`, `fromCold`, `fromHot`, `fromColdResult`, `fromHotResult`, `fromColdUnit`, and `fromHotUnit`.
+- Document environment functions: `env`, `read`, and `mapEnv`.
+- Document execution functions: `run` and `toAsyncResult`.
 - Document composition functions: `map`, `bind`, `tap`, `mapError`, and `delay`.
 - Document error and cancellation helpers: `catch`, `catchCancellation`, `ensureNotCanceled`, and `cancellationToken`.
-- Document operational helpers: `sleep`, `retry`, `timeout`, `tryFinally`, `bracket`, `bracketAsync`, `usingAsync`, `log`, and `logWith`.
+- Document operational helpers: `sleep`, `retry`, `timeout`, `tryFinally`, `useWithAcquireRelease`, `log`, and `logWith`.
 - Document `RetryPolicy.noDelay` with explicit retry-attempt semantics.
 - For all task-related functions, state clearly whether the API expects a cold factory or an already-created task value.
 - For all cancellation-related APIs, state whether cancellation is observed, translated, or propagated.
@@ -89,11 +100,11 @@ The current docs explain the idea, but they do not yet prove that adopting this 
 
 Tasks:
 
-- Add a dedicated comparison page with 3 to 5 realistic side-by-side workflows: plain `Async<Result<_ ,_>>`, FsToolkit, and Effect.FS.
+- Add a dedicated comparison page with 3 to 5 realistic side-by-side workflows: plain `Async<Result<_ ,_>>`, FsToolkit, and `Flow`.
 - Use examples with dependencies, typed error mapping, and at least one `Task` boundary, since that is where this library claims an advantage.
 - Add a concise "choose FsToolkit when" section.
-- Add a concise "choose Effect.FS when" section.
-- Show one migration that starts with `Async<Result<_,_>>` and ends in `Effect<'env, 'error, 'value>` with minimal churn.
+- Add a concise "choose EffectfulFlow when" section.
+- Show one migration that starts with `Async<Result<_,_>>` and ends in `Flow<'env, 'error, 'value>` with minimal churn.
 - Remove positioning language that sounds defensive or aspirational and replace it with concrete code comparisons.
 
 ## 6. Clarify Semantics And Edge Cases
@@ -106,7 +117,7 @@ Tasks:
 - Write a semantics page covering success, typed failure, thrown exception, cancellation, timeout, and cleanup behavior.
 - Document whether `timeout` only returns a timeout error or also cancels underlying work.
 - Document how `catch` and `catchCancellation` interact with exceptions thrown before versus during async execution.
-- Document whether `bracket` and `bracketAsync` run release logic on success, typed failure, thrown exception, and cancellation.
+- Document whether builder `use` / `use!` and `useWithAcquireRelease` run release logic on success, typed failure, thrown exception, and cancellation.
 - Document the exact meaning of `RetryPolicy.MaxAttempts`, including whether the first run counts as an attempt.
 - Add tests for release-on-error and release-on-cancellation paths.
 - Add tests for timeout behavior against work that continues unless explicitly canceled.
@@ -146,9 +157,9 @@ Even with better docs, some users will still compare the ergonomics with FsToolk
 Tasks:
 
 - Review the core combinator surface for missing high-value helpers such as `tapError`, `orElse`, `zip`, `map2`, or similar low-ceremony composition tools.
-- Revisit the environment story for larger applications so `withEnvironment` does not become repetitive plumbing.
+- Revisit the environment story for larger applications if `mapEnv` becomes repetitive plumbing.
 - Measure basic overhead against equivalent `Async<Result<_,_>>` workflows and publish the result.
-- Decide whether `AsyncResultCompat` stays in core or moves to a separate compatibility package.
+- Decide whether the direct `Async<Result<_,_>>` migration story needs more helpers beyond `Flow.fromAsyncResult` and `Flow.toAsyncResult`.
 
 ## Done Means
 

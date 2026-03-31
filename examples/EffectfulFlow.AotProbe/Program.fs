@@ -1,7 +1,7 @@
 open System
 open System.Threading
 open System.Threading.Tasks
-open EffectFs
+open EffectfulFlow
 
 type ProbeFailure(message: string) =
     inherit Exception(message)
@@ -33,14 +33,14 @@ let run (name: string) (probe: unit -> unit) =
         eprintfn "[fail] %s: %s" name error.Message
         false
 
-let execute<'env, 'error, 'value> (environment: 'env) (workflow: Effect<'env, 'error, 'value>) =
+let execute<'env, 'error, 'value> (environment: 'env) (workflow: Flow<'env, 'error, 'value>) =
     workflow
-    |> Effect.execute environment
+    |> Flow.run environment CancellationToken.None
     |> Async.RunSynchronously
 
-let plainEffectWorks () =
+let plainFlowWorks () =
     let result =
-        effect {
+        flow {
             let! name = Ok "Ada"
             return $"Hello {name}"
         }
@@ -52,7 +52,7 @@ let taskInteropWorks () =
     let seen = ref CancellationToken.None
 
     let result =
-        Effect.fromTask(fun cancellationToken ->
+        Flow.Task.fromCold(fun cancellationToken ->
             seen.Value <- cancellationToken
             Task.FromResult 42)
         |> execute ()
@@ -62,12 +62,12 @@ let taskInteropWorks () =
 
 let timeoutReturnsTypedError () =
     let result =
-        Effect.fromTask(fun cancellationToken ->
+        Flow.Task.fromCold(fun cancellationToken ->
             task {
                 do! Task.Delay(50, cancellationToken)
                 return 42
             })
-        |> Effect.timeout (TimeSpan.FromMilliseconds 10.0) "timed out"
+        |> Flow.Runtime.timeout (TimeSpan.FromMilliseconds 10.0) "timed out"
         |> execute ()
 
     Assert.equal (Error "timed out") result
@@ -76,14 +76,14 @@ let retryRepeatsUntilSuccess () =
     let attempts = ref 0
 
     let result =
-        Effect.delay(fun () ->
+        Flow.delay(fun () ->
             attempts.Value <- attempts.Value + 1
 
             if attempts.Value < 3 then
-                Effect.fail "retry"
+                Flow.fail "retry"
             else
-                Effect.succeed 42)
-        |> Effect.retry
+                Flow.succeed 42)
+        |> Flow.Runtime.retry
             { MaxAttempts = 3
               Delay = fun _ -> TimeSpan.Zero
               ShouldRetry = ((=) "retry") }
@@ -92,11 +92,14 @@ let retryRepeatsUntilSuccess () =
     Assert.equal (Ok 42) result
     Assert.equal 3 attempts.Value
 
-let asyncCleanupRuns () =
-    let resource = AsyncFlag()
+let builderUseDisposesAsyncResources () =
+    let resource = new AsyncFlag()
 
     let result =
-        Effect.usingAsync resource (fun _ -> Effect.succeed 42)
+        flow {
+            use _ = resource
+            return 42
+        }
         |> execute ()
 
     Assert.equal (Ok 42) result
@@ -106,7 +109,7 @@ let loggingWorks () =
     let sink = ResizeArray<string>()
 
     let result =
-        Effect.log (fun (messages: ResizeArray<string>) entry -> messages.Add(entry.Message)) LogLevel.Information "hello"
+        Flow.Runtime.log (fun (messages: ResizeArray<string>) entry -> messages.Add(entry.Message)) LogLevel.Information "hello"
         |> execute sink
 
     Assert.equal (Ok ()) result
@@ -115,11 +118,11 @@ let loggingWorks () =
 [<EntryPoint>]
 let main _ =
     let results =
-        [ run "plain effect works" plainEffectWorks
+        [ run "plain flow works" plainFlowWorks
           run "task interop works" taskInteropWorks
           run "timeout returns typed error" timeoutReturnsTypedError
           run "retry repeats until success" retryRepeatsUntilSuccess
-          run "async cleanup runs" asyncCleanupRuns
+          run "builder use disposes async resources" builderUseDisposesAsyncResources
           run "logging works" loggingWorks ]
 
     if List.forall id results then 0 else 1

@@ -1,7 +1,7 @@
 open System
 open System.Threading
 open System.Threading.Tasks
-open EffectFs
+open EffectfulFlow
 
 type AppConfig =
     { ApiBaseUrl: string
@@ -53,8 +53,7 @@ type IAuditStore =
     abstract Snapshot: unit -> AuditRecord list
 
 type AppEnvironment =
-    { Config: AppConfig
-      Gateway: IPingGateway
+    { Gateway: IPingGateway
       AuditStore: IAuditStore
       AttemptCount: int ref
       WriteLog: LogEntry -> unit }
@@ -114,10 +113,10 @@ type InMemoryAuditStore(writeLog: LogEntry -> unit) =
 
 let execute<'env, 'value>
     (environment: 'env)
-    (workflow: Effect<'env, AppError, 'value>)
+    (workflow: Flow<'env, AppError, 'value>)
     : Result<'value, AppError> =
     workflow
-    |> Effect.execute environment
+    |> Flow.run environment CancellationToken.None
     |> Async.RunSynchronously
 
 let requireNonEmpty (name: string) (value: string) : Result<string, ValidationError> =
@@ -138,10 +137,10 @@ let requirePositiveInt (name: string) (value: int) : Result<int, ValidationError
     else
         Error(NonPositiveNumber name)
 
-let logWith level messageFactory : Effect<AppEnvironment, AppError, unit> =
-    Effect.logWith (fun env entry -> env.WriteLog entry) level messageFactory
+let logWith level messageFactory : Flow<AppEnvironment, AppError, unit> =
+    Flow.Runtime.logWith (fun env entry -> env.WriteLog entry) level messageFactory
 
-let logInfo message : Effect<AppEnvironment, AppError, unit> =
+let logInfo message : Flow<AppEnvironment, AppError, unit> =
     logWith LogLevel.Information (fun _ -> message)
 
 let createEnvironment (config: AppConfig) : AppEnvironment =
@@ -150,15 +149,14 @@ let createEnvironment (config: AppConfig) : AppEnvironment =
     let writeLog entry =
         printfn "[%A] %s" entry.Level entry.Message
 
-    { Config = config
-      Gateway = FakePingGateway(attemptCount, config) :> IPingGateway
+    { Gateway = FakePingGateway(attemptCount, config) :> IPingGateway
       AuditStore = InMemoryAuditStore(writeLog) :> IAuditStore
       AttemptCount = attemptCount
       WriteLog = writeLog }
 
-let validateConfig : Effect<AppConfig, AppError, RequestPlan> =
-    effect {
-        let! config = Effect.environment
+let validateConfig : Flow<AppConfig, AppError, RequestPlan> =
+    flow {
+        let! config = Flow.env
 
         let! apiBaseUrl =
             requireNonEmpty "apiBaseUrl" config.ApiBaseUrl
@@ -190,82 +188,82 @@ let validateConfig : Effect<AppConfig, AppError, RequestPlan> =
               NetworkDelay = networkDelay }
     }
 
-let fetchResponse (plan: RequestPlan) : Effect<AppEnvironment, AppError, Response> =
+let fetchResponse (plan: RequestPlan) : Flow<AppEnvironment, AppError, Response> =
     let invokeGateway =
-        effect {
-            let! environment = Effect.environment
-            let! token = Effect.cancellationToken
-            do! logWith LogLevel.Information (fun env -> sprintf "gateway call attempt=%d url=%s" (env.AttemptCount.Value + 1) plan.Url)
+        flow {
+            let! gateway = Flow.read _.Gateway
+            let! attempts = Flow.read _.AttemptCount
+            let! ct = Flow.Runtime.cancellationToken
+            do! logWith LogLevel.Information (fun _ -> sprintf "gateway call attempt=%d url=%s" (attempts.Value + 1) plan.Url)
 
             let! response =
-                environment.Gateway.Ping(plan, token)
-                |> Effect.fromTaskResultValue
-                |> Effect.mapError GatewayFailed
+                gateway.Ping(plan, ct)
+                |> Flow.Task.fromHotResult
+                |> Flow.mapError GatewayFailed
 
             return response
         }
 
     invokeGateway
-    |> Effect.retry
+    |> Flow.Runtime.retry
         { MaxAttempts = plan.RetryCount + 1
           Delay = fun attempt -> TimeSpan.FromMilliseconds(float (attempt * 15))
           ShouldRetry =
             function
             | GatewayFailed(Transient _) -> true
             | _ -> false }
-    |> Effect.timeout plan.RequestTimeout TimedOut
-    |> Effect.catchCancellation (fun _ -> Canceled)
+    |> Flow.Runtime.timeout plan.RequestTimeout TimedOut
+    |> Flow.Runtime.catchCancellation (fun _ -> Canceled)
 
-let saveAudit (plan: RequestPlan) (response: Response) : Effect<AppEnvironment, AppError, unit> =
-    effect {
-        let! environment = Effect.environment
+let saveAudit (plan: RequestPlan) (response: Response) : Flow<AppEnvironment, AppError, unit> =
+    flow {
+        let! auditStore = Flow.read _.AuditStore
+        let! attempts = Flow.read _.AttemptCount
+        let! ct = Flow.Runtime.cancellationToken
+
         let record =
             { Url = plan.Url
-              Attempts = environment.AttemptCount.Value
+              Attempts = attempts.Value
               StatusCode = response.StatusCode }
 
-        let! token = Effect.cancellationToken
-
         do!
-            environment.AuditStore.Save(record, token)
-            |> Effect.fromTaskUnit
-            |> Effect.catch (fun error -> PersistenceFailed error.Message)
+            auditStore.Save(record, ct)
+            |> Flow.Task.fromHotUnit
+            |> Flow.catch (fun error -> PersistenceFailed error.Message)
     }
 
-let runLegacyBoundary : Effect<AppConfig, AppError, unit> =
-    Effect.delay(fun () ->
-        effect {
-            let! shouldFail = Effect.read (fun (config: AppConfig) -> config.SimulateLegacyFailure)
+let runLegacyBoundary : Flow<AppConfig, AppError, unit> =
+    Flow.delay(fun () ->
+        flow {
+            let! shouldFail = Flow.read (fun (config: AppConfig) -> config.SimulateLegacyFailure)
 
             if shouldFail then
                 invalidOp "legacy logger exploded"
 
             return ()
         })
-    |> Effect.catch (fun error -> LegacyFailure error.Message)
+    |> Flow.catch (fun error -> LegacyFailure error.Message)
 
-let program : Effect<AppConfig, AppError, string> =
-    effect {
-        let! config = Effect.environment
+let program : Flow<AppConfig, AppError, string> =
+    flow {
+        let! config = Flow.env
         let environment = createEnvironment config
-
-        let runInAppEnvironment workflow =
-            workflow |> Effect.withEnvironment (fun (_: AppConfig) -> environment)
 
         let! plan = validateConfig
 
-        let! response =
-            Effect.usingAsync
-                (RequestScope(environment.WriteLog, "request"))
-                (fun _ ->
-                    effect {
-                        do! runInAppEnvironment (logInfo "starting request workflow")
-                        let! response = runInAppEnvironment (fetchResponse plan)
-                        do! runInAppEnvironment (saveAudit plan response)
-                        return response
-                    })
+        use _ = new RequestScope(environment.WriteLog, "request")
 
-        let! () = runLegacyBoundary
+        do! logInfo "starting request workflow" |> Flow.mapEnv (fun (_: AppConfig) -> environment)
+
+        let! response =
+            fetchResponse plan
+            |> Flow.mapEnv (fun (_: AppConfig) -> environment)
+
+        do!
+            saveAudit plan response
+            |> Flow.mapEnv (fun (_: AppConfig) -> environment)
+
+        do! runLegacyBoundary
 
         let audits =
             environment.AuditStore.Snapshot()

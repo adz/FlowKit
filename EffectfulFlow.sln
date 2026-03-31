@@ -5,17 +5,17 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F39D16FA-0715-4E4B-BCD0-CFA82EF58B25}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "EffectFs", "src\EffectFs\EffectFs.fsproj", "{5C1ACFC8-8FEE-490D-A919-FE94C92C3331}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "EffectfulFlow", "src\EffectfulFlow\EffectfulFlow.fsproj", "{5C1ACFC8-8FEE-490D-A919-FE94C92C3331}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{B36A84DF-456D-A817-6EDD-3EC3E7F6E11F}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "EffectFs.Examples", "examples\EffectFs.Examples\EffectFs.Examples.fsproj", "{77BB3E57-00A7-4DE0-B65D-34AEA8FD11CB}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "EffectfulFlow.Examples", "examples\EffectfulFlow.Examples\EffectfulFlow.Examples.fsproj", "{77BB3E57-00A7-4DE0-B65D-34AEA8FD11CB}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "EffectFs.MaintenanceExamples", "examples\EffectFs.MaintenanceExamples\EffectFs.MaintenanceExamples.fsproj", "{A24CE0A5-22F0-482E-9ED0-0B4F584E24F5}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "EffectfulFlow.MaintenanceExamples", "examples\EffectfulFlow.MaintenanceExamples\EffectfulFlow.MaintenanceExamples.fsproj", "{A24CE0A5-22F0-482E-9ED0-0B4F584E24F5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "EffectFs.Tests", "tests\EffectFs.Tests\EffectFs.Tests.fsproj", "{1787EB0E-CBC5-49FE-BECA-4FB00A89EABA}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "EffectfulFlow.Tests", "tests\EffectfulFlow.Tests\EffectfulFlow.Tests.fsproj", "{1787EB0E-CBC5-49FE-BECA-4FB00A89EABA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

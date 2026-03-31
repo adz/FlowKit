@@ -1,8 +1,8 @@
 # Getting Started
 
-Read this page when you want to write your first small Effect.FS workflow.
+Read this page when you want to write your first small Flow.
 
-The goal is to keep pure code as plain F#, then introduce `Effect` only at the boundary where dependencies, async work, or typed failures start.
+The goal is to keep pure code as plain F#, then introduce `Flow` only at the boundary where dependencies, async work, or typed failures start.
 
 ## 1. Start With Pure Code
 
@@ -19,21 +19,19 @@ let validateName (name: string) =
         Ok name
 ```
 
-You do not need `Effect` for code that is already clear as plain `Result`.
+## 2. Introduce `Flow`
 
-## 2. Introduce `Effect` Without An Environment First
-
-Start with the smallest useful effect:
+Start with the smallest useful flow:
 
 ```fsharp
-Effect<'env, 'error, 'value>
+Flow<'env, 'error, 'value>
 ```
 
 Example:
 
 ```fsharp
-let greet input : Effect<unit, ValidationError, string> =
-    effect {
+let greet input : Flow<unit, ValidationError, string> =
+    flow {
         let! name = validateName input
         return $"Hello {name}"
     }
@@ -41,163 +39,124 @@ let greet input : Effect<unit, ValidationError, string> =
 
 Read the type as:
 
-- `'env`: the environment the workflow needs
+- `'env`: the environment the flow needs
 - `'error`: the expected typed failure
 - `'value`: the success value
 
-## 3. Run The Effect Explicitly
+## 3. Run The Flow Explicitly
 
-Effects are cold. They do nothing until you execute them:
+Flows are cold. They do nothing until you run them:
 
 ```fsharp
 let result =
     greet "Ada"
-    |> Effect.execute ()
+    |> Flow.run () System.Threading.CancellationToken.None
     |> Async.RunSynchronously
 ```
 
-Result:
+Use `unit` for `'env` when the flow does not need dependencies yet.
 
-```fsharp
-Ok "Hello Ada"
-```
+## 4. Read From The Environment
 
-Use `unit` for `'env` when the workflow does not need any dependencies yet.
-
-## 4. Map The Whole Effect
-
-Once you have an effect, transform the success value with `Effect.map`:
-
-```fsharp
-let greetingLength =
-    greet "Ada"
-    |> Effect.map String.length
-
-let result =
-    greetingLength
-    |> Effect.execute ()
-    |> Async.RunSynchronously
-```
-
-Result:
-
-```fsharp
-Ok 9
-```
-
-This keeps the workflow focused on producing the main value, then applies the next step to the whole effect.
-
-## 5. Do The Same Inline
-
-You can also build the workflow inline, then map it:
-
-```fsharp
-let result =
-    effect {
-        let! name = validateName "Ada"
-        return $"Hello {name}"
-    }
-    |> Effect.map String.length
-    |> Effect.execute ()
-    |> Async.RunSynchronously
-```
-
-This is a good shape when the workflow is short and only used once.
-
-## 6. Bind Existing Wrapper Types Directly
-
-Inside `effect {}` you can bind directly from common F# and .NET shapes:
-
-```fsharp
-let workflow : Effect<unit, string, int> =
-    effect {
-        let! a = Ok 1
-        let! b = async { return 2 }
-        let! c = System.Threading.Tasks.Task.FromResult 3
-        return a + b + c
-    }
-```
-
-This is the main ergonomic goal of the library: keep the workflow close to the happy path even when the inputs come in different wrapper shapes.
-
-## 7. Add The Environment When You Need Dependencies
-
-Use the environment helpers when the workflow depends on external context:
-
-- `Effect.environment` to read the whole environment
-- `Effect.read` to project one value from it
-- `Effect.withEnvironment` to run a smaller effect inside a larger environment
-- `Effect.provide` to pre-supply the environment
-
-Example:
+Use `Flow.read` when the flow only needs one projected value:
 
 ```fsharp
 type AppEnv =
     { Prefix: string }
 
-let greetWithPrefix input : Effect<AppEnv, ValidationError, string> =
-    effect {
-        let! env = Effect.environment
+let greetWithPrefix input : Flow<AppEnv, ValidationError, string> =
+    flow {
         let! name = validateName input
-        return $"{env.Prefix} {name}"
+        let! prefix = Flow.read _.Prefix
+        return $"{prefix} {name}"
+    }
+```
+
+Use `Flow.env` when you genuinely need the whole environment:
+
+```fsharp
+let describe : Flow<AppEnv, ValidationError, string> =
+    flow {
+        let! env = Flow.env
+        return env.Prefix
+    }
+```
+
+## 5. Compose Smaller Flows Into Bigger Environments
+
+Use `Flow.mapEnv` when a smaller flow should run inside a larger outer environment:
+
+```fsharp
+type SmallEnv = { Prefix: string }
+type BigEnv = { App: SmallEnv; RequestId: string }
+
+let greet : Flow<SmallEnv, ValidationError, string> =
+    flow {
+        let! prefix = Flow.read _.Prefix
+        return $"{prefix} world"
     }
 
-let prefixLength : Effect<AppEnv, ValidationError, int> =
-    Effect.read (fun env -> env.Prefix.Length)
+let greetInBigEnv : Flow<BigEnv, ValidationError, string> =
+    greet |> Flow.mapEnv _.App
 ```
 
-## 8. Prefer The Inferred `environment` Form
+## 6. Cross `.NET Task` Boundaries Explicitly
 
-Most of the time you can write:
+Task interop lives under `Flow.Task`.
+
+Started task values bind directly inside `flow {}`:
 
 ```fsharp
-let! env = Effect.environment
+let workflow : Flow<unit, string, int> =
+    flow {
+        let! value = System.Threading.Tasks.Task.FromResult 42
+        return value
+    }
 ```
 
-The longer form:
+Use `Flow.Task` when you want the boundary shape to stay explicit.
+
+Use cold task helpers when work should start at flow execution time:
 
 ```fsharp
-let! env = Effect.environment<AppEnv, ValidationError>
+let load : Flow<unit, string, int> =
+    Flow.Task.fromCold(fun _ ->
+        System.Threading.Tasks.Task.FromResult 42)
 ```
 
-is only needed when F# cannot infer the environment and error types yet.
-
-## 9. Use `environmentWith` When It Reads Better
-
-If the workflow uses the environment throughout, this can be a cleaner shape:
+Use hot task helpers only when you already have a started task value on purpose:
 
 ```fsharp
-let greet : Effect<AppEnv, ValidationError, string> =
-    Effect.environmentWith(fun env ->
-        effect {
-            return $"{env.Prefix} world"
-        })
+let started = System.Threading.Tasks.Task.FromResult 42
+let load = Flow.Task.fromHot started
 ```
 
-Use it when it reduces repetition. Do not force it into every workflow.
+## 7. Access The Cancellation Token Only Where Needed
 
-## 10. Add Operational Helpers Only Where They Help
+The token is already part of `Flow.run`, but some dependencies need it inside the flow:
 
-Effect.FS includes helpers for common application concerns:
+```fsharp
+let ping : Flow<AppEnv, string, Response> =
+    flow {
+        let! ct = Flow.Runtime.cancellationToken
+        let! gateway = Flow.read _.Gateway
+        return! gateway.Ping(ct) |> Flow.Task.fromColdResult
+    }
+```
 
-- `Effect.retry`
-- `Effect.timeout`
-- `Effect.log`
-- `Effect.logWith`
-- `Effect.bracket`
-- `Effect.bracketAsync`
-- `Effect.usingAsync`
+## 8. Use Runtime Helpers Where They Clarify The Flow
 
-Add them when they make the workflow clearer. Keep the core flow small and direct.
+Runtime helpers live under `Flow.Runtime`:
 
-## 11. Migrate One Workflow At A Time
+- `Flow.Runtime.retry`
+- `Flow.Runtime.timeout`
+- `Flow.Runtime.log`
+- `Flow.Runtime.logWith`
+- `Flow.Runtime.catchCancellation`
+- `Flow.Runtime.useWithAcquireRelease`
 
-If you already have `Async<Result<_,_>>` code, start at the boundary:
-
-- lift old code with `Effect.fromAsyncResult`
-- run an effect as `Async<Result<_,_>>` with `Effect.toAsyncResult`
-- use `AsyncResultCompat` during migration if that keeps the transition simpler
+For normal resource lifetimes, prefer `use` and `use!` directly inside `flow {}`.
 
 ## Next
 
-Read [`examples/README.md`](../examples/README.md) to see complete workflows, then [`docs/FSTOOLKIT_MIGRATION.md`](./FSTOOLKIT_MIGRATION.md) if you are moving from FsToolkit.
+Read [`examples/README.md`](../examples/README.md) to see complete flows, then [`docs/FSTOOLKIT_MIGRATION.md`](./FSTOOLKIT_MIGRATION.md) if you are moving from `Async<Result<_,_>>`.

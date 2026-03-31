@@ -1,4 +1,4 @@
-# Effect.FS Plan
+# EffectfulFlow Plan
 
 ## Status
 
@@ -86,7 +86,7 @@ Outcome:
 
 ## Product Position
 
-Effect.FS should be judged against:
+EffectfulFlow should be judged against:
 
 - plain `Async<Result<_,_>>`
 - FsToolkit-style application code
