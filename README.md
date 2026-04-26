@@ -1,6 +1,6 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/content/img/flowkit-logo-dark.svg">
-  <img alt="flow{kit}" src="docs/content/img/flowkit-logo-light.svg" height="72">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/content/img/flowkit-dark.svg">
+  <img alt="flow{kit}" src="docs/content/img/flowkit-light.svg" height="72">
 </picture>
 
 Simple to use F# flow {} computation expression for unifying Dependencies (Reader), 

@@ -16,7 +16,7 @@
     <PackageReleaseNotes>Initial public preview release of FlowKit with the core Flow abstraction, task and async interop, cancellation-aware execution, retry and timeout helpers, scoped cleanup, runnable examples, and GitHub Pages API documentation.</PackageReleaseNotes>
     <PackageTags>fsharp;effects;flow;async;result;dependencies</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <FsDocsLogoSource>content/img/flowkit-logo-light.svg</FsDocsLogoSource>
+    <FsDocsLogoSource>content/img/flowkit-light.svg</FsDocsLogoSource>
     <FsDocsLogoAlt>flow{kit}</FsDocsLogoAlt>
     <FsDocsLogoLink>https://adz.github.io/FlowKit/</FsDocsLogoLink>
     <IncludeSymbols>true</IncludeSymbols>
@@ -26,7 +26,8 @@
 
   <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
-    <None Include="..\..\docs\content\img\*.svg" Pack="true" PackagePath="docs/content/img/" />
+    <None Include="..\..\docs\content\img\flowkit-light.svg" Pack="true" PackagePath="docs/content/img/" />
+    <None Include="..\..\docs\content\img\flowkit-dark.svg" Pack="true" PackagePath="docs/content/img/" />
   </ItemGroup>
 
   <ItemGroup>
