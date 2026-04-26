@@ -1,5 +1,3 @@
-# FlowKit
-
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/content/img/flowkit-logo-dark.svg">
   <img alt="flow{kit}" src="docs/content/img/flowkit-logo-light.svg" height="72">
