@@ -7,7 +7,7 @@ open FsFlow.Net
 type AppEnv =
     { Prefix: string
       Name: string
-      LoadSuffix: CancellationToken -> Task<string> }
+      LoadSuffix: ColdTask<string> }
 
 let greetingFlow : Flow<AppEnv, string, string> =
     Flow.read (fun env -> $"{env.Prefix} {env.Name}")
@@ -19,8 +19,7 @@ let greetingAsyncFlow : AsyncFlow<AppEnv, string, string> =
 
 let greetingTaskFlow : TaskFlow<AppEnv, string, string> =
     TaskFlow.read _.LoadSuffix
-    |> TaskFlow.bind (fun loadSuffix ->
-        TaskFlow.fromTask(fun cancellationToken -> loadSuffix cancellationToken))
+    |> TaskFlow.bind TaskFlow.fromTask
     |> TaskFlow.map (fun suffix -> suffix)
 
 [<EntryPoint>]
@@ -28,7 +27,7 @@ let main _ =
     let env =
         { Prefix = "Hello"
           Name = "Ada"
-          LoadSuffix = fun _ -> Task.FromResult "!" }
+          LoadSuffix = ColdTask(fun _ -> Task.FromResult "!") }
 
     let syncResult =
         greetingFlow

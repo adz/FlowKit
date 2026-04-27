@@ -11,7 +11,7 @@ type AppConfig =
 
 type AppEnvironment =
     { Config: AppConfig
-      LoadSuffix: CancellationToken -> Task<string> }
+      LoadSuffix: ColdTask<string> }
 
 let validateConfig : Flow<AppConfig, string, string> =
     Flow.read (fun config ->
@@ -31,7 +31,7 @@ let greetTask : TaskFlow<AppEnvironment, string, string> =
     |> TaskFlow.bind (fun greeting ->
         TaskFlow.read _.LoadSuffix
         |> TaskFlow.bind (fun loadSuffix ->
-            TaskFlow.fromTask(fun cancellationToken -> loadSuffix cancellationToken)
+            TaskFlow.fromTask loadSuffix
             |> TaskFlow.map (fun suffix -> $"{greeting}{suffix}")))
 
 [<EntryPoint>]
@@ -41,7 +41,7 @@ let main _ =
             { Prefix = "Hello"
               Name = "Ada"
               Delay = TimeSpan.FromMilliseconds 10.0 }
-          LoadSuffix = fun _ -> Task.FromResult "!" }
+          LoadSuffix = ColdTask(fun _ -> Task.FromResult "!") }
 
     let syncResult =
         validateConfig

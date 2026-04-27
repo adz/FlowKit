@@ -34,9 +34,11 @@ let taskFlowProbe () =
     let seen = ref CancellationToken.None
 
     let workflow : TaskFlow<unit, string, int> =
-        TaskFlow.fromTask(fun cancellationToken ->
-            seen.Value <- cancellationToken
-            Task.FromResult 42)
+        TaskFlow.fromTask(
+            ColdTask(fun cancellationToken ->
+                seen.Value <- cancellationToken
+                Task.FromResult 42)
+        )
 
     let result =
         workflow

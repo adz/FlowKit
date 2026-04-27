@@ -138,14 +138,16 @@ module Tests =
         test <@ asyncResult = Ok 19 @>
 
     [<Fact>]
-    let ``TaskFlow observes the runtime cancellation token`` () =
+    let ``ColdTask carries the runtime cancellation token into TaskFlow`` () =
         let seen = ref CancellationToken.None
         use cts = new CancellationTokenSource()
 
         let workflow : TaskFlow<unit, string, int> =
-            TaskFlow.fromTask(fun cancellationToken ->
-                seen.Value <- cancellationToken
-                Task.FromResult 42)
+            TaskFlow.fromTask(
+                ColdTask(fun cancellationToken ->
+                    seen.Value <- cancellationToken
+                    Task.FromResult 42)
+            )
 
         let result =
             workflow
@@ -154,6 +156,42 @@ module Tests =
 
         test <@ result = Ok 42 @>
         test <@ seen.Value = cts.Token @>
+
+    [<Fact>]
+    let ``TaskFlow.fromTask requires the nominal ColdTask wrapper`` () =
+        let fsFlowAssemblyPath = typeof<FlowBuilder>.Assembly.Location
+        let fsFlowNetAssemblyPath = typeof<TaskFlowBuilder>.Assembly.Location
+
+        let rawFactoryProbe =
+            $"""
+#r @"{fsFlowAssemblyPath}"
+#r @"{fsFlowNetAssemblyPath}"
+open System.Threading
+open System.Threading.Tasks
+open FsFlow.Net
+
+let probe : TaskFlow<unit, string, int> =
+    TaskFlow.fromTask(fun (_: CancellationToken) -> Task.FromResult 42)
+"""
+
+        let wrappedFactoryProbe =
+            $"""
+#r @"{fsFlowAssemblyPath}"
+#r @"{fsFlowNetAssemblyPath}"
+open System.Threading.Tasks
+open FsFlow.Net
+
+let probe : TaskFlow<unit, string, int> =
+    TaskFlow.fromTask(ColdTask(fun _ -> Task.FromResult 42))
+"""
+
+        let rawExitCode, rawOutput = runFsiScript rawFactoryProbe
+        let wrappedExitCode, wrappedOutput = runFsiScript wrappedFactoryProbe
+
+        test <@ rawExitCode <> 0 @>
+        test <@ rawOutput.Contains("error FS") @>
+        test <@ wrappedExitCode = 0 @>
+        test <@ wrappedOutput = "" @>
 
     [<Fact>]
     let ``TaskFlow can lift AsyncFlow`` () =

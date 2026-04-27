@@ -18,6 +18,23 @@ type TaskFlow<'env, 'error, 'value> =
     | TaskFlow of ('env -> CancellationToken -> Task<Result<'value, 'error>>)
 
 /// <summary>
+/// Represents delayed task work that can observe a runtime cancellation token
+/// when it is started.
+/// </summary>
+/// <typeparam name="value">The type of the produced task value.</typeparam>
+type ColdTask<'value> =
+    | ColdTask of (CancellationToken -> Task<'value>)
+
+/// <summary>
+/// Core functions for creating and executing cold tasks.
+/// </summary>
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+[<RequireQualifiedAccess>]
+module ColdTask =
+    let run (cancellationToken: CancellationToken) (ColdTask operation: ColdTask<'value>) : Task<'value> =
+        operation cancellationToken
+
+/// <summary>
 /// Core functions for creating, composing, and executing task flows.
 /// </summary>
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
@@ -54,17 +71,17 @@ module TaskFlow =
             AsyncFlow.run environment flow
             |> fun operation -> Async.StartAsTask(operation, cancellationToken = cancellationToken))
 
-    let fromTask (factory: CancellationToken -> Task<'value>) : TaskFlow<'env, 'error, 'value> =
+    let fromTask (coldTask: ColdTask<'value>) : TaskFlow<'env, 'error, 'value> =
         TaskFlow(fun _ cancellationToken ->
             task {
-                let! value = factory cancellationToken
+                let! value = ColdTask.run cancellationToken coldTask
                 return Ok value
             })
 
     let fromTaskResult
-        (factory: CancellationToken -> Task<Result<'value, 'error>>)
+        (coldTask: ColdTask<Result<'value, 'error>>)
         : TaskFlow<'env, 'error, 'value> =
-        TaskFlow(fun _ cancellationToken -> factory cancellationToken)
+        TaskFlow(fun _ cancellationToken -> ColdTask.run cancellationToken coldTask)
 
     let env<'env, 'error> : TaskFlow<'env, 'error, 'env> =
         TaskFlow(fun environment _ -> Task.FromResult(Ok environment))

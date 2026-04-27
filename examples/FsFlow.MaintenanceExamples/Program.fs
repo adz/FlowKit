@@ -35,7 +35,7 @@ let asyncExample : AsyncFlow<int, string, int> =
         AsyncFlow.fromAsync(async { return value * 2 }))
 
 let taskExample : TaskFlow<int, string, int> =
-    TaskFlow.fromTask(fun _ -> Task.FromResult 5)
+    TaskFlow.fromTask(ColdTask(fun _ -> Task.FromResult 5))
     |> TaskFlow.bind (fun suffix ->
         TaskFlow.read id
         |> TaskFlow.map (fun value -> value + suffix))

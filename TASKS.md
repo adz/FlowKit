@@ -14,7 +14,7 @@ The current answer is not mainly "the core idea is bad." The current answer is t
 4. [x] Confirm whether F# computation expression extension members are sufficient for `FsFlow.Net` to add task-oriented binds to `asyncFlow {}` only when `FsFlow.Net` is referenced.
 5. [x] Design the shared internal combinator core so `map`, `bind`, `mapError`, environment projection, and related operations are not reimplemented ad hoc across `Flow`, `AsyncFlow`, and `TaskFlow`.
 6. [x] Remove task-oriented bind support from sync `flow {}` so the sync builder stays honest to the new representation.
-7. [ ] Replace the current cold task aliases with a single nominal `ColdTask<'value>` wrapper representing delayed `CancellationToken -> Task<'value>`.
+7. [x] Replace the current cold task aliases with a single nominal `ColdTask<'value>` wrapper representing delayed `CancellationToken -> Task<'value>`.
 8. [ ] Remove the separate `ColdTaskResult` concept and treat `ColdTask<Result<'value,'error>>` as the typed-failure cold-task shape.
 9. [ ] Design the `ColdTask` helper surface for constructing and adapting values from delayed task factories, started `Task<'value>` values where needed, and `ValueTask<'value>` factories or values where needed.
 10. [ ] Document the semantic difference between lifting hot `Task`/`ValueTask` values versus lifting `ColdTask<'value>`, including rerun behavior, cancellation-token propagation, and when `ColdTask` is the preferred interop shape.
