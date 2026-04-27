@@ -158,6 +158,65 @@ module Tests =
         test <@ seen.Value = cts.Token @>
 
     [<Fact>]
+    let ``ColdTask helpers adapt task and valuetask sources with the expected hot and cold semantics`` () =
+        let startedTask = Task.FromResult 42
+        let hotTask = ColdTask.fromTask startedTask
+
+        let taskRun1 = hotTask |> ColdTask.run CancellationToken.None
+        let taskRun2 = hotTask |> ColdTask.run CancellationToken.None
+
+        test <@ obj.ReferenceEquals(startedTask, taskRun1) @>
+        test <@ obj.ReferenceEquals(taskRun1, taskRun2) @>
+        test <@ taskRun1.GetAwaiter().GetResult() = 42 @>
+
+        let taskFactoryRuns = ref 0
+
+        let coldTask =
+            ColdTask.fromTaskFactory(fun () ->
+                taskFactoryRuns.Value <- taskFactoryRuns.Value + 1
+                Task.FromResult taskFactoryRuns.Value)
+
+        let coldTaskRun1 = coldTask |> ColdTask.run CancellationToken.None |> fun task -> task.GetAwaiter().GetResult()
+        let coldTaskRun2 = coldTask |> ColdTask.run CancellationToken.None |> fun task -> task.GetAwaiter().GetResult()
+
+        test <@ coldTaskRun1 = 1 @>
+        test <@ coldTaskRun2 = 2 @>
+
+        let seen = ref CancellationToken.None
+        let valueTaskFactoryRuns = ref 0
+
+        let coldValueTask =
+            ColdTask.fromValueTaskFactory(fun cancellationToken ->
+                seen.Value <- cancellationToken
+                valueTaskFactoryRuns.Value <- valueTaskFactoryRuns.Value + 1
+                ValueTask<int>(valueTaskFactoryRuns.Value))
+
+        use cts = new CancellationTokenSource()
+
+        let coldValueTaskRun1 =
+            coldValueTask
+            |> ColdTask.run cts.Token
+            |> fun task -> task.GetAwaiter().GetResult()
+
+        let coldValueTaskRun2 =
+            coldValueTask
+            |> ColdTask.run CancellationToken.None
+            |> fun task -> task.GetAwaiter().GetResult()
+
+        test <@ coldValueTaskRun1 = 1 @>
+        test <@ coldValueTaskRun2 = 2 @>
+        test <@ seen.Value = CancellationToken.None @>
+
+        let startedValueTask = ValueTask<int>(99)
+        let hotValueTask = ColdTask.fromValueTask startedValueTask
+
+        let hotValueTaskRun1 = hotValueTask |> ColdTask.run CancellationToken.None
+        let hotValueTaskRun2 = hotValueTask |> ColdTask.run CancellationToken.None
+
+        test <@ obj.ReferenceEquals(hotValueTaskRun1, hotValueTaskRun2) @>
+        test <@ hotValueTaskRun1.GetAwaiter().GetResult() = 99 @>
+
+    [<Fact>]
     let ``ColdTask of Result is the typed failure cold task shape`` () =
         let seen = ref CancellationToken.None
         use cts = new CancellationTokenSource()

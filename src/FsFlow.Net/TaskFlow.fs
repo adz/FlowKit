@@ -31,6 +31,29 @@ type ColdTask<'value> =
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 [<RequireQualifiedAccess>]
 module ColdTask =
+    let create (operation: CancellationToken -> Task<'value>) : ColdTask<'value> =
+        ColdTask operation
+
+    let fromTaskFactory (factory: unit -> Task<'value>) : ColdTask<'value> =
+        create (fun _ -> factory ())
+
+    let fromTask (startedTask: Task<'value>) : ColdTask<'value> =
+        fromTaskFactory (fun () -> startedTask)
+
+    let fromValueTaskFactory
+        (factory: CancellationToken -> ValueTask<'value>)
+        : ColdTask<'value> =
+        create (fun cancellationToken -> factory cancellationToken |> _.AsTask())
+
+    let fromValueTaskFactoryWithoutCancellation
+        (factory: unit -> ValueTask<'value>)
+        : ColdTask<'value> =
+        create (fun _ -> factory () |> _.AsTask())
+
+    let fromValueTask (startedValueTask: ValueTask<'value>) : ColdTask<'value> =
+        let startedTask = startedValueTask.AsTask()
+        fromTask startedTask
+
     let run (cancellationToken: CancellationToken) (ColdTask operation: ColdTask<'value>) : Task<'value> =
         operation cancellationToken
 
