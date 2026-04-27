@@ -222,6 +222,9 @@ type TaskFlowBuilder() =
     member _.ReturnFrom(operation: ValueTask<Result<'value, 'error>>) : TaskFlow<'env, 'error, 'value> =
         TaskFlow(fun _ _ -> operation.AsTask())
 
+    member _.ReturnFrom(operation: ColdTask<Result<'value, 'error>>) : TaskFlow<'env, 'error, 'value> =
+        TaskFlow.fromTaskResult operation
+
     member _.ReturnFrom(operation: Async<Result<'value, 'error>>) : TaskFlow<'env, 'error, 'value> =
         operation
         |> AsyncFlow.fromAsyncResult
@@ -289,6 +292,15 @@ type TaskFlowBuilder() =
             binder: 'value -> TaskFlow<'env, 'error, 'next>
         ) : TaskFlow<'env, 'error, 'next> =
         TaskFlow(fun _ _ -> operation.AsTask())
+        |> TaskFlow.bind binder
+
+    member _.Bind
+        (
+            operation: ColdTask<Result<'value, 'error>>,
+            binder: 'value -> TaskFlow<'env, 'error, 'next>
+        ) : TaskFlow<'env, 'error, 'next> =
+        operation
+        |> TaskFlow.fromTaskResult
         |> TaskFlow.bind binder
 
     member _.Bind
@@ -443,6 +455,18 @@ module TaskFlowBuilderExtensions =
             |> this.ReturnFrom
             |> TaskFlow.bind binder
 
+        member _.ReturnFrom(operation: ColdTask<'value>) : TaskFlow<'env, 'error, 'value> =
+            TaskFlow.fromTask operation
+
+        member this.Bind
+            (
+                operation: ColdTask<'value>,
+                binder: 'value -> TaskFlow<'env, 'error, 'next>
+            ) : TaskFlow<'env, 'error, 'next> =
+            operation
+            |> this.ReturnFrom
+            |> TaskFlow.bind binder
+
 type DotNetAsyncFlowBuilder() =
     inherit AsyncFlowBuilder()
 
@@ -454,6 +478,13 @@ type DotNetAsyncFlowBuilder() =
     member _.ReturnFrom(operation: ValueTask<Result<'value, 'error>>) : AsyncFlow<'env, 'error, 'value> =
         operation.AsTask()
         |> Async.AwaitTask
+        |> AsyncFlow.fromAsyncResult
+
+    member _.ReturnFrom(operation: ColdTask<Result<'value, 'error>>) : AsyncFlow<'env, 'error, 'value> =
+        async {
+            let! cancellationToken = Async.CancellationToken
+            return! ColdTask.run cancellationToken operation |> Async.AwaitTask
+        }
         |> AsyncFlow.fromAsyncResult
 
     member _.Bind
@@ -473,6 +504,18 @@ type DotNetAsyncFlowBuilder() =
         ) : AsyncFlow<'env, 'error, 'next> =
         operation.AsTask()
         |> Async.AwaitTask
+        |> AsyncFlow.fromAsyncResult
+        |> AsyncFlow.bind binder
+
+    member this.Bind
+        (
+            operation: ColdTask<Result<'value, 'error>>,
+            binder: 'value -> AsyncFlow<'env, 'error, 'next>
+        ) : AsyncFlow<'env, 'error, 'next> =
+        async {
+            let! cancellationToken = Async.CancellationToken
+            return! ColdTask.run cancellationToken operation |> Async.AwaitTask
+        }
         |> AsyncFlow.fromAsyncResult
         |> AsyncFlow.bind binder
 
@@ -527,6 +570,23 @@ module AsyncFlowBuilderExtensions =
         member this.Bind
             (
                 operation: ValueTask<'value>,
+                binder: 'value -> AsyncFlow<'env, 'error, 'next>
+            ) : AsyncFlow<'env, 'error, 'next> =
+            operation
+            |> this.ReturnFrom
+            |> AsyncFlow.bind binder
+
+        member _.ReturnFrom(operation: ColdTask<'value>) : AsyncFlow<'env, 'error, 'value> =
+            async {
+                let! cancellationToken = Async.CancellationToken
+                let! value = ColdTask.run cancellationToken operation |> Async.AwaitTask
+                return value
+            }
+            |> AsyncFlow.fromAsync
+
+        member this.Bind
+            (
+                operation: ColdTask<'value>,
                 binder: 'value -> AsyncFlow<'env, 'error, 'next>
             ) : AsyncFlow<'env, 'error, 'next> =
             operation

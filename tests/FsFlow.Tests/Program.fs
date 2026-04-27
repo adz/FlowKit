@@ -553,6 +553,48 @@ let probe : Flow<unit, string, int> =
         test <@ valueTaskReturnFromResultResult = Ok 42 @>
 
     [<Fact>]
+    let ``taskFlow directly binds and returns ColdTask values`` () =
+        let seen = ref CancellationToken.None
+        use cts = new CancellationTokenSource()
+
+        let resultColdTask (value: int) : ColdTask<Result<int, string>> =
+            ColdTask(fun cancellationToken ->
+                seen.Value <- cancellationToken
+                Task.FromResult(Ok value))
+
+        let workflow : TaskFlow<int, string, int> =
+            taskFlow {
+                let! env = TaskFlow.env
+                let! baseValue =
+                    ColdTask(fun cancellationToken ->
+                        seen.Value <- cancellationToken
+                        Task.FromResult(env + 1))
+
+                let! adjustedValue = resultColdTask (baseValue * 2)
+                return adjustedValue + 2
+            }
+
+        let coldTaskReturnFromValue : TaskFlow<unit, string, int> =
+            taskFlow { return! ColdTask(fun _ -> Task.FromResult 42) }
+
+        let coldTaskReturnFromResult : TaskFlow<unit, string, int> =
+            taskFlow { return! resultColdTask 42 }
+
+        let run flow environment cancellationToken =
+            flow
+            |> TaskFlow.run environment cancellationToken
+            |> fun task -> task.GetAwaiter().GetResult()
+
+        let workflowResult = run workflow 19 cts.Token
+        let coldTaskReturnFromValueResult = run coldTaskReturnFromValue () cts.Token
+        let coldTaskReturnFromResultResult = run coldTaskReturnFromResult () cts.Token
+
+        test <@ workflowResult = Ok 42 @>
+        test <@ coldTaskReturnFromValueResult = Ok 42 @>
+        test <@ coldTaskReturnFromResultResult = Ok 42 @>
+        test <@ seen.Value = cts.Token @>
+
+    [<Fact>]
     let ``asyncFlow directly binds and returns Task values when FsFlow.Net is referenced`` () =
         let resultTask (value: int) : Task<Result<int, string>> = Task.FromResult(Ok value)
 
@@ -636,6 +678,57 @@ let probe : Flow<unit, string, int> =
         test <@ valueTaskReturnFromUnitResult = Ok() @>
         test <@ valueTaskReturnFromValueResult = Ok 42 @>
         test <@ valueTaskReturnFromResultResult = Ok 42 @>
+
+    [<Fact>]
+    let ``asyncFlow directly binds and returns ColdTask values when FsFlow.Net is referenced`` () =
+        let seen = ref CancellationToken.None
+        use cts = new CancellationTokenSource()
+
+        let resultColdTask (value: int) : ColdTask<Result<int, string>> =
+            ColdTask(fun cancellationToken ->
+                seen.Value <- cancellationToken
+                Task.FromResult(Ok value))
+
+        let workflow : AsyncFlow<int, string, int> =
+            asyncFlow {
+                let! env = AsyncFlow.env
+                let! baseValue =
+                    ColdTask(fun cancellationToken ->
+                        seen.Value <- cancellationToken
+                        Task.FromResult(env + 1))
+
+                let! adjustedValue = resultColdTask (baseValue * 2)
+                return adjustedValue + 2
+            }
+
+        let coldTaskReturnFromValue : AsyncFlow<unit, string, int> =
+            asyncFlow { return! ColdTask(fun _ -> Task.FromResult 42) }
+
+        let coldTaskReturnFromResult : AsyncFlow<unit, string, int> =
+            asyncFlow { return! resultColdTask 42 }
+
+        let workflowResult =
+            workflow
+            |> AsyncFlow.run 19
+            |> fun operation -> Async.StartAsTask(operation, cancellationToken = cts.Token)
+            |> fun task -> task.GetAwaiter().GetResult()
+
+        let coldTaskReturnFromValueResult =
+            coldTaskReturnFromValue
+            |> AsyncFlow.run ()
+            |> fun operation -> Async.StartAsTask(operation, cancellationToken = cts.Token)
+            |> fun task -> task.GetAwaiter().GetResult()
+
+        let coldTaskReturnFromResultResult =
+            coldTaskReturnFromResult
+            |> AsyncFlow.run ()
+            |> fun operation -> Async.StartAsTask(operation, cancellationToken = cts.Token)
+            |> fun task -> task.GetAwaiter().GetResult()
+
+        test <@ workflowResult = Ok 42 @>
+        test <@ coldTaskReturnFromValueResult = Ok 42 @>
+        test <@ coldTaskReturnFromResultResult = Ok 42 @>
+        test <@ seen.Value = cts.Token @>
 
 module Program =
     [<EntryPoint>]
