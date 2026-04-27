@@ -168,6 +168,136 @@ Likely design direction:
 
 Anonymous records may be useful for user env composition, but they are not by themselves a full capability-container strategy. They are best treated as one env-shaping option rather than the entire abstraction story.
 
+## Capability System Options
+
+The library should be able to grow a set of capabilities over time while still allowing users to compose their own environments and define their own capabilities.
+
+The design target is:
+
+- high DX
+- high performance
+- user-extensible capabilities
+- no forced dependency on a runtime service container
+
+### Option 1. Named Wrapper Capabilities
+
+Examples:
+
+- `WithLogger<'env>`
+- `WithClock<'env>`
+- `WithMetrics<'env>`
+
+Pros:
+
+- explicit
+- easy to document
+- capability requirements are obvious in types
+
+Cons:
+
+- nesting becomes awkward
+- composing many capabilities gets noisy fast
+- library users may end up with wrapper pyramids
+
+Assessment:
+
+- good for a few focused helpers
+- not ideal as the primary long-term capability model
+
+### Option 2. SRTP Or Inline Capability Accessors
+
+Concept:
+
+- capabilities are represented as static access patterns over `'env`
+- helpers use inline accessors or SRTP-based member constraints
+- users satisfy capabilities with env types that expose the expected members or adapters
+
+Pros:
+
+- high performance
+- extensible without runtime lookup
+- allows new capabilities to be added without changing the workflow core
+- keeps one `'env` parameter rather than forcing nested wrappers
+
+Cons:
+
+- more complex implementation
+- rougher compiler errors
+- raw records and anonymous records may need helper adapters or explicit projections for the best experience
+
+Assessment:
+
+- strongest candidate for the long-term capability direction
+- likely best fit if the goal is maximum performance plus high DX for capability-aware helpers
+
+### Option 3. Typed Capability Bag Or Service Container
+
+Concept:
+
+- env is or contains a typed capability map keyed by types or tokens
+
+Pros:
+
+- open-ended extensibility
+- easy to add capabilities dynamically
+- can model heterogeneous capability sets cleanly
+
+Cons:
+
+- more indirection
+- weaker transparency than plain env values
+- more runtime machinery
+- higher risk of allocation and lookup overhead
+- worse fit for the current library style
+
+Assessment:
+
+- probably too heavy for `FsFlow`
+- not preferred unless the project intentionally moves toward a larger effect-system container model
+
+## Preferred Capability Direction
+
+Current preferred direction:
+
+- keep `'env` as a normal user-controlled environment parameter
+- support projection-based helpers as the universal fallback
+- add capability-aware helpers using a static capability-access pattern where that materially improves DX
+- avoid forcing a runtime capability bag
+
+This suggests a two-layer model:
+
+1. universal forms that always work
+   - `logErrorWith (fun env -> env.Logger) "text"`
+2. capability-aware shorthand forms when the env satisfies the capability access convention
+   - `logError "text"`
+
+This approach keeps:
+
+- performance high
+- capability growth open-ended
+- user-defined capabilities possible
+- core workflow types unchanged
+
+## Anonymous Records
+
+Anonymous records are attractive for env composition and should remain a valid user option.
+
+They are useful because:
+
+- they are lightweight
+- they compose local capability sets conveniently
+- they avoid repeated named-type declarations in application code
+
+But they should not be treated as the full capability-system answer on their own because:
+
+- reusable library constraints over anonymous-record fields are limited
+- they do not by themselves provide a scalable mechanism for capability-oriented helper discovery
+
+Current view:
+
+- users should be free to use anonymous records for env composition
+- the library should not depend solely on anonymous-record-specific behavior for its capability story
+
 ## IcedTasks
 
 `IcedTasks` is best treated as an optional integration target, not as the foundation of the public model.
