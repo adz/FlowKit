@@ -85,6 +85,17 @@ module private ResultFlow =
         : Result<'value, 'nextError> =
         Result.mapError mapper result
 
+module internal OptionFlow =
+    let toUnitResult (value: 'value option) : Result<'value, unit> =
+        match value with
+        | Some innerValue -> Ok innerValue
+        | None -> Error()
+
+    let toUnitResultValueOption (value: 'value voption) : Result<'value, unit> =
+        match value with
+        | ValueSome innerValue -> Ok innerValue
+        | ValueNone -> Error()
+
 module internal InternalCombinatorCore =
     let mapWith
         (mapOutcome: (Result<'value, 'error> -> Result<'next, 'error>) -> 'operation -> 'nextOperation)
@@ -345,6 +356,16 @@ type FlowBuilder() =
     member _.ReturnFrom(result: Result<'value, 'error>) : Flow<'env, 'error, 'value> =
         Flow.fromResult result
 
+    member _.ReturnFrom(option: 'value option) : Flow<'env, unit, 'value> =
+        option
+        |> OptionFlow.toUnitResult
+        |> Flow.fromResult
+
+    member _.ReturnFrom(option: 'value voption) : Flow<'env, unit, 'value> =
+        option
+        |> OptionFlow.toUnitResultValueOption
+        |> Flow.fromResult
+
     member _.Zero() : Flow<'env, 'error, unit> =
         Flow.succeed ()
 
@@ -361,6 +382,26 @@ type FlowBuilder() =
             binder: 'value -> Flow<'env, 'error, 'next>
         ) : Flow<'env, 'error, 'next> =
         result
+        |> Flow.fromResult
+        |> Flow.bind binder
+
+    member _.Bind
+        (
+            option: 'value option,
+            binder: 'value -> Flow<'env, unit, 'next>
+        ) : Flow<'env, unit, 'next> =
+        option
+        |> OptionFlow.toUnitResult
+        |> Flow.fromResult
+        |> Flow.bind binder
+
+    member _.Bind
+        (
+            option: 'value voption,
+            binder: 'value -> Flow<'env, unit, 'next>
+        ) : Flow<'env, unit, 'next> =
+        option
+        |> OptionFlow.toUnitResultValueOption
         |> Flow.fromResult
         |> Flow.bind binder
 
@@ -451,6 +492,16 @@ type AsyncFlowBuilder() =
     member _.ReturnFrom(result: Result<'value, 'error>) : AsyncFlow<'env, 'error, 'value> =
         AsyncFlow.fromResult result
 
+    member _.ReturnFrom(option: 'value option) : AsyncFlow<'env, unit, 'value> =
+        option
+        |> OptionFlow.toUnitResult
+        |> AsyncFlow.fromResult
+
+    member _.ReturnFrom(option: 'value voption) : AsyncFlow<'env, unit, 'value> =
+        option
+        |> OptionFlow.toUnitResultValueOption
+        |> AsyncFlow.fromResult
+
     member _.Zero() : AsyncFlow<'env, 'error, unit> =
         AsyncFlow.succeed ()
 
@@ -494,6 +545,26 @@ type AsyncFlowBuilder() =
             binder: 'value -> AsyncFlow<'env, 'error, 'next>
         ) : AsyncFlow<'env, 'error, 'next> =
         result
+        |> AsyncFlow.fromResult
+        |> AsyncFlow.bind binder
+
+    member _.Bind
+        (
+            option: 'value option,
+            binder: 'value -> AsyncFlow<'env, unit, 'next>
+        ) : AsyncFlow<'env, unit, 'next> =
+        option
+        |> OptionFlow.toUnitResult
+        |> AsyncFlow.fromResult
+        |> AsyncFlow.bind binder
+
+    member _.Bind
+        (
+            option: 'value voption,
+            binder: 'value -> AsyncFlow<'env, unit, 'next>
+        ) : AsyncFlow<'env, unit, 'next> =
+        option
+        |> OptionFlow.toUnitResultValueOption
         |> AsyncFlow.fromResult
         |> AsyncFlow.bind binder
 

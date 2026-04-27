@@ -239,6 +239,16 @@ type TaskFlowBuilder() =
     member _.ReturnFrom(result: Result<'value, 'error>) : TaskFlow<'env, 'error, 'value> =
         TaskFlow.fromResult result
 
+    member _.ReturnFrom(option: 'value option) : TaskFlow<'env, unit, 'value> =
+        option
+        |> FsFlow.OptionFlow.toUnitResult
+        |> TaskFlow.fromResult
+
+    member _.ReturnFrom(option: 'value voption) : TaskFlow<'env, unit, 'value> =
+        option
+        |> FsFlow.OptionFlow.toUnitResultValueOption
+        |> TaskFlow.fromResult
+
     member _.Zero() : TaskFlow<'env, 'error, unit> =
         TaskFlow.succeed ()
 
@@ -318,6 +328,26 @@ type TaskFlowBuilder() =
             binder: 'value -> TaskFlow<'env, 'error, 'next>
         ) : TaskFlow<'env, 'error, 'next> =
         result
+        |> TaskFlow.fromResult
+        |> TaskFlow.bind binder
+
+    member _.Bind
+        (
+            option: 'value option,
+            binder: 'value -> TaskFlow<'env, unit, 'next>
+        ) : TaskFlow<'env, unit, 'next> =
+        option
+        |> FsFlow.OptionFlow.toUnitResult
+        |> TaskFlow.fromResult
+        |> TaskFlow.bind binder
+
+    member _.Bind
+        (
+            option: 'value voption,
+            binder: 'value -> TaskFlow<'env, unit, 'next>
+        ) : TaskFlow<'env, unit, 'next> =
+        option
+        |> FsFlow.OptionFlow.toUnitResultValueOption
         |> TaskFlow.fromResult
         |> TaskFlow.bind binder
 

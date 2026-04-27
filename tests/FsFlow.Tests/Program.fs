@@ -29,6 +29,28 @@ module Tests =
         |> Array.distinct
         |> Array.sort
 
+    let private asyncFlowBuilderBindAndReturnFromArgumentNames () =
+        typeof<AsyncFlowBuilder>.GetMethods()
+        |> Array.filter (fun methodInfo ->
+            methodInfo.IsPublic
+            && not methodInfo.IsSpecialName
+            && (methodInfo.Name = "Bind" || methodInfo.Name = "ReturnFrom"))
+        |> Array.collect (fun methodInfo -> methodInfo.GetParameters())
+        |> Array.map (fun parameterInfo -> parameterInfo.ParameterType.Name)
+        |> Array.distinct
+        |> Array.sort
+
+    let private taskFlowBuilderBindAndReturnFromArgumentNames () =
+        typeof<TaskFlowBuilder>.GetMethods()
+        |> Array.filter (fun methodInfo ->
+            methodInfo.IsPublic
+            && not methodInfo.IsSpecialName
+            && (methodInfo.Name = "Bind" || methodInfo.Name = "ReturnFrom"))
+        |> Array.collect (fun methodInfo -> methodInfo.GetParameters())
+        |> Array.map (fun parameterInfo -> parameterInfo.ParameterType.Name)
+        |> Array.distinct
+        |> Array.sort
+
     let private hasAsyncResultReturnFromOverload (builderType: Type) =
         builderType.GetMethods()
         |> Array.exists (fun methodInfo ->
@@ -361,7 +383,129 @@ let probe : TaskFlow<unit, string, int> =
         test <@ Flow.run 21 workflow = Ok 42 @>
         test <@ publicMethods |> Array.contains "Bind" @>
         test <@ publicMethods |> Array.contains "ReturnFrom" @>
-        test <@ argumentTypeNames = [| "FSharpFunc`2"; "FSharpResult`2"; "Flow`3" |] @>
+        test <@ argumentTypeNames = [| "FSharpFunc`2"; "FSharpOption`1"; "FSharpResult`2"; "FSharpValueOption`1"; "Flow`3" |] @>
+
+    [<Fact>]
+    let ``option and valueoption inputs short-circuit with unit errors across builders`` () =
+        let syncSome : Flow<int, unit, int> =
+            flow {
+                let! env = Flow.env
+                let! value = Some(env + 1)
+                return value * 2
+            }
+
+        let syncNone : Flow<int, unit, int> =
+            flow {
+                let! env = Flow.env
+                let! value = None
+                return env + value
+            }
+
+        let syncValueSome : Flow<int, unit, int> =
+            flow {
+                let! env = Flow.env
+                let! value = ValueSome(env + 1)
+                return value * 2
+            }
+
+        let syncValueNone : Flow<int, unit, int> =
+            flow {
+                let! env = Flow.env
+                let! value = ValueNone
+                return env + value
+            }
+
+        let asyncWorkflow : AsyncFlow<int, unit, int> =
+            asyncFlow {
+                let! env = AsyncFlow.env
+                let! value = Some(env + 1)
+                let! extra = ValueSome(value + 1)
+                return extra * 2
+            }
+
+        let asyncReturnFromNone : AsyncFlow<unit, unit, int> =
+            asyncFlow { return! None }
+
+        let taskWorkflow : TaskFlow<int, unit, int> =
+            taskFlow {
+                let! env = TaskFlow.env
+                let! value = Some(env + 1)
+                let! extra = ValueSome(value + 1)
+                return extra * 2
+            }
+
+        let taskReturnFromValueNone : TaskFlow<unit, unit, int> =
+            taskFlow { return! ValueNone }
+
+        let asyncArgumentTypeNames = asyncFlowBuilderBindAndReturnFromArgumentNames ()
+        let taskArgumentTypeNames = taskFlowBuilderBindAndReturnFromArgumentNames ()
+
+        test <@ Flow.run 20 syncSome = Ok 42 @>
+        test <@ Flow.run 20 syncNone = Error() @>
+        test <@ Flow.run 20 syncValueSome = Ok 42 @>
+        test <@ Flow.run 20 syncValueNone = Error() @>
+        test <@ asyncWorkflow |> AsyncFlow.run 19 |> Async.RunSynchronously = Ok 42 @>
+        test <@ asyncReturnFromNone |> AsyncFlow.run () |> Async.RunSynchronously = Error() @>
+        test <@ taskWorkflow |> TaskFlow.run 19 CancellationToken.None |> fun task -> task.GetAwaiter().GetResult() = Ok 42 @>
+        test <@ taskReturnFromValueNone |> TaskFlow.run () CancellationToken.None |> fun task -> task.GetAwaiter().GetResult() = Error() @>
+        test <@ asyncArgumentTypeNames |> Array.contains "FSharpOption`1" @>
+        test <@ asyncArgumentTypeNames |> Array.contains "FSharpValueOption`1" @>
+        test <@ taskArgumentTypeNames |> Array.contains "FSharpOption`1" @>
+        test <@ taskArgumentTypeNames |> Array.contains "FSharpValueOption`1" @>
+
+    [<Fact>]
+    let ``option and valueoption implicit binding requires unit workflow errors`` () =
+        let fsFlowAssemblyPath = typeof<FlowBuilder>.Assembly.Location
+        let fsFlowNetAssemblyPath = typeof<TaskFlowBuilder>.Assembly.Location
+
+        let flowProbe =
+            $"""
+#r @"{fsFlowAssemblyPath}"
+open FsFlow
+
+let probe : Flow<unit, string, int> =
+    flow {{
+        let! value = Some 42
+        return value
+    }}
+"""
+
+        let asyncProbe =
+            $"""
+#r @"{fsFlowAssemblyPath}"
+open FsFlow
+
+let probe : AsyncFlow<unit, string, int> =
+    asyncFlow {{
+        let! value = ValueSome 42
+        return value
+    }}
+"""
+
+        let taskProbe =
+            $"""
+#r @"{fsFlowAssemblyPath}"
+#r @"{fsFlowNetAssemblyPath}"
+open FsFlow
+open FsFlow.Net
+
+let probe : TaskFlow<unit, string, int> =
+    taskFlow {{
+        let! value = Some 42
+        return value
+    }}
+"""
+
+        let flowExitCode, flowOutput = runFsiScript flowProbe
+        let asyncExitCode, asyncOutput = runFsiScript asyncProbe
+        let taskExitCode, taskOutput = runFsiScript taskProbe
+
+        test <@ flowExitCode <> 0 @>
+        test <@ flowOutput.Contains("Flow<unit,unit,int>") @>
+        test <@ asyncExitCode <> 0 @>
+        test <@ asyncOutput.Contains("AsyncFlow<unit,unit,int>") @>
+        test <@ taskExitCode <> 0 @>
+        test <@ taskOutput.Contains("TaskFlow<unit,unit,int>") @>
 
     [<Fact>]
     let ``flow computation expression rejects task-oriented binds even with FsFlow.Net referenced`` () =
