@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 235 64">
-  <text x="0" y="45" font-family="Inter, Segoe UI, Arial, sans-serif"
-        font-size="42" font-weight="600" fill="#0F172A">flow</text>
-  <text x="96" y="45" font-family="Inter, Segoe UI, Arial, sans-serif"
-        font-size="42" font-weight="600" fill="#2563EB">{kit}</text>
-</svg>

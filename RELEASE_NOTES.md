@@ -2,7 +2,7 @@
 
 ## 0.1.0 - 2026-04-26
 
-- Initial public preview release of `FlowKit`
+- Initial public preview release of `FsFlow`
 - Core `Flow<'env, 'error, 'value>` abstraction for explicit environment requirements, typed failures, and cold execution
 - Direct `Result`, `Async`, `Task`, `ColdTask`, and `ColdTaskResult` interop inside one `flow {}` workflow
 - Runtime helpers for cancellation, timeout, retry, logging, and scoped cleanup

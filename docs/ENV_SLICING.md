@@ -130,7 +130,7 @@ For example:
 - gateway I/O is explicit through `Gateway` in the environment
 - persistence is explicit through `AuditStore`
 - logging is explicit through `Log`
-- cancellation is explicit through `Flow.run` and `Flow.Runtime.cancellationToken`
+- cancellation is explicit through `Flow.toAsync` and `Flow.Runtime.cancellationToken`
 
 Small environment slices already make those requirements visible without adding another layer
 of abstraction.

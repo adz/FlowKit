@@ -1,4 +1,4 @@
-# FlowKit Tasks
+# FsFlow Tasks
 
 This backlog is driven by one question:
 
@@ -13,7 +13,7 @@ The current answer is not mainly "the core idea is bad." The current answer is t
 ## Flow Follow-Up Work
 
 Problem:
-The public API and repo identity now center on `FlowKit` plus the `Flow` programming model, but the Flow API itself still needs final polishing.
+The public API and repo identity now center on `FsFlow` plus the `Flow` programming model, but the Flow API itself still needs final polishing.
 
 Tasks:
 

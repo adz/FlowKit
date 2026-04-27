@@ -1,11 +1,11 @@
 # Semantics
 
-This page describes how FlowKit behaves around failure, exceptions, cancellation,
+This page describes how FsFlow behaves around failure, exceptions, cancellation,
 timeout, and cleanup.
 
-FlowKit does not replace the underlying async or task machinery.
+FsFlow does not replace the underlying async or task machinery.
 It composes existing `Result`, `Async`, and `.NET Task` behavior behind one workflow type,
-while keeping execution explicit through `Flow.run`.
+while keeping execution explicit through `Flow.toAsync`.
 
 ## Success And Typed Failure
 
@@ -32,7 +32,7 @@ It does not turn ordinary typed failures into exceptions or vice versa unless yo
 
 Cancellation is explicit in the execution model:
 
-- `Flow.run environment cancellationToken flow` runs with the supplied token
+- `Flow.toAsync environment cancellationToken flow` runs with the supplied token
 - `Flow.Runtime.cancellationToken` reads that token inside the flow
 - `Flow.Runtime.ensureNotCanceled` checks whether the token is already canceled and returns a typed failure if so
 - `Flow.Runtime.catchCancellation` translates `OperationCanceledException` into a typed error
@@ -99,4 +99,4 @@ The test suite currently verifies:
 
 ## Next
 
-Read [`docs/GETTING_STARTED.md`](./GETTING_STARTED.md) for the basic flow model, or [`src/FlowKit/Flow.fs`](../src/FlowKit/Flow.fs) for the full API surface.
+Read [`docs/GETTING_STARTED.md`](./GETTING_STARTED.md) for the basic flow model, or [`src/FsFlow/Flow.fs`](../src/FsFlow/Flow.fs) for the full API surface.

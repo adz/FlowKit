@@ -1,8 +1,8 @@
-# Why FlowKit
+# Why FsFlow
 
 Read this page when you want to decide whether `Flow` is a better fit than manual environment threading, `Async<Result<_,_>>`, or `Task<Result<_,_>>` for ordinary F# application code.
 
-FlowKit is aimed at a specific F# problem:
+FsFlow is aimed at a specific F# problem:
 
 - a use case needs dependencies
 - validation already returns `Result`
@@ -24,7 +24,7 @@ Those shapes work, but they tend to spread the same concerns across several laye
 - helper modules for mapping and binding
 - extra noise around the happy path
 
-FlowKit gives that combined shape one explicit representation:
+FsFlow gives that combined shape one explicit representation:
 
 ```fsharp
 Flow<'env, 'error, 'value>
@@ -134,7 +134,7 @@ Keep the domain plain F# by default:
 The design stays explicit in the places that matter for teams:
 
 - env access is visible through `Flow.read`, `Flow.env`, and `Flow.localEnv`
-- execution is visible through `Flow.run`
+- execution is visible through `Flow.toAsync`
 - expected failures stay in the type
 - `flow {}` binds the common shapes already present in app code, including `Result`, `Async`, `Task`, and selected mixed wrappers
 - task and runtime boundaries stay named under `Flow.Task` and `Flow.Runtime`
@@ -147,7 +147,7 @@ like ordinary F# application code rather than a general FP framework.
 Adopting `Flow` does not mean betting on a replacement runtime.
 
 - the underlying async and task work still runs on F# `Async` and `.NET Task`
-- cancellation still comes from the `CancellationToken` you pass to `Flow.run`
+- cancellation still comes from the `CancellationToken` you pass to `Flow.toAsync`
 - execution is still explicit
 - the library stays narrow and DX-focused rather than growing into a concurrency platform
 

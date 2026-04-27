@@ -1,25 +1,25 @@
 # Examples
 
-This page points to runnable examples so you can see what FlowKit looks like in code.
+This page points to runnable examples so you can see what FsFlow looks like in code.
 
 ## Run The Examples
 
 Main example:
 
 ```bash
-dotnet run --project examples/FlowKit.Examples/FlowKit.Examples.fsproj --nologo
+dotnet run --project examples/FsFlow.Examples/FsFlow.Examples.fsproj --nologo
 ```
 
 Maintenance example:
 
 ```bash
-dotnet run --project examples/FlowKit.MaintenanceExamples/FlowKit.MaintenanceExamples.fsproj --nologo
+dotnet run --project examples/FsFlow.MaintenanceExamples/FsFlow.MaintenanceExamples.fsproj --nologo
 ```
 
 Playground example:
 
 ```bash
-dotnet run --project examples/FlowKit.Playground/FlowKit.Playground.fsproj --nologo
+dotnet run --project examples/FsFlow.Playground/FsFlow.Playground.fsproj --nologo
 ```
 
 NativeAOT probe:
@@ -30,7 +30,7 @@ bash scripts/run-aot-probe.sh
 
 ## Main Example
 
-The main example in [`examples/FlowKit.Examples/Program.fs`](./FlowKit.Examples/Program.fs) shows a small application-shaped set of flows:
+The main example in [`examples/FsFlow.Examples/Program.fs`](./FsFlow.Examples/Program.fs) shows a small application-shaped set of flows:
 
 - validate configuration with plain `Result`
 - build a smaller runtime environment from config
@@ -50,14 +50,14 @@ Read it in this order:
 
 ## Maintenance Example
 
-The maintenance example in [`examples/FlowKit.MaintenanceExamples/Program.fs`](./FlowKit.MaintenanceExamples/Program.fs) is smaller and more focused. It shows:
+The maintenance example in [`examples/FsFlow.MaintenanceExamples/Program.fs`](./FsFlow.MaintenanceExamples/Program.fs) is smaller and more focused. It shows:
 
 - how to normalize awkward nested wrapper shapes one layer at a time
 - the difference between cold task factories and already-created task values
 
 ## Playground Example
 
-The playground example in [`examples/FlowKit.Playground/Program.fs`](./FlowKit.Playground/Program.fs) is the quickest way to feel the new surface in practice. It shows:
+The playground example in [`examples/FsFlow.Playground/Program.fs`](./FsFlow.Playground/Program.fs) is the quickest way to feel the new surface in practice. It shows:
 
 - plain `Result` validation first
 - a small `flow {}` workflow

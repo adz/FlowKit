@@ -33,10 +33,10 @@ jobs:
         run: dotnet restore
 
       - name: Run test harness
-        run: dotnet run --project tests/FlowKit.Tests/FlowKit.Tests.fsproj --nologo
+        run: dotnet run --project tests/FsFlow.Tests/FsFlow.Tests.fsproj --nologo
 
       - name: Pack library
-        run: dotnet pack src/FlowKit/FlowKit.fsproj --configuration Release --output artifacts/package
+        run: dotnet pack src/FsFlow/FsFlow.fsproj --configuration Release --output artifacts/package
 
       - name: Build API docs
         run: bash scripts/generate-api-docs.sh

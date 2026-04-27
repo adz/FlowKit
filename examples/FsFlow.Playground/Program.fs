@@ -1,7 +1,7 @@
 open System
 open System.Threading
 open System.Threading.Tasks
-open FlowKit
+open FsFlow
 
 type AppEnv =
     { Prefix: string
@@ -39,7 +39,7 @@ let main _ =
 
     let run input =
         greet input
-        |> Flow.run env CancellationToken.None
+        |> Flow.toAsync env CancellationToken.None
         |> Async.RunSynchronously
         |> printfn "%s -> %A" input
 

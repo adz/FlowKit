@@ -1,4 +1,4 @@
-namespace FlowKit
+namespace FsFlow
 
 open System
 open System.Threading
@@ -93,17 +93,17 @@ module RetryPolicy =
 [<RequireQualifiedAccess>]
 module Flow =
     /// <summary>
-    /// Executes a flow with the provided environment and cancellation token.
+    /// Converts a flow into an async result using the provided environment and cancellation token.
     /// </summary>
     /// <param name="environment">The environment required by the flow.</param>
     /// <param name="cancellationToken">The cancellation token to observe.</param>
-    /// <param name="flow">The flow to execute.</param>
+    /// <param name="flow">The flow to convert.</param>
     /// <example>
     /// <code>
-    /// let result = Flow.run env cts.Token myFlow |> Async.RunSynchronously
+    /// let result = Flow.toAsync env cts.Token myFlow |> Async.RunSynchronously
     /// </code>
     /// </example>
-    let run
+    let toAsync
         (environment: 'env)
         (cancellationToken: CancellationToken)
         (Flow operation: Flow<'env, 'error, 'value>)
@@ -222,7 +222,7 @@ module Flow =
         : Flow<'env, 'error, 'next> =
         Flow(fun environment cancellationToken ->
             async {
-                let! result = run environment cancellationToken flow
+                let! result = toAsync environment cancellationToken flow
                 return Result.map mapper result
             })
 
@@ -242,10 +242,10 @@ module Flow =
         : Flow<'env, 'error, 'next> =
         Flow(fun environment cancellationToken ->
             async {
-                let! result = run environment cancellationToken flow
+                let! result = toAsync environment cancellationToken flow
 
                 match result with
-                | Ok item -> return! run environment cancellationToken (binder item)
+                | Ok item -> return! toAsync environment cancellationToken (binder item)
                 | Error error -> return Error error
             })
 
@@ -285,7 +285,7 @@ module Flow =
         : Flow<'env, 'nextError, 'value> =
         Flow(fun environment cancellationToken ->
             async {
-                let! result = run environment cancellationToken flow
+                let! result = toAsync environment cancellationToken flow
                 return Result.mapError mapper result
             })
 
@@ -306,7 +306,7 @@ module Flow =
         Flow(fun environment cancellationToken ->
             async {
                 try
-                    return! run environment cancellationToken flow
+                    return! toAsync environment cancellationToken flow
                 with error ->
                     return Error(handler error)
             })
@@ -329,7 +329,7 @@ module Flow =
         Flow(fun environment cancellationToken ->
             environment
             |> mapping
-            |> fun innerEnvironment -> run innerEnvironment cancellationToken flow)
+            |> fun innerEnvironment -> toAsync innerEnvironment cancellationToken flow)
 
     /// <summary>
     /// Ensures a compensation action is executed after the flow completes, regardless of success or failure.
@@ -348,7 +348,7 @@ module Flow =
         Flow(fun environment cancellationToken ->
             async {
                 try
-                    return! run environment cancellationToken flow
+                    return! toAsync environment cancellationToken flow
                 finally
                     compensation ()
             })
@@ -364,17 +364,17 @@ module Flow =
     /// </example>
     let delay (factory: unit -> Flow<'env, 'error, 'value>) : Flow<'env, 'error, 'value> =
         Flow(fun environment cancellationToken ->
-            run environment cancellationToken (factory ()))
+            toAsync environment cancellationToken (factory ()))
 
     /// <summary>
-    /// Alias for <see cref="run"/>.
+    /// Alias for <see cref="toAsync"/>.
     /// </summary>
     let toAsyncResult
         (environment: 'env)
         (cancellationToken: CancellationToken)
         (flow: Flow<'env, 'error, 'value>)
         : Async<Result<'value, 'error>> =
-        run environment cancellationToken flow
+        toAsync environment cancellationToken flow
 
     /// <summary>
     /// Helpers for interoperating with .NET Tasks.
@@ -479,7 +479,7 @@ module Flow =
             Flow(fun environment cancellationToken ->
                 async {
                     try
-                        return! run environment cancellationToken flow
+                        return! toAsync environment cancellationToken flow
                     with :? OperationCanceledException as error ->
                         return Error(handler error)
                 })
@@ -566,7 +566,7 @@ module Flow =
                     Flow(fun environment cancellationToken ->
                         async {
                             let! result =
-                                run environment cancellationToken (useResource resource)
+                                toAsync environment cancellationToken (useResource resource)
                                 |> Async.Catch
 
                             do! release resource cancellationToken |> Async.AwaitTask
@@ -594,7 +594,7 @@ module Flow =
                     try
                         let! child =
                             Async.StartChild(
-                                run environment cancellationToken flow,
+                                toAsync environment cancellationToken flow,
                                 millisecondsTimeout = int after.TotalMilliseconds
                             )
 
@@ -615,7 +615,7 @@ module Flow =
             let rec loop attempt =
                 Flow(fun environment cancellationToken ->
                     async {
-                        let! result = run environment cancellationToken flow
+                        let! result = toAsync environment cancellationToken flow
 
                         match result with
                         | Ok value -> return Ok value
@@ -625,7 +625,7 @@ module Flow =
                             if delay > TimeSpan.Zero then
                                 do! Task.Delay(delay, cancellationToken) |> Async.AwaitTask
 
-                            return! run environment cancellationToken (loop (attempt + 1))
+                            return! toAsync environment cancellationToken (loop (attempt + 1))
                         | Error error ->
                             return Error error
                     })

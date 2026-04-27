@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\FlowKit\FlowKit.fsproj" />
+    <ProjectReference Include="..\..\src\FsFlow\FsFlow.fsproj" />
   </ItemGroup>
 
 </Project>

@@ -11,15 +11,15 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(UsePrebuiltFlowKit)' != 'true'">
-    <ProjectReference Include="..\..\src\FlowKit\FlowKit.fsproj"
+  <ItemGroup Condition="'$(UsePrebuiltFsFlow)' != 'true'">
+    <ProjectReference Include="..\..\src\FsFlow\FsFlow.fsproj"
                       SetTargetFramework="TargetFramework=net8.0"
                       GlobalPropertiesToRemove="PublishAot" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(UsePrebuiltFlowKit)' == 'true'">
-    <Reference Include="FlowKit">
-      <HintPath>..\..\artifacts\bin\FlowKit\release_net8.0\FlowKit.dll</HintPath>
+  <ItemGroup Condition="'$(UsePrebuiltFsFlow)' == 'true'">
+    <Reference Include="FsFlow">
+      <HintPath>..\..\artifacts\bin\FsFlow\release_net8.0\FsFlow.dll</HintPath>
       <Private>true</Private>
     </Reference>
   </ItemGroup>

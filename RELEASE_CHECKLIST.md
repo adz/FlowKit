@@ -19,8 +19,8 @@ Use this checklist before cutting a public release.
 
 ## API Docs And Packaging
 
-- [ ] `dotnet pack src/FlowKit/FlowKit.fsproj --configuration Release` succeeds
-- [ ] package metadata points at `adz/FlowKit`
+- [ ] `dotnet pack src/FsFlow/FsFlow.fsproj --configuration Release` succeeds
+- [ ] package metadata points at `adz/FsFlow`
 - [ ] packed `README.md` is still suitable for the NuGet package page
 - [ ] symbol package is produced alongside the main package
 

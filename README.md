@@ -1,16 +1,18 @@
+# FsFlow
+
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/content/img/flowkit-dark.svg">
-  <img alt="flow{kit}" src="docs/content/img/flowkit-light.svg" height="72">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/content/img/fsflow-readme-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="docs/content/img/fsflow-readme-light.svg">
+  <img alt="FsFlow" src="docs/content/img/fsflow-readme-light.svg" width="160">
 </picture>
 
-Simple to use F# flow {} computation expression for unifying Dependencies (Reader), 
-Error Handling (Result), and Async/Task.
+F# application workflows that compose with normal `Result`, `Async`, and `.NET Task`.
 
-[![ci](https://github.com/adz/FlowKit/actions/workflows/ci.yml/badge.svg)](https://github.com/adz/FlowKit/actions/workflows/ci.yml)
-[![NuGet](https://img.shields.io/nuget/v/FlowKit.svg)](https://www.nuget.org/packages/FlowKit)
+[![ci](https://github.com/adz/FsFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/adz/FsFlow/actions/workflows/ci.yml)
+[![NuGet](https://img.shields.io/nuget/v/FsFlow.svg)](https://www.nuget.org/packages/FsFlow)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
-Docs: [adz.github.io/FlowKit](https://adz.github.io/FlowKit/)
+Docs: [adz.github.io/FsFlow](https://adz.github.io/FsFlow/)
 
 When one F# use case starts mixing `Result`, `async {}`, `.NET Task`, and dependency management,
 the code often stops reading like the happy path.
@@ -37,7 +39,7 @@ Deps -> Input -> Async<Result<'value, 'error>>
 
 plus helper modules, adapters, and wrapper-specific boilerplate.
 
-FlowKit is a minimal, idiomatic way to represent that shape directly in F#.
+FsFlow is a minimal, idiomatic way to represent that shape directly in F#.
 
 It gives that use case one shape:
 
@@ -88,11 +90,11 @@ let handle (deps: UserDeps) userId : Flow<RequestContext, AppError, string> =
     }
 ```
 
-This is the same application flow without the plumbing taking over the happy path. If your codebase prefers a single booted app environment, that style works too. FlowKit supports both.
+This is the same application flow without the plumbing taking over the happy path. If your codebase prefers a single booted app environment, that style works too. FsFlow supports both.
 
 ## What It Actually Is
 
-FlowKit is a small, focused F# library built around composable flows:
+FsFlow is a small, focused F# library built around composable flows:
 
 - explicit environment requirements
 - typed failures via Result
@@ -105,7 +107,7 @@ The point is to keep that code in one place, with one workflow type, while stayi
 - one computation expression: `flow {}`
 - one CE that binds `Result`, `Async`, `Task`, and env access in one place
 - explicit environment access through `Flow.read` and `Flow.env`
-- explicit execution through `Flow.run env cancellationToken flow`
+- explicit execution through `Flow.toAsync env cancellationToken flow`
 
 It does not replace F# `Async`, `.NET Task`, or `Result`.
 It gives you a smaller, more consistent way to compose them in application code.
@@ -113,12 +115,12 @@ Cancellation stays explicit at the runtime boundary and in cold task signatures,
 
 ## What It Is Not
 
-FlowKit is not trying to become a new runtime platform.
+FsFlow is not trying to become a new runtime platform.
 
 - it does not reimplement `Async` or `Task`
 - it does not introduce its own concurrency system
 - it does not hide when effects run
-- it stays explicit at the execution boundary with `Flow.run`
+- it stays explicit at the execution boundary with `Flow.toAsync`
 
 The library is intentionally narrow:
 
@@ -127,7 +129,7 @@ The library is intentionally narrow:
 - less wrapper and adapter noise around the happy path
 
 Reader-style composition can feel imported in F# when it arrives as a larger FP stack.
-FlowKit keeps the same practical benefits in plain F# terms:
+FsFlow keeps the same practical benefits in plain F# terms:
 
 - one computation expression
 - plain functions
@@ -167,7 +169,7 @@ let greet userId : Flow<AppEnv, AppError, string> =
 
 let result =
     greet 42
-    |> Flow.run
+    |> Flow.toAsync
         { Prefix = "Hello"
           LoadName = fun _ -> Task.FromResult(Ok "Ada") }
         System.Threading.CancellationToken.None
@@ -183,7 +185,7 @@ This full example shows the intended shape in one place:
 
 ## Where To Use It
 
-Use FlowKit at the effectful application boundary:
+Use FsFlow at the effectful application boundary:
 
 - handlers
 - use cases
@@ -200,7 +202,7 @@ Keep domain code plain. Use `flow {}` by default in the application layer.
 
 ## Supported Architectural Styles
 
-FlowKit supports three valid architectural styles:
+FsFlow supports three valid architectural styles:
 
 - Booted App Environment
 - Explicit Dependencies + Context
@@ -215,9 +217,9 @@ Choose the style that fits your codebase and team:
 
 Read [`docs/ARCHITECTURAL_STYLES.md`](docs/ARCHITECTURAL_STYLES.md) for examples and trade-offs.
 
-## When FlowKit Fits Well
+## When FsFlow Fits Well
 
-FlowKit is a good fit when:
+FsFlow is a good fit when:
 
 - a workflow needs 2 to 5 dependencies
 - validation, IO, and error translation all belong in one use case
@@ -225,7 +227,7 @@ FlowKit is a good fit when:
 - you want expected failures in the type rather than scattered exception handling
 - retry, timeout, and cleanup belong close to the business flow
 
-FlowKit is usually not worth it when:
+FsFlow is usually not worth it when:
 
 - the code is mostly pure
 - plain `Result` already reads well
@@ -236,14 +238,14 @@ FlowKit is usually not worth it when:
 1. [`docs/GETTING_STARTED.md`](docs/GETTING_STARTED.md)
 2. [`docs/TINY_EXAMPLES.md`](docs/TINY_EXAMPLES.md)
 3. [`docs/ARCHITECTURAL_STYLES.md`](docs/ARCHITECTURAL_STYLES.md)
-4. [`docs/WHY_FLOWKIT.md`](docs/WHY_FLOWKIT.md)
+4. [`docs/WHY_FSFLOW.md`](docs/WHY_FSFLOW.md)
 5. [`docs/TASK_ASYNC_INTEROP.md`](docs/TASK_ASYNC_INTEROP.md)
 6. [`docs/FSTOOLKIT_MIGRATION.md`](docs/FSTOOLKIT_MIGRATION.md)
 7. [`docs/ENV_SLICING.md`](docs/ENV_SLICING.md)
 8. [`docs/SEMANTICS.md`](docs/SEMANTICS.md)
 9. [`examples/README.md`](examples/README.md)
 10. [`docs/TROUBLESHOOTING_TYPES.md`](docs/TROUBLESHOOTING_TYPES.md)
-11. [`src/FlowKit/Flow.fs`](src/FlowKit/Flow.fs)
+11. [`src/FsFlow/Flow.fs`](src/FsFlow/Flow.fs)
 
 ## Compatibility
 
@@ -255,7 +257,7 @@ The design is `.NET`-first. Cancellation is explicit in the `Flow` execution mod
 This means we don't have a Fable story (yet).
 
 ### Existing Shapes
-FlowKit builds on existing F# and .NET primitives rather than replacing them.
+FsFlow builds on existing F# and .NET primitives rather than replacing them.
 If a direct `Result`, `Async<'T>`, or `Task<'T>` boundary is already the clearest shape,
 use that shape directly.
 
@@ -271,19 +273,19 @@ Run the examples:
 
 ```bash
 # Longer main example
-dotnet run --project examples/FlowKit.Examples/FlowKit.Examples.fsproj
+dotnet run --project examples/FsFlow.Examples/FsFlow.Examples.fsproj
 
 # Maintenance example:
-dotnet run --project examples/FlowKit.MaintenanceExamples/FlowKit.MaintenanceExamples.fsproj
+dotnet run --project examples/FsFlow.MaintenanceExamples/FsFlow.MaintenanceExamples.fsproj
 
 # Minimal playground example:
-dotnet run --project examples/FlowKit.Playground/FlowKit.Playground.fsproj
+dotnet run --project examples/FsFlow.Playground/FsFlow.Playground.fsproj
 ```
 
 Run the test suite:
 
 ```bash
-dotnet run --project tests/FlowKit.Tests/FlowKit.Tests.fsproj
+dotnet run --project tests/FsFlow.Tests/FsFlow.Tests.fsproj
 ```
 
 Run the NativeAOT probe:

@@ -15,7 +15,7 @@ These shapes already have names:
 - `Async<'value>`
 - `Async<Result<'value, 'error>>`
 
-These shapes are named by FlowKit because F# does not give them a useful built-in name:
+These shapes are named by FsFlow because F# does not give them a useful built-in name:
 
 - `ColdTask<'value>`
 - `ColdTaskResult<'value, 'error>`

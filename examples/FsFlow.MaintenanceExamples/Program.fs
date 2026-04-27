@@ -1,12 +1,12 @@
 open System
 open System.Threading
 open System.Threading.Tasks
-open FlowKit
+open FsFlow
 
 let run label workflow =
     let result =
         workflow
-        |> Flow.run () CancellationToken.None
+        |> Flow.toAsync () CancellationToken.None
         |> Async.RunSynchronously
 
     printfn "%s: %A" label result

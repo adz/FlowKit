@@ -63,12 +63,12 @@ Use `fromCold*` for task factories that should start at run time.
 ```fsharp
 let result =
     workflow
-    |> Flow.run () CancellationToken.None
+    |> Flow.toAsync () CancellationToken.None
     |> Async.RunSynchronously
 ```
 
 `Flow` values are cold.
-Nothing runs until you call `Flow.run`.
+Nothing runs until you call `Flow.toAsync`.
 
 ## Next
 

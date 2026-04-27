@@ -1,6 +1,6 @@
 # Documentation Style Guide
 
-This guide establishes the voice and structure for FlowKit documentation.
+This guide establishes the voice and structure for FsFlow documentation.
 
 ## Audience
 

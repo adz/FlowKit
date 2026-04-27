@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.1;net8.0</TargetFrameworks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IsAotCompatible Condition="'$(TargetFramework)' == 'net8.0'">true</IsAotCompatible>
+    <PackageId>FsFlow</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Adam Davies</Authors>
+    <Description>F# application workflows that compose with normal Result, Async, and .NET Task while keeping environment requirements and typed failures explicit.</Description>
+    <PackageProjectUrl>https://adz.github.io/FsFlow/</PackageProjectUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/adz/FsFlow</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageReleaseNotes>Initial public preview release of FsFlow with the core Flow abstraction, Async and Task interop, explicit environment requirements, typed failures, cancellation-aware execution, retry and timeout helpers, scoped cleanup, runnable examples, and GitHub Pages API documentation.</PackageReleaseNotes>
+    <PackageTags>fsharp;workflow;async;task;result;application</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <FsDocsCollectionName>FsFlow</FsDocsCollectionName>
+    <FsDocsLogoSource>content/img/fsflow-inline-light.svg</FsDocsLogoSource>
+    <FsDocsLogoAlt>FsFlow</FsDocsLogoAlt>
+    <FsDocsLogoLink>https://adz.github.io/FsFlow/</FsDocsLogoLink>
+    <FsDocsLicenseLink>https://github.com/adz/FsFlow/blob/main/LICENSE</FsDocsLicenseLink>
+    <FsDocsReleaseNotesLink>https://github.com/adz/FsFlow/blob/main/RELEASE_NOTES.md</FsDocsReleaseNotesLink>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\docs\content\img\favicon-dark.svg" Pack="true" PackagePath="docs/content/img/" />
+    <None Include="..\..\docs\content\img\favicon-light.svg" Pack="true" PackagePath="docs/content/img/" />
+    <None Include="..\..\docs\content\img\fsflow-inline-dark.svg" Pack="true" PackagePath="docs/content/img/" />
+    <None Include="..\..\docs\content\img\fsflow-inline-light.svg" Pack="true" PackagePath="docs/content/img/" />
+    <None Include="..\..\docs\content\img\fsflow-readme-dark.svg" Pack="true" PackagePath="docs/content/img/" />
+    <None Include="..\..\docs\content\img\fsflow-readme-light.svg" Pack="true" PackagePath="docs/content/img/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Flow.fs" />
+  </ItemGroup>
+
+</Project>

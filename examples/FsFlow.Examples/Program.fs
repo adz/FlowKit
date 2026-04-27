@@ -1,7 +1,7 @@
 open System
 open System.Threading
 open System.Threading.Tasks
-open FlowKit
+open FsFlow
 
 type AppConfig =
     { ApiBaseUrl: string
@@ -116,7 +116,7 @@ let execute<'env, 'value>
     (workflow: Flow<'env, AppError, 'value>)
     : Result<'value, AppError> =
     workflow
-    |> Flow.run environment CancellationToken.None
+    |> Flow.toAsync environment CancellationToken.None
     |> Async.RunSynchronously
 
 let requireNonEmpty (name: string) (value: string) : Result<string, ValidationError> =

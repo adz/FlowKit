@@ -2,7 +2,7 @@
 
 Read this page when you want to choose how `Flow` should fit into your application architecture without forcing one app shape on every codebase.
 
-FlowKit supports three valid architectural styles.
+FsFlow supports three valid architectural styles.
 
 > One core workflow abstraction. Three valid architectural styles. Choose based on app shape and team preferences.
 
@@ -156,12 +156,12 @@ There is no single mandated architecture.
 - Use standard `.NET` AppHost plus DI when the host should stay conventional and `Flow` is an internal workflow abstraction.
 
 The important constraint is not which style you pick.
-The important constraint is that `Flow` stays explicit at the workflow boundary and `Flow.run`
+The important constraint is that `Flow` stays explicit at the workflow boundary and `Flow.toAsync`
 stays explicit at execution time.
 
 ## Next
 
 Read [`docs/GETTING_STARTED.md`](./GETTING_STARTED.md) for the core workflow model,
 [`docs/ENV_SLICING.md`](./ENV_SLICING.md) for smaller environment projections, and
-[`docs/WHY_FLOWKIT.md`](./WHY_FLOWKIT.md) for the trade-offs against manual
+[`docs/WHY_FSFLOW.md`](./WHY_FSFLOW.md) for the trade-offs against manual
 threading and wrapper-based shapes.

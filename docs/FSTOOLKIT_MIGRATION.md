@@ -110,11 +110,11 @@ The migrated style:
 
 ```fsharp
 greet 42
-|> Flow.run env cancellationToken
+|> Flow.toAsync env cancellationToken
 |> Async.RunSynchronously
 ```
 
-That is the main runtime change: execution becomes explicit through `Flow.run`.
+That is the main runtime change: execution becomes explicit through `Flow.toAsync`.
 
 ## Step 5. Migrate One Use Case At A Time
 

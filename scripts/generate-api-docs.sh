@@ -8,7 +8,8 @@ cd "${ROOT_DIR}"
 
 rm -rf "${ROOT_DIR}/.fsdocs/cache" "${ROOT_DIR}/output"
 
-dotnet build src/FlowKit/FlowKit.fsproj --nologo -v minimal
+dotnet restore "${ROOT_DIR}/FsFlow.slnx" --nologo -v minimal
+dotnet build src/FsFlow/FsFlow.fsproj --nologo -v minimal
 
 dotnet fsdocs build \
     --input "${ROOT_DIR}/docs" \

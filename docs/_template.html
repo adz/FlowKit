@@ -5,7 +5,7 @@
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="{{fsdocs-authors}}" name="author">
-    <meta property="og:site_name" content="{{fsdocs-collection-name}}">
+    <meta property="og:site_name" content="FsFlow">
     <meta property="og:title" content="{{fsdocs-page-title}}" />
     <meta property="og:url" content="{{root}}{{fsdocs-source-basename}}.html">
     <meta property="og:type" content="website" />
@@ -13,17 +13,18 @@
     <meta name="twitter:site" content="{{root}}">
     <meta name="twitter:title" content="{{fsdocs-page-title}}">
     {{fsdocs-meta-tags}}
-    <title>{{fsdocs-page-title}} | {{fsdocs-collection-name}}</title>
+    <title>{{fsdocs-page-title}} | FsFlow</title>
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-    <link href="{{root}}{{fsdocs-favicon-src}}" rel="icon" sizes="32x32" type="image/png"/>
+    <link href="{{root}}content/img/favicon-light.svg" rel="icon" media="(prefers-color-scheme: light)" type="image/svg+xml"/>
+    <link href="{{root}}content/img/favicon-dark.svg" rel="icon" media="(prefers-color-scheme: dark)" type="image/svg+xml"/>
     <script type="application/javascript" src="{{root}}content/fsdocs-theme-set-dark.js"></script>
     <script type="application/javascript" src="{{root}}content/fsdocs-details-set-expanded.js"></script>
     <link href="{{root}}content/fsdocs-default.css" rel="stylesheet" type="text/css"/>
     <link href="{{root}}content/fsdocs-theme.css" rel="stylesheet" type="text/css"/>
-    <link href="{{root}}content/flowkit-docs.css" rel="stylesheet" type="text/css"/>
+    <link href="{{root}}content/fsflow-docs.css" rel="stylesheet" type="text/css"/>
     {{fsdocs-head-extra}}
     {{fsdocs-watch-script}}
 </head>
@@ -49,8 +50,8 @@
         </div>
         <a class="navbar-brand" href="{{root}}">
             <picture>
-                <source media="(prefers-color-scheme: dark)" srcset="{{root}}content/img/flowkit-dark.svg">
-                <img class="flowkit-navbar-logo" alt="flow{kit}" src="{{root}}content/img/flowkit-light.svg">
+                <source media="(prefers-color-scheme: dark)" srcset="{{root}}content/img/fsflow-inline-dark.svg">
+                <img class="fsflow-navbar-logo" alt="FsFlow" src="{{root}}content/img/fsflow-inline-light.svg">
             </picture>
         </a>
     </div>

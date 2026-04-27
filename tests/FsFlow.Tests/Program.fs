@@ -1,9 +1,9 @@
-namespace FlowKit.Tests
+namespace FsFlow.Tests
 
 open System
 open System.Threading
 open System.Threading.Tasks
-open FlowKit
+open FsFlow
 open Xunit
 open Swensen.Unquote
 
@@ -28,7 +28,7 @@ module Tests =
         (workflow: Flow<'env, 'error, 'value>)
         : Result<'value, 'error> =
         workflow
-        |> Flow.run environment cancellationToken
+        |> Flow.toAsync environment cancellationToken
         |> Async.RunSynchronously
 
     let executeUnit<'error, 'value> (workflow: Flow<unit, 'error, 'value>) : Result<'value, 'error> =

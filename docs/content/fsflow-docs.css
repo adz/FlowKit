@@ -7,7 +7,7 @@
     align-items: center;
 }
 
-.flowkit-navbar-logo {
+.fsflow-navbar-logo {
     display: block;
     height: 28px;
     width: auto;
@@ -16,7 +16,7 @@
 }
 
 @media (max-width: 768px) {
-    .flowkit-navbar-logo {
+    .fsflow-navbar-logo {
         height: 24px;
     }
 }

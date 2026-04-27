@@ -1,7 +1,7 @@
 open System
 open System.Threading
 open System.Threading.Tasks
-open FlowKit
+open FsFlow
 
 type ProbeFailure(message: string) =
     inherit Exception(message)
@@ -35,7 +35,7 @@ let run (name: string) (probe: unit -> unit) =
 
 let execute<'env, 'error, 'value> (environment: 'env) (workflow: Flow<'env, 'error, 'value>) =
     workflow
-    |> Flow.run environment CancellationToken.None
+    |> Flow.toAsync environment CancellationToken.None
     |> Async.RunSynchronously
 
 let plainFlowWorks () =

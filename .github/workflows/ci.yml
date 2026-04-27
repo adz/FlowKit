@@ -33,19 +33,19 @@ jobs:
         run: dotnet restore
 
       - name: Run test harness
-        run: dotnet run --project tests/FlowKit.Tests/FlowKit.Tests.fsproj --nologo
+        run: dotnet run --project tests/FsFlow.Tests/FsFlow.Tests.fsproj --nologo
 
       - name: Run main example
-        run: dotnet run --project examples/FlowKit.Examples/FlowKit.Examples.fsproj --nologo
+        run: dotnet run --project examples/FsFlow.Examples/FsFlow.Examples.fsproj --nologo
 
       - name: Run maintenance example
-        run: dotnet run --project examples/FlowKit.MaintenanceExamples/FlowKit.MaintenanceExamples.fsproj --nologo
+        run: dotnet run --project examples/FsFlow.MaintenanceExamples/FsFlow.MaintenanceExamples.fsproj --nologo
 
       - name: Publish and run NativeAOT probe
         run: bash scripts/run-aot-probe.sh
 
       - name: Pack library
-        run: dotnet pack src/FlowKit/FlowKit.fsproj --configuration Release --output artifacts/package
+        run: dotnet pack src/FsFlow/FsFlow.fsproj --configuration Release --output artifacts/package
 
   docs:
     runs-on: ubuntu-latest

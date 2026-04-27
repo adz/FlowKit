@@ -56,7 +56,7 @@ Flows are cold. They do nothing until you run them and provide a cancellation to
 ```fsharp
 let result =
     greet "Ada"
-    |> Flow.run () CancellationToken.None
+    |> Flow.toAsync () CancellationToken.None
     |> Async.RunSynchronously
 ```
 
@@ -187,7 +187,7 @@ let readConfigs leftPath rightPath : Flow<unit, string, string * string> =
 ```
 
 `flow {}` binds `readAll leftPath` directly and passes in the same cancellation token that
-you gave to `Flow.run`.
+you gave to `Flow.toAsync`.
 
 ## 8. Access The Cancellation Token Only Where Needed
 
