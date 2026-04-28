@@ -27,7 +27,7 @@ Docs: [adz.github.io/FsFlow](https://adz.github.io/FsFlow/)
 - [`docs/GETTING_STARTED.md`](docs/GETTING_STARTED.md) for the workflow-family overview
 - [`docs/TINY_EXAMPLES.md`](docs/TINY_EXAMPLES.md) for the smallest runnable snippets
 - [`docs/SEMANTICS.md`](docs/SEMANTICS.md) for the execution model
-- [`docs/FSTOOLKIT_MIGRATION.md`](docs/FSTOOLKIT_MIGRATION.md) for incremental adoption
+- [`docs/INTEGRATIONS_FSTOOLKIT.md`](docs/INTEGRATIONS_FSTOOLKIT.md) for FsToolkit coexistence and migration
 
 ## Install
 
