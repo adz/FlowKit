@@ -38,7 +38,7 @@ Measures the same 20-step short-circuiting shape for task-oriented computations.
 
 | Method | Mean | Allocated |
 | --- | --- | --- |
-| Manual Task<Result> | 142.1 ns | 640 B |
+| `Manual Task<Result>` | 142.1 ns | 640 B |
 | TaskFlow | 185.4 ns | 1.2 KB |
 
 ### Implicit Token Propagation
