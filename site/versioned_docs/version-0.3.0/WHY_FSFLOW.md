@@ -1,6 +1,6 @@
 # Why FsFlow
 
-This page shows when the FsFlow workflow family is a better fit than manual environment threading, `Async<Result<_,_>>`, or `Task<Result<_,_>>` for ordinary F# application code.
+This page shows when the FsFlow computation family is a better fit than manual environment threading, `Async<Result<_,_>>`, or `Task<Result<_,_>>` for ordinary F# application code.
 
 FsFlow is aimed at a specific F# problem:
 
@@ -64,7 +64,7 @@ let greet env name =
 
 This is still the right shape when the code is small and mostly pure.
 
-Once the same workflow also needs environment access or async work, pick the workflow family that
+Once the same computation also needs environment access or async work, pick the computation family that
 matches the honest runtime.
 
 For a synchronous use case:
@@ -98,7 +98,7 @@ let fetchUser userId : AppEnv -> Async<Result<User, AppError>> =
 This works, but the shape gets harder to read as retries, timeout, cancellation, cleanup,
 and additional environment access show up.
 
-The same workflow in `TaskFlow` keeps the happy path in one CE when the boundary is task-oriented:
+The same computation in `TaskFlow` keeps the happy path in one CE when the boundary is task-oriented:
 
 ```fsharp
 let fetchUser userId : TaskFlow<AppEnv, AppError, User> =
@@ -111,7 +111,7 @@ let fetchUser userId : TaskFlow<AppEnv, AppError, User> =
 ```
 
 That is the core pitch of the library: keep dependencies, typed failures, and the real runtime
-shape in one explicit workflow family without pushing the code into a larger framework.
+shape in one explicit computation family without pushing the code into a larger framework.
 
 ## Adoption Rule
 
@@ -136,7 +136,7 @@ The design stays explicit in the places that matter for teams:
 - env access is visible through `Flow.read`, `AsyncFlow.read`, or `TaskFlow.read`
 - execution is visible through `Flow.run`, `AsyncFlow.toAsync`, or `TaskFlow.toTask`
 - expected failures stay in the type
-- the workflow family tells you whether the use case is sync, `Async`, or `.NET Task`
+- the computation family tells you whether the use case is sync, `Async`, or `.NET Task`
 
 This is the difference from more imported-feeling Reader encodings: the code still reads
 like ordinary F# application code rather than a general FP framework.
@@ -150,7 +150,7 @@ Adopting FsFlow does not mean betting on a replacement runtime.
 - the library stays narrow and DX-focused rather than growing into a concurrency platform
 
 The goal is not to compete with the BCL or the F# core library.
-The goal is to make mixed application workflows easier to write and easier to read.
+The goal is to make mixed application computations easier to write and easier to read.
 
 ## When Not To Use It
 
@@ -165,6 +165,6 @@ Stay with plain F# when:
 
 ## Next
 
-Read [`docs/GETTING_STARTED.md`](./GETTING_STARTED.md) for the workflow-family overview,
+Read [`docs/GETTING_STARTED.md`](./GETTING_STARTED.md) for the computation-family overview,
 [`docs/TASK_ASYNC_INTEROP.md`](./TASK_ASYNC_INTEROP.md) for boundary-shape interop, and
-[`docs/examples/README.md`](./examples/README.md) for runnable application-shaped workflows.
+[`docs/examples/README.md`](./examples/README.md) for reference examples.

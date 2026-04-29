@@ -9,9 +9,7 @@ description: FsFlow technical guides, semantics, and API reference.
 
 <span class="eyebrow">Typed results, explicit context, and async/task interop</span>
 
-<p class="page-summary">Standardize application boundaries with a unified model for dependency access, typed failure, and runtime interop. `flow { ... }` combines `Result` with an added `'env` for explicit context, while `asyncFlow { ... }` and `taskFlow { ... }` extend the same style to F# `Async` and .NET `Task`.</p>
-
-# Type-safe, effectful boundaries for F#.
+# Typed results and explicit context for F#.
 
 <p class="lede">
 FsFlow provides a lightweight abstraction for the `Env -> Result<'T, 'E>` shape across sync, async, and task-based code. It preserves cold execution and rerun behavior while simplifying mixed-runtime composition without hiding execution details.
@@ -28,47 +26,72 @@ FsFlow provides a lightweight abstraction for the `Env -> Result<'T, 'E>` shape 
 
 <aside class="docs-home-panel">
 <section class="docs-home-panel-card">
-<span class="label">Documentation Model</span>
-<strong>Technical guides for architectural integration, semantic rules for execution, and comprehensive API reference.</strong>
+<span class="label"><a href="reference/fsflow/validate">Zero-Wrapper Pure Validation</a></span>
+<strong>Bind plain `Result<'T, 'E>` directly into flows without extra lifting.</strong>
 </section>
 
 <section class="docs-home-panel-card">
-<span class="label">Unified API Surface</span>
-<strong>`Flow`, `AsyncFlow`, and `TaskFlow` share an aligned member surface for mapping, binding, and env access.</strong>
-</section>
-
-<section class="docs-home-panel-card">
-<span class="label">Zero-Wrapper Pure Validation</span>
-<strong>Bind plain `Result<'T, 'E>` directly into any computation family without additional lifting ceremony.</strong>
+<span class="label">Built on Core .NET</span>
+<strong>FsFlow keeps `Async` and `Task` underneath, stays explicit at execution boundaries, and stays narrow so it improves application code without trying to become a concurrency platform.</strong>
 </section>
 </aside>
 
 </div>
 
-## Explicit boundaries, three runtimes
+## Example: file reads with typed errors
 
 ```fsharp
-type AppEnv =
-    { Prefix: string }
+open System
+open System.IO
+open System.Threading
+open FsFlow.Net
+open FsFlow.Validate
 
-type AppError =
-    | MissingName
+type ReadmeEnv =
+    { Root: string }
 
-let validateName name =
-    if System.String.IsNullOrWhiteSpace name then
-        Error MissingName
-    else
-        Ok name
+type FileReadError =
+    | NotFound of path: string
 
-let greet input : Flow<AppEnv, AppError, string> =
-    flow {
-        let! name = validateName input
-        let! prefix = Flow.read _.Prefix
-        return prefix + " " + name
+let readTextFile (path: string) : TaskFlow<ReadmeEnv, FileReadError, string> =
+    taskFlow {
+        // In production, map access and path exceptions separately at the boundary.
+        do! okIf (File.Exists path)
+            |> orElse (NotFound path)
+
+        return! ColdTask(fun ct -> File.ReadAllTextAsync(path, ct))
+    }
+
+let program : TaskFlow<ReadmeEnv, FileReadError, string * string> =
+    taskFlow {
+        let! root = TaskFlow.read _.Root
+        let settingsFile = Path.Combine(root, "settings.json")
+        let featureFlagsFile = Path.Combine(root, "feature-flags.json")
+
+        let! settings = readTextFile settingsFile
+        let! featureFlags = readTextFile featureFlagsFile
+
+        return settings, featureFlags
     }
 ```
 
-The FsFlow model aligns pure validation, environment access, and typed failure across synchronous and asynchronous boundaries.
+This snippet shows the core shape. The full runnable example, including `main` and temp-directory setup,
+is in [`examples/FsFlow.ReadmeExample/Program.fs`](https://github.com/adz/FsFlow/blob/main/examples/FsFlow.ReadmeExample/Program.fs).
+
+It reads a `Root` value from `'env`, then reads two files in one `taskFlow {}` so the cancellation token is
+passed implicitly into both reads. It uses a simple `File.Exists` guard in the example, with a note that
+production code should map path and access failures more explicitly at the boundary.
+
+Run side:
+
+```fsharp
+use cts = new CancellationTokenSource()
+
+program
+|> TaskFlow.run { Root = root } cts.Token
+|> Async.AwaitTask
+|> Async.RunSynchronously
+```
 
 <div class="docs-grid">
 
@@ -110,28 +133,6 @@ The FsFlow model aligns pure validation, environment access, and typed failure a
 <span class="label">Ecosystem</span>
 <h3><a href="INTEGRATIONS">Integrations</a></h3>
 <p>Compatibility surface with `FsToolkit.ErrorHandling`, `Validus`, `IcedTasks`, and `FSharpPlus`.</p>
-</section>
-
-</div>
-
-<div class="docs-stack">
-
-<section class="docs-card">
-<span class="label">Reference</span>
-<h3><a href="reference/">API Reference</a></h3>
-<p>Complete member documentation for the <code>FsFlow</code> and <code>FsFlow.Net</code> packages.</p>
-</section>
-
-<section class="docs-card">
-<span class="label">Implementation</span>
-<h3><a href="examples/">Reference Examples</a></h3>
-<p>Full application-shaped programs demonstrating library usage within complex orchestration layers.</p>
-</section>
-
-<section class="docs-card">
-<span class="label">Performance</span>
-<h3><a href="BENCHMARKS">Benchmarks</a></h3>
-<p>Empirical measurements of abstraction overhead, allocation costs, and task-oriented execution tradeoffs.</p>
 </section>
 
 </div>

@@ -19,7 +19,7 @@ Avoid keeping a task-oriented boundary in `Flow` just because a helper can be ad
 ## Auto-Lifts At A Glance
 
 These are the values you can usually drop directly into `let!` in each builder.
-The option and value-option cases auto-lift only when the workflow error type is `unit`.
+The option and value-option cases auto-lift only when the computation error type is `unit`.
 
 | Builder | Auto-lifts directly |
 | --- | --- |
@@ -63,7 +63,7 @@ When `FsFlow.Net` is referenced, `asyncFlow {}` also binds task-oriented inputs 
 Example:
 
 ```fsharp
-let workflow : AsyncFlow<unit, string, string> =
+let computation : AsyncFlow<unit, string, string> =
     asyncFlow {
         let! a = async { return "a" }
         let! b = async { return Ok "b" }
@@ -93,7 +93,7 @@ let workflow : AsyncFlow<unit, string, string> =
 Example:
 
 ```fsharp
-let workflow : TaskFlow<unit, string, int> =
+let computation : TaskFlow<unit, string, int> =
     taskFlow {
         let! value = Task.FromResult 42
         return value
@@ -102,10 +102,10 @@ let workflow : TaskFlow<unit, string, int> =
 
 ## When Explicit Lifting Still Matters
 
-Use the direct auto-lift when the workflow error type can stay `unit`.
+Use the direct auto-lift when the computation error type can stay `unit`.
 Use an explicit lift when you want to choose the error value yourself.
 
-For example, `option<'value>` can bind directly in a `unit`-error workflow:
+For example, `option<'value>` can bind directly in a `unit`-error computation:
 
 ```fsharp
 let maybeName : string option = None
@@ -147,7 +147,7 @@ Prefer `AsyncFlow` when:
 
 - the outer application code already uses `Async`
 - you want to stay in core `FsFlow`
-- `Async` is the honest execution model for the workflow
+- `Async` is the honest execution model for the computation
 
 Use `AsyncFlow.toAsync` to run it.
 
@@ -156,7 +156,7 @@ Use `AsyncFlow.toAsync` to run it.
 Prefer `TaskFlow` when:
 
 - the public boundary is `.NET Task`
-- task interop is central to the workflow
+- task interop is central to the computation
 - runtime cancellation belongs in execution
 
 Use `TaskFlow.toTask` to run it.
@@ -180,7 +180,7 @@ Example:
 let readAll path : ColdTask<string> =
     ColdTask(fun ct -> System.IO.File.ReadAllTextAsync(path, ct))
 
-let workflow : TaskFlow<unit, string, string> =
+let computation : TaskFlow<unit, string, string> =
     taskFlow {
         let! text = readAll "config.json"
         return text
@@ -211,7 +211,7 @@ Example with a started task:
 ```fsharp
 let started = Task.FromResult 42
 
-let workflow : TaskFlow<unit, string, int> =
+let computation : TaskFlow<unit, string, int> =
     taskFlow {
         let! value = started
         return value
@@ -225,7 +225,7 @@ let loadValue : ColdTask<int> =
     ColdTask(fun cancellationToken ->
         Task.FromResult 42)
 
-let workflow : TaskFlow<unit, string, int> =
+let computation : TaskFlow<unit, string, int> =
     taskFlow {
         let! value = loadValue
         return value

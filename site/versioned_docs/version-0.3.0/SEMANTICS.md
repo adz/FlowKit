@@ -14,12 +14,12 @@ The core `FsFlow` package keeps only sync and `Async` concepts in its public sur
 - `map` only transforms successful values
 - `mapError` only transforms typed failures
 - `tapError` runs only on typed failure and preserves the original error when the tap succeeds
-- `orElse` switches to a fallback workflow when the first workflow returns a typed failure
+- `orElse` switches to a fallback computation when the first computation returns a typed failure
 
 ## Cold By Default
 
-All three workflow families are cold.
-Building a workflow does not run it.
+All three computation families are cold.
+Building a computation does not run it.
 
 Rerun behavior:
 
@@ -31,14 +31,14 @@ The `delay` combinator preserves that behavior in each family.
 
 ## Execution Is Explicit
 
-Run each workflow family with its own execution function:
+Run each computation family with its own execution function:
 
 - `Flow.run env flow`
 - `AsyncFlow.toAsync env flow`
 - `TaskFlow.toTask env cancellationToken flow`
 
 The runtime shape is part of the public contract.
-That is why the library keeps three families instead of forcing every workflow through one wrapper.
+That is why the library keeps three families instead of forcing every computation through one wrapper.
 
 ## Exceptions
 
@@ -48,7 +48,7 @@ Each family exposes `catch` to convert exceptions into typed errors:
 - `AsyncFlow.catch`
 - `TaskFlow.catch`
 
-This handles exceptions that occur while the workflow is being executed.
+This handles exceptions that occur while the computation is being executed.
 Typed failures still stay in `Result`.
 
 ## Environments
@@ -57,7 +57,7 @@ Each family reads dependencies explicitly:
 
 - `env` reads the whole environment
 - `read` projects one dependency
-- `localEnv` runs a smaller workflow inside a larger environment
+- `localEnv` runs a smaller computation inside a larger environment
 
 The environment semantics are aligned across all three families.
 
@@ -65,8 +65,8 @@ The environment semantics are aligned across all three families.
 
 Each family also exposes low-ceremony helpers for common composition shapes:
 
-- `zip` runs two workflows in sequence and returns a tuple
-- `map2` runs two workflows in sequence and combines both successful values with a mapper
+- `zip` runs two computations in sequence and returns a tuple
+- `map2` runs two computations in sequence and combines both successful values with a mapper
 - both helpers short-circuit on the first typed failure
 
 These helpers are useful when a full computation expression would add more ceremony than value.
@@ -86,24 +86,24 @@ CancellationToken -> Task<'value>
 
 That distinction matters because reruns behave differently:
 
-- rerunning a workflow that binds a started `Task` or `ValueTask` re-awaits the same started work
-- rerunning a workflow that binds a `ColdTask` calls the factory again
+- rerunning a computation that binds a started `Task` or `ValueTask` re-awaits the same started work
+- rerunning a computation that binds a `ColdTask` calls the factory again
 
 It also affects cancellation:
 
-- a started `Task` or `ValueTask` is already running before the workflow executes
-- the current workflow `CancellationToken` cannot be injected into that already-started work
-- a `ColdTask` starts when the workflow runs, so the current workflow `CancellationToken` can be passed in
+- a started `Task` or `ValueTask` is already running before the computation executes
+- the current computation `CancellationToken` cannot be injected into that already-started work
+- a `ColdTask` starts when the computation runs, so the current computation `CancellationToken` can be passed in
 
 Use a hot task input only when reusing the same already-started work is the behavior you want.
-Use `ColdTask` when the effect should start at workflow execution time, rerun from scratch, or observe the runtime cancellation token.
+Use `ColdTask` when the effect should start at computation execution time, rerun from scratch, or observe the runtime cancellation token.
 
 Example with a started task:
 
 ```fsharp
 let started = Task.FromResult 42
 
-let workflow : TaskFlow<unit, string, int> =
+let computation : TaskFlow<unit, string, int> =
     taskFlow {
         let! value = started
         return value
@@ -120,14 +120,14 @@ let readValue : ColdTask<int> =
     ColdTask(fun cancellationToken ->
         Task.FromResult 42)
 
-let workflow : TaskFlow<unit, string, int> =
+let computation : TaskFlow<unit, string, int> =
     taskFlow {
         let! value = readValue
         return value
     }
 ```
 
-Each run calls the `ColdTask` factory again and passes in the current workflow cancellation token.
+Each run calls the `ColdTask` factory again and passes in the current computation cancellation token.
 
 ## Runtime Helpers
 
@@ -143,9 +143,9 @@ The shared runtime helpers live on `Flow.Runtime` and `AsyncFlow.Runtime`:
 - `timeout`
 - `retry`
 
-Use `Flow.Runtime` for synchronous workflows and `AsyncFlow.Runtime` for async workflows.
+Use `Flow.Runtime` for synchronous computations and `AsyncFlow.Runtime` for async computations.
 
-The `FsFlow.Net` package also provides `TaskFlow.Runtime` for task-native workflows:
+The `FsFlow.Net` package also provides `TaskFlow.Runtime` for task-native computations:
 
 - `TaskFlow.Runtime.cancellationToken`
 - `TaskFlow.Runtime.catchCancellation`
@@ -168,13 +168,13 @@ When the error value itself needs environment or effectful evaluation, use the b
 
 ## Family Direction
 
-The workflow families intentionally compose upward:
+The computation families intentionally compose upward:
 
 - `AsyncFlow` can lift `Flow`
 - `TaskFlow` can lift `Flow`
 - `TaskFlow` can lift `AsyncFlow`
 
-Keep the smallest honest workflow at each boundary, then lift it only when the outer runtime actually changes.
+Keep the smallest honest computation at each boundary, then lift it only when the outer runtime actually changes.
 
 ## What The Tests Cover
 
@@ -190,7 +190,7 @@ The test suite currently verifies:
 
 ## Next
 
-Read [`docs/GETTING_STARTED.md`](./GETTING_STARTED.md) for the workflow-family overview,
+Read [`docs/GETTING_STARTED.md`](./GETTING_STARTED.md) for the computation-family overview,
 [`docs/TASK_ASYNC_INTEROP.md`](./TASK_ASYNC_INTEROP.md) for the direct binding surface,
 or [`src/FsFlow/Flow.fs`](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs) and
 [`src/FsFlow.Net/TaskFlow.fs`](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs)

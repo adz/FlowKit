@@ -5,13 +5,13 @@ This page shows the fastest path from plain `Result` code to the right FsFlow fa
 The core `FsFlow` package contains `Flow` and `AsyncFlow`.
 `FsFlow.Net` adds `TaskFlow` for `.NET` task-oriented boundaries.
 
-## 1. Choose The Workflow Family First
+## 1. Choose The Computation Family First
 
 Use:
 
-- `Flow<'env, 'error, 'value>` when the workflow itself is synchronous
-- `AsyncFlow<'env, 'error, 'value>` when the workflow is naturally `Async`-based
-- `TaskFlow<'env, 'error, 'value>` when the workflow is naturally `.NET Task`-based
+- `Flow<'env, 'error, 'value>` when the computation itself is synchronous
+- `AsyncFlow<'env, 'error, 'value>` when the computation is naturally `Async`-based
+- `TaskFlow<'env, 'error, 'value>` when the computation is naturally `.NET Task`-based
 
 Pick the family that matches the honest boundary of the code you are writing.
 Avoid `TaskFlow` just because one helper somewhere happens to use `Task`.
@@ -34,9 +34,9 @@ let validateName (name: string) =
 
 FsFlow can sit at the application boundary, not replace ordinary pure code.
 
-## 3. Use `Flow` For Synchronous Workflows
+## 3. Use `Flow` For Synchronous Boundaries
 
-Use `Flow` when the workflow needs dependencies and typed failure, but no async runtime:
+Use `Flow` when the computation needs dependencies and typed failure, but no async runtime:
 
 ```fsharp
 type AppEnv =
@@ -60,13 +60,13 @@ let result =
 
 Choose `Flow` when:
 
-- the workflow body is sync
+- the computation body is sync
 - you want the smallest representation
 - carrying a runtime `CancellationToken` would be noise
 
-## 4. Use `AsyncFlow` For `Async`-Based Workflows
+## 4. Use `AsyncFlow` For `Async`-Based Boundaries
 
-Use `AsyncFlow` when the workflow itself is built around F# `Async`:
+Use `AsyncFlow` when the computation itself is built around F# `Async`:
 
 ```fsharp
 type AsyncEnv =
@@ -98,11 +98,11 @@ Choose `AsyncFlow` when:
 
 - the surrounding code already uses `Async`
 - the core package can stay free of `.NET Task` concepts
-- `Async` is the natural runtime for the workflow
+- `Async` is the natural runtime for the computation
 
-## 5. Use `TaskFlow` For `.NET Task`-Based Workflows
+## 5. Use `TaskFlow` For `.NET Task`-Based Boundaries
 
-Use `TaskFlow` when the workflow is task-oriented end to end:
+Use `TaskFlow` when the computation is task-oriented end to end:
 
 ```fsharp
 type TaskEnv =
@@ -140,7 +140,7 @@ Choose `TaskFlow` when:
 
 ## 6. Read From The Environment
 
-Each workflow family has the same environment pattern:
+Each computation family has the same environment pattern:
 
 - `Flow.read` / `Flow.env`
 - `AsyncFlow.read` / `AsyncFlow.env`
@@ -169,7 +169,7 @@ let describe : AsyncFlow<AsyncEnv, ValidationError, string> =
 
 ## 7. Compose Upward, Not Sideways
 
-The workflow families are ordered from smaller to larger runtime commitments:
+The computation families are ordered from smaller to larger runtime commitments:
 
 - `Flow` is the sync base
 - `AsyncFlow` can lift `Flow`
@@ -195,11 +195,11 @@ let greetTaskValidated input : TaskFlow<TaskEnv, ValidationError, string> =
     }
 ```
 
-Keep the smallest honest workflow at each boundary, then lift it only when the outer runtime really changes.
+Keep the smallest honest computation at each boundary, then lift it only when the outer runtime really changes.
 
 ## 8. What To Read Next
 
 Read [`docs/INTEGRATIONS.md`](./INTEGRATIONS.md) if you already use FsToolkit, Validus, IcedTasks, or FSharpPlus.
 Read [`docs/TASK_ASYNC_INTEROP.md`](./TASK_ASYNC_INTEROP.md) for the direct binding surface in `asyncFlow {}`
 and `taskFlow {}`, then [`docs/ENV_SLICING.md`](./ENV_SLICING.md) for environment design, then
-[`docs/examples/README.md`](./examples/README.md) for runnable examples.
+[`docs/examples/README.md`](./examples/README.md) for reference examples.

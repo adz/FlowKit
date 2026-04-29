@@ -131,9 +131,10 @@ let main _ =
 Observed output:
 
 ```text
-Flow result: Ok "Hello Ada"
-AsyncFlow result: Ok "Hello Ada"
-TaskFlow result: Ok "Hello Ada!"
+Flow result: Ok { Id = 42
+     Name = "Ada" }
+AsyncFlow result: Ok "Hello [11111111-1111-1111-1111-111111111111] Ada"
+TaskFlow result: Ok "Hello [11111111-1111-1111-1111-111111111111] Ada!"
 ```
 
 ## Playground Example
@@ -230,7 +231,7 @@ Observed output:
 ```text
 Flow: Ok "Hello Ada"
 AsyncFlow: Ok "HELLO ADA"
-TaskFlow suffix: Ok "!"
+TaskFlow: Ok "Hello Ada!"
 ```
 
 ## Maintenance Example

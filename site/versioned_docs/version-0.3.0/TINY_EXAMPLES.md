@@ -1,6 +1,6 @@
 # Tiny Examples
 
-This page shows the smallest useful examples for each FsFlow workflow family without the larger application setup from the main guides.
+This page shows the smallest useful examples for each FsFlow computation family without the larger application setup from the main guides.
 
 These examples are intentionally small.
 They are the quickest way to sanity-check the model before moving on to the longer docs.
@@ -11,7 +11,7 @@ They are the quickest way to sanity-check the model before moving on to the long
 let validatePort value =
     if value > 0 then Ok value else Error "port must be positive"
 
-let workflow : Flow<unit, string, int> =
+let computation : Flow<unit, string, int> =
     flow {
         let! port = validatePort 8080
         return port
@@ -21,7 +21,7 @@ let workflow : Flow<unit, string, int> =
 Run it with:
 
 ```fsharp
-let result = workflow |> Flow.run ()
+let result = computation |> Flow.run ()
 ```
 
 ## Read A Dependency From The Environment
@@ -29,7 +29,7 @@ let result = workflow |> Flow.run ()
 ```fsharp
 type AppEnv = { Prefix: string }
 
-let workflow : Flow<AppEnv, string, string> =
+let computation : Flow<AppEnv, string, string> =
     flow {
         let! prefix = Flow.read _.Prefix
         return $"{prefix} world"
@@ -43,7 +43,7 @@ let validateName name =
     if System.String.IsNullOrWhiteSpace name then Error "missing"
     else Ok name
 
-let workflow : AsyncFlow<unit, string, string> =
+let computation : AsyncFlow<unit, string, string> =
     asyncFlow {
         let! name = validateName "Ada"
         let! suffix = async { return "!" }
@@ -55,7 +55,7 @@ Run it with:
 
 ```fsharp
 let result =
-    workflow
+    computation
     |> AsyncFlow.toAsync ()
     |> Async.RunSynchronously
 ```
@@ -63,7 +63,7 @@ let result =
 ## Bind A Task In `taskFlow {}`
 
 ```fsharp
-let workflow : TaskFlow<unit, string, int> =
+let computation : TaskFlow<unit, string, int> =
     taskFlow {
         let! value = Task.FromResult 42
         return value
@@ -74,7 +74,7 @@ Run it with:
 
 ```fsharp
 let result =
-    workflow
+    computation
     |> TaskFlow.toTask () CancellationToken.None
     |> Async.AwaitTask
     |> Async.RunSynchronously
@@ -88,14 +88,14 @@ Use a direct `Task` bind when you already have started work and reusing that sam
 let readText path : ColdTask<string> =
     ColdTask(fun ct -> System.IO.File.ReadAllTextAsync(path, ct))
 
-let workflow : TaskFlow<unit, string, string> =
+let computation : TaskFlow<unit, string, string> =
     taskFlow {
         let! text = readText "config.json"
         return text
     }
 ```
 
-Use `ColdTask<'value>` when work should start only when the task-oriented workflow runs, should rerun from scratch on each execution, or should observe the workflow cancellation token.
+Use `ColdTask<'value>` when work should start only when the task-oriented computation runs, should rerun from scratch on each execution, or should observe the computation cancellation token.
 
 ## Combine Two Small Flows
 
@@ -110,6 +110,6 @@ Use `zip` when you want both values as a tuple, or `map2` when you want to combi
 
 ## Next
 
-Read [`docs/GETTING_STARTED.md`](./GETTING_STARTED.md) for the full workflow-family overview,
+Read [`docs/GETTING_STARTED.md`](./GETTING_STARTED.md) for the full computation-family overview,
 [`docs/INTEGRATIONS.md`](./INTEGRATIONS.md) if you are adopting the library incrementally,
 and [`docs/TASK_ASYNC_INTEROP.md`](./TASK_ASYNC_INTEROP.md) for the direct binding surface.
