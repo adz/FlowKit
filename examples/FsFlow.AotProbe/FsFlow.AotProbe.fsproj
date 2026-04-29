@@ -12,12 +12,19 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(UsePrebuiltFsFlow)' != 'true'">
+    <ProjectReference Include="..\..\src\FsFlow\FsFlow.fsproj"
+                      SetTargetFramework="TargetFramework=net8.0"
+                      GlobalPropertiesToRemove="PublishAot" />
     <ProjectReference Include="..\..\src\FsFlow.Net\FsFlow.Net.fsproj"
                       SetTargetFramework="TargetFramework=net8.0"
                       GlobalPropertiesToRemove="PublishAot" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(UsePrebuiltFsFlow)' == 'true'">
+    <Reference Include="FsFlow">
+      <HintPath>..\..\artifacts\bin\FsFlow.Net\release_net8.0\FsFlow.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
     <Reference Include="FsFlow.Net">
       <HintPath>..\..\artifacts\bin\FsFlow.Net\release_net8.0\FsFlow.Net.dll</HintPath>
       <Private>true</Private>
