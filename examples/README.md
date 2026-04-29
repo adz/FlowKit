@@ -10,6 +10,16 @@ Main example:
 dotnet run --project examples/FsFlow.Examples/FsFlow.Examples.fsproj --nologo
 ```
 
+Readme example:
+
+```bash
+dotnet run --project examples/FsFlow.ReadmeExample/FsFlow.ReadmeExample.fsproj --nologo
+```
+
+Full source:
+
+[`examples/FsFlow.ReadmeExample/Program.fs`](./FsFlow.ReadmeExample/Program.fs)
+
 Maintenance example:
 
 ```bash

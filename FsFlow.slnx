@@ -7,6 +7,7 @@
   <Folder Name="/examples/">
     <Project Path="examples/FsFlow.AotProbe/FsFlow.AotProbe.fsproj" />
     <Project Path="examples/FsFlow.Examples/FsFlow.Examples.fsproj" />
+    <Project Path="examples/FsFlow.ReadmeExample/FsFlow.ReadmeExample.fsproj" />
     <Project Path="examples/FsFlow.MaintenanceExamples/FsFlow.MaintenanceExamples.fsproj" />
     <Project Path="examples/FsFlow.Playground/FsFlow.Playground.fsproj" />
   </Folder>
