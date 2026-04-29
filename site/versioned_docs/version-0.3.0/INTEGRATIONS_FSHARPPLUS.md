@@ -36,15 +36,37 @@ The practical rule is: if the code is generic and reusable across many domains, 
 
 ## Example
 
+Keep the reusable helper separate from the boundary:
+
 ```fsharp
+type AppEnv =
+    { Prefix: string
+      Name: string }
+
 let normalizeName name =
     name.Trim()
+
+let buildGreeting prefix name =
+    $"{prefix} {normalizeName name}"
 
 let greet : Flow<AppEnv, string, string> =
     flow {
         let! prefix = Flow.read _.Prefix
         let! name = Flow.read _.Name
-        return $"{prefix} {normalizeName name}"
+        return buildGreeting prefix name
+    }
+```
+
+If you already use `FSharpPlus` for generic mapping or chaining, keep that code in the helper layer and let FsFlow read the environment at the edge.
+
+The same helper can sit under an async boundary without changing its shape:
+
+```fsharp
+let greetAsync : AsyncFlow<AppEnv, string, string> =
+    asyncFlow {
+        let! prefix = AsyncFlow.read _.Prefix
+        let! name = AsyncFlow.read _.Name
+        return buildGreeting prefix name
     }
 ```
 

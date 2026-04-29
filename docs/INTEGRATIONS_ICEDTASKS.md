@@ -32,6 +32,10 @@ The difference is the model:
 - `FsFlow.Net` keeps the boundary model explicit with `TaskFlow<'env, 'error, 'value>`
 - the combination works well when you need task-native interop without giving up typed failures or environment/threaded context
 
+One naming caveat matters here: `IcedTasks` uses `ColdTask` as an alias-style task shape, while `FsFlow.Net` uses a nominal `ColdTask<'value>` wrapper type. The names are similar, but the types are not interchangeable without an explicit bridge.
+
+This page is about coexistence, not a literal side-by-side API sample from both libraries. The code below shows both sides of the boundary, with each bridge made explicit.
+
 ## How To Combine Them
 
 Use `IcedTasks` when the codebase already centers `task {}` and its adjacent task CE helpers.
@@ -44,19 +48,75 @@ Use `TaskFlow` when you want:
 
 ## Example
 
-```fsharp
-let loadConfig : ColdTask<AppConfig> =
-    ColdTask.fromTaskFactory (fun () -> Task.FromResult { Prefix = "Hello" })
+The first bridge goes from IcedTasks into FsFlow.
+Use `coldTask` when you want delayed execution without a token, and `cancellableTask` when the helper needs the current `CancellationToken`:
 
-let workflow : TaskFlow<unit, string, string> =
+```fsharp
+open System.Threading
+open System.Threading.Tasks
+open FsFlow.Net
+open IcedTasks
+
+type AppConfig =
+    { Prefix: string }
+
+let icedLoadConfig =
+    coldTask {
+        return { Prefix = "Hello" }
+    }
+
+let fsFlowUsesIcedTasks : TaskFlow<unit, string, string> =
     taskFlow {
-        let! config = loadConfig
-        let! prefix = TaskFlow.read _.Prefix
-        return $"{prefix} {config.Prefix}"
+        let! config = FsFlow.Net.ColdTask.fromTaskFactory icedLoadConfig
+        return config.Prefix
     }
 ```
 
-If a helper is already naturally task-shaped, keep it task-shaped. FsFlow can orchestrate the boundary, not force the task helper into a different semantic bucket.
+`taskFlow {}` auto-binds the FsFlow `ColdTask<'value>` wrapper produced by `FsFlow.Net.ColdTask.fromTaskFactory icedLoadConfig`, so the IcedTasks helper stays cold until the boundary runs. The distinction still matters: `icedLoadConfig` is an IcedTasks alias-style cold task, while `FsFlow.Net.ColdTask<'value>` is a nominal wrapper type.
+
+`coldTask` does not take a `CancellationToken`; it is just `unit -> Task<'value>`. If the IcedTasks helper needs token flow, use `cancellableTask` instead:
+
+```fsharp
+let icedLoadText path =
+    cancellableTask {
+        let! ct = CancellableTask.getCancellationToken ()
+        return! System.IO.File.ReadAllTextAsync(path, ct)
+    }
+```
+
+The second bridge goes back the other way:
+
+```fsharp
+let fsGreeting : TaskFlow<unit, string, string> =
+    taskFlow {
+        return "Hello from FsFlow"
+    }
+
+let icedTasksUsesFsFlow =
+    cancellableTask {
+        let! ct = CancellableTask.getCancellationToken ()
+        let! result = TaskFlow.toTask () ct fsGreeting
+        return result
+    }
+```
+
+Use `TaskFlow.toTask` when you want to consume an FsFlow boundary from an IcedTasks computation. Use `cancellableTask` when you want the IcedTasks side to carry a token through the bridge.
+
+## Keep Started Task Work As Task
+
+If you already have started `Task` work, keep it as `Task` and bind it directly in `taskFlow {}`:
+
+```fsharp
+let started = Task.FromResult 42
+
+let taskBoundary : TaskFlow<unit, string, int> =
+    taskFlow {
+        let! value = started
+        return value
+    }
+```
+
+Do not wrap started work in `coldTask` just to make it look similar. Use `Task` when the work is already hot, and use `coldTask` when the helper itself should stay delayed.
 
 ## When To Prefer IcedTasks
 

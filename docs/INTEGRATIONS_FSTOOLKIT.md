@@ -58,24 +58,71 @@ Typical bridges look like this:
 
 ## Example
 
+The first bridge keeps validation pure and only moves the boundary:
+
 ```fsharp
 let validateName name =
     if System.String.IsNullOrWhiteSpace name then
-        Error "name required"
+        Error ()
     else
         Ok name
 
+let validatedName : Result<string, string> =
+    validateName "Ada"
+    |> Validate.orElse "name required"
+```
+
+Use this shape when the check itself stays simple but the final application error needs to be the one you actually surface.
+
+The next bridge takes an `Async<Result<_,_>>` boundary and keeps the async shape intact:
+
+```fsharp
+type AppEnv =
+    { Prefix: string
+      LoadName: int -> Async<Result<string, string>>
+      LoadGreeting: int -> Task<Result<string, string>> }
+
 let loadGreeting : AsyncFlow<AppEnv, string, string> =
     asyncFlow {
+        let! env = AsyncFlow.env
         let! loadName = AsyncFlow.read _.LoadName
-        let! name = loadName 42
-        let! validName = validateName name
-        let! prefix = AsyncFlow.read _.Prefix
-        return $"{prefix} {validName}"
+        let! name = loadName 42 |> AsyncFlow.fromAsyncResult
+        return $"{env.Prefix} {name}"
     }
 ```
 
-The `AsyncFlow` layer can sit on top of the old `Async<Result<_,_>>` shape instead of replacing it everywhere at once.
+Use this shape when the legacy code already returns `Async<Result<_,_>>` and FsFlow should only own the environment and boundary.
+
+The task-shaped version follows the same rule:
+
+```fsharp
+let publishGreeting : TaskFlow<AppEnv, string, string> =
+    taskFlow {
+        let! env = TaskFlow.env
+        let! name = env.LoadGreeting 42
+        return $"{env.Prefix} {name}"
+    }
+```
+
+The `TaskFlow` builder can bind `Task<Result<_,_>>` directly, so you can keep the task boundary honest while moving the orchestration into FsFlow.
+
+If you prefer the explicit bridge in module form, the same task result shape can be lifted with `TaskFlow.fromTaskResult`.
+
+## Keep Started Work Started
+
+If the code already has a started task, keep it as a task and bind it directly:
+
+```fsharp
+let started = Task.FromResult (Ok "Ada")
+
+let alreadyRunning : TaskFlow<unit, string, string> =
+    taskFlow {
+        let! name = started
+        return name
+    }
+```
+
+Use `TaskFlow.fromTaskResult` when you need the explicit bridge in a non-builder pipeline, and use the direct bind when the code is already clearly task-shaped.
 
 ## When FsToolkit Still Wins
 
