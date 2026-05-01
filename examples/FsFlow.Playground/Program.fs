@@ -12,26 +12,10 @@ type AppEnv =
 let greetingFlow : Flow<AppEnv, string, string> =
     Flow.read (fun env -> $"{env.Prefix} {env.Name}") // Flow<AppEnv, string, string>
 
-// Keep the explicit lift form here so the example shows the conversion before the shorter CE version.
-let greetingAsyncFlowManual : AsyncFlow<AppEnv, string, string> =
-    asyncFlow {
-        let! greeting = greetingFlow |> AsyncFlow.fromFlow // AsyncFlow<AppEnv, string, string>
-        return greeting.ToUpperInvariant()
-    }
-
 let greetingAsyncFlow : AsyncFlow<AppEnv, string, string> =
     asyncFlow {
         let! greeting = greetingFlow // AsyncFlow<AppEnv, string, string>
         return greeting.ToUpperInvariant()
-    }
-
-// Keep the explicit lift form here so the task interop path stays visible before the auto-boundary version.
-let greetingTaskFlowManual : TaskFlow<AppEnv, string, string> =
-    taskFlow {
-        let! env = TaskFlow.env // TaskFlow<AppEnv, string, AppEnv>
-        let! greeting = greetingFlow |> TaskFlow.fromFlow // TaskFlow<AppEnv, string, string>
-        let! suffix = env.LoadSuffix |> TaskFlow.fromTask // TaskFlow<AppEnv, string, string>
-        return $"{greeting}{suffix}"
     }
 
 let greetingTaskFlow : TaskFlow<AppEnv, string, string> =

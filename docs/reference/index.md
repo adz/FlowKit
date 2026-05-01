@@ -1,8 +1,9 @@
 ---
-title: API Home
+title: API Reference
 description: Landing page for the FsFlow API reference.
 ---
-# API Docs
+
+# API Reference
 
 This page shows the API reference by package first, then by user-interest surface.
 

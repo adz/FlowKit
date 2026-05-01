@@ -1,57 +1,119 @@
 # FsFlow
 
+> [!WARNING]
+> API Still stabilising - wait for 1.0 to avoid breaking changes
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/content/img/fsflow-readme-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="docs/content/img/fsflow-readme-light.svg">
   <img alt="FsFlow" src="docs/content/img/fsflow-readme-light.svg" width="160">
 </picture>
 
-FsFlow is an F# library for typed results, explicit context, and async/task interop.
-`flow { ... }` combines `Result` with an added `'env`, so you can thread dependencies or
-request context, such as a trace ID, without globals. `asyncFlow { ... }` and
-`taskFlow { ... }` extend the same style to F# `Async` and .NET `Task`.
+FsFlow is a single model for Result-based programs in F#.
+Write validation and typed-error logic once, keep it as plain `Result` while the code is pure,
+then lift the same logic into `Flow`, `AsyncFlow`, or `TaskFlow` when the boundary needs
+environment access, async work, task interop, cancellation, or runtime policy.
 
 [![ci](https://github.com/adz/FsFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/adz/FsFlow/actions/workflows/ci.yml)
 [![NuGet](https://img.shields.io/nuget/v/FsFlow.svg)](https://www.nuget.org/packages/FsFlow)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
-## Why FsFlow
+## Core Model
 
-- Keep expected failures in the type instead of pushing them into exceptions
-- Keep dependencies visible instead of hiding them in globals or service locators
-- Blend `Async` or `Task` inline only when the boundary needs it
-- Fit a booted app environment, explicit dependencies plus context, or a conventional `.NET` host
-- Lift `Result`, `Async<Result<_,_>>`, `Task<Result<_,_>>`, and `ColdTask` so existing .NET code can fit without a rewrite
-- Use `Reader`-style environment access with explicit context instead of global state
-- Use `ColdTask` when task work should stay delayed and pick up the workflow cancellation token automatically
+FsFlow is built around one progression:
 
-In addition, FsFlows pair well with normal Result libraries, and it provides a clean set of
-functions in `FsFlow.Validate` for handling them fluently before lifting into a flow.
+```text
+Validate -> Result -> Flow -> AsyncFlow -> TaskFlow
+```
+
+The validation vocabulary stays the same while the execution context grows.
+
+- Start with plain `Result` and pure validation helpers.
+- Use `flow {}` when the boundary needs typed failure and environment, but not async runtime.
+- Use `asyncFlow {}` when the boundary is naturally `Async`.
+- Use `taskFlow {}` when the boundary is naturally `.NET Task`.
+- Keep expected failures typed all the way through instead of switching helper families at each runtime shape.
+
+This is the key difference from split models like `Result`, `Async<Result<_,_>>`, and `Task<Result<_,_>>`
+that need separate helper modules, separate builders, and repeated adaptation at the boundary.
 
 ## Install
 
 - `FsFlow` for `Flow` and `AsyncFlow`
 - `FsFlow.Net` for `TaskFlow`
 
+## Example
+
+Start with pure validation:
+
+```fsharp
+open System.Threading.Tasks
+open FsFlow.Validate
+
+type RegistrationError =
+    | EmailMissing
+    | SaveFailed of string
+
+let validateEmail (email: string) : Result<unit, RegistrationError> =
+    email
+    |> okIfNotBlank
+    |> Result.map ignore
+    |> orElse EmailMissing
+```
+
+Use the same `Result` directly inside a task-oriented workflow:
+
+```fsharp
+open System.Threading.Tasks
+open FsFlow.Net
+
+type User =
+    { Email: string }
+
+type RegistrationEnv =
+    { LoadUser: int -> Task<Result<User, RegistrationError>>
+      SaveUser: User -> Task<Result<unit, RegistrationError>> }
+
+let registerUser userId : TaskFlow<RegistrationEnv, RegistrationError, unit> =
+    taskFlow {
+        let! loadUser = TaskFlow.read _.LoadUser
+        let! saveUser = TaskFlow.read _.SaveUser
+
+        let! user = loadUser userId
+        do! validateEmail user.Email
+
+        return! saveUser user
+    }
+```
+
+`validateEmail` is just `Result<unit, RegistrationError>`.
+`taskFlow` lifts it directly with `do!`.
+There is no separate task-result validation vocabulary to learn first.
+
+## Semantic Boundary
+
+FsFlow is for short-circuiting, ordered workflows:
+
+- `Validate`, `Result`, `Flow`, `AsyncFlow`, and `TaskFlow` stop on the first typed failure.
+- They are for orchestration, dependency access, async or task execution, and runtime concerns.
+- They are not accumulated validation builders.
+
+If you need accumulated validation, keep that explicit with a dedicated validation library or bridge it in at the edge.
+
 ## What You Get
 
-FsFlow relies on standard F# and .NET with small additions for workflow ergonomics:
+FsFlow stays close to standard F# and .NET:
 
 - `flow { ... }` binds to `Result` and `Option`
 - `asyncFlow { ... }` also binds to `Async` and `Async<Result<_,_>>`
 - `taskFlow { ... }` binds to `Task`, `ValueTask`, `Task<_>`, `ValueTask<_>`, and `ColdTask`
-- `Validate` works fluently with pure `Result` types before lifting into a flow
+- `Validate` works as plain `Result` logic before lifting into a workflow
 
 Because tasks are hot, FsFlow includes `ColdTask`: a small wrapper around `CancellationToken -> Task`.
-`taskFlow` handles token passing for you (or yields it when you need direct control).
-This enables helpers like `retry`, `delay` and `timeout` to work across Async and Task.
+`taskFlow` handles token passing for you and keeps reruns explicit.
 
-In all computation expressions, access `'env` with `let!` and provide it once at the boundary.
-
-## Example: file reads with typed errors
-
-This snippet shows the core shape. The full runnable example, including `main` and temp-directory setup,
-is in [`examples/FsFlow.ReadmeExample/Program.fs`](./examples/FsFlow.ReadmeExample/Program.fs).
+This is the file-oriented example shape. The full runnable example is in
+[`examples/FsFlow.ReadmeExample/Program.fs`](./examples/FsFlow.ReadmeExample/Program.fs).
 
 ```bash
 dotnet run --project examples/FsFlow.ReadmeExample/FsFlow.ReadmeExample.fsproj --nologo
@@ -84,14 +146,11 @@ let program : TaskFlow<ReadmeEnv, FileReadError, string * string> =
     }
 ```
 
-It reads a `Root` value from `'env`, then reads two files in one `taskFlow {}` so the cancellation token is
-passed implicitly into both reads. It uses a simple `File.Exists` guard in the example, with a note that
-production code should map path and access failures more explicitly at the boundary.
+It reads `Root` from `'env`, performs two file reads in one `taskFlow {}`, and keeps failure typed at the boundary.
 
 ## Getting Started
 
 - [Docs site](https://adz.github.io/FsFlow) for guides and API reference
+- [`docs/VALIDATE_AND_RESULT.md`](docs/VALIDATE_AND_RESULT.md) for the validation-first story
 - [`examples/`](examples/) for runnable repo examples
 - [`docs/TINY_EXAMPLES.md`](docs/TINY_EXAMPLES.md) for the smallest runnable snippets
-
-See the docs-site [Integrations page](https://adz.github.io/FsFlow/INTEGRATIONS/) for coexistence and migration patterns.

@@ -1,9 +1,9 @@
 ---
-title: Validus
+title: Validus Integration
 description: How FsFlow fits beside Validus validation pipelines.
 ---
 
-# Validus
+# Validus Integration
 
 This page shows how FsFlow can fit beside `Validus` validation pipelines.
 
@@ -28,7 +28,7 @@ Common patterns:
 
 - validate with `Validus`
 - convert the final success/failure into a plain `Result`
-- feed that `Result` into `Flow.fromResult`, `AsyncFlow.fromResult`, or `TaskFlow.fromResult`
+- bind that `Result` directly inside a flow when the workflow starts
 - use `Validate` when you want a smaller pure-guard layer without the heavier validation model
 
 ## Why The Pair Works

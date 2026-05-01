@@ -25,18 +25,8 @@ let validateName (name: string) : Result<string, string> =
 let loadUser : Flow<RequestEnv, string, User> =
     flow {
         let! db = Flow.read _.Db // Flow<RequestEnv, string, AppDb>
-        // Keep the explicit lift here so the example preserves the custom missing-user error.
         let! user = db.FindUser 42 |> Flow.fromOption "user not found" // Flow<RequestEnv, string, User>
         return user
-    }
-
-// Keep the explicit lift form here so the same request boundary is visible step by step.
-let renderTraceManual : AsyncFlow<RequestEnv, string, string> =
-    asyncFlow {
-        let! env = AsyncFlow.env // AsyncFlow<RequestEnv, string, RequestEnv>
-        let! user = loadUser |> AsyncFlow.fromFlow // AsyncFlow<RequestEnv, string, User>
-        let! validName = validateName user.Name |> AsyncFlow.fromResult // AsyncFlow<RequestEnv, string, string>
-        return $"{env.Prefix} [{env.TraceId}] {validName}"
     }
 
 let renderTrace : AsyncFlow<RequestEnv, string, string> =
@@ -45,15 +35,6 @@ let renderTrace : AsyncFlow<RequestEnv, string, string> =
         let! user = loadUser // AsyncFlow<RequestEnv, string, User>
         let! validName = validateName user.Name // AsyncFlow<RequestEnv, string, string>
         return $"{env.Prefix} [{env.TraceId}] {validName}"
-    }
-
-// Keep the explicit lift form here so the async and task boundary conversions stay easy to compare.
-let publishResponseManual : TaskFlow<RequestEnv, string, string> =
-    taskFlow {
-        let! env = TaskFlow.env // TaskFlow<RequestEnv, string, RequestEnv>
-        let! user = loadUser |> TaskFlow.fromFlow // TaskFlow<RequestEnv, string, User>
-        let! suffix = env.LoadSuffix |> TaskFlow.fromTask // TaskFlow<RequestEnv, string, string>
-        return $"{env.Prefix} [{env.TraceId}] {user.Name}{suffix}"
     }
 
 let publishResponse : TaskFlow<RequestEnv, string, string> =

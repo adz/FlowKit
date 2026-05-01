@@ -1,9 +1,9 @@
 ---
-title: FSharpPlus
+title: FSharpPlus Integration
 description: How FsFlow fits beside FSharpPlus-based codebases.
 ---
 
-# FSharpPlus
+# FSharpPlus Integration
 
 This page shows how FsFlow can fit beside codebases that already use `FSharpPlus`.
 

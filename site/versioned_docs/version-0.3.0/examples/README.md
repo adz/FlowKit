@@ -10,11 +10,11 @@ This page shows the examples that are executed during the docs build, so the pub
 The examples below are built from the repository projects, run with the current source, and then written back into this page.
 
 The code blocks keep the important API calls on the same lines as the values they bind, with trailing comments where that makes the signature easier to read.
-Each example starts with the explicit lift form and then shows the shorter auto-lifted form beside it.
+The examples prefer the normal direct-bind style inside computation expressions, so the docs reflect the recommended day-to-day usage.
 
 ## Request Boundary Example
 
-This example starts with the explicit lift form, then shows the shorter auto-lifted form for a request boundary that pulls a user from a database-like environment, threads a trace id through the request context, and bridges the same model across Flow, AsyncFlow, and TaskFlow.
+This example shows a request boundary that pulls a user from a database-like environment, threads a trace id through the request context, and reuses the same validation shape across Flow, AsyncFlow, and TaskFlow.
 
 Run it:
 
@@ -56,18 +56,8 @@ let validateName (name: string) : Result<string, string> =
 let loadUser : Flow<RequestEnv, string, User> =
     flow {
         let! db = Flow.read _.Db // Flow<RequestEnv, string, AppDb>
-        // Keep the explicit lift here so the example preserves the custom missing-user error.
         let! user = db.FindUser 42 |> Flow.fromOption "user not found" // Flow<RequestEnv, string, User>
         return user
-    }
-
-// Keep the explicit lift form here so the same request boundary is visible step by step.
-let renderTraceManual : AsyncFlow<RequestEnv, string, string> =
-    asyncFlow {
-        let! env = AsyncFlow.env // AsyncFlow<RequestEnv, string, RequestEnv>
-        let! user = loadUser |> AsyncFlow.fromFlow // AsyncFlow<RequestEnv, string, User>
-        let! validName = validateName user.Name |> AsyncFlow.fromResult // AsyncFlow<RequestEnv, string, string>
-        return $"{env.Prefix} [{env.TraceId}] {validName}"
     }
 
 let renderTrace : AsyncFlow<RequestEnv, string, string> =
@@ -76,15 +66,6 @@ let renderTrace : AsyncFlow<RequestEnv, string, string> =
         let! user = loadUser // AsyncFlow<RequestEnv, string, User>
         let! validName = validateName user.Name // AsyncFlow<RequestEnv, string, string>
         return $"{env.Prefix} [{env.TraceId}] {validName}"
-    }
-
-// Keep the explicit lift form here so the async and task boundary conversions stay easy to compare.
-let publishResponseManual : TaskFlow<RequestEnv, string, string> =
-    taskFlow {
-        let! env = TaskFlow.env // TaskFlow<RequestEnv, string, RequestEnv>
-        let! user = loadUser |> TaskFlow.fromFlow // TaskFlow<RequestEnv, string, User>
-        let! suffix = env.LoadSuffix |> TaskFlow.fromTask // TaskFlow<RequestEnv, string, string>
-        return $"{env.Prefix} [{env.TraceId}] {user.Name}{suffix}"
     }
 
 let publishResponse : TaskFlow<RequestEnv, string, string> =
@@ -139,7 +120,7 @@ TaskFlow result: Ok "Hello [11111111-1111-1111-1111-111111111111] Ada!"
 
 ## Playground Example
 
-This example shows the same core boundary in both explicit-lift and auto-lift form, so you can compare the two styles side by side.
+This example shows the same core boundary across Flow, AsyncFlow, and TaskFlow using the normal direct-bind style inside each computation expression.
 
 Run it:
 
@@ -168,26 +149,10 @@ type AppEnv =
 let greetingFlow : Flow<AppEnv, string, string> =
     Flow.read (fun env -> $"{env.Prefix} {env.Name}") // Flow<AppEnv, string, string>
 
-// Keep the explicit lift form here so the example shows the conversion before the shorter CE version.
-let greetingAsyncFlowManual : AsyncFlow<AppEnv, string, string> =
-    asyncFlow {
-        let! greeting = greetingFlow |> AsyncFlow.fromFlow // AsyncFlow<AppEnv, string, string>
-        return greeting.ToUpperInvariant()
-    }
-
 let greetingAsyncFlow : AsyncFlow<AppEnv, string, string> =
     asyncFlow {
         let! greeting = greetingFlow // AsyncFlow<AppEnv, string, string>
         return greeting.ToUpperInvariant()
-    }
-
-// Keep the explicit lift form here so the task interop path stays visible before the auto-boundary version.
-let greetingTaskFlowManual : TaskFlow<AppEnv, string, string> =
-    taskFlow {
-        let! env = TaskFlow.env // TaskFlow<AppEnv, string, AppEnv>
-        let! greeting = greetingFlow |> TaskFlow.fromFlow // TaskFlow<AppEnv, string, string>
-        let! suffix = env.LoadSuffix |> TaskFlow.fromTask // TaskFlow<AppEnv, string, string>
-        return $"{greeting}{suffix}"
     }
 
 let greetingTaskFlow : TaskFlow<AppEnv, string, string> =
@@ -236,7 +201,7 @@ TaskFlow: Ok "Hello Ada!"
 
 ## Maintenance Example
 
-This example shows smaller, focused shapes for maintenance and interop scenarios, first with explicit lifting and then with the shorter auto-boundary form.
+This example shows smaller, focused shapes for maintenance and interop scenarios without switching away from the normal direct-bind style.
 
 Run it:
 
@@ -281,25 +246,10 @@ let syncExample : Flow<int, string, int> =
     Flow.read id // Flow<int, string, int>
     |> Flow.map ((+) 1)
 
-// Keep the explicit lift form here so the conversion from Flow to AsyncFlow is easy to compare.
-let asyncExampleManual : AsyncFlow<int, string, int> =
-    asyncFlow {
-        let! value = syncExample |> AsyncFlow.fromFlow // AsyncFlow<int, string, int>
-        return value * 2
-    }
-
 let asyncExample : AsyncFlow<int, string, int> =
     asyncFlow {
         let! value = syncExample // AsyncFlow<int, string, int>
         return value * 2
-    }
-
-// Keep the explicit lift form here so the ColdTask-to-TaskFlow conversion stays obvious.
-let taskExampleManual : TaskFlow<int, string, int> =
-    taskFlow {
-        let! env = TaskFlow.env // TaskFlow<int, string, int>
-        let! suffix = ColdTask(fun _ -> Task.FromResult 5) |> TaskFlow.fromTask // TaskFlow<int, string, int>
-        return env + suffix
     }
 
 let taskExample : TaskFlow<int, string, int> =

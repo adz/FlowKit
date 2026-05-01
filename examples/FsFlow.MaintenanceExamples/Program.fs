@@ -28,25 +28,10 @@ let syncExample : Flow<int, string, int> =
     Flow.read id // Flow<int, string, int>
     |> Flow.map ((+) 1)
 
-// Keep the explicit lift form here so the conversion from Flow to AsyncFlow is easy to compare.
-let asyncExampleManual : AsyncFlow<int, string, int> =
-    asyncFlow {
-        let! value = syncExample |> AsyncFlow.fromFlow // AsyncFlow<int, string, int>
-        return value * 2
-    }
-
 let asyncExample : AsyncFlow<int, string, int> =
     asyncFlow {
         let! value = syncExample // AsyncFlow<int, string, int>
         return value * 2
-    }
-
-// Keep the explicit lift form here so the ColdTask-to-TaskFlow conversion stays obvious.
-let taskExampleManual : TaskFlow<int, string, int> =
-    taskFlow {
-        let! env = TaskFlow.env // TaskFlow<int, string, int>
-        let! suffix = ColdTask(fun _ -> Task.FromResult 5) |> TaskFlow.fromTask // TaskFlow<int, string, int>
-        return env + suffix
     }
 
 let taskExample : TaskFlow<int, string, int> =

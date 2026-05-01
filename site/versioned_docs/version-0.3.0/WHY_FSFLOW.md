@@ -1,30 +1,36 @@
-# Why FsFlow
+---
+title: The FsFlow Model
+description: The core FsFlow progression from Validate and Result into Flow, AsyncFlow, and TaskFlow.
+---
 
-This page shows when the FsFlow computation family is a better fit than manual environment threading, `Async<Result<_,_>>`, or `Task<Result<_,_>>` for ordinary F# application code.
+# The FsFlow Model
 
-FsFlow is aimed at a specific F# problem:
+This page shows why FsFlow is best understood as one scalable model for Result-based programs rather than a small helper for application boundaries.
 
-- a use case needs dependencies
-- validation already returns `Result`
-- one or more async or task boundaries show up
-- expected failures should stay in the type
+The core progression is:
 
-At that point, many codebases end up with one of these shapes:
-
-```fsharp
-AppEnv -> Result<'value, 'error>
-AppEnv -> Async<Result<'value, 'error>>
-AppEnv -> CancellationToken -> Task<Result<'value, 'error>>
+```text
+Validate -> Result -> Flow -> AsyncFlow -> TaskFlow
 ```
 
-Those shapes work, but they tend to spread the same concerns across several layers:
+The validation vocabulary stays the same while the execution context grows.
 
-- dependency threading
-- wrapper-shape adaptation
-- helper modules for mapping and binding
-- extra noise around the happy path
+- start with pure validation and plain `Result`
+- lift into `Flow` when the boundary needs explicit environment access
+- lift again into `AsyncFlow` or `TaskFlow` when the runtime becomes asynchronous
 
-FsFlow gives those combined shapes one aligned family:
+That matters because many F# codebases end up with separate worlds:
+
+```fsharp
+Result<'value, 'error>
+Async<Result<'value, 'error>>
+Task<Result<'value, 'error>>
+```
+
+Those shapes work, but they often split the same program across separate helper modules, separate builders,
+and repeated adaptation between pure validation and effectful orchestration.
+
+FsFlow gives those shapes one coherent family:
 
 ```fsharp
 Flow<'env, 'error, 'value>
@@ -32,90 +38,73 @@ AsyncFlow<'env, 'error, 'value>
 TaskFlow<'env, 'error, 'value>
 ```
 
-This is a DX layer over the primitives F# and .NET already provide.
+The point is not to replace `Result`, `Async`, or `Task`.
+The point is to let one Result-based style scale into real application boundaries without changing the mental model.
 
-- it composes `Result`, `Async`, and `Task`
-- it does not replace them with a new runtime model
-- it stays explicit about env access and execution
+## The Main Claim
 
-## Before And After
+FsFlow unifies Result-based programming across pure logic and effectful execution.
 
-### Manual Dependency Threading Plus `Result`
+- write validation and domain checks once with `Validate` and `Result`
+- lift them directly into flows when you need environment, async, task, cancellation, retries, logging, or resource handling
+- keep the smallest honest runtime shape at each boundary
+
+## Before The Runtime Grows
+
+Start with a plain validation helper:
 
 ```fsharp
-type AppEnv =
-    { Prefix: string }
+type RegistrationError =
+    | EmailMissing
 
-type AppError =
-    | MissingName
-
-let validateName name =
-    if System.String.IsNullOrWhiteSpace name then
-        Error MissingName
-    else
-        Ok name
-
-let greet env name =
-    result {
-        let! validName = validateName name
-        return $"{env.Prefix} {validName}"
-    }
+let validateEmail (email: string) : Result<unit, RegistrationError> =
+    email
+    |> FsFlow.Validate.okIfNotBlank
+    |> Result.map ignore
+    |> FsFlow.Validate.orElse EmailMissing
 ```
 
-This is still the right shape when the code is small and mostly pure.
+This is already enough for pure code and should stay plain when the surrounding logic is still plain.
 
-Once the same computation also needs environment access or async work, pick the computation family that
-matches the honest runtime.
+## When The Boundary Grows
 
-For a synchronous use case:
-
-```fsharp
-let greet name : Flow<AppEnv, AppError, string> =
-    flow {
-        let! validName = validateName name
-        let! prefix = Flow.read _.Prefix
-        return $"{prefix} {validName}"
-    }
-```
-
-The important part is that `validateName` still returns a plain `Result`.
-You do not have to wrap it in a separate result-specific abstraction first.
-
-### `Async<Result<_,_>>` Plus Helpers
+When that same use case needs dependencies and task work, keep the validation as-is and lift the boundary:
 
 ```fsharp
-let fetchUser userId : AppEnv -> Async<Result<User, AppError>> =
-    fun env ->
-        async {
-            match validateUserId userId with
-            | Error error -> return Error error
-            | Ok validId ->
-                let! result = env.LoadUser validId |> Async.AwaitTask
-                return result |> Result.mapError GatewayFailed
-        }
-```
+open System.Threading.Tasks
 
-This works, but the shape gets harder to read as retries, timeout, cancellation, cleanup,
-and additional environment access show up.
+type RegistrationEnv =
+    { LoadUser: int -> Task<Result<User, RegistrationError>>
+      SaveUser: User -> Task<Result<unit, RegistrationError>> }
 
-The same computation in `TaskFlow` keeps the happy path in one CE when the boundary is task-oriented:
-
-```fsharp
-let fetchUser userId : TaskFlow<AppEnv, AppError, User> =
+let register userId : TaskFlow<RegistrationEnv, RegistrationError, unit> =
     taskFlow {
         let! loadUser = TaskFlow.read _.LoadUser
-        let! validId = validateUserId userId
-        let! user = loadUser validId
-        return user
+        let! saveUser = TaskFlow.read _.SaveUser
+
+        let! user = loadUser userId
+        do! validateEmail user.Email
+        return! saveUser user
     }
 ```
 
-That is the core pitch of the library: keep dependencies, typed failures, and the real runtime
-shape in one explicit computation family without pushing the code into a larger framework.
+`validateEmail` is still just `Result<unit, RegistrationError>`.
+There is no separate task-result validation vocabulary to switch to first.
+
+## What This Replaces
+
+FsFlow is strongest when you would otherwise spread the same use case across:
+
+- plain `Result` helpers
+- `Async<Result<_,_>>` or `Task<Result<_,_>>` wrappers
+- extra helper modules for each wrapper shape
+- manual environment threading or ad hoc service lookups
+
+Instead, the same logic can move upward through the computation families while keeping the same typed-failure story.
 
 ## Adoption Rule
 
-Use FsFlow by default in the effectful application layer:
+Use FsFlow by default in the effectful application layer where the boundary genuinely needs more than plain `Result`:
 
 - handlers
 - use cases
@@ -129,7 +118,17 @@ Keep the domain plain F# by default:
 - small validation helpers
 - plain `Result` when it already reads clearly
 
-## What Makes It Readable
+## Short-Circuiting Is Intentional
+
+`Validate`, `Result`, `Flow`, `AsyncFlow`, and `TaskFlow` are short-circuiting.
+They stop on the first typed failure.
+
+That is a feature, not a missing applicative layer.
+
+If you need accumulated validation, keep that explicit with a dedicated validation type or a library such as Validus.
+FsFlow does not currently provide applicative accumulated validation in `Validate` or the flow builders.
+
+## What Keeps It Readable
 
 The design stays explicit in the places that matter for teams:
 
@@ -138,8 +137,7 @@ The design stays explicit in the places that matter for teams:
 - expected failures stay in the type
 - the computation family tells you whether the use case is sync, `Async`, or `.NET Task`
 
-This is the difference from more imported-feeling Reader encodings: the code still reads
-like ordinary F# application code rather than a general FP framework.
+This keeps the code close to ordinary F# application code instead of turning each runtime shape into a new mini-ecosystem.
 
 ## Why This Is Low Risk
 
@@ -165,6 +163,7 @@ Stay with plain F# when:
 
 ## Next
 
-Read [`docs/GETTING_STARTED.md`](./GETTING_STARTED.md) for the computation-family overview,
+Read [`docs/VALIDATE_AND_RESULT.md`](./VALIDATE_AND_RESULT.md) for the validation-first story,
+[`docs/GETTING_STARTED.md`](./GETTING_STARTED.md) for the computation-family overview,
 [`docs/TASK_ASYNC_INTEROP.md`](./TASK_ASYNC_INTEROP.md) for boundary-shape interop, and
 [`docs/examples/README.md`](./examples/README.md) for reference examples.

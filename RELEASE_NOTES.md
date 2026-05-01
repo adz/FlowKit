@@ -6,6 +6,9 @@
 - Introduced `FsFlow.Net` package for .NET task-oriented workflows and interop
 - Added `ColdTask<'value>` for deferred, restartable task factories
 - Migrated documentation to a versioned Docusaurus site with generated runnable examples
+- Reorganized the docs into a clearer product-manual path across getting started, execution semantics, runtime interop, environment slicing, and architecture
+- Added package-oriented API landing pages for `FsFlow` and `FsFlow.Net`
+- Trimmed the README into a shorter NuGet-facing entry point
 - Added pure validation helpers and effect bridges for `Async` and `Task`
 - Expanded benchmark suite with BenchmarkDotNet and new comparison scenarios
 

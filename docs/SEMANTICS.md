@@ -1,4 +1,9 @@
-# Semantics
+---
+title: Execution Semantics
+description: Exact execution rules for Flow, AsyncFlow, TaskFlow, and ColdTask.
+---
+
+# Execution Semantics
 
 This page shows the exact execution model of `Flow`, `AsyncFlow`, `TaskFlow`, and `ColdTask`.
 
@@ -15,6 +20,26 @@ The core `FsFlow` package keeps only sync and `Async` concepts in its public sur
 - `mapError` only transforms typed failures
 - `tapError` runs only on typed failure and preserves the original error when the tap succeeds
 - `orElse` switches to a fallback computation when the first computation returns a typed failure
+
+All of these semantics are short-circuiting.
+The first typed failure stops the current workflow unless you explicitly recover from it.
+
+## Short-Circuiting Versus Accumulated Validation
+
+`Validate`, `Result`, `Flow`, `AsyncFlow`, and `TaskFlow` model ordered workflows.
+They do not accumulate multiple independent validation failures by default, and FsFlow does not currently provide an applicative accumulated-validation mode here.
+
+Use this model when:
+
+- later steps depend on earlier successful values
+- the workflow should stop on the first failure
+- you are orchestrating environment access, async work, tasks, retries, cancellation, or resource usage
+
+Use a separate validation model when:
+
+- independent checks should all run
+- you need a collection of failures instead of the first failure
+- the problem is applicative validation rather than workflow orchestration
 
 ## Cold By Default
 

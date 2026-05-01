@@ -1,4 +1,9 @@
-# Task And Async Interop
+---
+title: Task and Async Interop
+description: Direct binding rules for async and task work in FsFlow.
+---
+
+# Task and Async Interop
 
 This page shows the direct binding surface for async work and helps you choose the right FsFlow family.
 
@@ -15,6 +20,22 @@ Choose the family that matches the runtime shape of the boundary itself:
 
 Use interop to cross boundaries.
 Avoid keeping a task-oriented boundary in `Flow` just because a helper can be adapted.
+
+## Preferred Style Inside Computation Expressions
+
+Inside `flow {}`, `asyncFlow {}`, and `taskFlow {}`, prefer direct binding:
+
+```fsharp
+taskFlow {
+    let! user = loadUser
+    do! validateUser user
+    let! suffix = coldSuffix
+    return user.Name + suffix
+}
+```
+
+The builders already bind `Result`, `Flow`, `AsyncFlow`, `Task`, `Task<Result<_,_>>`, and `ColdTask` where supported.
+That means normal docs examples should not reach for `TaskFlow.fromFlow` or `AsyncFlow.fromResult` inside the computation expression unless the point of the example is the bridge API itself.
 
 ## Auto-Lifts At A Glance
 
@@ -162,7 +183,8 @@ Prefer `TaskFlow` when:
 Use `TaskFlow.toTask` to run it.
 Use `Flow.Runtime` or `AsyncFlow.Runtime` for shared operational helpers like `sleep`, `timeout`, `retry`, and `useWithAcquireRelease`.
 Use `TaskFlow.Runtime` when you want the same helpers in a task-native shape.
-Use `FsFlow.Validate` for pure `Result<'value, unit>` validation, then bridge into `Flow`, `AsyncFlow`, or `TaskFlow` only when the error value itself needs effectful evaluation.
+Use `FsFlow.Validate` for pure `Result<'value, unit>` validation.
+The builders bind those results directly, so extra bridge calls are only needed when the error value itself needs a different conversion shape.
 
 ## `ColdTask<'value>`
 

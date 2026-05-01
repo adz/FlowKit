@@ -1,7 +1,9 @@
-# FsFlow And Effect-TS
+---
+title: Effect-TS Comparison
+description: Where FsFlow overlaps with Effect-TS and where it stays intentionally smaller.
+---
 
-This page places FsFlow in relation to Effect-TS without pretending they solve the
-same problem at the same scale.
+# Effect-TS Comparison
 
 This page shows FsFlow in relation to Effect-TS without pretending they solve the same problem at the same scale.
 

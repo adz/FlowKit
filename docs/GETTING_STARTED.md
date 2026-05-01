@@ -1,11 +1,39 @@
 # Getting Started
 
-This page shows the fastest path from plain `Result` code to the right FsFlow family for a real application boundary.
+This page shows the fastest path from plain `Result` code to the right FsFlow family as the execution context grows.
 
 The core `FsFlow` package contains `Flow` and `AsyncFlow`.
 `FsFlow.Net` adds `TaskFlow` for `.NET` task-oriented boundaries.
 
-## 1. Choose The Computation Family First
+## 1. Start With The Continuum
+
+FsFlow is meant to scale one Result-based style through richer boundaries:
+
+```text
+Validate -> Result -> Flow -> AsyncFlow -> TaskFlow
+```
+
+Start as small as possible, then lift only when the boundary truly needs more runtime context.
+
+## 2. Start With Pure Validation
+
+Here `validateName` stays an ordinary `Result` helper:
+
+```fsharp
+open FsFlow.Validate
+
+type ValidationError =
+    | MissingName
+
+let validateName (name: string) : Result<string, ValidationError> =
+    name
+    |> okIfNotBlank
+    |> orElse MissingName
+```
+
+FsFlow works best when this kind of code stays plain until there is a real need to add runtime concerns.
+
+## 3. Choose The Smallest Honest Boundary
 
 Use:
 
@@ -17,26 +45,10 @@ Pick the family that matches the honest boundary of the code you are writing.
 Avoid `TaskFlow` just because one helper somewhere happens to use `Task`.
 Avoid `Flow` if the boundary is mainly async work with sync wrappers around it.
 
-## 2. Start With Pure Code
+## 4. Use `Flow` For Synchronous Boundaries
 
-Here `validateName` stays an ordinary `Result` helper:
-
-```fsharp
-type ValidationError =
-    | MissingName
-
-let validateName (name: string) =
-    if System.String.IsNullOrWhiteSpace name then
-        Error MissingName
-    else
-        Ok name
-```
-
-FsFlow can sit at the application boundary, not replace ordinary pure code.
-
-## 3. Use `Flow` For Synchronous Boundaries
-
-Use `Flow` when the computation needs dependencies and typed failure, but no async runtime:
+Use `Flow` when the computation needs dependencies and typed failure, but no async runtime.
+The validation code stays exactly the same:
 
 ```fsharp
 type AppEnv =
@@ -64,7 +76,7 @@ Choose `Flow` when:
 - you want the smallest representation
 - carrying a runtime `CancellationToken` would be noise
 
-## 4. Use `AsyncFlow` For `Async`-Based Boundaries
+## 5. Use `AsyncFlow` For `Async`-Based Boundaries
 
 Use `AsyncFlow` when the computation itself is built around F# `Async`:
 
@@ -100,7 +112,7 @@ Choose `AsyncFlow` when:
 - the core package can stay free of `.NET Task` concepts
 - `Async` is the natural runtime for the computation
 
-## 5. Use `TaskFlow` For `.NET Task`-Based Boundaries
+## 6. Use `TaskFlow` For `.NET Task`-Based Boundaries
 
 Use `TaskFlow` when the computation is task-oriented end to end:
 
@@ -138,7 +150,7 @@ Choose `TaskFlow` when:
 - task interop is central to the code path
 - runtime cancellation can be part of execution
 
-## 6. Read From The Environment
+## 7. Read From The Environment
 
 Each computation family has the same environment pattern:
 
@@ -167,7 +179,7 @@ let describe : AsyncFlow<AsyncEnv, ValidationError, string> =
     }
 ```
 
-## 7. Compose Upward, Not Sideways
+## 8. Compose Upward, Not Sideways
 
 The computation families are ordered from smaller to larger runtime commitments:
 
@@ -186,20 +198,27 @@ let validateGreeting input : Flow<AppEnv, ValidationError, string> =
 
 let greetTaskValidated input : TaskFlow<TaskEnv, ValidationError, string> =
     taskFlow {
-        let! validName =
-            validateGreeting input
-            |> TaskFlow.fromFlow
-
+        let! validName = validateGreeting input
         let! prefix = TaskFlow.read _.Prefix
         return $"{prefix} {validName}"
     }
 ```
 
 Keep the smallest honest computation at each boundary, then lift it only when the outer runtime really changes.
+Inside the computation expression, prefer direct binds like this over `TaskFlow.fromFlow`.
 
-## 8. What To Read Next
+## 9. Keep The Semantic Boundary Clear
 
-Read [`docs/INTEGRATIONS.md`](./INTEGRATIONS.md) if you already use FsToolkit, Validus, IcedTasks, or FSharpPlus.
+`Validate`, `Result`, `Flow`, `AsyncFlow`, and `TaskFlow` are short-circuiting.
+They are for ordered workflows that stop on the first typed failure.
+
+If you need accumulated validation, keep that explicit with a dedicated validation type or a bridge to a validation library.
+FsFlow does not currently provide applicative accumulated validation in `Validate` or the flow builders.
+Do not assume that a flow builder is trying to merge independent failures.
+
+## 10. What To Read Next
+
+Read [`docs/VALIDATE_AND_RESULT.md`](./VALIDATE_AND_RESULT.md) for the validation-first story.
 Read [`docs/TASK_ASYNC_INTEROP.md`](./TASK_ASYNC_INTEROP.md) for the direct binding surface in `asyncFlow {}`
 and `taskFlow {}`, then [`docs/ENV_SLICING.md`](./ENV_SLICING.md) for environment design, then
 [`docs/examples/README.md`](./examples/README.md) for reference examples.

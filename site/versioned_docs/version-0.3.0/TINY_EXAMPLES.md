@@ -1,4 +1,9 @@
-# Tiny Examples
+---
+title: Common Shapes
+description: Small examples for the main FsFlow computation families.
+---
+
+# Common Shapes
 
 This page shows the smallest useful examples for each FsFlow computation family without the larger application setup from the main guides.
 

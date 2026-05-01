@@ -69,13 +69,13 @@ This page shows the examples that are executed during the docs build, so the pub
 The examples below are built from the repository projects, run with the current source, and then written back into this page.
 
 The code blocks keep the important API calls on the same lines as the values they bind, with trailing comments where that makes the signature easier to read.
-Each example starts with the explicit lift form and then shows the shorter auto-lifted form beside it.
+The examples prefer the normal direct-bind style inside computation expressions, so the docs reflect the recommended day-to-day usage.
 
 EOF
 
 render_example_section \
   "Request Boundary Example" \
-  "This example starts with the explicit lift form, then shows the shorter auto-lifted form for a request boundary that pulls a user from a database-like environment, threads a trace id through the request context, and bridges the same model across Flow, AsyncFlow, and TaskFlow." \
+  "This example shows a request boundary that pulls a user from a database-like environment, threads a trace id through the request context, and reuses the same validation shape across Flow, AsyncFlow, and TaskFlow." \
   "$root_dir/examples/FsFlow.Examples/FsFlow.Examples.fsproj" \
   "$root_dir/examples/FsFlow.Examples/Program.fs" \
   "https://github.com/adz/FsFlow/blob/main/examples/FsFlow.Examples/Program.fs" \
@@ -83,7 +83,7 @@ render_example_section \
 
 render_example_section \
   "Playground Example" \
-  "This example shows the same core boundary in both explicit-lift and auto-lift form, so you can compare the two styles side by side." \
+  "This example shows the same core boundary across Flow, AsyncFlow, and TaskFlow using the normal direct-bind style inside each computation expression." \
   "$root_dir/examples/FsFlow.Playground/FsFlow.Playground.fsproj" \
   "$root_dir/examples/FsFlow.Playground/Program.fs" \
   "https://github.com/adz/FsFlow/blob/main/examples/FsFlow.Playground/Program.fs" \
@@ -91,7 +91,7 @@ render_example_section \
 
 render_example_section \
   "Maintenance Example" \
-  "This example shows smaller, focused shapes for maintenance and interop scenarios, first with explicit lifting and then with the shorter auto-boundary form." \
+  "This example shows smaller, focused shapes for maintenance and interop scenarios without switching away from the normal direct-bind style." \
   "$root_dir/examples/FsFlow.MaintenanceExamples/FsFlow.MaintenanceExamples.fsproj" \
   "$root_dir/examples/FsFlow.MaintenanceExamples/Program.fs" \
   "https://github.com/adz/FsFlow/blob/main/examples/FsFlow.MaintenanceExamples/Program.fs" \

@@ -1,9 +1,9 @@
 ---
-title: IcedTasks
+title: IcedTasks Integration
 description: How FsFlow fits beside IcedTasks and task-oriented code.
 ---
 
-# IcedTasks
+# IcedTasks Integration
 
 This page shows how FsFlow can fit beside `IcedTasks`.
 
