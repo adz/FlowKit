@@ -1,6 +1,6 @@
 # Release Notes
 
-## 0.3.0 - 2026-04-28
+## 0.3.0 - 2026-05-02
 
 - Major architectural shift to a workflow family: `Flow`, `AsyncFlow`, and `TaskFlow`
 - Introduced `FsFlow.Net` package for .NET task-oriented workflows and interop
