@@ -39,7 +39,7 @@ The numbered items below are intentionally linear so the ralph loop can move thr
     - Add predicate constructors, boolean algebra, and bridge helpers.
 13. [x] Split and tighten the `Result` helper surface.
     - Keep fail-fast helpers on `Result`, add `mapErrorTo`, and keep `result {}`.
-14. [ ] Normalize `Result` binding across the flow builders.
+14. [x] Normalize `Result` binding across the flow builders.
     - Bind `Result` and `Result<unit, _>` directly in `Flow`, `AsyncFlow`, and `TaskFlow`.
 15. [ ] Implement the reader-env `yield` ergonomics.
     - Allow `yield _.Field` in reader-style builders and keep `Flow.read`.

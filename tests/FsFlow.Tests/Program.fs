@@ -1092,6 +1092,36 @@ let probe : TaskFlow<unit, string, int> =
         test <@ argumentTypeNames = [| "FSharpFunc`2"; "FSharpOption`1"; "FSharpResult`2"; "FSharpValueOption`1"; "Flow`3" |] @>
 
     [<Fact>]
+    let ``flow builders directly bind Result and Result unit values`` () =
+        let syncWorkflow : Flow<int, string, int> =
+            flow {
+                let! env = Flow.env
+                let! doubled = Ok(env * 2)
+                do! Ok ()
+                return doubled
+            }
+
+        let asyncWorkflow : AsyncFlow<int, string, int> =
+            asyncFlow {
+                let! env = AsyncFlow.env
+                let! doubled = Ok(env * 2)
+                do! Ok ()
+                return doubled
+            }
+
+        let taskWorkflow : TaskFlow<int, string, int> =
+            taskFlow {
+                let! env = TaskFlow.env
+                let! doubled = Ok(env * 2)
+                do! Ok ()
+                return doubled
+            }
+
+        test <@ Flow.run 21 syncWorkflow = Ok 42 @>
+        test <@ asyncWorkflow |> AsyncFlow.run 21 |> Async.RunSynchronously = Ok 42 @>
+        test <@ taskWorkflow |> TaskFlow.run 21 CancellationToken.None |> fun task -> task.GetAwaiter().GetResult() = Ok 42 @>
+
+    [<Fact>]
     let ``option and valueoption inputs short-circuit with unit errors across builders`` () =
         let syncSome : Flow<int, unit, int> =
             flow {
@@ -1155,8 +1185,10 @@ let probe : TaskFlow<unit, string, int> =
         test <@ taskWorkflow |> TaskFlow.run 19 CancellationToken.None |> fun task -> task.GetAwaiter().GetResult() = Ok 42 @>
         test <@ taskReturnFromValueNone |> TaskFlow.run () CancellationToken.None |> fun task -> task.GetAwaiter().GetResult() = Error() @>
         test <@ asyncArgumentTypeNames |> Array.contains "FSharpOption`1" @>
+        test <@ asyncArgumentTypeNames |> Array.contains "FSharpResult`2" @>
         test <@ asyncArgumentTypeNames |> Array.contains "FSharpValueOption`1" @>
         test <@ taskArgumentTypeNames |> Array.contains "FSharpOption`1" @>
+        test <@ taskArgumentTypeNames |> Array.contains "FSharpResult`2" @>
         test <@ taskArgumentTypeNames |> Array.contains "FSharpValueOption`1" @>
 
     [<Fact>]
