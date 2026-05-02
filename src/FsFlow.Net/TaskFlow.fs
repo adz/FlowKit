@@ -68,6 +68,13 @@ module TaskFlow =
         : Task<Result<'value, 'error>> =
         operation environment cancellationToken
 
+    /// <summary>Runs a task flow against a runtime context and its cancellation token.</summary>
+    let runContext
+        (context: RuntimeContext<'runtime, 'env>)
+        (flow: TaskFlow<RuntimeContext<'runtime, 'env>, 'error, 'value>)
+        : Task<Result<'value, 'error>> =
+        run context context.CancellationToken flow
+
     let toTask
         (environment: 'env)
         (cancellationToken: CancellationToken)
@@ -191,6 +198,18 @@ module TaskFlow =
 
     let read (projection: 'env -> 'value) : TaskFlow<'env, 'error, 'value> =
         TaskFlow(fun environment _ -> Task.FromResult(Ok(projection environment)))
+
+    /// <summary>Reads the runtime half of a runtime-context environment.</summary>
+    let readRuntime
+        (projection: 'runtime -> 'value)
+        : TaskFlow<RuntimeContext<'runtime, 'env>, 'error, 'value> =
+        read (fun context -> projection context.Runtime)
+
+    /// <summary>Reads the application environment half of a runtime-context environment.</summary>
+    let readEnvironment
+        (projection: 'env -> 'value)
+        : TaskFlow<RuntimeContext<'runtime, 'env>, 'error, 'value> =
+        read (fun context -> projection context.Environment)
 
     let map
         (mapper: 'value -> 'next)
@@ -323,6 +342,22 @@ module TaskFlow =
                 flow
                 (environment, cancellationToken))
 
+    /// <summary>Maps the runtime half of a runtime-context environment before running a task flow.</summary>
+    let localRuntime
+        (mapping: 'outerRuntime -> 'innerRuntime)
+        (flow: TaskFlow<RuntimeContext<'innerRuntime, 'env>, 'error, 'value>)
+        : TaskFlow<RuntimeContext<'outerRuntime, 'env>, 'error, 'value> =
+        TaskFlow(fun context cancellationToken ->
+            run (RuntimeContext.mapRuntime mapping context) cancellationToken flow)
+
+    /// <summary>Maps the application environment half of a runtime-context environment before running a task flow.</summary>
+    let localEnvironment
+        (mapping: 'outerEnvironment -> 'innerEnvironment)
+        (flow: TaskFlow<RuntimeContext<'runtime, 'innerEnvironment>, 'error, 'value>)
+        : TaskFlow<RuntimeContext<'runtime, 'outerEnvironment>, 'error, 'value> =
+        TaskFlow(fun context cancellationToken ->
+            run (RuntimeContext.mapEnvironment mapping context) cancellationToken flow)
+
     let delay (factory: unit -> TaskFlow<'env, 'error, 'value>) : TaskFlow<'env, 'error, 'value> =
         TaskFlow(fun environment cancellationToken ->
             InternalCombinatorCore.delayWith
@@ -356,6 +391,13 @@ module TaskFlow =
     /// <summary>Transforms a sequence of task flows into a task flow of a sequence and stops at the first failure.</summary>
     let sequence (flows: seq<TaskFlow<'env, 'error, 'value>>) : TaskFlow<'env, 'error, 'value list> =
         traverse id flows
+
+    /// <summary>Provides a derived environment from a layer flow to a downstream task flow.</summary>
+    let provideLayer
+        (layer: TaskFlow<'input, 'error, 'environment>)
+        (flow: TaskFlow<'environment, 'error, 'value>)
+        : TaskFlow<'input, 'error, 'value> =
+        bind (fun environment -> flow |> localEnv (fun _ -> environment)) layer
 
     /// <summary>
     /// Task-native runtime helpers for operational concerns like logging, timeout, retry, and scoped cleanup.
@@ -539,6 +581,98 @@ module TaskFlow =
                     })
 
             loop 1
+
+/// <summary>
+/// Describes a task-flow program that is built against a runtime context and later executed with a cancellation token.
+/// </summary>
+/// <typeparam name="runtime">The runtime service type captured by the spec.</typeparam>
+/// <typeparam name="env">The application environment type captured by the spec.</typeparam>
+/// <typeparam name="error">The error type produced by the task flow.</typeparam>
+/// <typeparam name="value">The success type produced by the task flow.</typeparam>
+type TaskFlowSpec<'runtime, 'env, 'error, 'value> =
+    {
+        /// <summary>Runtime services to supply when the spec is run.</summary>
+        Runtime: 'runtime
+
+        /// <summary>Application dependencies to supply when the spec is run.</summary>
+        Environment: 'env
+
+        /// <summary>Builds the task flow that should run against the runtime context.</summary>
+        Build: unit -> TaskFlow<RuntimeContext<'runtime, 'env>, 'error, 'value>
+    }
+
+/// <summary>Helpers for creating and running <see cref="TaskFlowSpec{runtime, env, error, value}" /> values.</summary>
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+[<RequireQualifiedAccess>]
+module TaskFlowSpec =
+    /// <summary>Creates a task-flow spec from runtime services, application dependencies, and a build function.</summary>
+    let create
+        (runtime: 'runtime)
+        (environment: 'env)
+        (build: unit -> TaskFlow<RuntimeContext<'runtime, 'env>, 'error, 'value>)
+        : TaskFlowSpec<'runtime, 'env, 'error, 'value> =
+        {
+            Runtime = runtime
+            Environment = environment
+            Build = build
+        }
+
+    /// <summary>Runs the spec with the supplied cancellation token.</summary>
+    let run
+        (cancellationToken: CancellationToken)
+        (spec: TaskFlowSpec<'runtime, 'env, 'error, 'value>)
+        : Task<Result<'value, 'error>> =
+        let context = RuntimeContext.create spec.Runtime spec.Environment cancellationToken
+
+        spec.Build ()
+        |> TaskFlow.run context cancellationToken
+
+/// <summary>Capability helpers for record-based environments and .NET service-provider interop.</summary>
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+[<RequireQualifiedAccess>]
+module Capability =
+    /// <summary>Describes a missing service-provider capability.</summary>
+    type MissingCapability =
+        {
+            /// <summary>The requested capability type.</summary>
+            CapabilityType: Type
+        }
+
+    /// <summary>Reads a capability from a record-based environment projection.</summary>
+    let service (projection: 'env -> 'service) : TaskFlow<'env, 'error, 'service> =
+        TaskFlow.read projection
+
+    /// <summary>Reads a capability from the runtime half of a two-context runtime environment.</summary>
+    let runtime
+        (projection: 'runtime -> 'service)
+        : TaskFlow<RuntimeContext<'runtime, 'env>, 'error, 'service> =
+        TaskFlow.read (fun context -> projection context.Runtime)
+
+    /// <summary>Reads a capability from the application half of a two-context runtime environment.</summary>
+    let environment
+        (projection: 'env -> 'service)
+        : TaskFlow<RuntimeContext<'runtime, 'env>, 'error, 'service> =
+        TaskFlow.read (fun context -> projection context.Environment)
+
+    /// <summary>Reads a service from <see cref="IServiceProvider" /> and fails when it is not registered.</summary>
+    let serviceFromProvider<'service> : TaskFlow<IServiceProvider, MissingCapability, 'service> =
+        TaskFlow(fun provider _ ->
+            match provider.GetService typeof<'service> with
+            | null ->
+                Task.FromResult(
+                    Error
+                        {
+                            CapabilityType = typeof<'service>
+                        })
+            | value -> Task.FromResult(Ok(unbox<'service> value)))
+
+/// <summary>
+/// Layer helpers for deriving an environment in one flow and consuming it in another.
+/// </summary>
+/// <typeparam name="input">The input environment type for the layer.</typeparam>
+/// <typeparam name="error">The error type carried by the layer.</typeparam>
+/// <typeparam name="output">The output environment type produced by the layer.</typeparam>
+type Layer<'input, 'error, 'output> = TaskFlow<'input, 'error, 'output>
 
 /// [omit]
 /// <exclude/>

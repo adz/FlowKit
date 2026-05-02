@@ -43,7 +43,7 @@ The numbered items below are intentionally linear so the ralph loop can move thr
     - Bind `Result` and `Result<unit, _>` directly in `Flow`, `AsyncFlow`, and `TaskFlow`.
 15. [x] Implement the reader-env `yield` ergonomics.
     - Allow `yield _.Field` in reader-style builders and keep `Flow.read`.
-16. [ ] Design and prototype the runtime and capability model.
+16. [x] Design and prototype the runtime and capability model.
     - Separate runtime services from app dependencies and pressure-test the API shape.
 
 ## Docs and Automation

@@ -16,6 +16,22 @@ module Tests =
         { Prefix: string
           Count: int }
 
+    type private IDeviceClient =
+        abstract Name: string
+
+    type private RuntimeServices =
+        { RuntimePrefix: string
+          Seen: ResizeArray<string> }
+
+    type private AppDependencies =
+        { DeviceClient: IDeviceClient
+          Value: int }
+
+    type private RecordingServiceProvider(serviceType: Type, service: obj) =
+        interface IServiceProvider with
+            member _.GetService(requestedType: Type) =
+                if requestedType = serviceType then service else null
+
     let private publicInstanceMethodNames (targetType: Type) =
         targetType.GetMethods()
         |> Array.filter (fun methodInfo -> methodInfo.IsPublic && not methodInfo.IsSpecialName)
@@ -997,6 +1013,108 @@ let probe : TaskFlow<unit, string, int> =
         test <@ releaseCount.Value = 1 @>
 
     [<Fact>]
+    let ``TaskFlow runtime context splits runtime services from app dependencies`` () =
+        let runtime = { RuntimePrefix = "rt:"; Seen = ResizeArray() }
+
+        let app =
+            { DeviceClient =
+                  { new IDeviceClient with
+                      member _.Name = "client" }
+              Value = 41 }
+
+        let context = RuntimeContext.create runtime app CancellationToken.None
+
+        let workflow : TaskFlow<RuntimeContext<RuntimeServices, AppDependencies>, string, string> =
+            taskFlow {
+                let! prefix = TaskFlow.readRuntime _.RuntimePrefix
+                let! value = TaskFlow.readEnvironment _.Value
+                runtime.Seen.Add $"value={value}"
+                return $"{prefix}{value}"
+            }
+
+        let result =
+            workflow
+            |> TaskFlow.runContext context
+            |> fun task -> task.GetAwaiter().GetResult()
+
+        test <@ result = Ok "rt:41" @>
+        test <@ List.ofSeq runtime.Seen = [ "value=41" ] @>
+
+    [<Fact>]
+    let ``TaskFlowSpec runs a built workflow against the combined runtime context`` () =
+        let runtime = { RuntimePrefix = "spec:"; Seen = ResizeArray() }
+
+        let app =
+            { DeviceClient =
+                  { new IDeviceClient with
+                      member _.Name = "spec-client" }
+              Value = 7 }
+
+        let spec =
+            TaskFlowSpec.create runtime app (fun () ->
+                taskFlow {
+                    let! prefix = TaskFlow.readRuntime _.RuntimePrefix
+                    let! value = TaskFlow.readEnvironment _.Value
+                    return $"{prefix}{value}"
+                })
+
+        let result =
+            spec
+            |> TaskFlowSpec.run CancellationToken.None
+            |> fun task -> task.GetAwaiter().GetResult()
+
+        test <@ result = Ok "spec:7" @>
+
+    [<Fact>]
+    let ``TaskFlow layers and capability helpers compose`` () =
+        let runtime =
+            { RuntimePrefix = "runtime:"
+              Seen = ResizeArray() }
+
+        let app =
+            { DeviceClient =
+                  { new IDeviceClient with
+                      member _.Name = "provider-client" }
+              Value = 10 }
+
+        let outerContext = RuntimeContext.create runtime () CancellationToken.None
+
+        let appLayer : TaskFlow<RuntimeContext<RuntimeServices, unit>, string, AppDependencies> =
+            TaskFlow.succeed app
+
+        let workflow : TaskFlow<AppDependencies, string, string> =
+            taskFlow {
+                let! client = Capability.service _.DeviceClient
+                let! value = TaskFlow.read _.Value
+                return $"{client.Name}:{value}"
+            }
+
+        let composed =
+            workflow
+            |> TaskFlow.provideLayer appLayer
+
+        let composedResult =
+            composed
+            |> TaskFlow.runContext outerContext
+            |> fun task -> task.GetAwaiter().GetResult()
+
+        let provider = RecordingServiceProvider(typeof<IDeviceClient>, app.DeviceClient :> obj) :> IServiceProvider
+
+        let providerResult =
+            Capability.serviceFromProvider<IDeviceClient>
+            |> TaskFlow.run provider CancellationToken.None
+            |> fun task -> task.GetAwaiter().GetResult()
+
+        let missingProviderResult =
+            Capability.serviceFromProvider<IDeviceClient>
+            |> TaskFlow.run (RecordingServiceProvider(typeof<string>, "nope") :> IServiceProvider) CancellationToken.None
+            |> fun task -> task.GetAwaiter().GetResult()
+
+        test <@ composedResult = Ok "provider-client:10" @>
+        test <@ providerResult = Ok app.DeviceClient @>
+        test <@ missingProviderResult = Error { CapabilityType = typeof<IDeviceClient> } @>
+
+    [<Fact>]
     let ``Flow traverse and sequence work as expected`` () =
         let values = [ 1; 2; 3 ]
         let workflow = values |> Flow.traverse (fun v -> Flow.succeed (v * 2))
@@ -1129,7 +1247,7 @@ let probe : TaskFlow<unit, string, int> =
 
     [<Fact>]
     let ``reader-style yield projects from the environment across builders`` () =
-        let environment =
+        let environment : ReaderEnv =
             { Prefix = "flow"
               Count = 21 }
 
