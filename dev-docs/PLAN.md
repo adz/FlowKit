@@ -392,6 +392,7 @@ The main ergonomic items are:
 - direct `Result` binding into all flow builders
 - reader-env `yield` as shorthand for environment projection, while keeping `Flow.read` as the explicit API
 - a validation CE that exposes applicative accumulation over the diagnostics graph
+- keep the core logging abstraction generic and use `ILogger` as an adapter at the host boundary
 
 The `yield` work stays intentionally conservative:
 
@@ -403,7 +404,6 @@ The `yield` work stays intentionally conservative:
 
 These still need explicit decisions:
 
-- the core logging abstraction versus `ILogger` adapters and ergonomics
 - the final scope of the runtime/capability model and whether it becomes a core contract or a `FsFlow.Net` concern
 - the final public name of the diagnostics graph type and its child/merge helpers
 - whether `Check` should expose only `not` / `and` / `or` or also `all` / `any` as first-class combinators

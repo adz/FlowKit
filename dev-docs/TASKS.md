@@ -62,4 +62,4 @@ The numbered items below are intentionally linear so the ralph loop can move thr
 ## Deferred
 
 22. [x] Decide whether `Option<'value>` and `ValueOption<'value>` should get implicit binding or only explicit conversion helpers.
-23. [ ] Decide whether the core logging abstraction should stay generic or lean on `ILogger` adapters for ergonomics.
+23. [x] Decide whether the core logging abstraction should stay generic or lean on `ILogger` adapters for ergonomics.
