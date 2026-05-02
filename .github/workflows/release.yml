@@ -45,8 +45,8 @@ jobs:
       - name: Pack library
         run: dotnet pack src/FsFlow/FsFlow.fsproj --configuration Release --output artifacts/package
 
-      - name: Build API docs
-        run: bash scripts/generate-api-docs.sh
+      - name: Build docs site
+        run: bash scripts/build-docs-site.sh
 
       - name: Archive package artifacts
         uses: actions/upload-artifact@v4

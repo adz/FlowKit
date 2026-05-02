@@ -79,8 +79,8 @@ jobs:
       - name: Restore
         run: dotnet restore
 
-      - name: Build API docs
-        run: bash scripts/generate-api-docs.sh
+      - name: Build docs site
+        run: bash scripts/build-docs-site.sh
 
       - name: Prepare Pages artifact
         run: touch output/.nojekyll
