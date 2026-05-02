@@ -29,6 +29,11 @@ type Diagnostics<'error> =
     }
 
 /// <summary>
+/// An accumulating validation result that keeps the structured diagnostics graph visible.
+/// </summary>
+type Validation<'value, 'error> = private Validation of Result<'value, Diagnostics<'error>>
+
+/// <summary>
 /// Helpers for building, merging, and flattening validation diagnostics graphs.
 /// </summary>
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
@@ -71,6 +76,95 @@ module Diagnostics =
             local @ children
 
         flattenWithPrefix [] graph
+
+/// <summary>
+/// Helpers for accumulating validation results with mergeable diagnostics.
+/// </summary>
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+[<RequireQualifiedAccess>]
+module Validation =
+    let private unwrap (Validation result) = result
+
+    let toResult (validation: Validation<'value, 'error>) : Result<'value, Diagnostics<'error>> =
+        unwrap validation
+
+    let succeed (value: 'value) : Validation<'value, 'error> =
+        Validation (Ok value)
+
+    let fail (diagnostics: Diagnostics<'error>) : Validation<'value, 'error> =
+        Validation (Error diagnostics)
+
+    let fromResult (result: Result<'value, 'error>) : Validation<'value, 'error> =
+        match result with
+        | Ok value -> succeed value
+        | Error error -> fail (Diagnostics.singleton { Path = []; Error = error })
+
+    let map
+        (mapper: 'value -> 'next)
+        (validation: Validation<'value, 'error>)
+        : Validation<'next, 'error> =
+        validation |> unwrap |> Result.map mapper |> Validation
+
+    let bind
+        (binder: 'value -> Validation<'next, 'error>)
+        (validation: Validation<'value, 'error>)
+        : Validation<'next, 'error> =
+        match unwrap validation with
+        | Ok value -> binder value
+        | Error diagnostics -> fail diagnostics
+
+    let mapError
+        (mapper: 'error -> 'nextError)
+        (validation: Validation<'value, 'error>)
+        : Validation<'value, 'nextError> =
+        let rec mapDiagnostics (graph: Diagnostics<'error>) : Diagnostics<'nextError> =
+            {
+                Local =
+                    graph.Local
+                    |> List.map (fun diagnostic ->
+                        {
+                            Path = diagnostic.Path
+                            Error = mapper diagnostic.Error
+                        })
+                Children =
+                    graph.Children
+                    |> Map.map (fun _ child -> mapDiagnostics child)
+            }
+
+        validation |> unwrap |> Result.mapError mapDiagnostics |> Validation
+
+    let map2
+        (mapper: 'left -> 'right -> 'value)
+        (left: Validation<'left, 'error>)
+        (right: Validation<'right, 'error>)
+        : Validation<'value, 'error> =
+        Validation(
+            match unwrap left, unwrap right with
+            | Ok leftValue, Ok rightValue -> Ok(mapper leftValue rightValue)
+            | Error leftDiagnostics, Ok _ -> Error leftDiagnostics
+            | Ok _, Error rightDiagnostics -> Error rightDiagnostics
+            | Error leftDiagnostics, Error rightDiagnostics -> Error(Diagnostics.merge leftDiagnostics rightDiagnostics)
+        )
+
+    let apply
+        (validation: Validation<'value -> 'next, 'error>)
+        (value: Validation<'value, 'error>)
+        : Validation<'next, 'error> =
+        map2 (fun mapper input -> mapper input) validation value
+
+    let collect (validations: seq<Validation<'value, 'error>>) : Validation<'value list, 'error> =
+        let folder
+            (state: Validation<'value list, 'error>)
+            (validation: Validation<'value, 'error>) =
+            map2 (fun values value -> values @ [ value ]) state validation
+
+        Seq.fold folder (succeed []) validations
+
+    let sequence (validations: seq<Validation<'value, 'error>>) : Validation<'value list, 'error> =
+        collect validations
+
+    let merge (left: Validation<'value, 'error>) (right: Validation<'next, 'error>) : Validation<'value * 'next, 'error> =
+        map2 (fun leftValue rightValue -> leftValue, rightValue) left right
 
 /// <summary>
 /// A reusable predicate result that carries a unit failure placeholder until the caller
@@ -327,3 +421,105 @@ module Validate =
     let failIfBlank = Check.failIfBlank
     let orElse = Check.orElse
     let orElseWith = Check.orElseWith
+
+/// <summary>
+/// Computation expression builder for accumulating <see cref="T:FsFlow.Validation`2" /> workflows.
+/// </summary>
+/// <exclude/>
+type ValidateBuilder() =
+    member _.Return(value: 'value) : Validation<'value, 'error> =
+        Validation.succeed value
+
+    member _.ReturnFrom(validation: Validation<'value, 'error>) : Validation<'value, 'error> =
+        validation
+
+    member _.ReturnFrom(result: Result<'value, 'error>) : Validation<'value, 'error> =
+        Validation.fromResult result
+
+    member _.Zero() : Validation<unit, 'error> =
+        Validation.succeed ()
+
+    member _.Bind
+        (
+            validation: Validation<'value, 'error>,
+            binder: 'value -> Validation<'next, 'error>
+        ) : Validation<'next, 'error> =
+        Validation.bind binder validation
+
+    member _.Bind
+        (
+            result: Result<'value, 'error>,
+            binder: 'value -> Validation<'next, 'error>
+        ) : Validation<'next, 'error> =
+        result
+        |> Validation.fromResult
+        |> Validation.bind binder
+
+    member _.Delay(factory: unit -> Validation<'value, 'error>) : Validation<'value, 'error> =
+        factory ()
+
+    member _.Run(validation: Validation<'value, 'error>) : Validation<'value, 'error> =
+        validation
+
+    member _.Combine
+        (
+            first: Validation<unit, 'error>,
+            second: Validation<'value, 'error>
+        ) : Validation<'value, 'error> =
+        Validation.bind (fun () -> second) first
+
+    member _.MergeSources
+        (
+            left: Validation<'left, 'error>,
+            right: Validation<'right, 'error>
+        ) : Validation<'left * 'right, 'error> =
+        Validation.map2 (fun leftValue rightValue -> leftValue, rightValue) left right
+
+    member _.TryWith
+        (
+            validation: Validation<'value, 'error>,
+            handler: exn -> Validation<'value, 'error>
+        ) : Validation<'value, 'error> =
+        try
+            validation
+        with error ->
+            handler error
+
+    member _.TryFinally(validation: Validation<'value, 'error>, compensation: unit -> unit) : Validation<'value, 'error> =
+        try
+            validation
+        finally
+            compensation ()
+
+    member this.Using
+        (
+            resource: 'resource,
+            binder: 'resource -> Validation<'value, 'error>
+        ) : Validation<'value, 'error>
+        when 'resource :> IDisposable =
+        this.TryFinally(
+            binder resource,
+            fun () ->
+                if not (isNull (box resource)) then
+                    resource.Dispose()
+        )
+
+    member this.While
+        (
+            guard: unit -> bool,
+            body: Validation<unit, 'error>
+        ) : Validation<unit, 'error> =
+        if guard () then
+            this.Bind(body, fun () -> this.While(guard, body))
+        else
+            this.Zero()
+
+    member this.For
+        (
+            sequence: seq<'value>,
+            binder: 'value -> Validation<unit, 'error>
+        ) : Validation<unit, 'error> =
+        this.Using(
+            sequence.GetEnumerator(),
+            fun enumerator -> this.While(enumerator.MoveNext, this.Delay(fun () -> binder enumerator.Current))
+        )

@@ -747,6 +747,65 @@ let probe : TaskFlow<unit, string, int> =
         test <@ Diagnostics.flatten merged = expectedMerged @>
 
     [<Fact>]
+    let ``validate computation expression accumulates sibling failures and short-circuits sequentially`` () =
+        let makeDiagnostic error =
+            {
+                Path = []
+                Error = error
+            }
+
+        let leftRuns = ref 0
+        let rightRuns = ref 0
+        let sequentialRuns = ref 0
+
+        let mergedWorkflow : Validation<int, string> =
+            validate {
+                let! left =
+                    (leftRuns.Value <- leftRuns.Value + 1
+                     Validation.fail (Diagnostics.singleton (makeDiagnostic "left")))
+
+                and! right =
+                    (rightRuns.Value <- rightRuns.Value + 1
+                     Validation.fail (Diagnostics.singleton (makeDiagnostic "right")))
+
+                return left + right
+            }
+
+        let sequentialWorkflow : Validation<int, string> =
+            validate {
+                let! _ = Validation.fail (Diagnostics.singleton (makeDiagnostic "parse"))
+                let! _ =
+                    (sequentialRuns.Value <- sequentialRuns.Value + 1
+                     Validation.fail (Diagnostics.singleton (makeDiagnostic "should-not-run")))
+                return 0
+            }
+
+        let liftedResultWorkflow : Validation<int, string> =
+            validate {
+                let! value = Ok 21
+                return value + 1
+            }
+
+        let mergedResult = Validation.toResult mergedWorkflow
+        let sequentialResult = Validation.toResult sequentialWorkflow
+        let liftedResult = Validation.toResult liftedResultWorkflow
+        let expectedSequential = Error (Diagnostics.singleton (makeDiagnostic "parse"))
+
+        test <@ typeof<Validation<int, string>>.Name = "Validation`2" @>
+        match mergedResult with
+        | Ok _ -> failwith "expected merged workflow to fail"
+        | Error diagnostics ->
+            let flattened = Diagnostics.flatten diagnostics
+            if flattened <> [ makeDiagnostic "left"; makeDiagnostic "right" ] then
+                failwith "expected merged workflow diagnostics to flatten in order"
+
+        test <@ leftRuns.Value = 1 @>
+        test <@ rightRuns.Value = 1 @>
+        test <@ sequentialResult = expectedSequential @>
+        test <@ sequentialRuns.Value = 0 @>
+        test <@ liftedResult = Ok 22 @>
+
+    [<Fact>]
     let ``Validate bridges into flow, async, and task shapes`` () =
         let flowBridge =
             Validate.okIf false

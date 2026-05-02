@@ -33,7 +33,7 @@ The numbered items below are intentionally linear so the ralph loop can move thr
    - Choose the graph type name and the diagnostic/path vocabulary.
 10. [x] Implement diagnostics merge semantics.
    - Add empty, singleton, merge, and flatten helpers plus recursive branch merging.
-11. [ ] Add the accumulating `Validation` carrier and `validate {}` CE.
+11. [x] Add the accumulating `Validation` carrier and `validate {}` CE.
    - Make `and!` accumulate siblings and `let!` remain sequential within a branch.
 12. [ ] Build the `Check` helper surface.
     - Add predicate constructors, boolean algebra, and bridge helpers.

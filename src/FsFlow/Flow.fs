@@ -1164,3 +1164,8 @@ module Builders =
     /// The core <c>asyncFlow { }</c> computation expression.
     /// </summary>
     let asyncFlow = AsyncFlowBuilder()
+
+    /// <summary>
+    /// The accumulating <c>validate { }</c> computation expression.
+    /// </summary>
+    let validate = ValidateBuilder()
