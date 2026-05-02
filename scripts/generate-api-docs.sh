@@ -2,4 +2,6 @@
 
 set -euo pipefail
 
-"$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/build-docs-site.sh"
+root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+node "$root_dir/scripts/generate-api-docs.mjs"

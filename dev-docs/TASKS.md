@@ -50,7 +50,7 @@ The numbered items below are intentionally linear so the ralph loop can move thr
 
 17. [x] Rewrite docs around the post-`0.3.0` model once implemented.
     - Lead with `Check -> Result -> Validation -> Flow -> AsyncFlow -> TaskFlow`.
-18. [ ] Replace lifted API pages with source-doc extraction.
+18. [x] Replace lifted API pages with source-doc extraction.
     - Preserve source links and keep hand-written notes limited to cross-cutting commentary.
 19. [ ] Expand executable documentation examples into docs-as-tests.
     - Keep examples runnable during docs generation and capture evaluated output.

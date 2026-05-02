@@ -1,57 +1,22 @@
 ---
 title: Support Types
-description: Supporting types in the core FsFlow package.
+description: Source-documented runtime support types in FsFlow.
 ---
 
 # Support Types
 
-This page shows the support types that are useful but not the headline boundary surface.
+This page shows the support types that stay close to the runtime helpers without taking over the main workflow story.
 
-These types show up when you need runtime logging or retry behavior, but they stay out of the way the rest of the time.
+## Logging
 
-## LogLevel
+- type `LogLevel`: Log levels used by runtime logging helpers and environment-provided logging functions. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs#L31)
+- type `LogEntry`: A structured log entry written through a runtime logger. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs#L42)
 
-`LogLevel` is the runtime logging severity used by logging helpers.
+## Retry policy
 
-- `Trace`
-- `Debug`
-- `Information`
-- `Warning`
-- `Error`
-- `Critical`
-
-## LogEntry
-
-`LogEntry` is the structured log record used by runtime logging helpers.
-
-- `Level`
-- `Message`
-- `TimestampUtc`
-
-## RetryPolicy
-
-`RetryPolicy<'error>` defines how retry helpers decide whether to keep going.
-
-- `MaxAttempts`
-- `Delay`
-- `ShouldRetry`
-
-The standard helper is:
-
-- `RetryPolicy.noDelay`
-
-## Member map
-
-- `LogLevel` for structured severity
-- `LogEntry` for structured runtime events
-- `RetryPolicy<'error>` for retry decision and delay behavior
-
-## Example
-
-```fsharp
-let policy =
-    RetryPolicy.noDelay 3
-```
+- type `RetryPolicy`: Defines how runtime retry helpers repeat typed failures in a controlled way. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs#L52)
+- module `RetryPolicy`: Standard retry policies for runtime helpers. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs#L63)
+- `RetryPolicy.noDelay` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs#L64)
 
 ## Source
 

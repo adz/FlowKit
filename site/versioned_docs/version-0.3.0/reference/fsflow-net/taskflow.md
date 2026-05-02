@@ -1,132 +1,119 @@
 ---
 title: TaskFlow
-description: The task-oriented workflow surface in FsFlow.Net.
+description: Source-documented task workflow surface in FsFlow.Net.
 ---
 
 # TaskFlow
 
-This page shows the task-oriented boundary family in one place: the `TaskFlow<'env, 'error, 'value>` type, the `TaskFlow` module, and the task builder entry point.
+This page shows the source-documented task-oriented surface: the runtime context, cold task helper, task flow module, and the task-specific runtime helpers.
 
-Use this page when the runtime boundary is task-based or when cancellation is part of the honest shape of the workflow.
+## Runtime context
 
-## Core shape
+- type `RuntimeContext`: Captures the two-context shape of a task workflow execution: runtime services, application capabilities, and the cancellation token for the current run. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/Runtime.fs#L14)
+- module `RuntimeContext`: Helpers for building and reshaping `RuntimeContext{runtime, env}` values. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/Runtime.fs#L29)
+- `RuntimeContext.create`: Creates a runtime context from the supplied runtime services, environment, and cancellation token. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/Runtime.fs#L31)
+- `RuntimeContext.runtime`: Reads the runtime half of a runtime context. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/Runtime.fs#L43)
+- `RuntimeContext.environment`: Reads the application environment half of a runtime context. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/Runtime.fs#L46)
+- `RuntimeContext.cancellationToken`: Reads the cancellation token stored in a runtime context. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/Runtime.fs#L49)
+- `RuntimeContext.mapRuntime`: Maps the runtime half of a runtime context. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/Runtime.fs#L52)
+- `RuntimeContext.mapEnvironment`: Maps the application environment half of a runtime context. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/Runtime.fs#L63)
+- `RuntimeContext.withRuntime`: Replaces the runtime half of a runtime context. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/Runtime.fs#L74)
+- `RuntimeContext.withEnvironment`: Replaces the environment half of a runtime context. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/Runtime.fs#L81)
 
-`TaskFlow<'env, 'error, 'value>` stores a function from environment and cancellation token to `Task<Result<'value, 'error>>`.
+## ColdTask
 
-- `TaskFlow.run` executes the boundary.
-- `TaskFlow.toTask` exposes the task result directly.
+- type `ColdTask`: Represents delayed task work that can observe a runtime cancellation token when it is started. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L23)
+- module `ColdTask`: Core functions for creating and executing cold tasks. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L31)
+- `ColdTask.run` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L55)
+- `ColdTask.create` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L32)
+- `ColdTask.fromTaskFactory` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L35)
+- `ColdTask.fromTask` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L38)
+- `ColdTask.fromValueTaskFactory` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L41)
+- `ColdTask.fromValueTaskFactoryWithoutCancellation` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L46)
+- `ColdTask.fromValueTask` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L51)
 
-## What you can do
+## TaskFlow
 
-`TaskFlow` is the task-native branch of the FsFlow family:
+- type `TaskFlow`: Represents a cold task-based workflow that reads an environment, observes a runtime cancellation token, returns a typed result, and is executed explicitly through `TaskFlow.run`. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L15)
+- module `TaskFlow`: Core functions for creating, composing, executing, and adapting task flows. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L63)
+- `TaskFlow.run` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L64)
+- `TaskFlow.runContext`: Runs a task flow against a runtime context and its cancellation token. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L72)
+- `TaskFlow.toTask` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L78)
+- `TaskFlow.succeed` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L85)
+- `TaskFlow.fail` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L88)
+- `TaskFlow.fromResult` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L91)
+- `TaskFlow.fromOption` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L94)
+- `TaskFlow.fromValueOption` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L99)
+- `TaskFlow.orElseTask` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L104)
+- `TaskFlow.orElseAsync` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L116)
+- `TaskFlow.orElseFlow` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L128)
+- `TaskFlow.orElseAsyncFlow` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L142)
+- `TaskFlow.orElseTaskFlow` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L160)
+- `TaskFlow.fromFlow` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L176)
+- `TaskFlow.fromAsyncFlow` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L179)
+- `TaskFlow.fromTask` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L184)
+- `TaskFlow.fromTaskResult` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L191)
+- `TaskFlow.env` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L196)
+- `TaskFlow.read` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L199)
+- `TaskFlow.readRuntime`: Reads the runtime half of a runtime-context environment. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L203)
+- `TaskFlow.readEnvironment`: Reads the application environment half of a runtime-context environment. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L209)
+- `TaskFlow.map` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L214)
+- `TaskFlow.bind` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L229)
+- `TaskFlow.tap` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L248)
+- `TaskFlow.tapError` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L258)
+- `TaskFlow.mapError` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L276)
+- `TaskFlow.catch` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L291)
+- `TaskFlow.orElse` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L303)
+- `TaskFlow.zip` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L316)
+- `TaskFlow.map2` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L326)
+- `TaskFlow.localEnv` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L334)
+- `TaskFlow.delay` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L361)
+- `TaskFlow.traverse`: Transforms a sequence of values into a task flow and stops at the first failure. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L369)
+- `TaskFlow.sequence`: Transforms a sequence of task flows into a task flow of a sequence and stops at the first failure. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L392)
 
-- lift from `Flow` and `AsyncFlow`
-- build from `Task`, `ValueTask`, `Async`, `ColdTask`, and `Result`
-- keep cancellation visible all the way through execution
-- compose with the same result-first flow as the other families
-- bridge to task-native runtime concerns like timeout, retry, and cleanup
+## Task runtime helpers
 
-## Builder entry point
+- `TaskFlow.Runtime`: Task-native runtime helpers for operational concerns like logging, timeout, retry, and scoped cleanup. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L406)
+- `TaskFlow.Runtime.cancellationToken`: Reads the current runtime cancellation token. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L408)
+- `TaskFlow.Runtime.catchCancellation`: Converts an `OperationCanceledException` into a typed error. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L412)
+- `TaskFlow.Runtime.ensureNotCanceled`: Returns a typed error immediately when the runtime token is already canceled. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L425)
+- `TaskFlow.Runtime.sleep`: Suspends the flow for the specified duration while observing cancellation. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L433)
+- `TaskFlow.Runtime.log`: Writes a fixed log message through the environment-provided logger. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L441)
+- `TaskFlow.Runtime.logWith`: Writes a log message computed from the current environment. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L456)
+- `TaskFlow.Runtime.useWithAcquireRelease`: Acquires a resource, uses it, and always runs the release action. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L471)
+- `TaskFlow.Runtime.timeout`: Fails with the supplied error when the flow does not complete before the timeout. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L496)
+- `TaskFlow.Runtime.timeoutToOk`: Returns the supplied success value when the flow times out. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L514)
+- `TaskFlow.Runtime.timeoutToError`: Forwards to `timeout` for a typed failure on timeout. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L532)
+- `TaskFlow.Runtime.timeoutWith`: Runs a fallback flow when the original flow times out. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L540)
+- `TaskFlow.Runtime.retry`: Retries a flow according to the supplied policy. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L558)
 
-The `taskFlow {}` builder is the readable orchestration layer for task-based code.
+## TaskFlowSpec
 
-- use it when the runtime boundary is genuinely task-shaped
-- use `TaskFlow` members for the real primitives
-- keep `TaskFlowBuilder` as implementation detail, not a primary landing page
+- type `TaskFlowSpec`: Describes a task-flow program that is built against a runtime context and later executed with a cancellation token. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L592)
+- module `TaskFlowSpec`: Helpers for creating and running `TaskFlowSpec{runtime, env, error, value}` values. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L607)
+- `TaskFlowSpec.create`: Creates a task-flow spec from runtime services, application dependencies, and a build function. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L609)
+- `TaskFlowSpec.run`: Runs the spec with the supplied cancellation token. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L621)
 
-## Create and run
+## Capabilities and layers
 
-The creation helpers mirror the sync and async families:
+- module `Capability`: Capability helpers for record-based environments and .NET service-provider interop. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L633)
+- `Capability.MissingCapability`: Describes a missing service-provider capability. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L635)
+- `Capability.service`: Reads a capability from a record-based environment projection. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L642)
+- `Capability.runtime`: Reads a capability from the runtime half of a two-context runtime environment. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L646)
+- `Capability.environment`: Reads a capability from the application half of a two-context runtime environment. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L652)
+- `Capability.serviceFromProvider`: Reads a service from `IServiceProvider` and fails when it is not registered. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L658)
+- type `Layer`: Layer helpers for deriving an environment in one flow and consuming it in another. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L675)
 
-- `TaskFlow.run` executes the task boundary with environment and cancellation.
-- `TaskFlow.toTask` exposes the raw task result.
-- `TaskFlow.succeed` and `TaskFlow.fail` create immediate task boundaries.
-- `TaskFlow.fromResult` lifts a plain `Result<'value, 'error>`.
-- `TaskFlow.fromOption` and `TaskFlow.fromValueOption` lift optional values with an explicit error.
-- `TaskFlow.fromFlow` and `TaskFlow.fromAsyncFlow` bridge the other FsFlow families into task shape.
-- `TaskFlow.fromTask` and `TaskFlow.fromTaskResult` bridge delayed task work into the task boundary.
-- `TaskFlow.env` reads the full environment.
-- `TaskFlow.read` projects a dependency from the environment.
+## Entry points
 
-## Compose
+The task-specific builder entry points stay as syntax on top of the module surface, while the extension modules handle the extra task and async interop shapes.
 
-The composition helpers preserve the same typed failure model:
-
-- `TaskFlow.map` transforms the success value.
-- `TaskFlow.bind` sequences the next task-bound step.
-- `TaskFlow.tap` and `TaskFlow.tapError` observe success or failure without changing them.
-- `TaskFlow.mapError` reshapes the failure value.
-- `TaskFlow.catch` turns an exception into a typed failure.
-- `TaskFlow.orElse` and its flow/task bridges lift validation into task-shaped runtime work.
-- `TaskFlow.zip` and `TaskFlow.map2` combine independent task flows.
-
-## Environment and lifecycle
-
-Task-based boundaries still keep dependency access explicit:
-
-- `TaskFlow.env` exposes the current environment value.
-- `TaskFlow.read` projects a dependency from the environment.
-- `TaskFlow.localEnv` narrows or reshapes the environment for a subflow.
-- `TaskFlow.delay` defers construction until execution time.
-
-## Collections
-
-The traversal helpers keep task composition honest:
-
-- `TaskFlow.traverse` runs a task-flow-producing function over each item.
-- `TaskFlow.sequence` turns a collection of task flows into a task flow of a collection.
-
-## Runtime helpers
-
-The task-oriented helper surface covers the operational boundaries:
-
-- `TaskFlow.Runtime.catchCancellation` maps cancellation into a typed failure.
-- `TaskFlow.Runtime.useWithAcquireRelease` scopes cleanup for task-based resources.
-- `TaskFlow.Runtime.timeout`, `timeoutToOk`, `timeoutToError`, and `timeoutWith` bound task work in time.
-- `TaskFlow.Runtime.retry` repeats execution using `RetryPolicy<'error>`.
-- cancellation-aware reads and delay helpers remain explicit rather than implicit.
-
-## Interop
-
-The `TaskFlow` surface is where the other families and task-native helpers meet:
-
-- `TaskFlow.fromFlow` and `TaskFlow.fromAsyncFlow` bridge the other FsFlow families.
-- `TaskFlow.fromTask` and `TaskFlow.fromTaskResult` bridge delayed task work.
-- `TaskFlow.orElseTask`, `TaskFlow.orElseAsync`, and the flow/task-flow bridges lift validation when the error itself needs a task-shaped boundary.
-
-## Example
-
-```fsharp
-let workflow : TaskFlow<unit, string, int> =
-    taskFlow {
-        let! value = TaskFlow.fromTaskResult (Task.FromResult (Ok 42))
-        return value
-    }
-```
-
-## Member map
-
-If you want the short version of the page, reach for:
-
-- `TaskFlow.succeed` and `TaskFlow.fail` to create immediate boundaries
-- `TaskFlow.fromResult`, `TaskFlow.fromOption`, and `TaskFlow.fromValueOption` to lift ordinary values
-- `TaskFlow.fromFlow`, `TaskFlow.fromAsyncFlow`, `TaskFlow.fromTask`, and `TaskFlow.fromTaskResult` for task bridges
-- `TaskFlow.read` and `TaskFlow.env` for explicit environment access
-- `TaskFlow.map`, `TaskFlow.bind`, `TaskFlow.tap`, `TaskFlow.tapError`, and `TaskFlow.orElse` for composition
-- `TaskFlow.traverse` and `TaskFlow.sequence` for lists and sequences
-- `TaskFlow.Runtime.*` for cancellation, timeout, retry, and resource management
-
-## Source-Lifted Notes
-
-The source comments on `TaskFlow` are intentionally minimal. The important ones are:
-
-- `TaskFlow.run` is execution with both environment and cancellation.
-- `TaskFlow.toTask` exposes the underlying task result.
-- `TaskFlow.succeed`, `fail`, `fromResult`, `fromOption`, and `fromValueOption` are the direct creation path.
-- `TaskFlow.fromFlow`, `fromAsyncFlow`, `fromTask`, and `fromTaskResult` are the bridge path from other runtimes.
-- `TaskFlow.read` keeps environment access explicit.
-- `TaskFlow.Runtime.*` keeps operational behavior separate from the main composition surface.
+- `Builders.asyncFlow`: The .NET-extended `asyncFlow { }` computation expression. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L1112)
+- `Builders.taskFlow`: The .NET `taskFlow { }` computation expression. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L1117)
+- module `TaskFlowBuilderExtensions` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L907)
+- module `AsyncFlowBuilderExtensions` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L1034)
 
 ## Source
 
 - [TaskFlow.fs](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs)
+- [Runtime.fs](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/Runtime.fs)

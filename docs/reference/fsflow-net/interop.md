@@ -1,48 +1,28 @@
 ---
 title: Interop
-description: Task and async interop helpers for FsFlow.Net.
+description: Source-documented task and async interop helpers for FsFlow.Net.
 ---
 
 # Interop
 
 This page shows the interop helpers that bridge task-based boundaries to sync and async boundaries when that is the honest runtime shape.
 
-Use this page when you need to move between `Task`, `ValueTask`, `Async`, `ColdTask`, `Flow`, `AsyncFlow`, and `TaskFlow`.
-
 ## TaskFlow bridges
 
-- `TaskFlow.fromFlow`
-- `TaskFlow.fromAsyncFlow`
-- `TaskFlow.orElseTask`
-- `TaskFlow.orElseAsync`
-- `TaskFlow.orElseFlow`
-- `TaskFlow.orElseAsyncFlow`
-- `TaskFlow.orElseTaskFlow`
+- `TaskFlow.fromFlow` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L176)
+- `TaskFlow.fromAsyncFlow` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L179)
+- `TaskFlow.orElseTask` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L104)
+- `TaskFlow.orElseAsync` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L116)
+- `TaskFlow.orElseFlow` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L128)
+- `TaskFlow.orElseAsyncFlow` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L142)
+- `TaskFlow.orElseTaskFlow` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L160)
 
 ## Builder extensions
 
-The builder extension modules are the supported customization surface:
+The builder extension modules are the supported customization surface. The builder types themselves stay out of the narrative.
 
-- `TaskFlowBuilderExtensions`
-- `AsyncFlowBuilderExtensions`
-
-The builder types themselves are plumbing and are intentionally not part of the docs narrative.
-
-## Bridge map
-
-The task package surface gives you these bridge points:
-
-- `TaskFlow.fromFlow` and `TaskFlow.fromAsyncFlow` to lift sync and async boundaries into the task family
-- `TaskFlow.fromTask` and `TaskFlow.fromTaskResult` when the task is already the right runtime shape
-- `TaskFlow.orElseTask`, `TaskFlow.orElseAsync`, `TaskFlow.orElseFlow`, `TaskFlow.orElseAsyncFlow`, and `TaskFlow.orElseTaskFlow` for effectful fallback shapes
-- `TaskFlowBuilderExtensions` and `AsyncFlowBuilderExtensions` for builder-level customization only
-
-## Example
-
-```fsharp
-let asTaskFlow =
-    TaskFlow.fromAsyncFlow (AsyncFlow.succeed "ok")
-```
+- module `TaskFlowBuilderExtensions` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L907)
+- module `AsyncFlowBuilderExtensions` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs#L1034)
 
 ## Source
 
