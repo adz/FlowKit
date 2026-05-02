@@ -56,7 +56,7 @@ The numbered items below are intentionally linear so the ralph loop can move thr
     - Keep examples runnable during docs generation and capture evaluated output.
 20. [x] Tighten docs release automation.
     - Wire docs generation into release and tag workflows, and add link checking where practical.
-21. [ ] Expand benchmark coverage where it helps the architecture.
+21. [x] Expand benchmark coverage where it helps the architecture.
     - Add peer benchmarks for `FsToolkit.ErrorHandling`, `Ply`, and `IcedTasks`.
 
 ## Deferred

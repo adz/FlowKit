@@ -3,6 +3,9 @@ namespace FsFlow.Benchmarks
 open System
 open System.Threading
 open System.Threading.Tasks
+open FSharp.Control.Tasks
+open FsToolkit.ErrorHandling
+open IcedTasks
 open FsFlow
 open FsFlow.Net
 
@@ -61,10 +64,23 @@ module Shared =
         workflow ()
         |> fun operation -> operation.GetAwaiter().GetResult()
 
+    let runValueTask (workflow: unit -> ValueTask<int>) =
+        workflow ()
+        |> fun operation -> operation.GetAwaiter().GetResult()
+
+    let runValueTaskResult (workflow: unit -> ValueTask<Result<int, string>>) =
+        workflow ()
+        |> fun operation -> operation.GetAwaiter().GetResult()
+        |> consumeResult
+
     let runCancellableTaskResult (workflow: CancellationToken -> Task<Result<int, string>>) =
         workflow noCancellation
         |> fun operation -> operation.GetAwaiter().GetResult()
         |> consumeResult
+
+    let runCancellableTask (workflow: CancellationToken -> Task<int>) =
+        workflow noCancellation
+        |> fun operation -> operation.GetAwaiter().GetResult()
 
     let buildFlowBindChain (depth: int) =
         let mutable flow = Flow.succeed 0
@@ -126,6 +142,34 @@ module Shared =
 
         fun () -> loop 1 0
 
+    let buildFsToolkitAsyncResultBindChain (depth: int) (failAt: int option) =
+        let rec loop index value =
+            asyncResult {
+                if index > depth then
+                    return value
+                elif failAt = Some index then
+                    return! Error $"fail-{index}"
+                else
+                    let! next = async { return value + index }
+                    return! loop (index + 1) next
+            }
+
+        fun () -> loop 1 0
+
+    let buildFsToolkitTaskResultBindChain (depth: int) (failAt: int option) =
+        let rec loop index value =
+            taskResult {
+                if index > depth then
+                    return value
+                elif failAt = Some index then
+                    return! Error $"fail-{index}"
+                else
+                    let! next = Task.FromResult(value + index)
+                    return! loop (index + 1) next
+            }
+
+        fun () -> loop 1 0
+
     let buildDirectTaskResultBindChain (depth: int) (failAt: int option) =
         let rec loop index value () =
             task {
@@ -139,6 +183,18 @@ module Shared =
             }
 
         loop 1 0
+
+    let buildPlyValueTaskChain (depth: int) =
+        let rec loop index value =
+            vtask {
+                if index > depth then
+                    return Ok value
+                else
+                    let! next = ValueTask<int>(value + index)
+                    return! loop (index + 1) next
+            }
+
+        fun () -> loop 1 0
 
     let buildRawTaskBindChain (depth: int) =
         let rec loop index value () =
@@ -218,6 +274,39 @@ module Shared =
             task {
                 if index > CancellationCheckpoints then
                     return Ok value
+                else
+                    cancellationToken.ThrowIfCancellationRequested()
+                    let! checkpointValue = Task.FromResult index
+                    return! loop (index + 1) (value + checkpointValue) cancellationToken
+            }
+
+        fun cancellationToken -> loop 1 0 cancellationToken
+
+    let buildIcedTasksCancellableTaskChain () =
+        let checkpoint index =
+            cancellableTask {
+                let! ct = CancellableTask.getCancellationToken ()
+                ct.ThrowIfCancellationRequested()
+                return index
+            }
+
+        let mutable workflow = cancellableTask { return 0 }
+
+        for index in 1 .. CancellationCheckpoints do
+            workflow <-
+                cancellableTask {
+                    let! value = workflow
+                    let! checkpointValue = checkpoint index
+                    return value + checkpointValue
+                }
+
+        workflow
+
+    let buildDirectCancellableTaskValueChain () =
+        let rec loop index value (cancellationToken: CancellationToken) =
+            task {
+                if index > CancellationCheckpoints then
+                    return value
                 else
                     cancellationToken.ThrowIfCancellationRequested()
                     let! checkpointValue = Task.FromResult index
