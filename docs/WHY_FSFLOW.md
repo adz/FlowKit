@@ -1,6 +1,6 @@
 ---
 title: The FsFlow Model
-description: The core FsFlow progression from Validate and Result into Flow, AsyncFlow, and TaskFlow.
+description: The core FsFlow progression from Check and Result into Validation, Flow, AsyncFlow, and TaskFlow.
 ---
 
 # The FsFlow Model
@@ -10,19 +10,22 @@ This page shows why FsFlow is best understood as one scalable model for Result-b
 The core progression is:
 
 ```text
-Validate -> Result -> Flow -> AsyncFlow -> TaskFlow
+Check -> Result -> Validation -> Flow -> AsyncFlow -> TaskFlow
 ```
 
 The validation vocabulary stays the same while the execution context grows.
 
-- start with pure validation and plain `Result`
-- lift into `Flow` when the boundary needs explicit environment access
+- start with reusable predicate checks
+- keep fail-fast logic in plain `Result`
+- accumulate sibling failures with `Validation` and `validate {}`
+- lift into `Flow` when you need explicit environment access
 - lift again into `AsyncFlow` or `TaskFlow` when the runtime becomes asynchronous
 
 That matters because many F# codebases end up with separate worlds:
 
 ```fsharp
 Result<'value, 'error>
+Validation<'value, 'error>
 Async<Result<'value, 'error>>
 Task<Result<'value, 'error>>
 ```
@@ -33,6 +36,9 @@ and repeated adaptation between pure validation and effectful orchestration.
 FsFlow gives those shapes one coherent family:
 
 ```fsharp
+Check<'value>
+Result<'value, 'error>
+Validation<'value, 'error>
 Flow<'env, 'error, 'value>
 AsyncFlow<'env, 'error, 'value>
 TaskFlow<'env, 'error, 'value>
@@ -45,26 +51,41 @@ The point is to let one Result-based style scale into real application boundarie
 
 FsFlow unifies Result-based programming across pure logic and effectful execution.
 
-- write validation and domain checks once with `Validate` and `Result`
-- lift them directly into flows when you need environment, async, task, cancellation, retries, logging, or resource handling
+- write predicate logic once with `Check`
+- keep fail-fast domain logic in `Result`
+- accumulate sibling validation with `Validation`
+- lift the same logic directly into flows when you need environment, async, task, cancellation, logging, or resource handling
 - keep the smallest honest runtime shape at each boundary
 
 ## Before The Runtime Grows
 
-Start with a plain validation helper:
+Start with a plain check or validation helper:
 
 ```fsharp
+open FsFlow
+
 type RegistrationError =
+    | NameMissing
     | EmailMissing
 
-let validateEmail (email: string) : Result<unit, RegistrationError> =
+let validateEmail (email: string) : Result<string, RegistrationError> =
     email
-    |> FsFlow.Validate.okIfNotBlank
-    |> Result.map ignore
-    |> FsFlow.Validate.orElse EmailMissing
+    |> Check.notBlank
+    |> Result.mapErrorTo EmailMissing
 ```
 
 This is already enough for pure code and should stay plain when the surrounding logic is still plain.
+
+If sibling checks should accumulate, move to `Validation` instead of forcing everything through `Result`:
+
+```fsharp
+let validateRegistration (email: string) (name: string) : Validation<string * string, RegistrationError> =
+    validate {
+        let! validEmail = validateEmail email
+        and! validName = Check.notBlank name |> Result.mapErrorTo NameMissing
+        return validEmail, validName
+    }
+```
 
 ## When The Boundary Grows
 
@@ -88,14 +109,14 @@ let register userId : TaskFlow<RegistrationEnv, RegistrationError, unit> =
     }
 ```
 
-`validateEmail` is still just `Result<unit, RegistrationError>`.
+`validateEmail` is still just `Result<string, RegistrationError>`.
 There is no separate task-result validation vocabulary to switch to first.
 
 ## What This Replaces
 
 FsFlow is strongest when you would otherwise spread the same use case across:
 
-- plain `Result` helpers
+- plain `Check`, `Result`, and `Validation` helpers
 - `Async<Result<_,_>>` or `Task<Result<_,_>>` wrappers
 - extra helper modules for each wrapper shape
 - manual environment threading or ad hoc service lookups
@@ -120,13 +141,13 @@ Keep the domain plain F# by default:
 
 ## Short-Circuiting Is Intentional
 
-`Validate`, `Result`, `Flow`, `AsyncFlow`, and `TaskFlow` are short-circuiting.
+`Check`, `Result`, `Flow`, `AsyncFlow`, and `TaskFlow` are short-circuiting.
 They stop on the first typed failure.
 
 That is a feature, not a missing applicative layer.
 
-If you need accumulated validation, keep that explicit with a dedicated validation type or a library such as Validus.
-FsFlow does not currently provide applicative accumulated validation in `Validate` or the flow builders.
+If you need accumulated validation, use `Validation` and `validate {}` explicitly.
+FsFlow does not try to hide that behavior inside the workflow builders.
 
 ## What Keeps It Readable
 
@@ -159,7 +180,7 @@ Stay with plain F# when:
 - the code is mostly pure
 - a direct function parameter is clearer
 - plain `Result` already says everything
-- a single `Task<'T>` or `Async<'T>` boundary is the simplest honest shape
+- `Validation` or a plain `Task<'T>` / `Async<'T>` boundary is the simplest honest shape
 
 ## Next
 

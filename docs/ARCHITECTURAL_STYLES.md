@@ -127,12 +127,20 @@ Use FsFlow inside:
 Typical shape:
 
 ```fsharp
-type ShipOrderWorkflow(logger: ILogger<ShipOrderWorkflow>, gateway: IShippingGateway) =
-    member _.Run(input: ShipOrderInput) : TaskFlow<RequestContext, AppError, ShipmentId> =
+type RuntimeServices =
+    { Logger: ILogger<ShipOrderWorkflow> }
+
+type AppEnv =
+    { Gateway: IShippingGateway }
+
+type ShipOrderWorkflow() =
+    member _.Run(input: ShipOrderInput) : TaskFlow<RuntimeContext<RuntimeServices, AppEnv>, AppError, ShipmentId> =
         taskFlow {
-            let! ctx = TaskFlow.env
-            logger.LogInformation("shipping order {OrderId} trace={TraceId}", input.OrderId, ctx.TraceId)
-            let! shipmentId = gateway.CreateShipment(input.OrderId, ctx.CancellationToken)
+            let! logger = TaskFlow.readRuntime _.Logger
+            let! gateway = TaskFlow.read _.Gateway
+
+            logger.LogInformation("shipping order {OrderId}", input.OrderId)
+            let! shipmentId = gateway.CreateShipment(input.OrderId)
             return shipmentId
         }
 ```
@@ -144,6 +152,10 @@ Use this style for:
 - incremental adoption
 
 Choose this when familiarity and low migration risk matter most.
+
+If the task boundary needs separate runtime services and application capabilities, use
+`RuntimeContext<'runtime, 'env>` and the `TaskFlow.readRuntime` / `TaskFlow.read` split instead of
+forcing everything into one record.
 
 ## Which Style To Prefer
 

@@ -1,23 +1,28 @@
 ---
 title: Validate and Result
-description: The validation-first path from plain Result logic into Flow, AsyncFlow, and TaskFlow.
+description: The validation-first path from Check and Result into Validation, Flow, AsyncFlow, and TaskFlow.
 ---
 
 # Validate and Result
 
-This page shows how `FsFlow.Validate` fits into the main FsFlow story and how plain `Result` logic carries forward unchanged into `Flow`, `AsyncFlow`, and `TaskFlow`.
+This page shows how `Check`, `Result`, and `Validation` fit into the main FsFlow story and how plain
+`Result` logic carries forward unchanged into `Flow`, `AsyncFlow`, and `TaskFlow`.
 
 ## Main Idea
 
-`FsFlow.Validate` is not a side utility.
-It is the first step in the main progression:
+`Check` is the reusable predicate layer.
+`Result` is the fail-fast carrier.
+`Validation` is the accumulating carrier.
+
+Those are the first steps in the main progression:
 
 ```text
-Validate -> Result -> Flow -> AsyncFlow -> TaskFlow
+Check -> Result -> Validation -> Flow -> AsyncFlow -> TaskFlow
 ```
 
-`Validate` produces plain `Result` values.
-Those results are intentionally independent of the flow types.
+`Check` produces plain `Result` values with a unit error.
+`Result.mapErrorTo` turns those unit failures into application errors.
+`Validation` keeps the structured diagnostics graph visible when multiple sibling failures should be merged.
 Because the flow builders bind `Result` directly, the same validation functions lift unchanged into every workflow family.
 
 ## Key Shapes
@@ -25,23 +30,31 @@ Because the flow builders bind `Result` directly, the same validation functions 
 Some validation helpers return a value:
 
 ```fsharp
-Validate.okIfNotBlank : string -> Result<string, unit>
-Validate.okIfSome : 'a option -> Result<'a, unit>
+Check.notBlank : string -> Result<string, unit>
+Check.notNull : 'a -> Result<'a, unit>
 ```
 
 Some validation helpers return `unit`:
 
 ```fsharp
-Validate.okIf : bool -> Result<unit, unit>
-Validate.okIfEmpty : seq<'a> -> Result<unit, unit>
+Check.okIf : bool -> Result<unit, unit>
+Check.okIfEmpty : seq<'a> -> Result<unit, unit>
 ```
 
-Use `Validate.orElse` or `Validate.orElseWith` to attach the application error you actually want:
+Use `Result.mapErrorTo` to attach the application error you actually want:
 
 ```fsharp
-Validate.orElse : 'error -> Result<'value, unit> -> Result<'value, 'error>
-Validate.orElseWith : (unit -> 'error) -> Result<'value, unit> -> Result<'value, 'error>
+Result.mapErrorTo : 'error -> Result<'value, unit> -> Result<'value, 'error>
 ```
+
+The accumulated carrier keeps the graph visible:
+
+```fsharp
+type Validation<'value, 'error> = Result<'value, Diagnostics<'error>>
+```
+
+The `Validate` module remains as a backward-compatible alias for the older name, but `Check` and
+`Validation` are the canonical terms in the current docs.
 
 ## Main Pattern
 
@@ -49,7 +62,7 @@ The primary pattern is to keep the validated value.
 This allows you to bind the result and use the "clean" value in subsequent steps.
 
 ```fsharp
-open FsFlow.Validate
+open FsFlow
 
 type RegistrationError =
     | NameRequired
@@ -57,16 +70,16 @@ type RegistrationError =
 
 let requireName (name: string) : Result<string, RegistrationError> =
     name
-    |> okIfNotBlank
-    |> orElse NameRequired
+    |> Check.notBlank
+    |> Result.mapErrorTo NameRequired
 
 let requireEmail (email: string) : Result<string, RegistrationError> =
     email
-    |> okIfNotBlank
-    |> orElse EmailRequired
+    |> Check.notBlank
+    |> Result.mapErrorTo EmailRequired
 ```
 
-When you only need a check (and don't need the value), you can still return `Result<unit, 'error>` by ignoring the value:
+When you only need a check and do not need the value, you can still return `Result<unit, 'error>` by ignoring the value:
 
 ```fsharp
 let validateName (name: string) : Result<unit, RegistrationError> =
@@ -86,12 +99,25 @@ type RegisterUser =
       Email: string }
 
 let validateCommand (cmd: RegisterUser) : Result<RegisterUser, RegistrationError> =
-    validateName cmd.Name
-    |> Result.bind (fun () -> validateEmail cmd.Email)
-    |> Result.map (fun () -> cmd)
+    result {
+        let! name = requireName cmd.Name
+        let! email = requireEmail cmd.Email
+        return { cmd with Name = name; Email = email }
+    }
 ```
 
-This stays plain `Result` code because the problem is still plain validation.
+This stays plain `Result` code because the problem is still fail-fast validation.
+
+If the checks are independent and should all report back, switch to `validate {}`:
+
+```fsharp
+let validateCommandAllAtOnce (cmd: RegisterUser) : Validation<RegisterUser, RegistrationError> =
+    validate {
+        let! name = requireName cmd.Name
+        and! email = requireEmail cmd.Email
+        return { cmd with Name = name; Email = email }
+    }
+```
 
 ## In Flow Code
 
@@ -142,13 +168,15 @@ let! validName = requireName user.Name
 That is the main rule.
 It keeps the validation functions small and avoids unnecessary helper shapes.
 
-## What Validate Is Not
+## What Validate And Result Are Not
 
-`Validate` is for short-circuiting checks that produce plain `Result`.
+`Check` is for reusable predicates.
+`Result` is for fail-fast workflows.
+`Validation` is for accumulated sibling failures.
 
-It is not an applicative validation type, and FsFlow does not currently provide accumulated validation in `Validate`, `Flow`, `AsyncFlow`, or `TaskFlow`.
-
-If you need to collect multiple independent validation errors, use a dedicated validation library such as Validus and feed the final `Result` into FsFlow after that step is complete.
+They are not all the same thing with a hidden list on the error side.
+When you need structured accumulation, use `Validation` and `validate {}` explicitly.
+When you need short-circuiting, keep the code on `Result` or a flow builder.
 
 ## Next
 

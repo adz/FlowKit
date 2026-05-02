@@ -26,20 +26,23 @@ The first typed failure stops the current workflow unless you explicitly recover
 
 ## Short-Circuiting Versus Accumulated Validation
 
-`Validate`, `Result`, `Flow`, `AsyncFlow`, and `TaskFlow` model ordered workflows.
-They do not accumulate multiple independent validation failures by default, and FsFlow does not currently provide an applicative accumulated-validation mode here.
+`Check`, `Result`, `result {}`, `Flow`, `AsyncFlow`, and `TaskFlow` model ordered workflows.
+They stop on the first typed failure unless you explicitly recover from it.
 
-Use this model when:
+`Validation` and `validate {}` are the accumulating path.
+They merge sibling failures into the diagnostics graph instead of stopping at the first one.
+
+Use the short-circuiting model when:
 
 - later steps depend on earlier successful values
 - the workflow should stop on the first failure
 - you are orchestrating environment access, async work, tasks, retries, cancellation, or resource usage
 
-Use a separate validation model when:
+Use the validation model when:
 
 - independent checks should all run
-- you need a collection of failures instead of the first failure
-- the problem is applicative validation rather than workflow orchestration
+- you need a structured collection of failures instead of the first failure
+- the problem is sibling validation rather than workflow orchestration
 
 ## Cold By Default
 
@@ -184,12 +187,21 @@ The `FsFlow.Net` package also provides `TaskFlow.Runtime` for task-native comput
 
 Use `TaskFlow.Runtime` when the public boundary is task-based and the helper belongs in task execution.
 
+`FsFlow.Net` also exposes `RuntimeContext<'runtime, 'env>` for task workflows that need separate
+runtime services and application capabilities, plus `TaskFlowSpec` and `Capability` helpers for
+shaping those two halves.
+
 ## Validation Helpers
 
-`FsFlow.Validate` provides pure `Result<'value, unit>` checks for booleans, options, value options, nulls, collections, equality, and strings.
-Use `Validate.orElse` or `Validate.orElseWith` to attach a typed error after the pure validation step.
+`FsFlow.Check` provides pure `Result<'value, unit>` checks for booleans, options, value options,
+nulls, collections, equality, and strings.
+`FsFlow.Validate` remains as a compatibility alias for the same surface.
+
+Use `Result.mapErrorTo` to attach a typed error after the pure validation step.
 
 When the error value itself needs environment or effectful evaluation, use the bridge helpers on `Flow`, `AsyncFlow`, or `TaskFlow`.
+
+Use `Validation` when the failures should accumulate instead of short-circuiting.
 
 ## Family Direction
 

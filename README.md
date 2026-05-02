@@ -10,9 +10,10 @@
 </picture>
 
 FsFlow is a single model for Result-based programs in F#.
-Write validation and typed-error logic once, keep it as plain `Result` while the code is pure,
-then lift the same logic into `Flow`, `AsyncFlow`, or `TaskFlow` when the boundary needs
-environment access, async work, task interop, cancellation, or runtime policy.
+Write small predicate checks with `Check`, keep fail-fast logic in `Result`, accumulate sibling
+validation with `Validation` and `validate {}`, then lift the same logic into `Flow`,
+`AsyncFlow`, or `TaskFlow` when the boundary needs environment access, async work, task interop,
+or runtime policy.
 
 [![ci](https://github.com/adz/FsFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/adz/FsFlow/actions/workflows/ci.yml)
 [![NuGet](https://img.shields.io/nuget/v/FsFlow.svg)](https://www.nuget.org/packages/FsFlow)
@@ -23,12 +24,14 @@ environment access, async work, task interop, cancellation, or runtime policy.
 FsFlow is built around one progression:
 
 ```text
-Validate -> Result -> Flow -> AsyncFlow -> TaskFlow
+Check -> Result -> Validation -> Flow -> AsyncFlow -> TaskFlow
 ```
 
-The validation vocabulary stays the same while the execution context grows.
+The same validation vocabulary stays the same while the execution context grows.
 
-- Start with plain `Result` and pure validation helpers.
+- Start with `Check` for reusable predicates.
+- Use `Result` and `result {}` for fail-fast pure code.
+- Use `Validation` and `validate {}` when sibling failures should accumulate.
 - Use `flow {}` when the boundary needs typed failure and environment, but not async runtime.
 - Use `asyncFlow {}` when the boundary is naturally `Async`.
 - Use `taskFlow {}` when the boundary is naturally `.NET Task`.
@@ -44,24 +47,23 @@ that need separate helper modules, separate builders, and repeated adaptation at
 
 ## Example
 
-Start with pure validation:
+Start with a reusable check and a fail-fast result:
 
 ```fsharp
 open System.Threading.Tasks
-open FsFlow.Validate
+open FsFlow
 
 type RegistrationError =
     | EmailMissing
     | SaveFailed of string
 
-let validateEmail (email: string) : Result<unit, RegistrationError> =
+let validateEmail (email: string) : Result<string, RegistrationError> =
     email
-    |> okIfNotBlank
-    |> Result.map ignore
-    |> orElse EmailMissing
+    |> Check.notBlank
+    |> Result.mapErrorTo EmailMissing
 ```
 
-Use the same `Result` directly inside a task-oriented workflow:
+Use the same validation logic directly inside a task-oriented workflow:
 
 ```fsharp
 open System.Threading.Tasks
@@ -86,7 +88,7 @@ let registerUser userId : TaskFlow<RegistrationEnv, RegistrationError, unit> =
     }
 ```
 
-`validateEmail` is just `Result<unit, RegistrationError>`.
+`validateEmail` is just a plain `Result<string, RegistrationError>`.
 `taskFlow` lifts it directly with `do!`.
 There is no separate task-result validation vocabulary to learn first.
 
@@ -94,11 +96,12 @@ There is no separate task-result validation vocabulary to learn first.
 
 FsFlow is for short-circuiting, ordered workflows:
 
-- `Validate`, `Result`, `Flow`, `AsyncFlow`, and `TaskFlow` stop on the first typed failure.
-- They are for orchestration, dependency access, async or task execution, and runtime concerns.
-- They are not accumulated validation builders.
+- `Check`, `Result`, `Flow`, `AsyncFlow`, and `TaskFlow` stop on the first typed failure.
+- `Validation` and `validate {}` accumulate sibling failures in a structured diagnostics graph.
+- The flow families are for orchestration, dependency access, async or task execution, and runtime concerns.
 
-If you need accumulated validation, keep that explicit with a dedicated validation library or bridge it in at the edge.
+If you need accumulated validation, use `Validation` and `validate {}` explicitly instead of
+trying to hide it inside a flow builder.
 
 ## What You Get
 
@@ -107,7 +110,8 @@ FsFlow stays close to standard F# and .NET:
 - `flow { ... }` binds to `Result` and `Option`
 - `asyncFlow { ... }` also binds to `Async` and `Async<Result<_,_>>`
 - `taskFlow { ... }` binds to `Task`, `ValueTask`, `Task<_>`, `ValueTask<_>`, and `ColdTask`
-- `Validate` works as plain `Result` logic before lifting into a workflow
+- `result {}` keeps fail-fast pure code readable
+- `validate {}` keeps sibling validation accumulation explicit
 
 Because tasks are hot, FsFlow includes `ColdTask`: a small wrapper around `CancellationToken -> Task`.
 `taskFlow` handles token passing for you and keeps reruns explicit.

@@ -7,20 +7,21 @@ description: FsFlow technical guides, semantics, and API reference.
 
 <div class="docs-home-copy">
 
-<span class="eyebrow">One Result-based model from pure validation to effectful execution</span>
+<span class="eyebrow">One model from predicate checks to task execution</span>
 
 # A single model for Result-based programs in F#.
 
 <p class="lede">
-Write validation and typed-error logic once. Keep it as plain `Result` while the code is pure, then lift the same logic into `Flow`, `AsyncFlow`, or `TaskFlow` when the boundary needs environment access, async work, task interop, cancellation, or runtime policy.
+Write predicate checks once. Keep fail-fast logic in `Result`, accumulate sibling failures with `Validation`, then lift the same logic into `Flow`, `AsyncFlow`, or `TaskFlow` when the boundary needs environment access, async work, task interop, cancellation, or runtime policy.
 ![Flow](content/img/flow-graphic.png)
 </p>
 
 <div class="docs-home-meta">
-<span class="docs-chip">Validate -> Result -> Flow</span>
-<span class="docs-chip">AsyncFlow / TaskFlow</span>
+<span class="docs-chip">Check -> Result -> Validation</span>
+<span class="docs-chip">Flow / AsyncFlow / TaskFlow</span>
 <span class="docs-chip">Typed failure</span>
 <span class="docs-chip">Explicit environment</span>
+<span class="docs-chip">Runtime context</span>
 <span class="docs-chip">Cold execution semantics</span>
 </div>
 
@@ -32,13 +33,13 @@ API Still stabilising - wait for 1.0 to avoid breaking changes
 
 <aside class="docs-home-panel">
 <section class="docs-home-panel-card">
-<span class="label"><a href="reference/fsflow/validate">Validate First</a></span>
-<strong>Start with plain `Result`, then lift the same checks directly into flows with `let!` and `do!`.</strong>
+<span class="label"><a href="reference/fsflow/validate">Check First</a></span>
+<strong>Start with `Check` and `Result`, then lift the same logic directly into flows with `let!` and `do!`.</strong>
 </section>
 
 <section class="docs-home-panel-card">
 <span class="label">Short-Circuiting Workflows</span>
-<strong>`Flow`, `AsyncFlow`, and `TaskFlow` are ordered, typed-failure orchestration tools. Use a separate validation library when you need accumulated errors.</strong>
+<strong>`Flow`, `AsyncFlow`, and `TaskFlow` are ordered, typed-failure orchestration tools. Use `Validation` and `validate {}` when you need accumulated sibling errors.</strong>
 </section>
 </aside>
 
@@ -47,30 +48,30 @@ API Still stabilising - wait for 1.0 to avoid breaking changes
 ## Core Progression
 
 ```text
-Validate -> Result -> Flow -> AsyncFlow -> TaskFlow
+Check -> Result -> Validation -> Flow -> AsyncFlow -> TaskFlow
 ```
 
 The vocabulary stays stable while the execution context grows.
 
-- `Validate` gives you small pure checks.
-- `Result` keeps domain and application failures typed.
+- `Check` gives you reusable pure predicates.
+- `Result` keeps fail-fast domain and application failures typed.
+- `Validation` accumulates sibling failures in a structured graph.
 - `Flow` adds explicit environment access for synchronous orchestration.
 - `AsyncFlow` and `TaskFlow` keep the same style when the boundary becomes asynchronous.
 
-## Example: validate once, lift later
+## Example: check once, lift later
 
 ```fsharp
-open FsFlow.Validate
+open FsFlow
 
 type RegistrationError =
     | EmailMissing
     | SaveFailed of string
 
-let validateEmail (email: string) : Result<unit, RegistrationError> =
+let validateEmail (email: string) : Result<string, RegistrationError> =
     email
-    |> okIfNotBlank
-    |> Result.map ignore
-    |> orElse EmailMissing
+    |> Check.notBlank
+    |> Result.mapErrorTo EmailMissing
 ```
 
 That pure `Result` can be used directly in a task-oriented application boundary:
@@ -81,7 +82,6 @@ open System.IO
 open System.Threading
 open System.Threading.Tasks
 open FsFlow.Net
-open FsFlow.Validate
 
 type User =
     { Email: string
@@ -95,8 +95,8 @@ type RegistrationEnv =
 
 let readTextFile (path: string) : TaskFlow<RegistrationEnv, RegistrationError, string> =
     taskFlow {
-        do! okIf (File.Exists path)
-            |> orElse (SaveFailed $"Missing file: {path}")
+        do! Check.okIf (File.Exists path)
+            |> Result.mapErrorTo (SaveFailed $"Missing file: {path}")
 
         return! ColdTask(fun ct -> File.ReadAllTextAsync(path, ct))
     }
@@ -121,7 +121,7 @@ let registerUser userId : TaskFlow<RegistrationEnv, RegistrationError, string * 
     }
 ```
 
-`validateEmail` is just `Result<unit, RegistrationError>`.
+`validateEmail` is just `Result<string, RegistrationError>`.
 `taskFlow` lifts it directly with `do!`.
 The runtime gets richer without changing how validation is expressed.
 
@@ -159,13 +159,13 @@ registerUser 42
 <section class="docs-card">
 <span class="label">Start</span>
 <h2><a href="GETTING_STARTED">Getting Started</a></h2>
-<p>The fastest path from plain `Result` code to the right FsFlow family for a real application boundary.</p>
+<p>The fastest path from `Check` and `Result` code to the right FsFlow family for a real application boundary.</p>
 </section>
 
 <section class="docs-card">
 <span class="label">Start</span>
 <h2><a href="VALIDATE_AND_RESULT">Validate and Result</a></h2>
-<p>The central validation story: write plain `Result` checks first, then reuse them unchanged inside flows.</p>
+<p>The central validation story: use `Check`, `Result`, and `Validation` before you lift into flows.</p>
 </section>
 
 <section class="docs-card">
@@ -183,31 +183,31 @@ registerUser 42
 <section class="docs-card">
 <span class="label">Core Model</span>
 <h2><a href="WHY_FSFLOW">The FsFlow Model</a></h2>
-<p>Why FsFlow is best understood as one scalable Result model, not a bag of boundary helpers.</p>
+<p>Why FsFlow is best understood as one scalable model from `Check` through `TaskFlow`, not a bag of boundary helpers.</p>
 </section>
 
 <section class="docs-card">
 <span class="label">Core Model</span>
 <h2><a href="SEMANTICS">Execution Semantics</a></h2>
-<p>Cold execution, rerun behavior, exception handling, and cancellation propagation.</p>
+<p>Cold execution, rerun behavior, exception handling, cancellation propagation, and runtime context.</p>
 </section>
 
 <section class="docs-card">
 <span class="label">Core Model</span>
 <h2><a href="TASK_ASYNC_INTEROP">Task and Async Interop</a></h2>
-<p>Direct binding rules for `Async`, `Task`, `ValueTask`, `Result`, and `ColdTask` across the workflow families.</p>
+<p>Direct binding rules for `Async`, `Task`, `ValueTask`, `Result`, `Validation`, and `ColdTask` across the workflow families.</p>
 </section>
 
 <section class="docs-card">
 <span class="label">Core Model</span>
 <h2><a href="ENV_SLICING">Environment Slicing</a></h2>
-<p>How to keep each flow honest about the smallest environment it actually needs.</p>
+<p>How to keep each flow honest about the smallest environment or capability set it actually needs.</p>
 </section>
 
 <section class="docs-card">
 <span class="label">Core Model</span>
 <h2><a href="ARCHITECTURAL_STYLES">Architectural Styles</a></h2>
-<p>The three supported application shapes and when each one fits best.</p>
+<p>The three supported application shapes and how the runtime/capability model fits into them.</p>
 </section>
 
 </div>

@@ -21,6 +21,9 @@ Choose the family that matches the runtime shape of the boundary itself:
 Use interop to cross boundaries.
 Avoid keeping a task-oriented boundary in `Flow` just because a helper can be adapted.
 
+Use `Check` for reusable predicates, `Result` for fail-fast validation, and `Validation` plus
+`validate {}` when sibling failures should accumulate.
+
 ## Preferred Style Inside Computation Expressions
 
 Inside `flow {}`, `asyncFlow {}`, and `taskFlow {}`, prefer direct binding:
@@ -185,9 +188,11 @@ Use `Flow.Runtime` or `AsyncFlow.Runtime` for shared operational helpers like `s
 
 Use `TaskFlow.Runtime` when you want the same helpers in a task-native shape.
 
-Use `FsFlow.Validate` for pure `Result<'value, unit>` validation.
+Use `FsFlow.Check` for pure `Result<'value, unit>` validation.
+Use `Result.mapErrorTo` when you want to turn a unit failure into a domain error.
+Use `Validation` and `validate {}` when the checks should accumulate.
 
-The builders bind those results directly, so extra bridge calls are only needed when the error value itself needs a different conversion shape.
+The builders bind `Result` directly, so extra bridge calls are only needed when the error value itself needs a different conversion shape.
 
 ## `ColdTask<'value>`
 

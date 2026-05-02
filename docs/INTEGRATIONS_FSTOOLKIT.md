@@ -26,7 +26,7 @@ Task<Result>
 FsFlow presents one path:
 
 ```text
-Validate -> Result -> Flow -> AsyncFlow -> TaskFlow
+Check -> Result -> Validation -> Flow -> AsyncFlow -> TaskFlow
 ```
 
 That means:
@@ -39,14 +39,14 @@ That means:
 
 | FsToolkit.ErrorHandling | FsFlow |
 | --- | --- |
-| `Result.requireTrue` | `Validate.okIf |> Validate.orElse` |
-| `Result.requireSome` | `Validate.okIfSome |> Validate.orElse` |
+| `Result.requireTrue` | `Check.okIf |> Result.mapErrorTo` |
+| `Result.requireSome` | `Check.okIfSome |> Result.mapErrorTo` |
 | `asyncResult {}` | `asyncFlow {}` |
 | `taskResult {}` | `taskFlow {}` |
 | Separate APIs per wrapper shape | Plain `Result` lifts into flows |
 | No env model | `Flow.read`, `AsyncFlow.read`, `TaskFlow.read` |
 | No runtime policy model | Runtime helpers for retry, timeout, cancellation, logging |
-| Accumulated validation helpers | Keep accumulated validation explicit with a dedicated model |
+| Accumulated validation helpers | `Validation` and `validate {}` |
 
 ## Keep The Pure Pieces Pure
 
@@ -57,6 +57,7 @@ That means:
 - pure validation stays pure
 - transformation helpers stay pure
 - effectful orchestration moves into `Flow`, `AsyncFlow`, or `TaskFlow`
+- sibling validation can move into `Validation` when accumulation matters
 
 That is the migration sweet spot: move orchestration, not every helper.
 
@@ -88,7 +89,7 @@ Use the same migration rule in either case:
 
 Typical bridges look like this:
 
-- `Result<'value, unit>` validation helpers become `FsFlow.Validate` calls
+- `Result<'value, unit>` validation helpers become `FsFlow.Check` calls
 - `Async<Result<'value, 'error>>` binds directly in `asyncFlow {}`
 - `Task<Result<'value, 'error>>` binds directly in `taskFlow {}`
 - `Async<Result<'value, unit>>` or `Result<'value, unit>` can use `orElse*` bridges when error creation itself needs environment or runtime work
@@ -105,14 +106,13 @@ type AppError =
 
 let validateName name =
     name
-    |> Validate.okIfNotBlank
-    |> Result.map ignore
-    |> Validate.orElse NameRequired
+    |> Check.notBlank
+    |> Result.mapErrorTo NameRequired
 
 let validateActive user =
     user.IsActive
-    |> Validate.okIf
-    |> Validate.orElse UserInactive
+    |> Check.okIf
+    |> Result.mapErrorTo UserInactive
 ```
 
 These validations stay reusable as plain `Result` logic.
@@ -173,7 +173,7 @@ FsFlow flows are short-circuiting.
 They are not a replacement for accumulated validation helpers.
 
 If your current `FsToolkit.ErrorHandling` usage leans on independent validation that should report multiple errors,
-keep that concern explicit instead of trying to hide it inside `flow {}` or `taskFlow {}`.
+keep that concern explicit with `Validation` and `validate {}` instead of trying to hide it inside `flow {}` or `taskFlow {}`.
 
 ## When FsToolkit Still Wins
 

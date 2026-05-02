@@ -25,7 +25,7 @@ Choose the package hub that matches the runtime shape of the code you are writin
 <section class="docs-card">
 <span class="label">FsFlow</span>
 <h2><a href="fsflow/">FsFlow hub</a></h2>
-<p>Flow, AsyncFlow, Validate, and the support types used by the core package.</p>
+<p>Check, Result, Validation, Flow, AsyncFlow, and the support types used by the core package.</p>
 </section>
 
 <section class="docs-card">
@@ -41,7 +41,7 @@ Choose the package hub that matches the runtime shape of the code you are writin
 <section class="docs-card">
 <span class="label">Open first</span>
 <h3><a href="fsflow/">FsFlow</a></h3>
-<p>Start with the core package hub, then move into the Flow, AsyncFlow, Validate, and support-type pages.</p>
+<p>Start with the core package hub, then move into the Check, Result, Validation, Flow, AsyncFlow, and support-type pages.</p>
 </section>
 
 <section class="docs-card">

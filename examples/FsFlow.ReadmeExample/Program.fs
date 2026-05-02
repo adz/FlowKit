@@ -2,7 +2,7 @@ open System
 open System.IO
 open System.Threading
 open FsFlow.Net
-open FsFlow.Validate
+open FsFlow
 
 type ReadmeEnv =
     { Root: string }
@@ -13,8 +13,8 @@ type FileReadError =
 let readTextFile (path: string) : TaskFlow<ReadmeEnv, FileReadError, string> =
     taskFlow {
         // In production, map access and path exceptions separately at the boundary.
-        do! okIf (File.Exists path)
-            |> orElse (NotFound path)
+        do! Check.okIf (File.Exists path)
+            |> Result.mapErrorTo (NotFound path)
 
         return! ColdTask(fun ct -> File.ReadAllTextAsync(path, ct)) // ColdTask<string>
     }

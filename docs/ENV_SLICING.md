@@ -2,6 +2,8 @@
 
 This page shows two ways to keep an FsFlow workflow honest about dependencies:
 small record environments with `localEnv`, and interface-based capability environments.
+For task-oriented work, the same idea can split into runtime services and application capabilities
+with `RuntimeContext<'runtime, 'env>`.
 
 The common goal is the same in both styles: each flow should depend on the smallest environment
 it actually needs.
@@ -52,6 +54,31 @@ let fetchResponseInAppEnv plan : TaskFlow<AppEnv, AppError, Response> =
 ```
 
 This is the simplest way to compose bigger programs from smaller flows.
+
+## Split Runtime Services From Application Capabilities
+
+When a task boundary needs both operational services and application dependencies, use
+`RuntimeContext<'runtime, 'env>` rather than forcing everything into one record:
+
+```fsharp
+type RuntimeServices =
+    { Log: string -> unit }
+
+type AppEnv =
+    { Gateway: IPingGateway
+      AttemptCount: int ref }
+
+let fetchResponse : TaskFlow<RuntimeContext<RuntimeServices, AppEnv>, AppError, Response> =
+    taskFlow {
+        let! log = TaskFlow.readRuntime _.Log
+        let! gateway = TaskFlow.read _.Gateway
+
+        log "starting request"
+        return! gateway.Ping()
+    }
+```
+
+Use this shape when operational concerns and app dependencies deserve different lifetimes or ownership.
 
 ## Interface-Based Capability Environments
 
@@ -125,6 +152,7 @@ For example:
 - gateway I/O is explicit through `Gateway` in the environment
 - persistence is explicit through `AuditStore`
 - logging is explicit through `Log`
+- task runtime services are explicit through `RuntimeContext<'runtime, 'env>`
 - task-oriented cancellation is explicit through `TaskFlow.toTask`
 
 Small environment slices already make those requirements visible without adding another layer

@@ -14,7 +14,9 @@ This package groups the synchronous and async workflow families plus the pure va
 
 - `Flow<'env, 'error, 'value>` and the `Flow` module
 - `AsyncFlow<'env, 'error, 'value>` and the `AsyncFlow` module
-- `Validate` for pure `Result<'value, unit>` guards
+- `Check` for pure `Result<'value, unit>` predicates
+- `Result` for fail-fast helpers
+- `Validation` for accumulated diagnostics
 - support types that shape runtime logging and retry behavior
 - the `flow {}` and `asyncFlow {}` entry points
 
@@ -53,12 +55,12 @@ The builder types themselves stay below the surface. The families and their modu
 </section>
 
 <section class="docs-card">
-<span class="label">Validate</span>
+<span class="label">Check</span>
 <h2>Pure validation</h2>
-<p>`FsFlow.Validate` gives pure `Result&lt;_, unit&gt;` checks for booleans, options, value options, nulls, collections, equality, and strings.</p>
-<p>The next page expands the full helper family and the bridges that turn unit failures into application errors.</p>
+<p>`FsFlow.Check` gives pure `Result&lt;_, unit&gt;` checks for booleans, options, value options, nulls, collections, equality, and strings.</p>
+<p>`FsFlow.Result` and `FsFlow.Validation` cover the fail-fast and accumulating sides, and the next page expands the full helper family and the bridges that turn unit failures into application errors.</p>
 <div class="docs-card-links">
-<a href="validate">Open the Validate page</a>
+<a href="validate">Open the validation page</a>
 </div>
 </section>
 
@@ -110,9 +112,9 @@ The builder types themselves stay below the surface. The families and their modu
 </section>
 
 <section class="docs-card">
-<span class="label">Validate</span>
+<span class="label">Check</span>
 <h3><a href="validate">Validation helpers</a></h3>
-<p>Pure Result-based predicates and the bridge to effectful error creation.</p>
+<p>Pure predicates, fail-fast result helpers, accumulating validation, and the bridge to effectful error creation.</p>
 </section>
 
 <section class="docs-card">

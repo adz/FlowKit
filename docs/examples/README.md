@@ -34,7 +34,6 @@ open System.Threading
 open System.Threading.Tasks
 open FsFlow
 open FsFlow.Net
-open FsFlow.Validate
 
 type User =
     { Id: int
@@ -50,8 +49,8 @@ type RequestEnv =
       LoadSuffix: ColdTask<string> }
 
 let validateName (name: string) : Result<string, string> =
-    okIfNotBlank name
-    |> orElse "name is required"
+    Check.notBlank name
+    |> Result.mapErrorTo "name is required"
 
 let loadUser : Flow<RequestEnv, string, User> =
     flow {

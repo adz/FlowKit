@@ -12,7 +12,7 @@ The rule of thumb is simple: keep each library on the boundary it already owns, 
 ## How The Libraries Differ
 
 - `FsToolkit.ErrorHandling` is the established result-oriented layer: it uses core F# types, a small number of wrappers such as `Task<Result<_,_>>`, and a familiar module-and-builder surface. It fits existing code with low overhead.
-- `Validus` is the richer validation layer: it handles composed and accumulated validation before FsFlow takes over the boundary.
+- `Validus` is a richer validation DSL if you already use it. FsFlow now covers the common check/result/validation path itself.
 - `IcedTasks` is the task-shape layer: it is interesting for performance and task-native ergonomics, but it still lives in the `Async` / `Task` / `Result` space rather than in a richer environment model.
 - `FSharpPlus` is the generic FP layer: it brings broad abstractions and monad-transformer-style composition, but that also means more compiler work and more complex error surfacing when you are trying to follow a FsFlow boundary.
 
@@ -20,6 +20,9 @@ The rule of thumb is simple: keep each library on the boundary it already owns, 
 
 FsFlow captures the common application boundary needs in one model:
 
+- `Check` for reusable predicates
+- `Result` for fail-fast typed failures
+- `Validation` for structured accumulation
 - `Flow` for synchronous boundaries
 - `AsyncFlow` for async boundaries
 - `TaskFlow` for task boundaries
