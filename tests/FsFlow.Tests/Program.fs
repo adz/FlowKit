@@ -563,6 +563,38 @@ let probe : TaskFlow<unit, string, int> =
 
     [<Fact>]
     let ``Check covers the pure result surface`` () =
+        test <@ Check.not (Check.okIf true) = Error () @>
+        test <@ Check.not (Check.okIf false) = Ok () @>
+
+        test <@ Check.``and`` (Check.okIf true) (Check.okIfSome (Some 10)) = Ok () @>
+        test <@ Check.``and`` (Check.okIf true) (Check.okIf false) = Error () @>
+
+        test <@ Check.``or`` (Check.okIf false) (Check.okIfSome (Some 10)) = Ok () @>
+        test <@ Check.``or`` (Check.okIf false) (Check.okIf false) = Error () @>
+
+        test <@ Check.all [ Check.okIf true; Check.okIf true; Check.okIf true ] = Ok () @>
+
+        let allShortCircuits =
+            seq {
+                yield Check.okIf true
+                yield Check.okIf false
+                failwith "Check.all should short-circuit before the third item"
+            }
+
+        test <@ Check.all allShortCircuits = Error () @>
+
+        test <@ Check.any [ Check.okIf false; Check.okIf false; Check.okIf true ] = Ok () @>
+
+        let anyShortCircuits =
+            seq {
+                yield Check.okIf true
+                failwith "Check.any should short-circuit before the second item"
+            }
+
+        test <@ Check.any anyShortCircuits = Ok () @>
+
+        test <@ Check.okIf false |> Check.orElse "invalid" = Error "invalid" @>
+
         test <@ Check.okIf true = Ok () @>
         test <@ Check.okIf false = Error () @>
         test <@ Check.failIf true = Error () @>

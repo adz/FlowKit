@@ -15,13 +15,69 @@ type Check<'value> = Result<'value, unit>
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 [<RequireQualifiedAccess>]
 module Check =
+    /// <summary>Returns success when the supplied check fails.</summary>
+    let not (check: Check<'value>) : Check<unit> =
+        match check with
+        | Ok _ -> Error ()
+        | Error () -> Ok ()
+
+    /// <summary>Returns success when both checks succeed.</summary>
+    let ``and`` (left: Check<'left>) (right: Check<'right>) : Check<unit> =
+        match left with
+        | Error () -> Error ()
+        | Ok _ ->
+            match right with
+            | Ok _ -> Ok ()
+            | Error () -> Error ()
+
+    /// <summary>Returns success when either check succeeds.</summary>
+    let ``or`` (left: Check<'left>) (right: Check<'right>) : Check<unit> =
+        match left with
+        | Ok _ -> Ok ()
+        | Error () ->
+            match right with
+            | Ok _ -> Ok ()
+            | Error () -> Error ()
+
+    /// <summary>Returns success when every check in the sequence succeeds.</summary>
+    let all (checks: seq<Check<'value>>) : Check<unit> =
+        use enumerator = checks.GetEnumerator()
+
+        let mutable result = Ok ()
+        let mutable continueLoop = true
+
+        while continueLoop && enumerator.MoveNext() do
+            match enumerator.Current with
+            | Ok _ -> ()
+            | Error () ->
+                result <- Error ()
+                continueLoop <- false
+
+        result
+
+    /// <summary>Returns success when at least one check in the sequence succeeds.</summary>
+    let any (checks: seq<Check<'value>>) : Check<unit> =
+        use enumerator = checks.GetEnumerator()
+
+        let mutable result = Error ()
+        let mutable continueLoop = true
+
+        while continueLoop && enumerator.MoveNext() do
+            match enumerator.Current with
+            | Ok _ ->
+                result <- Ok ()
+                continueLoop <- false
+            | Error () -> ()
+
+        result
+
     /// <summary>Returns success when the condition is true.</summary>
     let okIf (cond: bool) : Check<unit> =
         if cond then Ok () else Error ()
 
     /// <summary>Returns success when the condition is false.</summary>
     let failIf (cond: bool) : Check<unit> =
-        if not cond then Ok () else Error ()
+        if Operators.not cond then Ok () else Error ()
 
     /// <summary>Returns the value when the option is <c>Some</c>.</summary>
     let okIfSome (opt: 'a option) : Check<'a> =
@@ -164,6 +220,11 @@ module Check =
 /// </summary>
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Validate =
+    let not = Check.not
+    let (``and``) = Check.``and``
+    let (``or``) = Check.``or``
+    let all = Check.all
+    let any = Check.any
     let okIf = Check.okIf
     let failIf = Check.failIf
     let okIfSome = Check.okIfSome
