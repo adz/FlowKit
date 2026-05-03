@@ -81,7 +81,7 @@ open System
 open System.IO
 open System.Threading
 open System.Threading.Tasks
-open FsFlow.Net
+open FsFlow
 
 type User =
     { Email: string
@@ -285,19 +285,13 @@ registerUser 42
 <section class="docs-card">
 <span class="label">Reference</span>
 <h2><a href="reference/">API Reference</a></h2>
-<p>The package-level API landing page for `FsFlow` and `FsFlow.Net`.</p>
+<p>The API landing page for the main `FsFlow` package and its task surface.</p>
 </section>
 
 <section class="docs-card">
 <span class="label">Reference</span>
 <h2><a href="reference/fsflow/">FsFlow</a></h2>
-<p>The core package hub, including `Flow`, `AsyncFlow`, `Validate`, and support types.</p>
-</section>
-
-<section class="docs-card">
-<span class="label">Reference</span>
-<h2><a href="reference/fsflow-net/">FsFlow.Net</a></h2>
-<p>The task-oriented package hub, including `TaskFlow`, `ColdTask`, and interop helpers.</p>
+<p>The main package hub, including `Check`, `Result`, `Validation`, `Flow`, `AsyncFlow`, `TaskFlow`, `ColdTask`, and support types.</p>
 </section>
 
 </div>

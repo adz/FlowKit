@@ -13,16 +13,16 @@ The numbered items below are intentionally linear so the ralph loop can move thr
    - Keep each page in the FsToolkit-style format: short summary, explaining example, member map, and source link.
    - Use versioned source links for release pages and `main` links for next/unreleased docs.
 
-2. [ ] Publish one reference page per public API surface in `FsFlow.Net`.
+2. [ ] Publish one reference page per public API surface in the task surface of `FsFlow`.
    - Split `TaskFlow`, `ColdTask`, `TaskFlow.Runtime`, `TaskFlowSpec`, `Capability`, `Layer`, and the builder extensions into their own pages.
    - Lift the page content from the XML doc comments so the rendered docs and IDE experience stay in sync.
-   - Keep the task package hub concise and route readers into the member pages.
+   - Keep the main package hub concise and route readers into the member pages.
    - Make sure task interop pages and runtime helper pages are reachable from the side menu.
 
 3. [ ] Rework the docs navigation around the new API page structure.
    - Add side-menu entries for every public API page.
    - Keep package hubs as landing pages, not as the only place where API names are visible.
-   - Make the navigation mirror the code split between `FsFlow` and `FsFlow.Net`.
+   - Make the navigation mirror the public surface, with task pages living alongside the core pages.
 
 4. [ ] Rewrite the validation docs for the graph-based model.
    - Lead with `Check`, `Diagnostics`, `Validation`, and applicative `validate {}`.
@@ -42,3 +42,7 @@ The numbered items below are intentionally linear so the ralph loop can move thr
    - Keep `site/versioned_docs/version-0.3.0` aligned with the release snapshot.
    - Ensure unreleased docs point source links at `main` and released docs point at the matching version.
    - Check the docs site still reads coherently in both the current and versioned trees.
+
+8. [ ] Fix documentation contrast issues in light and dark modes.
+   - Address the low contrast of secondary text and sidebars in both themes.
+   - Ensure the site remains readable and accessible across all color modes.

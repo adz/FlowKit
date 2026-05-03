@@ -1,4 +1,4 @@
-namespace FsFlow.Net
+namespace FsFlow
 
 open System
 open System.Threading

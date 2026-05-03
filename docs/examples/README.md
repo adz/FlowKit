@@ -33,7 +33,6 @@ open System
 open System.Threading
 open System.Threading.Tasks
 open FsFlow
-open FsFlow.Net
 
 type User =
     { Id: int
@@ -138,7 +137,6 @@ open System
 open System.Threading
 open System.Threading.Tasks
 open FsFlow
-open FsFlow.Net
 
 type AppEnv =
     { Prefix: string
@@ -219,7 +217,6 @@ open System
 open System.Threading
 open System.Threading.Tasks
 open FsFlow
-open FsFlow.Net
 
 let runFlow label env workflow =
     let result = Flow.run env workflow

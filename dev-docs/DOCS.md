@@ -21,11 +21,32 @@ Write for pragmatic F# devs solving dependency, async, and typed-failure problem
 - Sidebars live in `/site/sidebars.js` and `/site/versioned_sidebars/version-0.3.0-sidebars.json`.
 - The site uses Docusaurus with a versioning plugin.
 
+## Docs Source Of Truth
+
+The docs system has two different kinds of pages:
+
+- hand-written guides and landing pages live in `docs/`
+- source-lifted API member pages live in `docs/reference/`
+
+The API member pages are generated from the XML doc comments in `src/`. When you change public API wording, update the code comments first and then regenerate the reference pages.
+
+The pipeline is:
+
+1. Edit the public XML doc comments in `src/`.
+2. Run `bash scripts/generate-api-docs.sh`.
+3. Review the regenerated `docs/reference/` pages.
+4. Update the hand-written hub pages and guides so they point at the new API shape.
+
+Do not hand-edit the generated API member pages unless you are fixing a generated-doc bug. If the source comments change, the generated markdown should change with them.
+
 ### Generated content
 
 - The "Runnable Examples" page is generated from real code in `/examples/`.
 - Use `scripts/generate-example-docs.sh` to refresh it.
 - Do not edit `docs/examples/README.md` or versioned equivalents directly.
+- The API reference member pages under `docs/reference/fsflow/` are generated from the XML docs in `src/`.
+- Update the generator in `scripts/generate-api-docs.mjs` when the reference structure changes, then rerun the script.
+- The package-hub pages, reference index pages, and the rest of the guides are hand-written markdown.
 
 ### Preview and versioning
 

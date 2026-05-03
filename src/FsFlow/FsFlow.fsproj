@@ -7,14 +7,14 @@
     <PackageId>FsFlow</PackageId>
     <Version>0.3.0</Version>
     <Authors>Adam Davies</Authors>
-    <Description>F# application workflows for sync and Async code with explicit environment requirements and typed failures.</Description>
+    <Description>F# application workflows for sync, Async, and task-oriented code with explicit environment requirements and typed failures.</Description>
     <PackageProjectUrl>https://adz.github.io/FsFlow/</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/adz/FsFlow</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <PackageReleaseNotes>Split task-oriented workflows into FsFlow.Net while keeping sync and Async core concepts in the FsFlow package.</PackageReleaseNotes>
-    <PackageTags>fsharp;workflow;async;result;application</PackageTags>
+    <PackageReleaseNotes>Folded the task-oriented workflow surface into the main FsFlow package and namespace.</PackageReleaseNotes>
+    <PackageTags>fsharp;workflow;async;task;result;application</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <FsDocsCollectionName>FsFlow</FsDocsCollectionName>
     <FsDocsLogoSource>content/img/fsflow-inline-light.svg</FsDocsLogoSource>
@@ -45,6 +45,8 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Validate.fs" />
     <Compile Include="Flow.fs" />
+    <Compile Include="Runtime.fs" />
+    <Compile Include="TaskFlow.fs" />
   </ItemGroup>
 
 </Project>

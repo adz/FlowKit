@@ -7,8 +7,8 @@ description: Exact execution rules for Flow, AsyncFlow, TaskFlow, and ColdTask.
 
 This page shows the exact execution model of `Flow`, `AsyncFlow`, `TaskFlow`, and `ColdTask`.
 
-Task-oriented semantics on this page refer to the `FsFlow.Net` package.
-The core `FsFlow` package keeps only sync and `Async` concepts in its public surface.
+Task-oriented semantics on this page refer to the task surface that ships in the main `FsFlow` package.
+The public surface now includes sync, async, and task concepts together.
 
 ## Success And Typed Failure
 
@@ -173,7 +173,7 @@ The shared runtime helpers live on `Flow.Runtime` and `AsyncFlow.Runtime`:
 
 Use `Flow.Runtime` for synchronous computations and `AsyncFlow.Runtime` for async computations.
 
-The `FsFlow.Net` package also provides `TaskFlow.Runtime` for task-native computations:
+The task surface also provides `TaskFlow.Runtime` for task-native computations:
 
 - `TaskFlow.Runtime.cancellationToken`
 - `TaskFlow.Runtime.catchCancellation`
@@ -187,7 +187,7 @@ The `FsFlow.Net` package also provides `TaskFlow.Runtime` for task-native comput
 
 Use `TaskFlow.Runtime` when the public boundary is task-based and the helper belongs in task execution.
 
-`FsFlow.Net` also exposes `RuntimeContext<'runtime, 'env>` for task workflows that need separate
+The task surface also exposes `RuntimeContext<'runtime, 'env>` for task workflows that need separate
 runtime services and application capabilities, plus `TaskFlowSpec` and `Capability` helpers for
 shaping those two halves.
 
@@ -230,5 +230,5 @@ The test suite currently verifies:
 Read [`docs/GETTING_STARTED.md`](./GETTING_STARTED.md) for the computation-family overview,
 [`docs/TASK_ASYNC_INTEROP.md`](./TASK_ASYNC_INTEROP.md) for the direct binding surface,
 or [`src/FsFlow/Flow.fs`](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs) and
-[`src/FsFlow.Net/TaskFlow.fs`](https://github.com/adz/FsFlow/blob/main/src/FsFlow.Net/TaskFlow.fs)
+[`src/FsFlow/TaskFlow.fs`](https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs)
 for the full API surface.

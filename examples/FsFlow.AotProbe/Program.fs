@@ -2,7 +2,6 @@ open System
 open System.Threading
 open System.Threading.Tasks
 open FsFlow
-open FsFlow.Net
 
 type ProbeFailure(message: string) =
     inherit Exception(message)

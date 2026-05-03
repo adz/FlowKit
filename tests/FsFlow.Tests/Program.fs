@@ -7,7 +7,7 @@ open System.Threading
 open System.Threading.Tasks
 open System.Threading.Tasks.Sources
 open FsFlow
-open FsFlow.Net
+open FsFlow
 open Swensen.Unquote
 open Xunit
 
@@ -476,7 +476,7 @@ module Tests =
 #r @"{fsFlowNetAssemblyPath}"
 open System.Threading
 open System.Threading.Tasks
-open FsFlow.Net
+open FsFlow
 
 let probe : TaskFlow<unit, string, int> =
     TaskFlow.fromTask(fun (_: CancellationToken) -> Task.FromResult 42)
@@ -487,7 +487,7 @@ let probe : TaskFlow<unit, string, int> =
 #r @"{fsFlowAssemblyPath}"
 #r @"{fsFlowNetAssemblyPath}"
 open System.Threading.Tasks
-open FsFlow.Net
+open FsFlow
 
 let probe : TaskFlow<unit, string, int> =
     TaskFlow.fromTask(ColdTask(fun _ -> Task.FromResult 42))
@@ -1440,7 +1440,7 @@ let probe : AsyncFlow<unit, string, int> =
 #r @"{fsFlowAssemblyPath}"
 #r @"{fsFlowNetAssemblyPath}"
 open FsFlow
-open FsFlow.Net
+open FsFlow
 
 let probe : TaskFlow<unit, string, int> =
     taskFlow {{
@@ -1550,7 +1550,7 @@ let probe : TaskFlow<unit, string, int> =
         test <@ taskValueNone = Error "missing value" @>
 
     [<Fact>]
-    let ``flow computation expression rejects task-oriented binds even with FsFlow.Net referenced`` () =
+    let ``flow computation expression rejects task-oriented binds when task helpers are imported`` () =
         let fsFlowAssemblyPath = typeof<FlowBuilder>.Assembly.Location
         let fsFlowNetAssemblyPath = typeof<TaskFlowBuilder>.Assembly.Location
 
@@ -1560,7 +1560,7 @@ let probe : TaskFlow<unit, string, int> =
 #r @"{fsFlowNetAssemblyPath}"
 open System.Threading.Tasks
 open FsFlow
-open FsFlow.Net
+open FsFlow
 
 let probe : Flow<unit, string, int> =
     flow {{
@@ -1574,7 +1574,7 @@ let probe : Flow<unit, string, int> =
 #r @"{fsFlowAssemblyPath}"
 #r @"{fsFlowNetAssemblyPath}"
 open FsFlow
-open FsFlow.Net
+open FsFlow
 
 let probe : Flow<unit, string, int> =
     flow {{
@@ -1614,7 +1614,7 @@ let probe : Flow<unit, string, int> =
             asyncFlow {
                 let! env = AsyncFlow.env
                 let! baseValue = async { return env + 1 }
-                let! adjustedValue = async { return Ok(baseValue * 2) }
+                let! (adjustedValue : int) = async { return Ok(baseValue * 2) }
                 return adjustedValue + 2
             }
 
@@ -1636,7 +1636,7 @@ let probe : Flow<unit, string, int> =
         test <@ hasAsyncResultReturnFromOverload typeof<AsyncFlowBuilder> @>
 
     [<Fact>]
-    let ``taskFlow lives in FsFlow.Net and composes async flows`` () =
+    let ``taskFlow lives in FsFlow and composes async flows`` () =
         let workflow : TaskFlow<int, string, int> =
             taskFlow {
                 let! env = Flow.env
@@ -1649,7 +1649,7 @@ let probe : Flow<unit, string, int> =
             |> TaskFlow.run 20 CancellationToken.None
             |> fun task -> task.GetAwaiter().GetResult()
 
-        test <@ typeof<TaskFlowBuilder>.Namespace = "FsFlow.Net" @>
+        test <@ typeof<TaskFlowBuilder>.Namespace = "FsFlow" @>
         test <@ result = Ok 42 @>
 
     [<Fact>]
@@ -1673,7 +1673,7 @@ let probe : Flow<unit, string, int> =
                 let! env = TaskFlow.env
                 do! Task.CompletedTask
                 let! baseValue = Task.FromResult(env + 1)
-                let! adjustedValue = resultTask (baseValue * 2)
+                let! (adjustedValue : int) = resultTask (baseValue * 2)
                 return adjustedValue + 2
             }
 
@@ -1710,7 +1710,7 @@ let probe : Flow<unit, string, int> =
                 let! env = TaskFlow.env
                 do! ValueTask()
                 let! baseValue = ValueTask<int>(env + 1)
-                let! adjustedValue = resultValueTask (baseValue * 2)
+                let! (adjustedValue : int) = resultValueTask (baseValue * 2)
                 return adjustedValue + 2
             }
 
@@ -1771,7 +1771,7 @@ let probe : Flow<unit, string, int> =
                         seen.Value <- cancellationToken
                         Task.FromResult(env + 1))
 
-                let! adjustedValue = resultColdTask (baseValue * 2)
+                let! (adjustedValue : int) = resultColdTask (baseValue * 2)
                 return adjustedValue + 2
             }
 
@@ -1796,7 +1796,7 @@ let probe : Flow<unit, string, int> =
         test <@ seen.Value = cts.Token @>
 
     [<Fact>]
-    let ``asyncFlow directly binds and returns Task values when FsFlow.Net is referenced`` () =
+    let ``asyncFlow directly binds and returns Task values when task helpers are imported`` () =
         let resultTask (value: int) : Task<Result<int, string>> = Task.FromResult(Ok value)
 
         let workflow : AsyncFlow<int, string, int> =
@@ -1804,7 +1804,7 @@ let probe : Flow<unit, string, int> =
                 let! env = AsyncFlow.env
                 do! Task.CompletedTask
                 let! baseValue = Task.FromResult(env + 1)
-                let! adjustedValue = resultTask (baseValue * 2)
+                let! (adjustedValue : int) = resultTask (baseValue * 2)
                 return adjustedValue + 2
             }
 
@@ -1812,7 +1812,10 @@ let probe : Flow<unit, string, int> =
             asyncFlow { return! Task.CompletedTask }
 
         let taskReturnFromResult : AsyncFlow<unit, string, int> =
-            asyncFlow { return! resultTask 42 }
+            asyncFlow {
+                let! (value : int) = resultTask 42
+                return value
+            }
 
         let workflowResult =
             workflow
@@ -1834,7 +1837,7 @@ let probe : Flow<unit, string, int> =
         test <@ taskReturnFromResultResult = Ok 42 @>
 
     [<Fact>]
-    let ``asyncFlow directly binds and returns ValueTask values when FsFlow.Net is referenced`` () =
+    let ``asyncFlow directly binds and returns ValueTask values when task helpers are imported`` () =
         let resultValueTask (value: int) : ValueTask<Result<int, string>> = ValueTask<Result<int, string>>(Ok value)
 
         let workflow : AsyncFlow<int, string, int> =
@@ -1842,7 +1845,7 @@ let probe : Flow<unit, string, int> =
                 let! env = AsyncFlow.env
                 do! ValueTask()
                 let! baseValue = ValueTask<int>(env + 1)
-                let! adjustedValue = resultValueTask (baseValue * 2)
+                let! (adjustedValue : int) = resultValueTask (baseValue * 2)
                 return adjustedValue + 2
             }
 
@@ -1853,7 +1856,10 @@ let probe : Flow<unit, string, int> =
             asyncFlow { return! ValueTask<int>(42) }
 
         let valueTaskReturnFromResult : AsyncFlow<unit, string, int> =
-            asyncFlow { return! resultValueTask 42 }
+            asyncFlow {
+                let! (value : int) = resultValueTask 42
+                return value
+            }
 
         let workflowResult =
             workflow
@@ -1881,7 +1887,7 @@ let probe : Flow<unit, string, int> =
         test <@ valueTaskReturnFromResultResult = Ok 42 @>
 
     [<Fact>]
-    let ``asyncFlow directly binds and returns ColdTask values when FsFlow.Net is referenced`` () =
+    let ``asyncFlow directly binds and returns ColdTask values when task helpers are imported`` () =
         let seen = ref CancellationToken.None
         use cts = new CancellationTokenSource()
 
@@ -1898,7 +1904,7 @@ let probe : Flow<unit, string, int> =
                         seen.Value <- cancellationToken
                         Task.FromResult(env + 1))
 
-                let! adjustedValue = resultColdTask (baseValue * 2)
+                let! (adjustedValue : int) = resultColdTask (baseValue * 2)
                 return adjustedValue + 2
             }
 
@@ -1906,7 +1912,10 @@ let probe : Flow<unit, string, int> =
             asyncFlow { return! ColdTask(fun _ -> Task.FromResult 42) }
 
         let coldTaskReturnFromResult : AsyncFlow<unit, string, int> =
-            asyncFlow { return! resultColdTask 42 }
+            asyncFlow {
+                let! (value : int) = resultColdTask 42
+                return value
+            }
 
         let workflowResult =
             workflow

@@ -7,7 +7,6 @@ open FSharp.Control.Tasks
 open FsToolkit.ErrorHandling
 open IcedTasks
 open FsFlow
-open FsFlow.Net
 
 [<RequireQualifiedAccess>]
 module Shared =

@@ -1,4 +1,4 @@
-namespace FsFlow.Net
+namespace FsFlow
 
 open System
 open System.Threading
@@ -977,59 +977,6 @@ module TaskFlowBuilderExtensions =
             |> TaskFlow.bind binder
 
 /// [omit]
-/// <exclude/>
-type DotNetAsyncFlowBuilder() =
-    inherit AsyncFlowBuilder()
-
-    member _.ReturnFrom(operation: Task<Result<'value, 'error>>) : AsyncFlow<'env, 'error, 'value> =
-        operation
-        |> Async.AwaitTask
-        |> AsyncFlow.fromAsyncResult
-
-    member _.ReturnFrom(operation: ValueTask<Result<'value, 'error>>) : AsyncFlow<'env, 'error, 'value> =
-        operation.AsTask()
-        |> Async.AwaitTask
-        |> AsyncFlow.fromAsyncResult
-
-    member _.ReturnFrom(operation: ColdTask<Result<'value, 'error>>) : AsyncFlow<'env, 'error, 'value> =
-        async {
-            let! cancellationToken = Async.CancellationToken
-            return! ColdTask.run cancellationToken operation |> Async.AwaitTask
-        }
-        |> AsyncFlow.fromAsyncResult
-
-    member _.Bind
-        (
-            operation: Task<Result<'value, 'error>>,
-            binder: 'value -> AsyncFlow<'env, 'error, 'next>
-        ) : AsyncFlow<'env, 'error, 'next> =
-        operation
-        |> Async.AwaitTask
-        |> AsyncFlow.fromAsyncResult
-        |> AsyncFlow.bind binder
-
-    member _.Bind
-        (
-            operation: ValueTask<Result<'value, 'error>>,
-            binder: 'value -> AsyncFlow<'env, 'error, 'next>
-        ) : AsyncFlow<'env, 'error, 'next> =
-        operation.AsTask()
-        |> Async.AwaitTask
-        |> AsyncFlow.fromAsyncResult
-        |> AsyncFlow.bind binder
-
-    member this.Bind
-        (
-            operation: ColdTask<Result<'value, 'error>>,
-            binder: 'value -> AsyncFlow<'env, 'error, 'next>
-        ) : AsyncFlow<'env, 'error, 'next> =
-        async {
-            let! cancellationToken = Async.CancellationToken
-            return! ColdTask.run cancellationToken operation |> Async.AwaitTask
-        }
-        |> AsyncFlow.fromAsyncResult
-        |> AsyncFlow.bind binder
-
 [<AutoOpen>]
 module AsyncFlowBuilderExtensions =
     type AsyncFlowBuilder with
@@ -1050,6 +997,13 @@ module AsyncFlowBuilderExtensions =
             operation
             |> Async.AwaitTask
             |> AsyncFlow.fromAsync
+
+        member _.ReturnFrom(operation: ColdTask<Result<'value, 'error>>) : AsyncFlow<'env, 'error, 'value> =
+            async {
+                let! cancellationToken = Async.CancellationToken
+                return! ColdTask.run cancellationToken operation |> Async.AwaitTask
+            }
+            |> AsyncFlow.fromAsyncResult
 
         member this.Bind
             (
@@ -1104,13 +1058,17 @@ module AsyncFlowBuilderExtensions =
             |> this.ReturnFrom
             |> AsyncFlow.bind binder
 
-[<AutoOpen>]
-module Builders =
-    /// <summary>
-    /// The .NET-extended <c>asyncFlow { }</c> computation expression.
-    /// </summary>
-    let asyncFlow = DotNetAsyncFlowBuilder()
+        member this.Bind
+            (
+                operation: ColdTask<Result<'value, 'error>>,
+                binder: 'value -> AsyncFlow<'env, 'error, 'next>
+            ) : AsyncFlow<'env, 'error, 'next> =
+            operation
+            |> this.ReturnFrom
+            |> AsyncFlow.bind binder
 
+[<AutoOpen>]
+module TaskBuilders =
     /// <summary>
     /// The .NET <c>taskFlow { }</c> computation expression.
     /// </summary>

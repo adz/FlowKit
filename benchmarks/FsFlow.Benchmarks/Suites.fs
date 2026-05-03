@@ -4,7 +4,6 @@ open System.Threading
 open BenchmarkDotNet.Attributes
 open BenchmarkDotNet.Order
 open FsFlow
-open FsFlow.Net
 
 [<MemoryDiagnoser>]
 [<InProcess>]

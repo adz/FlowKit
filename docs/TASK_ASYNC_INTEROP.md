@@ -7,8 +7,8 @@ description: Direct binding rules for async and task work in FsFlow.
 
 This page shows the direct binding surface for async work and helps you choose the right FsFlow family.
 
-Task-oriented APIs on this page belong in the `FsFlow.Net` package.
-The core `FsFlow` package keeps only sync and `Async` concepts.
+Task-oriented APIs on this page belong to the main `FsFlow` package.
+The core package includes sync, async, and task concepts together.
 
 ## The Main Rule
 
@@ -49,7 +49,7 @@ The option and value-option cases auto-lift only when the computation error type
 | --- | --- |
 | `flow {}` | `Flow<'env, 'error, 'value>`, `Result<'value, 'error>`, `option<'value>` when `error = unit`, `voption<'value>` when `error = unit` |
 | `asyncFlow {}` in core `FsFlow` | `Flow<'env, 'error, 'value>`, `AsyncFlow<'env, 'error, 'value>`, `Async<'value>`, `Async<Result<'value, 'error>>`, `Result<'value, 'error>`, `option<'value>` when `error = unit`, `voption<'value>` when `error = unit` |
-| `asyncFlow {}` with `FsFlow.Net` referenced | everything above, plus `Task<'value>`, `Task<Result<'value, 'error>>`, `ValueTask<'value>`, `ValueTask<Result<'value, 'error>>`, `ColdTask<'value>`, `ColdTask<Result<'value, 'error>>` |
+| `asyncFlow {}` with the task surface available | everything above, plus `Task<'value>`, `Task<Result<'value, 'error>>`, `ValueTask<'value>`, `ValueTask<Result<'value, 'error>>`, `ColdTask<'value>`, `ColdTask<Result<'value, 'error>>` |
 | `taskFlow {}` | `Flow<'env, 'error, 'value>`, `AsyncFlow<'env, 'error, 'value>`, `TaskFlow<'env, 'error, 'value>`, `Async<'value>`, `Async<Result<'value, 'error>>`, `Task<'value>`, `Task<Result<'value, 'error>>`, `ValueTask<'value>`, `ValueTask<Result<'value, 'error>>`, `ColdTask<'value>`, `ColdTask<Result<'value, 'error>>`, `Result<'value, 'error>`, `option<'value>` when `error = unit`, `voption<'value>` when `error = unit` |
 
 ### `flow {}`
@@ -75,7 +75,7 @@ In the core `FsFlow` package, `asyncFlow {}` binds:
 - `Option<'value>` when the error type is `unit`
 - `ValueOption<'value>` when the error type is `unit`
 
-When `FsFlow.Net` is referenced, `asyncFlow {}` also binds task-oriented inputs such as:
+When the task surface is available, `asyncFlow {}` also binds task-oriented inputs such as:
 
 - `Task<'value>`
 - `Task<Result<'value, 'error>>`
@@ -196,7 +196,7 @@ The builders bind `Result` directly, so extra bridge calls are only needed when 
 
 ## `ColdTask<'value>`
 
-`ColdTask<'value>` is the delayed task shape used by `FsFlow.Net`:
+`ColdTask<'value>` is the delayed task shape used by the task surface:
 
 ```fsharp
 CancellationToken -> Task<'value>

@@ -8,7 +8,6 @@ const githubBase = 'https://github.com/adz/FsFlow/blob/main';
 
 const targets = [
   path.join(repoRoot, 'docs', 'reference'),
-  path.join(repoRoot, 'site', 'versioned_docs', 'version-0.3.0', 'reference'),
 ];
 
 const pageSpecs = [
@@ -93,16 +92,16 @@ const pageSpecs = [
     ],
   },
   {
-    outPath: ['fsflow-net', 'taskflow.md'],
+    outPath: ['fsflow', 'taskflow.md'],
     title: 'TaskFlow',
-    description: 'Source-documented task workflow surface in FsFlow.Net.',
+    description: 'Source-documented task workflow surface in FsFlow.',
     intro:
       'This page shows the source-documented task-oriented surface: the runtime context, cold task helper, task flow module, and the task-specific runtime helpers.',
-    sourceFiles: ['src/FsFlow.Net/TaskFlow.fs', 'src/FsFlow.Net/Runtime.fs'],
+    sourceFiles: ['src/FsFlow/TaskFlow.fs', 'src/FsFlow/Runtime.fs'],
     sections: [
       {
         title: 'Runtime context',
-        symbols: ['src/FsFlow.Net/Runtime.fs::type:RuntimeContext', 'src/FsFlow.Net/Runtime.fs::module:RuntimeContext', 'src/FsFlow.Net/Runtime.fs::RuntimeContext.create', 'src/FsFlow.Net/Runtime.fs::RuntimeContext.runtime', 'src/FsFlow.Net/Runtime.fs::RuntimeContext.environment', 'src/FsFlow.Net/Runtime.fs::RuntimeContext.cancellationToken', 'src/FsFlow.Net/Runtime.fs::RuntimeContext.mapRuntime', 'src/FsFlow.Net/Runtime.fs::RuntimeContext.mapEnvironment', 'src/FsFlow.Net/Runtime.fs::RuntimeContext.withRuntime', 'src/FsFlow.Net/Runtime.fs::RuntimeContext.withEnvironment'],
+        symbols: ['src/FsFlow/Runtime.fs::type:RuntimeContext', 'src/FsFlow/Runtime.fs::module:RuntimeContext', 'src/FsFlow/Runtime.fs::RuntimeContext.create', 'src/FsFlow/Runtime.fs::RuntimeContext.runtime', 'src/FsFlow/Runtime.fs::RuntimeContext.environment', 'src/FsFlow/Runtime.fs::RuntimeContext.cancellationToken', 'src/FsFlow/Runtime.fs::RuntimeContext.mapRuntime', 'src/FsFlow/Runtime.fs::RuntimeContext.mapEnvironment', 'src/FsFlow/Runtime.fs::RuntimeContext.withRuntime', 'src/FsFlow/Runtime.fs::RuntimeContext.withEnvironment'],
       },
       {
         title: 'ColdTask',
@@ -128,17 +127,17 @@ const pageSpecs = [
         title: 'Entry points',
         manual:
           'The task-specific builder entry points stay as syntax on top of the module surface, while the extension modules handle the extra task and async interop shapes.',
-        symbols: ['Builders.asyncFlow', 'Builders.taskFlow', 'module:TaskFlowBuilderExtensions', 'module:AsyncFlowBuilderExtensions'],
+        symbols: ['TaskBuilders.taskFlow', 'module:TaskFlowBuilderExtensions', 'module:AsyncFlowBuilderExtensions'],
       },
     ],
   },
   {
-    outPath: ['fsflow-net', 'coldtask.md'],
+    outPath: ['fsflow', 'coldtask.md'],
     title: 'ColdTask',
-    description: 'Source-documented delayed task helpers used by FsFlow.Net.',
+    description: 'Source-documented delayed task helpers used by FsFlow.',
     intro:
       'This page shows the delayed task helper surface used by `TaskFlow`, with source links so the cold/hot distinction stays anchored to the implementation.',
-    sourceFiles: ['src/FsFlow.Net/TaskFlow.fs'],
+    sourceFiles: ['src/FsFlow/TaskFlow.fs'],
     sections: [
       {
         title: 'Core shape',
@@ -151,12 +150,12 @@ const pageSpecs = [
     ],
   },
   {
-    outPath: ['fsflow-net', 'interop.md'],
+    outPath: ['fsflow', 'interop.md'],
     title: 'Interop',
-    description: 'Source-documented task and async interop helpers for FsFlow.Net.',
+    description: 'Source-documented task and async interop helpers for FsFlow.',
     intro:
       'This page shows the interop helpers that bridge task-based boundaries to sync and async boundaries when that is the honest runtime shape.',
-    sourceFiles: ['src/FsFlow.Net/TaskFlow.fs'],
+    sourceFiles: ['src/FsFlow/TaskFlow.fs'],
     sections: [
       {
         title: 'TaskFlow bridges',

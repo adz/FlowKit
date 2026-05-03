@@ -42,8 +42,7 @@ that need separate helper modules, separate builders, and repeated adaptation at
 
 ## Install
 
-- `FsFlow` for `Flow` and `AsyncFlow`
-- `FsFlow.Net` for `TaskFlow`
+- `FsFlow` for `Flow`, `AsyncFlow`, `TaskFlow`, and the supporting validation/runtime helpers
 
 ## Example
 
@@ -67,7 +66,7 @@ Use the same validation logic directly inside a task-oriented workflow:
 
 ```fsharp
 open System.Threading.Tasks
-open FsFlow.Net
+open FsFlow
 
 type User =
     { Email: string }
@@ -90,7 +89,7 @@ let registerUser userId : TaskFlow<RegistrationEnv, RegistrationError, unit> =
 
 `validateEmail` is just a plain `Result<string, RegistrationError>`.
 `taskFlow` lifts it directly with `do!`.
-There is no separate task-result validation vocabulary to learn first.
+The task surface ships in the main FsFlow package and the `FsFlow` namespace.
 
 ## Semantic Boundary
 

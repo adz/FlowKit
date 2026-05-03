@@ -15,12 +15,25 @@
   --ifm-background-color: #f7f4ee;
   --ifm-navbar-background-color: rgba(251, 249, 245, 0.92);
   --ifm-menu-color-active: var(--ifm-color-primary);
+  --fsflow-secondary-text: rgba(42, 41, 37, 0.72);
+  --fsflow-border-color: rgba(42, 41, 37, 0.12);
+  --fsflow-sidebar-bg: rgba(249, 247, 242, 0.8);
+  --fsflow-card-bg: rgba(255, 255, 255, 0.86);
+}
+
+[data-theme='dark'] {
+  --ifm-background-color: #1e1c19;
+  --ifm-navbar-background-color: rgba(30, 28, 25, 0.92);
+  --fsflow-secondary-text: rgba(235, 230, 220, 0.72);
+  --fsflow-border-color: rgba(235, 230, 220, 0.12);
+  --fsflow-sidebar-bg: rgba(35, 33, 30, 0.8);
+  --fsflow-card-bg: rgba(45, 43, 40, 0.86);
 }
 
 html {
   background:
     radial-gradient(circle at top left, rgba(55, 103, 177, 0.08), transparent 26%),
-    linear-gradient(180deg, #fbf9f5 0%, #f7f4ee 100%);
+    linear-gradient(180deg, #fbf9f5 0%, var(--ifm-background-color) 100%);
 }
 
 body {
@@ -29,7 +42,7 @@ body {
 
 .navbar {
   backdrop-filter: blur(18px);
-  border-bottom: 1px solid rgba(42, 41, 37, 0.12);
+  border-bottom: 1px solid var(--fsflow-border-color);
 }
 
 .navbar__brand {
@@ -50,12 +63,12 @@ body {
 }
 
 .theme-doc-sidebar-container {
-  border-right: 1px solid rgba(42, 41, 37, 0.12);
-  background: rgba(249, 247, 242, 0.8);
+  border-right: 1px solid var(--fsflow-border-color);
+  background: var(--fsflow-sidebar-bg);
 }
 
 .table-of-contents {
-  opacity: 0.45;
+  opacity: 0.7;
   transition: opacity 160ms ease;
 }
 
@@ -124,7 +137,7 @@ body {
   display: block;
   max-width: 74ch;
   margin: 0 0 1rem;
-  color: rgba(42, 41, 37, 0.82);
+  color: var(--fsflow-secondary-text);
   font-size: 1.06rem;
   line-height: 1.7;
 }
@@ -148,10 +161,10 @@ body {
   align-items: center;
   min-height: 2rem;
   padding: 0.25rem 0.75rem;
-  border: 1px solid rgba(42, 41, 37, 0.12);
+  border: 1px solid var(--fsflow-border-color);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.7);
-  color: rgba(42, 41, 37, 0.82);
+  background: var(--fsflow-card-bg);
+  color: var(--fsflow-secondary-text);
   font-size: 0.9rem;
 }
 
@@ -162,16 +175,16 @@ body {
 
 .docs-home-panel-card {
   padding: 1rem 1.05rem;
-  border: 1px solid rgba(42, 41, 37, 0.12);
+  border: 1px solid var(--fsflow-border-color);
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.84);
+  background: var(--fsflow-card-bg);
   box-shadow: 0 12px 34px rgba(41, 32, 23, 0.05);
 }
 
 .docs-home-panel-card strong {
   display: block;
   line-height: 1.55;
-  color: rgba(42, 41, 37, 0.92);
+  color: var(--fsflow-secondary-text);
 }
 
 .docs-grid {
@@ -189,9 +202,9 @@ body {
 
 .docs-card {
   padding: 1.15rem 1.15rem 1.2rem;
-  border: 1px solid rgba(42, 41, 37, 0.12);
+  border: 1px solid var(--fsflow-border-color);
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.86);
+  background: var(--fsflow-card-bg);
   box-shadow: 0 18px 42px rgba(41, 32, 23, 0.06);
 }
 
@@ -203,7 +216,7 @@ body {
 
 .docs-card p {
   margin-bottom: 0.6rem;
-  color: rgba(42, 41, 37, 0.82);
+  color: var(--fsflow-secondary-text);
 }
 
 .docs-card-links {
@@ -226,9 +239,9 @@ body {
 
 .hero-card {
   padding: 1.25rem 1.25rem 1.3rem;
-  border: 1px solid rgba(42, 41, 37, 0.12);
+  border: 1px solid var(--fsflow-border-color);
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.86);
+  background: var(--fsflow-card-bg);
   box-shadow: 0 18px 42px rgba(41, 32, 23, 0.06);
 }
 

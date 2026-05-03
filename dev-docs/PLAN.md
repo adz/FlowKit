@@ -22,7 +22,7 @@ The same predicate and validation vocabulary should work at every step. The user
 
 These items are no longer live design questions and are tracked in the decision log:
 
-- [Flow architecture](decisions/flow-architecture.md): workflow family split, package boundary, cold/restartable semantics, `ColdTask`, and builder surface
+- [Flow architecture](decisions/flow-architecture.md): workflow family split, namespace continuity, cold/restartable semantics, `ColdTask`, and builder surface
 - [TaskFlow and ValueTask](decisions/taskflow-valuetask.md): why `TaskFlow` stays Task-backed and why `ValueTask` stays a boundary shape
 - [Validation surface](decisions/validation-surface.md): `Check`, `Diagnostics`, `Validation`, and the applicative `validate {}` split
 - [API reference page shape](decisions/reference-page-shape.md): one page per public API surface, side-menu entries, examples, and source links
@@ -45,7 +45,6 @@ The remaining product-shape work is the documentation surface, not the core arch
 
 ## Open Questions
 
-- whether any remaining reference pages need further split or regrouping once the page-per-API pass lands
 - whether any legacy `Validate` mentions should remain outside compatibility notes in the narrative docs
 - whether the docs site navigation wants any extra grouping once every public API has its own page
 

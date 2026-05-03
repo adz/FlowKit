@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\FsFlow\FsFlow.fsproj" />
-    <ProjectReference Include="..\..\src\FsFlow.Net\FsFlow.Net.fsproj" />
   </ItemGroup>
 
 </Project>

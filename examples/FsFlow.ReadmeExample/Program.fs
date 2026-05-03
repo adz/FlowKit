@@ -1,7 +1,6 @@
 open System
 open System.IO
 open System.Threading
-open FsFlow.Net
 open FsFlow
 
 type ReadmeEnv =

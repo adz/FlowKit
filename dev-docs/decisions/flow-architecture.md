@@ -25,12 +25,12 @@ Use three workflow types:
 
 - `Flow<'env,'error,'value>` for sync/result-oriented work.
 - `AsyncFlow<'env,'error,'value>` for async workflows in core `FsFlow`.
-- `TaskFlow<'env,'error,'value>` for .NET task-based workflows in `FsFlow.Net`.
+- `TaskFlow<'env,'error,'value>` for .NET task-based workflows in the main `FsFlow` package.
 
-Keep the core package task-free:
+Keep the core package unified:
 
-- `FsFlow` exports `Flow`, `AsyncFlow`, and the sync/async combinators.
-- `FsFlow.Net` exports `TaskFlow`, `ColdTask<'value>`, and .NET-specific runtime helpers.
+- `FsFlow` exports `Flow`, `AsyncFlow`, `TaskFlow`, `ColdTask<'value>`, and the sync/async/task combinators.
+- the task-specific types and helpers live in `FsFlow`.
 
 Keep workflows cold and restartable:
 
@@ -41,8 +41,10 @@ Keep workflows cold and restartable:
 ## Consequences
 
 - Sync flows do not carry cancellation/runtime concerns in their representation.
-- Task-oriented concepts stay out of core public contracts.
-- `FsFlow.Net` can extend `asyncFlow {}` with task-oriented `Bind` members via extension members in an auto-open module.
+- Task-oriented concepts are part of the main public contract.
+- the task surface extends `asyncFlow {}` using a prioritized overload strategy:
+  - `Task<Result<'T, 'E>>` and `ValueTask<Result<'T, 'E>>` are intrinsic members of `AsyncFlowBuilder` to ensure they take priority over plain `Task<'T>` overloads during member resolution.
+  - Plain `Task`, `Task<'T>`, and `ValueTask` overloads remain as extension members in an auto-open module.
 
 ## Notes
 

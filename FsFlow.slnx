@@ -16,7 +16,6 @@
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/FsFlow/FsFlow.fsproj" />
-    <Project Path="src/FsFlow.Net/FsFlow.Net.fsproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/FsFlow.Tests/FsFlow.Tests.fsproj" />

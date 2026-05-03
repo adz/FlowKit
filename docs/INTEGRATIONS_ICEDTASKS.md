@@ -24,15 +24,15 @@ The overlap is real:
 The difference is the model:
 
 - `IcedTasks` focuses on task expression ergonomics
-- `FsFlow.Net` focuses on orchestration, typed failure, and a named environment boundary
+- the task surface focuses on orchestration, typed failure, and a named environment boundary
 
 ## Why The Pair Works
 
 - `IcedTasks` keeps the task side fast and ergonomic
-- `FsFlow.Net` keeps the boundary model explicit with `TaskFlow<'env, 'error, 'value>`
+- the task surface keeps the boundary model explicit with `TaskFlow<'env, 'error, 'value>`
 - the combination works well when you need task-native interop without giving up typed failures or environment/threaded context
 
-One naming caveat matters here: `IcedTasks` uses `ColdTask` as an alias-style task shape, while `FsFlow.Net` uses a nominal `ColdTask<'value>` wrapper type. The names are similar, but the types are not interchangeable without an explicit bridge.
+One naming caveat matters here: `IcedTasks` uses `ColdTask` as an alias-style task shape, while the task surface uses a nominal `ColdTask<'value>` wrapper type. The names are similar, but the types are not interchangeable without an explicit bridge.
 
 This page is about coexistence, not a literal side-by-side API sample from both libraries. The code below shows both sides of the boundary, with each bridge made explicit.
 
@@ -54,7 +54,7 @@ Use `coldTask` when you want delayed execution without a token, and `cancellable
 ```fsharp
 open System.Threading
 open System.Threading.Tasks
-open FsFlow.Net
+open FsFlow
 open IcedTasks
 
 type AppConfig =
@@ -67,12 +67,12 @@ let icedLoadConfig =
 
 let fsFlowUsesIcedTasks : TaskFlow<unit, string, string> =
     taskFlow {
-        let! config = FsFlow.Net.ColdTask.fromTaskFactory icedLoadConfig
+        let! config = ColdTask.fromTaskFactory icedLoadConfig
         return config.Prefix
     }
 ```
 
-`taskFlow {}` auto-binds the FsFlow `ColdTask<'value>` wrapper produced by `FsFlow.Net.ColdTask.fromTaskFactory icedLoadConfig`, so the IcedTasks helper stays cold until the boundary runs. The distinction still matters: `icedLoadConfig` is an IcedTasks alias-style cold task, while `FsFlow.Net.ColdTask<'value>` is a nominal wrapper type.
+`taskFlow {}` auto-binds the `ColdTask<'value>` wrapper produced by `ColdTask.fromTaskFactory icedLoadConfig`, so the IcedTasks helper stays cold until the boundary runs. The distinction still matters: `icedLoadConfig` is an IcedTasks alias-style cold task, while `ColdTask<'value>` is a nominal wrapper type.
 
 `coldTask` does not take a `CancellationToken`; it is just `unit -> Task<'value>`. If the IcedTasks helper needs token flow, use `cancellableTask` instead:
 

@@ -7,8 +7,8 @@ description: The fastest path from Check and Result into Flow, AsyncFlow, and Ta
 
 This page shows the fastest path from plain checks into the right FsFlow family as the execution context grows.
 
-The core `FsFlow` package contains `Flow`, `AsyncFlow`, `Check`, `Result`, `Validation`, and `validate {}`.
-`FsFlow.Net` adds `TaskFlow`, `RuntimeContext`, and task-native runtime helpers.
+The core `FsFlow` package contains `Flow`, `AsyncFlow`, `TaskFlow`, `Check`, `Result`, `Validation`, and `validate {}`.
+The task APIs now live in the `FsFlow` namespace and ship in the main package.
 
 ## 1. Start With The Continuum
 
@@ -217,7 +217,7 @@ let describe : AsyncFlow<AsyncEnv, ValidationError, string> =
 
 When task work has separate runtime services from application capabilities, use
 `RuntimeContext<'runtime, 'env>` and the `TaskFlow.readRuntime`, `TaskFlow.read`, or `Capability`
-helpers from `FsFlow.Net`.
+helpers from the task surface.
 
 ## 9. Compose Upward, Not Sideways
 

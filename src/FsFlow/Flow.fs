@@ -1,6 +1,7 @@
 namespace FsFlow
 
 open System
+open System.Threading.Tasks
 
 /// <summary>
 /// Represents a cold synchronous workflow that reads an environment, returns a typed result,
@@ -1016,6 +1017,16 @@ type AsyncFlowBuilder() =
     member _.ReturnFrom(operation: Async<Result<'value, 'error>>) : AsyncFlow<'env, 'error, 'value> =
         AsyncFlow.fromAsyncResult operation
 
+    member _.ReturnFrom(operation: Task<Result<'value, 'error>>) : AsyncFlow<'env, 'error, 'value> =
+        operation
+        |> Async.AwaitTask
+        |> AsyncFlow.fromAsyncResult
+
+    member _.ReturnFrom(operation: ValueTask<Result<'value, 'error>>) : AsyncFlow<'env, 'error, 'value> =
+        operation.AsTask()
+        |> Async.AwaitTask
+        |> AsyncFlow.fromAsyncResult
+
     member _.ReturnFrom(flow: Flow<'env, 'error, 'value>) : AsyncFlow<'env, 'error, 'value> =
         AsyncFlow.fromFlow flow
 
@@ -1066,6 +1077,26 @@ type AsyncFlowBuilder() =
             binder: 'value -> AsyncFlow<'env, 'error, 'next>
         ) : AsyncFlow<'env, 'error, 'next> =
         operation
+        |> AsyncFlow.fromAsyncResult
+        |> AsyncFlow.bind binder
+
+    member _.Bind
+        (
+            operation: Task<Result<'value, 'error>>,
+            binder: 'value -> AsyncFlow<'env, 'error, 'next>
+        ) : AsyncFlow<'env, 'error, 'next> =
+        operation
+        |> Async.AwaitTask
+        |> AsyncFlow.fromAsyncResult
+        |> AsyncFlow.bind binder
+
+    member _.Bind
+        (
+            operation: ValueTask<Result<'value, 'error>>,
+            binder: 'value -> AsyncFlow<'env, 'error, 'next>
+        ) : AsyncFlow<'env, 'error, 'next> =
+        operation.AsTask()
+        |> Async.AwaitTask
         |> AsyncFlow.fromAsyncResult
         |> AsyncFlow.bind binder
 
