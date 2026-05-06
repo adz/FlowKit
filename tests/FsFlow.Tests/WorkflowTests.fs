@@ -476,6 +476,12 @@ module WorkflowTests =
                 |> AsyncFlow.run ()
                 |> Async.RunSynchronously
 
+            let asyncFlowBridgeFromFlow =
+                Check.okIf false
+                |> AsyncFlow.orElseFlow (Flow.read (fun env -> $"async-flow:{env}"))
+                |> AsyncFlow.run "env"
+                |> Async.RunSynchronously
+
             let asyncFlowBridge =
                 Check.okIf false
                 |> AsyncFlow.orElseAsyncFlow (AsyncFlow.read (fun env -> $"async-flow:{env}"))
@@ -506,13 +512,24 @@ module WorkflowTests =
                 |> TaskFlow.run "env" CancellationToken.None
                 |> fun task -> task.GetAwaiter().GetResult()
 
+            let flowValue = Flow.value "flow-value" |> Flow.run ()
+            let asyncValue = AsyncFlow.value "async-value" |> AsyncFlow.run () |> Async.RunSynchronously
+            let taskValue =
+                TaskFlow.value "task-value"
+                |> TaskFlow.run () CancellationToken.None
+                |> fun task -> task.GetAwaiter().GetResult()
+
             test <@ flowBridge = Error "flow:env" @>
             test <@ asyncBridge = Error "async" @>
+            test <@ asyncFlowBridgeFromFlow = Error "async-flow:env" @>
             test <@ asyncFlowBridge = Error "async-flow:env" @>
             test <@ taskBridge = Error "task" @>
             test <@ taskAsyncBridge = Error "task-async" @>
             test <@ taskFlowBridge = Error "task-flow:env" @>
             test <@ taskAsyncFlowBridge = Error "task-async-flow:env" @>
+            test <@ flowValue = Ok "flow-value" @>
+            test <@ asyncValue = Ok "async-value" @>
+            test <@ taskValue = Ok "task-value" @>
 
         [<Fact>]
         let ``AsyncFlow runtime helpers cover timeout retry and release`` () =
@@ -682,7 +699,10 @@ module WorkflowTests =
 
             let workflow : TaskFlow<AppDependencies, string, string> =
                 taskFlow {
-                    let! client = Capability.service _.DeviceClient
+                    let! (client : IDeviceClient) =
+                        Capability.service _.DeviceClient
+                        : TaskFlow<AppDependencies, string, IDeviceClient>
+
                     let! value = TaskFlow.read _.Value
                     return $"{client.Name}:{value}"
                 }
@@ -708,9 +728,53 @@ module WorkflowTests =
                 |> TaskFlow.run (RecordingServiceProvider(typeof<string>, "nope") :> IServiceProvider) CancellationToken.None
                 |> fun task -> task.GetAwaiter().GetResult()
 
+            let flowCapability : Flow<AppDependencies, string, IDeviceClient> =
+                Capability.service _.DeviceClient
+
+            let asyncCapability : AsyncFlow<AppDependencies, string, IDeviceClient> =
+                Capability.service _.DeviceClient
+
+            let flowCapabilityResult =
+                flowCapability
+                |> Flow.run app
+
+            let asyncCapabilityResult =
+                asyncCapability
+                |> AsyncFlow.run app
+                |> Async.RunSynchronously
+
+            let flowLayerWorkflow : Flow<AppDependencies, string, string> =
+                flow {
+                    let! client = Flow.read _.DeviceClient
+                    let! value = Flow.read _.Value
+                    return $"{client.Name}:{value}"
+                }
+
+            let flowLayerResult =
+                flowLayerWorkflow
+                |> Flow.provideLayer (Flow.succeed app)
+                |> Flow.run ()
+
+            let asyncLayerWorkflow : AsyncFlow<AppDependencies, string, string> =
+                asyncFlow {
+                    let! client = AsyncFlow.read _.DeviceClient
+                    let! value = AsyncFlow.read _.Value
+                    return $"{client.Name}:{value}"
+                }
+
+            let asyncLayerResult =
+                asyncLayerWorkflow
+                |> AsyncFlow.provideLayer (AsyncFlow.succeed app)
+                |> AsyncFlow.run ()
+                |> Async.RunSynchronously
+
             test <@ composedResult = Ok "provider-client:10" @>
             test <@ providerResult = Ok app.DeviceClient @>
             test <@ missingProviderResult = Error { CapabilityType = typeof<IDeviceClient> } @>
+            test <@ flowCapabilityResult = Ok app.DeviceClient @>
+            test <@ asyncCapabilityResult = Ok app.DeviceClient @>
+            test <@ flowLayerResult = Ok "provider-client:10" @>
+            test <@ asyncLayerResult = Ok "provider-client:10" @>
 
         [<Fact>]
         let ``Flow traverse and sequence work as expected`` () =

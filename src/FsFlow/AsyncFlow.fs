@@ -19,6 +19,10 @@ module AsyncFlow =
     let succeed (value: 'value) : AsyncFlow<'env, 'error, 'value> =
         AsyncFlow(fun _ -> async.Return(Ok value))
 
+    /// <summary>Alias for <see cref="succeed" /> that reads well in some call sites.</summary>
+    let value (item: 'value) : AsyncFlow<'env, 'error, 'value> =
+        succeed item
+
     /// <summary>Creates a failing async flow.</summary>
     let fail (error: 'error) : AsyncFlow<'env, 'error, 'value> =
         AsyncFlow(fun _ -> async.Return(Error error))
@@ -52,6 +56,21 @@ module AsyncFlow =
                 | Error () ->
                     let! error = errorAsync
                     return Error error
+            })
+
+    /// <summary>Turns a pure validation result into an async flow with synchronous environment-provided failure.</summary>
+    let orElseFlow
+        (errorFlow: Flow<'env, 'error, 'error>)
+        (result: Result<'value, unit>)
+        : AsyncFlow<'env, 'error, 'value> =
+        AsyncFlow(fun environment ->
+            async {
+                match result with
+                | Ok value -> return Ok value
+                | Error () ->
+                    match Flow.run environment errorFlow with
+                    | Ok error -> return Error error
+                    | Error error -> return Error error
             })
 
     /// <summary>Turns a pure validation result into an async flow whose failure value comes from another async flow.</summary>
@@ -230,6 +249,20 @@ module AsyncFlow =
         (flow: AsyncFlow<'innerEnvironment, 'error, 'value>)
         : AsyncFlow<'outerEnvironment, 'error, 'value> =
         AsyncFlow(InternalCombinatorCore.localEnvWith run mapping flow)
+
+    /// <summary>Provides a derived environment from a layer flow to a downstream flow.</summary>
+    let provideLayer
+        (layer: AsyncFlow<'input, 'error, 'environment>)
+        (flow: AsyncFlow<'environment, 'error, 'value>)
+        : AsyncFlow<'input, 'error, 'value> =
+        AsyncFlow(fun environment ->
+            async {
+                let! outcome = run environment layer
+
+                match outcome with
+                | Ok environment -> return! run environment flow
+                | Error error -> return Error error
+            })
 
     /// <summary>Defers async flow construction until execution time.</summary>
     let delay (factory: unit -> AsyncFlow<'env, 'error, 'value>) : AsyncFlow<'env, 'error, 'value> =

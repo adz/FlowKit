@@ -268,6 +268,16 @@ module Flow =
         : Flow<'outerEnvironment, 'error, 'value> =
         Flow(InternalCombinatorCore.localEnvWith run mapping flow)
 
+    /// <summary>Provides a derived environment from a layer flow to a downstream flow.</summary>
+    let provideLayer
+        (layer: Flow<'input, 'error, 'environment>)
+        (flow: Flow<'environment, 'error, 'value>)
+        : Flow<'input, 'error, 'value> =
+        Flow(fun environment ->
+            match run environment layer with
+            | Ok environment -> run environment flow
+            | Error error -> Error error)
+
     /// <summary>Defers flow construction until execution time.</summary>
     let delay (factory: unit -> Flow<'env, 'error, 'value>) : Flow<'env, 'error, 'value> =
         Flow(InternalCombinatorCore.delayWith run factory)

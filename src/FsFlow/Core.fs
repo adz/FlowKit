@@ -142,3 +142,78 @@ module internal InternalCombinatorCore =
         (factory: unit -> 'flow)
         : 'environment -> 'operation =
         fun environment -> factory () |> run environment
+
+/// <summary>Describes a missing service-provider capability.</summary>
+type MissingCapability =
+    {
+        CapabilityType: Type
+    }
+
+type Flow<'env, 'error, 'value> with
+    static member CapabilityService
+        (projection: 'env -> 'service)
+        : Flow<'env, 'error, 'service> =
+        Flow(fun environment -> Ok(projection environment))
+
+    static member ServiceFromProvider
+        ()
+        : Flow<IServiceProvider, MissingCapability, 'service> =
+        Flow(fun provider ->
+            match provider.GetService typeof<'service> with
+            | null ->
+                Error
+                    {
+                        CapabilityType = typeof<'service>
+                    }
+            | value -> Ok(unbox<'service> value))
+
+    static member ProvideLayer
+        (
+            layer: Flow<'input, 'error, 'environment>,
+            flow: Flow<'environment, 'error, 'value>
+        ) : Flow<'input, 'error, 'value> =
+        let (Flow layerOperation) = layer
+        let (Flow flowOperation) = flow
+
+        Flow(fun environment ->
+            match layerOperation environment with
+            | Ok environment -> flowOperation environment
+            | Error error -> Error error)
+
+type AsyncFlow<'env, 'error, 'value> with
+    static member CapabilityService
+        (projection: 'env -> 'service)
+        : AsyncFlow<'env, 'error, 'service> =
+        AsyncFlow(fun environment -> async.Return(Ok(projection environment)))
+
+    static member ServiceFromProvider
+        ()
+        : AsyncFlow<IServiceProvider, MissingCapability, 'service> =
+        AsyncFlow(fun provider ->
+            async {
+                match provider.GetService typeof<'service> with
+                | null ->
+                    return
+                        Error
+                            {
+                                CapabilityType = typeof<'service>
+                            }
+                | value -> return Ok(unbox<'service> value)
+            })
+
+    static member ProvideLayer
+        (
+            layer: AsyncFlow<'input, 'error, 'environment>,
+            flow: AsyncFlow<'environment, 'error, 'value>
+        ) : AsyncFlow<'input, 'error, 'value> =
+        let (AsyncFlow layerOperation) = layer
+        let (AsyncFlow flowOperation) = flow
+
+        AsyncFlow(fun environment ->
+            async {
+                let! outcome = layerOperation environment
+
+                match outcome with
+                | Ok environment -> return! flowOperation environment
+                | Error error -> return Error error
+            })

@@ -41,6 +41,32 @@ Use `Guard.MapError` when the source already carries a meaningful error:
 - **Manual**: `match x with Some v -> Ok v | None -> Error e` -> `let! v = x |> Guard.Of e`
 - **Manual**: `Result.mapError mapper` -> `let! x = result |> Guard.MapError mapper`
 
+## FsToolkit.ErrorHandling Compatibility Map
+Use this when translating FsToolkit-style code into FsFlow. If a function is not listed as a direct
+equivalent, FsFlow usually expects a different boundary shape rather than a 1:1 helper.
+
+### Result<'T, 'E>
+- Direct equivalents: `Result.map` -> `Result.map`, `Result.bind` -> `Result.bind`, `Result.mapError` -> `Result.mapError`, `Result.mapErrorTo` -> `Result.mapErrorTo`, `Result.sequence` -> `Result.sequence`, `Result.traverse` -> `Result.traverse`
+- Missing as dedicated `Result` helpers: `map2`, `map3`, `apply`, `fold`, `defaultValue`, `defaultError`, `defaultWith`, `valueOr`, `ignore`, `ignoreError`, `setError`, `withError`, `isOk`, `isError`, `orElse`, `orElseWith`, `orElseError`, `require*`
+- FsFlow replacements: use `result {}` for fail-fast sequencing, `Validation` for accumulation, `Check` for unit-error predicates, and `Guard` when the source should bind directly inside a flow
+- Important difference: `Result.mapErrorTo` in FsFlow only bridges `Result<'T, unit>` into a typed error; it is not a general-purpose error translator
+
+### AsyncResult<'T, 'E>
+- Closest FsFlow shape: `AsyncFlow<'env, 'error, 'value>`
+- Direct equivalents: `AsyncResult.map` -> `AsyncFlow.map`, `AsyncResult.bind` -> `AsyncFlow.bind`, `AsyncResult.mapError` -> `AsyncFlow.mapError`, `AsyncResult.map2` -> `AsyncFlow.map2`, `AsyncResult.sequence` -> `AsyncFlow.sequence`, `AsyncResult.traverse` -> `AsyncFlow.traverse`
+- Boundary lifts: `AsyncResult.fromResult` -> `AsyncFlow.fromResult`, `AsyncResult.fromOption` -> `AsyncFlow.fromOption`, `AsyncResult.fromValueOption` -> `AsyncFlow.fromValueOption`, `AsyncResult.fromAsync` -> `AsyncFlow.fromAsync`, `AsyncResult.fromAsyncResult` -> `AsyncFlow.fromAsyncResult`
+- Async fallback helpers: `orElse` -> `AsyncFlow.orElse`, `orElseAsync` -> `AsyncFlow.orElseAsync`, `orElseFlow` -> `AsyncFlow.orElseFlow`, `orElseAsyncFlow` -> `AsyncFlow.orElseAsyncFlow`
+- Missing as dedicated helpers: `fold`, `ignore`, `defaultValue`, `defaultError`, `defaultWith`, `valueOr`, `setError`, `withError`, `require*`
+- Important difference: FsFlow folds `AsyncResult` into a larger environment-aware model. If you only need `Async<Result<'T, 'E>>`, `AsyncFlow.toAsync` is the nearest execution shape
+
+### Validation
+- FsFlow equivalent type: `Validation<'value, 'error>` is not `Result<'value, 'error list>`; it stores a structured `Diagnostics<'error>` graph
+- Direct equivalents: `Validation.ok` -> `Validation.succeed`, `Validation.error` -> `Validation.fail`, `Validation.map` -> `Validation.map`, `Validation.bind` -> `Validation.bind`, `Validation.mapError` -> `Validation.mapError`, `Validation.map2` -> `Validation.map2`, `Validation.apply` -> `Validation.apply`, `Validation.sequence` -> `Validation.sequence`, `Validation.zip` -> `Validation.merge`, `Validation.toResult` -> `Validation.toResult`, `Validation.fromResult` -> `Validation.fromResult`
+- FsFlow-only additions: `Validation.at`, `Validation.key`, `Validation.index`, `Validation.name`, `Validation.traverseIndexed`
+- Missing as dedicated helpers: `map3`, `mapErrors`, `orElse*`, the Validation operator modules, and list-shaped error APIs
+- `Validation.bind` is short-circuiting in FsFlow just like FsToolkit.Validation.bind; accumulation comes from applicative composition (`validate { and! }`, `map2`, `apply`, `merge`, `traverseIndexed`)
+- Important difference: `Validation.mapError` remaps the entire diagnostics tree recursively, not just a flat error list
+
 ## Golden Path API
 - `run env flow`: Execute a flow.
 - `env`: Get the full environment.

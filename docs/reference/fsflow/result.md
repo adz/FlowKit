@@ -13,7 +13,7 @@ This page shows the source-documented `Result` surface: the module functions and
 
 ## Module functions
 
-- module `Result`: Helpers for fail-fast `Result` workflows and the bridge from
+- module [`Result`](./result.md): Helpers for fail-fast `Result` workflows and the bridge from
 placeholder unit failures into application errors. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Validate.fs#L171)
 - [`Result.map`](./result-map.md): Maps the successful value of a result. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Validate.fs#L176)
 - [`Result.bind`](./result-bind.md): Sequences a result-producing continuation after a successful value. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Validate.fs#L188)

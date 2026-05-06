@@ -157,20 +157,21 @@ Record-based slicing is useful when:
 ## Capabilities and Service Discovery
 
 For complex applications, FsFlow provides a structured way to manage dependencies through
-the `Capability` module. This allows you to define required services without hardcoding
-to a specific environment record shape.
+the `Capability` module. This lets you keep the projection logic separate from the workflow
+body while still staying explicit about the environment shape.
 
 ```fsharp
 type ILogger = abstract Log : string -> unit
 
 let log message =
-    TaskFlow.read (Capability.service<ILogger>)
-    |> TaskFlow.map (fun logger -> logger.Log message)
+    taskFlow {
+        let! logger = Capability.service _.Logger
+        return logger.Log message
+    }
 ```
 
-The `Capability.service<'t>` helper creates a projection that looks for the type `'t`
-inside the environment. This works automatically if the environment is a `Layer` or
-implements the necessary discovery logic.
+`Capability.service` reads a value from a record projection, so the workflow only depends
+on the field it actually needs.
 
 ## Layering and Composition
 

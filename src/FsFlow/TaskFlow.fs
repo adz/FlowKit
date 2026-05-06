@@ -23,6 +23,42 @@ type TaskFlow<'env, 'error, 'value> =
 type ColdTask<'value> =
     | ColdTask of (CancellationToken -> Task<'value>)
 
+type TaskFlow<'env, 'error, 'value> with
+    static member CapabilityService
+        (projection: 'env -> 'service)
+        : TaskFlow<'env, 'error, 'service> =
+        TaskFlow(fun environment _ -> Task.FromResult(Ok(projection environment)))
+
+    static member ServiceFromProvider
+        ()
+        : TaskFlow<IServiceProvider, MissingCapability, 'service> =
+        TaskFlow(fun provider _ ->
+            match provider.GetService typeof<'service> with
+            | null ->
+                Task.FromResult(
+                    Error
+                        {
+                            CapabilityType = typeof<'service>
+                        })
+            | value -> Task.FromResult(Ok(unbox<'service> value)))
+
+    static member ProvideLayer
+        (
+            layer: TaskFlow<'input, 'error, 'environment>,
+            flow: TaskFlow<'environment, 'error, 'value>
+        ) : TaskFlow<'input, 'error, 'value> =
+        let (TaskFlow layerOperation) = layer
+        let (TaskFlow flowOperation) = flow
+
+        TaskFlow(fun environment cancellationToken ->
+            task {
+                let! outcome = layerOperation environment cancellationToken
+
+                match outcome with
+                | Ok environment -> return! flowOperation environment cancellationToken
+                | Error error -> return Error error
+            })
+
 /// <summary>
 /// Core functions for creating and executing cold tasks.
 /// </summary>
@@ -104,6 +140,10 @@ module TaskFlow =
     let succeed (value: 'value) : TaskFlow<'env, 'error, 'value> =
         TaskFlow(fun _ _ -> Task.FromResult(Ok value))
 
+    /// <summary>Alias for <see cref="succeed" /> that reads well in some call sites.</summary>
+    let value (item: 'value) : TaskFlow<'env, 'error, 'value> =
+        succeed item
+
     /// <summary>Creates a failing task flow.</summary>
     /// <param name="error">The failure value of type <c>'error</c>.</param>
     /// <returns>A <see cref="T:FsFlow.TaskFlow`3" /> that always fails.</returns>
@@ -121,18 +161,18 @@ module TaskFlow =
     /// <param name="value">The option to lift.</param>
     /// <returns>A task flow succeeding with the option's value or failing.</returns>
     let fromOption (error: 'error) (value: 'value option) : TaskFlow<'env, 'error, 'value> =
-        match value with
-        | Some innerValue -> succeed innerValue
-        | None -> fail error
+        value
+        |> OptionFlow.toResult error
+        |> fromResult
 
     /// <summary>Lifts a value option into a task flow with the supplied error.</summary>
     /// <param name="error">The error of type <c>'error</c> to return if the value option is <see cref="T:Microsoft.FSharp.Core.FSharpValueOption`1.ValueNone" />.</param>
     /// <param name="value">The value option to lift.</param>
     /// <returns>A task flow succeeding with the option's value or failing.</returns>
     let fromValueOption (error: 'error) (value: 'value voption) : TaskFlow<'env, 'error, 'value> =
-        match value with
-        | ValueSome innerValue -> succeed innerValue
-        | ValueNone -> fail error
+        value
+        |> OptionFlow.toResultValueOption error
+        |> fromResult
 
     let orElseTask
         (errorTask: Task<'error>)
@@ -467,18 +507,18 @@ module TaskFlow =
         traverse id flows
 
     /// <summary>Provides a derived environment from a layer flow to a downstream task flow.</summary>
-    /// <remarks>
-    /// This allows for modular environment construction where a <see cref="T:FsFlow.Layer`3" /> 
-    /// is used to satisfy the requirements of a subsequent flow.
-    /// </remarks>
-    /// <param name="layer">A task flow that produces the environment for the next step.</param>
-    /// <param name="flow">The task flow to run with the produced environment.</param>
-    /// <returns>A task flow representing the layered composition.</returns>
     let provideLayer
         (layer: TaskFlow<'input, 'error, 'environment>)
         (flow: TaskFlow<'environment, 'error, 'value>)
         : TaskFlow<'input, 'error, 'value> =
-        bind (fun environment -> flow |> localEnv (fun _ -> environment)) layer
+        TaskFlow(fun environment cancellationToken ->
+            task {
+                let! outcome = run environment cancellationToken layer
+
+                match outcome with
+                | Ok environment -> return! run environment cancellationToken (flow |> localEnv (fun _ -> environment))
+                | Error error -> return Error error
+            })
 
     /// <summary>
     /// Task-native runtime helpers for operational concerns like logging, timeout, retry, and scoped cleanup.
@@ -712,16 +752,10 @@ module TaskFlowSpec =
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 [<RequireQualifiedAccess>]
 module Capability =
-    /// <summary>Describes a missing service-provider capability.</summary>
-    type MissingCapability =
-        {
-            /// <summary>The requested capability type.</summary>
-            CapabilityType: Type
-        }
-
     /// <summary>Reads a capability from a record-based environment projection.</summary>
-    let service (projection: 'env -> 'service) : TaskFlow<'env, 'error, 'service> =
-        TaskFlow.read projection
+    let inline service (projection: 'env -> 'service) : ^flow
+        when ^flow : (static member CapabilityService : ('env -> 'service) -> ^flow) =
+        (^flow : (static member CapabilityService : ('env -> 'service) -> ^flow) projection)
 
     /// <summary>Reads a capability from the runtime half of a two-context runtime environment.</summary>
     let runtime
@@ -747,13 +781,14 @@ module Capability =
                         })
             | value -> Task.FromResult(Ok(unbox<'service> value)))
 
-/// <summary>
-/// Layer helpers for deriving an environment in one flow and consuming it in another.
-/// </summary>
-/// <typeparam name="input">The input environment type for the layer.</typeparam>
-/// <typeparam name="error">The error type carried by the layer.</typeparam>
-/// <typeparam name="output">The output environment type produced by the layer.</typeparam>
-type Layer<'input, 'error, 'output> = TaskFlow<'input, 'error, 'output>
+/// <summary>Helpers for deriving an environment in one flow and consuming it in another.</summary>
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+[<RequireQualifiedAccess>]
+module Layer =
+    /// <summary>Provides a derived environment from a layer flow to a downstream flow.</summary>
+    let inline provideLayer (layer: ^layer) (flow: ^flow) : ^flow
+        when ^flow : (static member ProvideLayer : ^layer * ^flow -> ^flow) =
+        (^flow : (static member ProvideLayer : ^layer * ^flow -> ^flow) (layer, flow))
 
 /// [omit]
 /// <exclude/>

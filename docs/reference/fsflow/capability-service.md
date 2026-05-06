@@ -9,7 +9,7 @@ Reads a capability from a record-based environment projection.
 
 
 ```fsharp
-let service (projection: 'env -> 'service) : TaskFlow<'env, 'error, 'service>
+let inline service (projection: 'env -> 'service) : ^flow when ^flow : (static member CapabilityService : ('env -> 'service) -> ^flow)
 ```
 
 
@@ -18,5 +18,5 @@ let service (projection: 'env -> 'service) : TaskFlow<'env, 'error, 'service>
 ## Information
 
 - **Module**: `Capability`
-- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs#L723)
+- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs#L756)
 

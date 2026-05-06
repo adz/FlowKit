@@ -9,11 +9,11 @@ This page shows the source-documented `TaskFlowSpec` surface, used for defining 
 
 ## Core type
 
-- type `TaskFlowSpec`: Describes a task-flow program that is built against a runtime context and later executed with a cancellation token. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs#L673)
+- type [`TaskFlowSpec`](./taskflow-spec.md): Describes a task-flow program that is built against a runtime context and later executed with a cancellation token. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs#L713)
 
 ## Module functions
 
-- module `TaskFlowSpec`: Helpers for creating and running `TaskFlowSpec{runtime, env, error, value}` values. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs#L688)
-- [`TaskFlowSpec.create`](./taskflowspec-create.md): Creates a task-flow spec from runtime services, application dependencies, and a build function. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs#L690)
-- [`TaskFlowSpec.run`](./taskflowspec-run.md): Runs the spec with the supplied cancellation token. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs#L702)
+- module [`TaskFlowSpec`](./taskflow-spec.md): Helpers for creating and running `TaskFlowSpec{runtime, env, error, value}` values. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs#L728)
+- [`TaskFlowSpec.create`](./taskflowspec-create.md): Creates a task-flow spec from runtime services, application dependencies, and a build function. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs#L730)
+- [`TaskFlowSpec.run`](./taskflowspec-run.md): Runs the spec with the supplied cancellation token. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs#L742)
 

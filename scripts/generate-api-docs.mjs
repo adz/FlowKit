@@ -30,7 +30,7 @@ const pageSpecs = [
       },
       {
         title: 'Module functions',
-        symbols: ['module:Flow', 'Flow.run', 'Flow.succeed', 'Flow.value', 'Flow.fail', 'Flow.fromResult', 'Flow.fromOption', 'Flow.fromValueOption', 'Flow.orElseFlow', 'Flow.env', 'Flow.read', 'Flow.map', 'Flow.bind', 'Flow.tap', 'Flow.tapError', 'Flow.mapError', 'Flow.catch', 'Flow.orElse', 'Flow.zip', 'Flow.map2', 'Flow.localEnv', 'Flow.delay', 'Flow.traverse', 'Flow.sequence'],
+        symbols: ['module:Flow', 'Flow.run', 'Flow.succeed', 'Flow.value', 'Flow.fail', 'Flow.fromResult', 'Flow.fromOption', 'Flow.fromValueOption', 'Flow.orElseFlow', 'Flow.env', 'Flow.read', 'Flow.map', 'Flow.bind', 'Flow.tap', 'Flow.tapError', 'Flow.mapError', 'Flow.catch', 'Flow.orElse', 'Flow.zip', 'Flow.map2', 'Flow.localEnv', 'Flow.provideLayer', 'Flow.delay', 'Flow.traverse', 'Flow.sequence'],
       },
     ],
   },
@@ -53,7 +53,7 @@ const pageSpecs = [
       },
       {
         title: 'Module functions',
-        symbols: ['module:AsyncFlow', 'AsyncFlow.run', 'AsyncFlow.toAsync', 'AsyncFlow.succeed', 'AsyncFlow.fail', 'AsyncFlow.fromResult', 'AsyncFlow.fromOption', 'AsyncFlow.fromValueOption', 'AsyncFlow.orElseAsync', 'AsyncFlow.orElseAsyncFlow', 'AsyncFlow.fromFlow', 'AsyncFlow.fromAsync', 'AsyncFlow.fromAsyncResult', 'AsyncFlow.env', 'AsyncFlow.read', 'AsyncFlow.map', 'AsyncFlow.bind', 'AsyncFlow.tap', 'AsyncFlow.tapError', 'AsyncFlow.mapError', 'AsyncFlow.catch', 'AsyncFlow.orElse', 'AsyncFlow.zip', 'AsyncFlow.map2', 'AsyncFlow.localEnv', 'AsyncFlow.delay', 'AsyncFlow.traverse', 'AsyncFlow.sequence'],
+        symbols: ['module:AsyncFlow', 'AsyncFlow.run', 'AsyncFlow.toAsync', 'AsyncFlow.succeed', 'AsyncFlow.value', 'AsyncFlow.fail', 'AsyncFlow.fromResult', 'AsyncFlow.fromOption', 'AsyncFlow.fromValueOption', 'AsyncFlow.orElseAsync', 'AsyncFlow.orElseFlow', 'AsyncFlow.orElseAsyncFlow', 'AsyncFlow.fromFlow', 'AsyncFlow.fromAsync', 'AsyncFlow.fromAsyncResult', 'AsyncFlow.env', 'AsyncFlow.read', 'AsyncFlow.map', 'AsyncFlow.bind', 'AsyncFlow.tap', 'AsyncFlow.tapError', 'AsyncFlow.mapError', 'AsyncFlow.catch', 'AsyncFlow.orElse', 'AsyncFlow.zip', 'AsyncFlow.map2', 'AsyncFlow.localEnv', 'AsyncFlow.provideLayer', 'AsyncFlow.delay', 'AsyncFlow.traverse', 'AsyncFlow.sequence'],
       },
     ],
   },
@@ -167,7 +167,7 @@ const pageSpecs = [
     description: 'Source-documented task workflow surface in FsFlow.',
     intro:
       'This page shows the source-documented `TaskFlow` surface: the core type, the module functions, and the `taskFlow { }` builder.',
-    sourceFiles: ['src/FsFlow/TaskFlow.fs'],
+    sourceFiles: ['src/FsFlow/Flow.fs', 'src/FsFlow/AsyncFlow.fs', 'src/FsFlow/TaskFlow.fs'],
     sections: [
       
       {
@@ -180,7 +180,7 @@ const pageSpecs = [
       },
       {
         title: 'Module functions',
-        symbols: ['module:TaskFlow', 'TaskFlow.run', 'TaskFlow.runContext', 'TaskFlow.toTask', 'TaskFlow.succeed', 'TaskFlow.fail', 'TaskFlow.fromResult', 'TaskFlow.fromOption', 'TaskFlow.fromValueOption', 'TaskFlow.orElseTask', 'TaskFlow.orElseAsync', 'TaskFlow.orElseFlow', 'TaskFlow.orElseAsyncFlow', 'TaskFlow.orElseTaskFlow', 'TaskFlow.fromFlow', 'TaskFlow.fromAsyncFlow', 'TaskFlow.fromTask', 'TaskFlow.fromTaskResult', 'TaskFlow.env', 'TaskFlow.read', 'TaskFlow.readRuntime', 'TaskFlow.readEnvironment', 'TaskFlow.map', 'TaskFlow.bind', 'TaskFlow.tap', 'TaskFlow.tapError', 'TaskFlow.mapError', 'TaskFlow.catch', 'TaskFlow.orElse', 'TaskFlow.zip', 'TaskFlow.map2', 'TaskFlow.localEnv', 'TaskFlow.delay', 'TaskFlow.traverse', 'TaskFlow.sequence'],
+        symbols: ['module:TaskFlow', 'TaskFlow.run', 'TaskFlow.runContext', 'TaskFlow.toTask', 'TaskFlow.succeed', 'TaskFlow.value', 'TaskFlow.fail', 'TaskFlow.fromResult', 'TaskFlow.fromOption', 'TaskFlow.fromValueOption', 'TaskFlow.orElseTask', 'TaskFlow.orElseAsync', 'TaskFlow.orElseFlow', 'TaskFlow.orElseAsyncFlow', 'TaskFlow.orElseTaskFlow', 'TaskFlow.fromFlow', 'TaskFlow.fromAsyncFlow', 'TaskFlow.fromTask', 'TaskFlow.fromTaskResult', 'TaskFlow.env', 'TaskFlow.read', 'TaskFlow.readRuntime', 'TaskFlow.readEnvironment', 'TaskFlow.map', 'TaskFlow.bind', 'TaskFlow.tap', 'TaskFlow.tapError', 'TaskFlow.mapError', 'TaskFlow.catch', 'TaskFlow.orElse', 'TaskFlow.zip', 'TaskFlow.map2', 'TaskFlow.localEnv', 'TaskFlow.provideLayer', 'TaskFlow.delay', 'TaskFlow.traverse', 'TaskFlow.sequence'],
       },
     ],
   },
@@ -208,7 +208,7 @@ const pageSpecs = [
     description: 'Source-documented task workflow specification for FsFlow.',
     intro:
       'This page shows the source-documented `TaskFlowSpec` surface, used for defining and running task workflows with explicit configurations.',
-    sourceFiles: ['src/FsFlow/TaskFlow.fs'],
+    sourceFiles: ['src/FsFlow/Flow.fs', 'src/FsFlow/AsyncFlow.fs', 'src/FsFlow/TaskFlow.fs'],
     sections: [
       {
         title: 'Core type',
@@ -226,15 +226,15 @@ const pageSpecs = [
     description: 'Source-documented capabilities and layers for FsFlow.',
     intro:
       'This page shows the source-documented capability and layer surface, used for dependency injection and environment management in task workflows.',
-    sourceFiles: ['src/FsFlow/TaskFlow.fs'],
+    sourceFiles: ['src/FsFlow/Core.fs', 'src/FsFlow/TaskFlow.fs'],
     sections: [
       {
         title: 'Capabilities',
-        symbols: ['module:Capability', 'Capability.MissingCapability', 'Capability.service', 'Capability.runtime', 'Capability.environment', 'Capability.serviceFromProvider'],
+        symbols: ['module:Capability', 'MissingCapability', 'Capability.service', 'Capability.runtime', 'Capability.environment', 'Capability.serviceFromProvider'],
       },
       {
         title: 'Layers',
-        symbols: ['type:Layer'],
+        symbols: ['module:Layer', 'Layer.provideLayer'],
       },
     ],
   },
@@ -244,7 +244,7 @@ const pageSpecs = [
     description: 'Source-documented delayed task helpers used by FsFlow.',
     intro:
       'This page shows the source-documented `ColdTask` surface: the delayed task helper used to anchor execution to the runtime context.',
-    sourceFiles: ['src/FsFlow/TaskFlow.fs'],
+    sourceFiles: ['src/FsFlow/Flow.fs', 'src/FsFlow/AsyncFlow.fs', 'src/FsFlow/TaskFlow.fs'],
     sections: [
       {
         title: 'Core type',
@@ -262,11 +262,11 @@ const pageSpecs = [
     description: 'Source-documented task and async interop helpers for FsFlow.',
     intro:
       'This page shows the interop helpers that bridge task, async, and synchronous boundaries in FsFlow.',
-    sourceFiles: ['src/FsFlow/TaskFlow.fs'],
+    sourceFiles: ['src/FsFlow/Flow.fs', 'src/FsFlow/AsyncFlow.fs', 'src/FsFlow/TaskFlow.fs'],
     sections: [
       {
         title: 'TaskFlow bridges',
-        symbols: ['TaskFlow.fromFlow', 'TaskFlow.fromAsyncFlow', 'TaskFlow.orElseTask', 'TaskFlow.orElseAsync', 'TaskFlow.orElseFlow', 'TaskFlow.orElseAsyncFlow', 'TaskFlow.orElseTaskFlow'],
+        symbols: ['TaskFlow.fromFlow', 'TaskFlow.fromAsyncFlow', 'TaskFlow.orElseTask', 'TaskFlow.orElseAsync', 'TaskFlow.orElseFlow', 'TaskFlow.orElseAsyncFlow', 'TaskFlow.orElseTaskFlow', 'Flow.provideLayer', 'AsyncFlow.provideLayer', 'TaskFlow.provideLayer'],
       },
       {
         title: 'Builder extensions',
@@ -384,6 +384,76 @@ function extractSignature(lines, startIndex) {
   return signature.split('=')[0].split('{')[0].trim();
 }
 
+function normalizeDocKey(value) {
+  return value.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+function getFunctionPageName(qualifiedName) {
+  return `${qualifiedName.toLowerCase().split('.').join('-')}.md`;
+}
+
+function formatMarkdownLinkTarget(targetPath) {
+  return targetPath.startsWith('.') ? targetPath : `./${targetPath}`;
+}
+
+function resolveModuleOrTypePagePath(pageIndex, qualifiedName, currentPagePath, kindHint) {
+  const normalizedName = normalizeDocKey(qualifiedName);
+  const indexedPage = pageIndex.get(normalizedName);
+  if (indexedPage) {
+    return path.relative(path.dirname(currentPagePath), indexedPage).split(path.sep).join('/');
+  }
+
+  if (kindHint === 'type') {
+    return getFunctionPageName(qualifiedName);
+  }
+
+  return null;
+}
+
+function extractTypeConstructors(filePath, typeLineNumber) {
+  const lines = readLines(filePath);
+  const typeIndex = typeLineNumber - 1;
+  const typeLine = lines[typeIndex];
+  if (typeLine.includes('private')) {
+    return [];
+  }
+
+  const typeIndent = typeLine.match(/^ */)?.[0].length ?? 0;
+  const constructors = [];
+
+  for (let i = typeIndex + 1; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    const indent = line.match(/^ */)?.[0].length ?? 0;
+
+    if (trimmed === '' || trimmed.startsWith('///') || isAttributeLine(line)) {
+      continue;
+    }
+
+    if (indent <= typeIndent && !trimmed.startsWith('|')) {
+      break;
+    }
+
+    if (!trimmed.startsWith('|')) {
+      continue;
+    }
+
+    const constructorSource = trimmed.replace(/^\|\s*/, '');
+    const constructorNameMatch = constructorSource.match(/^(?:(``([^`]+)``)|([A-Za-z_][A-Za-z0-9_']*))/);
+    if (!constructorNameMatch) {
+      continue;
+    }
+
+    constructors.push({
+      name: constructorNameMatch[2] || constructorNameMatch[3],
+      signature: constructorSource,
+      line: i + 1,
+    });
+  }
+
+  return constructors;
+}
+
 function extractSymbols(filePath) {
   const lines = readLines(filePath);
   const symbols = new Map();
@@ -484,6 +554,16 @@ function extractSymbols(filePath) {
   return symbols;
 }
 
+function buildPageIndex() {
+  const pageIndex = new Map();
+  for (const spec of pageSpecs) {
+    const pagePath = path.resolve(repoRoot, 'docs', 'reference', ...spec.outPath);
+    pageIndex.set(normalizeDocKey(spec.title), pagePath);
+  }
+
+  return pageIndex;
+}
+
 function makeSourceLink(filePath, line) {
   const relPath = path.relative(repoRoot, filePath).split(path.sep).join('/');
   return `${githubBase}/${relPath}#L${line}`;
@@ -506,7 +586,7 @@ function resolveSymbolDoc(symbols, qualifiedName, kindHint) {
   return docs.find((doc) => doc.kind === 'module') ?? docs.find((doc) => doc.kind === 'type') ?? docs[0];
 }
 
-function renderFunctionPage(spec, symbolRef, symbolsByFile) {
+function renderFunctionPage(spec, symbolRef, symbolsByFile, pageIndex, currentPagePath) {
   const [sourceAlias, symbolWithKind] = symbolRef.includes('::') ? symbolRef.split('::', 2) : [null, symbolRef];
   const [kindHint, qualifiedName] = symbolWithKind.includes(':') ? symbolWithKind.split(':', 2) : [null, symbolWithKind];
   
@@ -527,6 +607,10 @@ function renderFunctionPage(spec, symbolRef, symbolsByFile) {
 
   const shortName = qualifiedName.split('.').pop();
   const parentName = qualifiedName.includes('.') ? qualifiedName.substring(0, qualifiedName.lastIndexOf('.')) : '';
+  const modulePagePath = kindHint === 'module'
+    ? resolveModuleOrTypePagePath(pageIndex, qualifiedName, currentPagePath, kindHint)
+    : null;
+  const constructors = kindHint === 'type' ? extractTypeConstructors(doc.filePath, doc.line) : [];
 
   let content = `---
 title: ${shortName}
@@ -543,6 +627,14 @@ ${doc.remarks ? `## Remarks\n\n${doc.remarks}\n` : ''}
 
 `;
 
+  if (constructors.length > 0) {
+    content += `## Constructors\n\n`;
+    for (const ctor of constructors) {
+      content += `- \`${ctor.signature}\` [source](${makeSourceLink(doc.filePath, ctor.line)})\n`;
+    }
+    content += '\n';
+  }
+
   if (doc.params && doc.params.length > 0) {
     content += `## Parameters\n\n`;
     for (const p of doc.params) {
@@ -557,7 +649,7 @@ ${doc.remarks ? `## Remarks\n\n${doc.remarks}\n` : ''}
 
   content += `## Information
 
-- **Module**: ${parentName ? `\`${parentName}\`` : 'Global'}
+- **Module**: ${parentName ? (modulePagePath ? `[\`${parentName}\`](${formatMarkdownLinkTarget(modulePagePath)})` : `\`${parentName}\``) : 'Global'}
 - **Source**: [source](${makeSourceLink(doc.filePath, doc.line)})
 
 `;
@@ -572,7 +664,7 @@ ${doc.remarks ? `## Remarks\n\n${doc.remarks}\n` : ''}
   return content;
 }
 
-function renderItem(symbols, sourcePath, symbolRef, pagePath) {
+function renderItem(symbols, sourcePath, symbolRef, pagePath, pageIndex) {
   const [sourceAlias, rawSymbol] = symbolRef.includes('::') ? symbolRef.split('::', 2) : [null, symbolRef];
   const symbolWithKind = sourceAlias && sourceAlias.includes(':') ? sourceAlias : rawSymbol;
   const [kindHint, qualifiedName] = symbolWithKind.includes(':') ? symbolWithKind.split(':', 2) : [null, symbolWithKind];
@@ -581,18 +673,24 @@ function renderItem(symbols, sourcePath, symbolRef, pagePath) {
     throw new Error(`Missing symbol doc for ${symbolRef} in ${sourcePath}`);
   }
 
-  const functionPageName = qualifiedName.toLowerCase().split('.').join('-');
-  
-  const isLinkable = doc.kind === 'let';
-  const label = isLinkable 
-    ? `[\`${qualifiedName}\`](./${functionPageName}.md)`
-    : `${doc.kind} \`${qualifiedName}\``;
+  const functionPageName = getFunctionPageName(qualifiedName);
+  const targetPath =
+    doc.kind === 'let'
+      ? `./${functionPageName}`
+      : resolveModuleOrTypePagePath(pageIndex, qualifiedName, pagePath, doc.kind);
+
+  const label =
+    doc.kind === 'let'
+      ? `[\`${qualifiedName}\`](${formatMarkdownLinkTarget(functionPageName)})`
+      : targetPath
+        ? `${doc.kind} [\`${qualifiedName}\`](${formatMarkdownLinkTarget(targetPath)})`
+        : `${doc.kind} \`${qualifiedName}\``;
     
   const summary = doc.summary ? `: ${doc.summary}` : '';
   return `- ${label}${summary} [source](${makeSourceLink(sourcePath, doc.line)})`;
 }
 
-function renderPage(spec, symbolsByFile, outPath) {
+function renderPage(spec, symbolsByFile, outPath, pageIndex) {
   let content = `---
 title: ${spec.title}
 description: ${spec.description}
@@ -620,7 +718,21 @@ ${spec.intro}
         const symbols = symbolsByFile.get(fullPath);
         if (symbols) {
           try {
-            content += renderItem(symbols, fullPath, symbolRef, outPath) + '\n';
+            const [sourceAliasInner, rawSymbol] = symbolRef.includes('::') ? symbolRef.split('::', 2) : [null, symbolRef];
+            const symbolWithKind = sourceAliasInner && sourceAliasInner.includes(':') ? sourceAliasInner : rawSymbol;
+            const [kindHint, qualifiedName] = symbolWithKind.includes(':') ? symbolWithKind.split(':', 2) : [null, symbolWithKind];
+            const doc = resolveSymbolDoc(symbols, qualifiedName, kindHint);
+            content += renderItem(symbols, fullPath, symbolRef, outPath, pageIndex) + '\n';
+            if (doc && doc.kind === 'type') {
+              const constructors = extractTypeConstructors(doc.filePath, doc.line);
+              if (constructors.length > 0) {
+                content += `### Constructors\n\n`;
+                for (const ctor of constructors) {
+                  content += `- \`${ctor.signature}\` [source](${makeSourceLink(doc.filePath, ctor.line)})\n`;
+                }
+                content += '\n';
+              }
+            }
             found = true;
             break;
           } catch (e) {
@@ -661,22 +773,23 @@ function generate() {
     symbolsByFile.set(path.resolve(repoRoot, file), extractSymbols(path.resolve(repoRoot, file)));
   }
 
+  const pageIndex = buildPageIndex();
+
   for (const targetRoot of targets) {
     for (const spec of pageSpecs) {
       const outPath = path.join(targetRoot, ...spec.outPath);
       ensureDir(path.dirname(outPath));
-      fs.writeFileSync(outPath, renderPage(spec, symbolsByFile, outPath), 'utf8');
+      fs.writeFileSync(outPath, renderPage(spec, symbolsByFile, outPath, pageIndex), 'utf8');
 
       // Generate individual function pages
       for (const section of spec.sections) {
         for (const symbolRef of section.symbols) {
           const [sourceAlias, symbolWithKind] = symbolRef.includes('::') ? symbolRef.split('::', 2) : [null, symbolRef];
           const [kindHint, qualifiedName] = symbolWithKind.includes(':') ? symbolWithKind.split(':', 2) : [null, symbolWithKind];
-          if (kindHint === 'module' || kindHint === 'type') continue;
+          if (kindHint === 'module') continue;
           
-          const functionPageName = qualifiedName.toLowerCase().split('.').join('-');
-          const functionPagePath = path.join(path.dirname(outPath), functionPageName + '.md');
-          fs.writeFileSync(functionPagePath, renderFunctionPage(spec, symbolRef, symbolsByFile), 'utf8');
+          const functionPagePath = path.join(path.dirname(outPath), getFunctionPageName(qualifiedName));
+          fs.writeFileSync(functionPagePath, renderFunctionPage(spec, symbolRef, symbolsByFile, pageIndex, outPath), 'utf8');
         }
       }
     }
