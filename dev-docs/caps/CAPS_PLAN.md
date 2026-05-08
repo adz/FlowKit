@@ -1,7 +1,11 @@
 # FsFlow Capability Plan
 ## Corrected capability architecture
 
-This document is the current source of truth for the FsFlow capability system.
+Status: historical. This document records the corrected structural-accessor plan after removing
+invalid SRTP trait aliases. The current recommendation is in `CAPS_SUMMARY.md`, which prefers
+nominal micro-capability interfaces for the 1.0 strict capability model.
+
+This document is no longer the current source of truth for the FsFlow capability system.
 
 The key correction from earlier drafts:
 

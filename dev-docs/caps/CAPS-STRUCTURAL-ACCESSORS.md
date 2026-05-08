@@ -1,7 +1,11 @@
 # Structural Accessor Pattern
 ## Anonymous records + SRTP trait accessors
 
-This is the preferred strict FsFlow model for pure F# code. It combines SRTP member constraints with anonymous records to create a low-boilerplate, structural capability model.
+Status: historical research. This was the preferred strict FsFlow model in an earlier design pass, but
+`CAPS_RECOMMENDED_MODEL.md` now supersedes it for the 1.0 direction.
+
+This model combines SRTP member constraints with anonymous records to create a low-boilerplate, structural
+capability model.
 
 The key correction from earlier drafts is this:
 
@@ -160,7 +164,7 @@ Conclusion:
 
 ## Verdict
 
-This remains the preferred strict model, but for a different reason than the earlier “Trait Alias” design claimed.
+This remains valuable research, but it is no longer the preferred 1.0 strict model.
 
 The winning idea is not named requirement types. The winning idea is:
 
