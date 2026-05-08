@@ -95,6 +95,7 @@ The operator story belongs to the same layer.
 - `>>=` sequences dependent steps
 
 Those names are useful because they describe the shape of the flow, not a separate abstraction. They are just different ways to say "stay in `Result`, keep going when the previous step worked, and stop when it failed."
+`<!>` is the lift step for a pure function. `<*>` expects a function that is already inside `Result`, so the lifted function value must already exist on its left-hand side.
 
 For a pure registration command, the operator form reads like this:
 
@@ -103,9 +104,10 @@ let createRegistration name mobile =
     { Name = name; Mobile = mobile }
 
 let validateCommandWithOperators (command: RegistrationCommand) : Result<Registration, RegistrationError> =
-    createRegistration
-    <!> requireName command.Name
-    <*> requireMobile command.Mobile
+    let createRegistrationForName =
+        createRegistration <!> requireName command.Name
+
+    createRegistrationForName <*> requireMobile command.Mobile
 ```
 
 When the second step depends on the first, `>>=` is the clearer spelling:
@@ -161,7 +163,7 @@ let completeRegistrationWorkflow
     (command: RegistrationCommand)
     : AsyncFlow<unit, RegistrationError, CompleteRegistrationResult> =
     asyncFlow {
-        let! registration = validateCommand command |> AsyncFlow.fromResult
+        let! registration = validateCommand command
 
         let! proofIsValid =
             match proofId with
@@ -169,14 +171,13 @@ let completeRegistrationWorkflow
                 AsyncFlow.succeed false
             | Some proofId ->
                 deps.VerifyProof registration.Mobile proofId
-                |> AsyncFlow.fromAsync
 
         match decideRegistration proofIsValid registration with
         | Complete registration ->
-            do! deps.CompleteRegistration registration |> AsyncFlow.fromAsync
+            do! deps.CompleteRegistration registration
             return RegistrationCompleted
         | RequestProof mobile ->
-            let! proofId = deps.CreateProof mobile |> AsyncFlow.fromAsync
+            let! proofId = deps.CreateProof mobile
             return ProofRequired proofId
     }
 ```
