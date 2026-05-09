@@ -23,7 +23,7 @@ The numbered items below are intentionally linear so the ralph loop can move thr
    `ValueTask<Result<_,_>>`, `ColdTask`, `ColdTask<Result<_,_>>`, `option` when `error = unit`, and
    `voption` when `error = unit`; cover representative projection tests without duplicating every
    existing builder test.
-4. [ ] Prove the named cap-set runtime pattern:
+4. [x] Prove the named cap-set runtime pattern:
    add tests and runnable examples showing fine-grained caps with default `Needs<'dep>`
    implementations, composed use-case caps, larger app runtimes satisfying smaller flows, and small
    test runtimes; include the flexible type style (`TaskFlow<#SomeCaps, _, _>`) where it improves

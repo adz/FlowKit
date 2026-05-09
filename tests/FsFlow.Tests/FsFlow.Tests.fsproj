@@ -10,6 +10,7 @@
   <ItemGroup>
     <Compile Include="TestSupport.fs" />
     <Compile Include="CapsPrimitiveTests.fs" />
+    <Compile Include="CapsRuntimePatternTests.fs" />
     <Compile Include="WorkflowTests.fs" />
     <Compile Include="ValidationTests.fs" />
   </ItemGroup>
