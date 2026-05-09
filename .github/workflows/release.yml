@@ -26,18 +26,30 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+
+      - name: Set up Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: 'latest'
+          extended: true
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
-          cache: npm
-          cache-dependency-path: site/package-lock.json
 
       - name: Restore local tools
         run: dotnet tool restore
 
       - name: Restore
         run: dotnet restore
+
+      - name: Install PostCSS dependencies
+        run: npm install --prefix site
 
       - name: Run test harness
         run: dotnet run --project tests/FsFlow.Tests/FsFlow.Tests.fsproj --nologo
