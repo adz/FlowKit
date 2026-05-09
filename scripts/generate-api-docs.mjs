@@ -603,14 +603,17 @@ function renderFunctionPage(spec, symbolRef, symbolsByFile, pageIndex, currentPa
     : null;
   const constructors = kindHint === 'type' ? extractTypeConstructors(doc.filePath, doc.line) : [];
   const isMultiType = kindHint === 'type' && docs.length > 1;
+  const bareBuilderSignature = doc.signature && doc.signature.trim() === `let ${shortName}`;
+  const showSignatureBlock = doc.signature && !(kindHint === 'type' && docs.length > 1) && !bareBuilderSignature;
 
   let content = `---
-title: ${shortName}
+title: ${qualifiedName}
+linkTitle: ${shortName}
 ---
 
 ${doc.summary || ''}
 
-${doc.signature ? `\n\`\`\`fsharp\n${doc.signature}\n\`\`\`\n` : ''}
+${showSignatureBlock ? `\n\`\`\`fsharp\n${doc.signature}\n\`\`\`\n` : ''}
 
 ${doc.remarks ? `## Remarks\n\n${doc.remarks}\n` : ''}
 
