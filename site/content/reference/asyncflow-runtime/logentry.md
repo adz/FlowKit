@@ -1,5 +1,6 @@
 ---
 title: LogEntry
+linkTitle: LogEntry
 type: docs
 ---
 

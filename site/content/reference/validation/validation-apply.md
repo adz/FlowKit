@@ -1,5 +1,6 @@
 ---
-title: apply
+title: Validation.apply
+linkTitle: apply
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: ignore
+title: Validation.ignore
+linkTitle: ignore
 type: docs
 ---
 

@@ -30,7 +30,7 @@
     {{- end -}}
     
     {{- $matches := slice -}}
-    {{- range site.AllPages -}}
+    {{- range site.Pages -}}
       {{- if .File -}}
         {{- if eq (lower (path.Base .File.Path)) $targetFile -}}
           {{- $matches = $matches | append . -}}

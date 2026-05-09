@@ -1,5 +1,6 @@
 ---
-title: zip
+title: Flow.zip
+linkTitle: zip
 type: docs
 ---
 

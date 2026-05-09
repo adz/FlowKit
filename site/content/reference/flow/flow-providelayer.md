@@ -1,5 +1,6 @@
 ---
-title: provideLayer
+title: Flow.provideLayer
+linkTitle: provideLayer
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: flatten
+title: Diagnostics.flatten
+linkTitle: flatten
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: read
+title: AsyncFlow.read
+linkTitle: read
 type: docs
 ---
 

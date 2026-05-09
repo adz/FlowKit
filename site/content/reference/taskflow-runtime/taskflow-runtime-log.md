@@ -1,5 +1,6 @@
 ---
-title: log
+title: TaskFlow.Runtime.log
+linkTitle: log
 type: docs
 ---
 

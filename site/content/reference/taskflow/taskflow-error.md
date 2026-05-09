@@ -1,5 +1,6 @@
 ---
-title: error
+title: TaskFlow.error
+linkTitle: error
 type: docs
 ---
 

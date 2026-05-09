@@ -1,5 +1,6 @@
 ---
-title: ignore
+title: Flow.ignore
+linkTitle: ignore
 type: docs
 ---
 

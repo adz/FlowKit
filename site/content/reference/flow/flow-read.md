@@ -1,5 +1,6 @@
 ---
-title: read
+title: Flow.read
+linkTitle: read
 type: docs
 ---
 

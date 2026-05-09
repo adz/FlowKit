@@ -1,5 +1,6 @@
 ---
 title: Path
+linkTitle: Path
 type: docs
 ---
 

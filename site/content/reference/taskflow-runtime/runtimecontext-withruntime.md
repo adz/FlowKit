@@ -1,5 +1,6 @@
 ---
-title: withRuntime
+title: RuntimeContext.withRuntime
+linkTitle: withRuntime
 type: docs
 ---
 

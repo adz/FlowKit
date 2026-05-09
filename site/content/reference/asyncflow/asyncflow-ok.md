@@ -1,5 +1,6 @@
 ---
-title: ok
+title: AsyncFlow.ok
+linkTitle: ok
 type: docs
 ---
 

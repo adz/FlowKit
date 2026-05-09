@@ -1,5 +1,6 @@
 ---
-title: mapError
+title: Validation.mapError
+linkTitle: mapError
 type: docs
 ---
 

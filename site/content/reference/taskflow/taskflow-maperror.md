@@ -1,5 +1,6 @@
 ---
-title: mapError
+title: TaskFlow.mapError
+linkTitle: mapError
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: logWith
+title: AsyncFlow.Runtime.logWith
+linkTitle: logWith
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: bind
+title: Validation.bind
+linkTitle: bind
 type: docs
 ---
 

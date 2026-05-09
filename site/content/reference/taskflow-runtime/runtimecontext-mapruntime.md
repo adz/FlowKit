@@ -1,5 +1,6 @@
 ---
-title: mapRuntime
+title: RuntimeContext.mapRuntime
+linkTitle: mapRuntime
 type: docs
 ---
 

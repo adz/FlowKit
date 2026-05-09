@@ -1,5 +1,6 @@
 ---
 title: PathSegment
+linkTitle: PathSegment
 type: docs
 ---
 

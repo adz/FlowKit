@@ -1,5 +1,6 @@
 ---
-title: fail
+title: Flow.fail
+linkTitle: fail
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: run
+title: TaskFlow.run
+linkTitle: run
 type: docs
 ---
 

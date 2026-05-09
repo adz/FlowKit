@@ -1,5 +1,6 @@
 ---
-title: singleton
+title: Diagnostics.singleton
+linkTitle: singleton
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: succeed
+title: Flow.succeed
+linkTitle: succeed
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: provideLayer
+title: Layer.provideLayer
+linkTitle: provideLayer
 type: docs
 ---
 

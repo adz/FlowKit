@@ -1,5 +1,6 @@
 ---
-title: apply
+title: Flow.apply
+linkTitle: apply
 type: docs
 ---
 

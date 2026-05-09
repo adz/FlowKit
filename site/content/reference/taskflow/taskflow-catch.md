@@ -1,5 +1,6 @@
 ---
-title: catch
+title: TaskFlow.catch
+linkTitle: catch
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: toString
+title: Diagnostics.toString
+linkTitle: toString
 type: docs
 ---
 

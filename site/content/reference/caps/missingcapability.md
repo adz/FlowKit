@@ -1,5 +1,6 @@
 ---
 title: MissingCapability
+linkTitle: MissingCapability
 type: docs
 ---
 

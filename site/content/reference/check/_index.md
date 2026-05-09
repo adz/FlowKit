@@ -1,5 +1,6 @@
 ---
 title: "Check"
+linkTitle: Check
 type: docs
 weight: 40
 ---

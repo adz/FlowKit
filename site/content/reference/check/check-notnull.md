@@ -1,5 +1,6 @@
 ---
-title: notNull
+title: Check.notNull
+linkTitle: notNull
 type: docs
 ---
 

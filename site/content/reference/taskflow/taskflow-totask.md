@@ -1,5 +1,6 @@
 ---
-title: toTask
+title: TaskFlow.toTask
+linkTitle: toTask
 type: docs
 ---
 

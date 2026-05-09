@@ -1,5 +1,6 @@
 ---
-title: name
+title: Validation.name
+linkTitle: name
 type: docs
 ---
 

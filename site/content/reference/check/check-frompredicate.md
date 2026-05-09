@@ -1,5 +1,6 @@
 ---
-title: fromPredicate
+title: Check.fromPredicate
+linkTitle: fromPredicate
 type: docs
 ---
 

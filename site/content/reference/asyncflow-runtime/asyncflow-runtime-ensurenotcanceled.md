@@ -1,5 +1,6 @@
 ---
-title: ensureNotCanceled
+title: AsyncFlow.Runtime.ensureNotCanceled
+linkTitle: ensureNotCanceled
 type: docs
 ---
 

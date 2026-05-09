@@ -1,5 +1,6 @@
 ---
-title: fromResult
+title: TaskFlow.fromResult
+linkTitle: fromResult
 type: docs
 ---
 

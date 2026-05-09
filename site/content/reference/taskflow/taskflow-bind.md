@@ -1,5 +1,6 @@
 ---
-title: bind
+title: TaskFlow.bind
+linkTitle: bind
 type: docs
 ---
 

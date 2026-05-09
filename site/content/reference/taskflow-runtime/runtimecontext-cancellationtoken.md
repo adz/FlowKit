@@ -1,5 +1,6 @@
 ---
-title: cancellationToken
+title: RuntimeContext.cancellationToken
+linkTitle: cancellationToken
 type: docs
 ---
 

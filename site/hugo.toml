@@ -5,6 +5,9 @@ theme = ["github.com/google/docsy"]
 # Language configuration
 defaultContentLanguage = "en"
 
+[outputs]
+  home = ["html", "rss", "json"]
+
 [module]
   [[module.imports]]
     path = "github.com/google/docsy"
@@ -37,11 +40,24 @@ defaultContentLanguage = "en"
     source = "../docs/GETTING_STARTED.md"
     target = "content/docs/start/getting-started.md"
   [[module.mounts]]
-    source = "../docs/VALIDATE_AND_RESULT.md"
-    target = "content/docs/start/validate-and-result.md"
+    source = "../docs/BASIC_EXAMPLES.md"
+    target = "content/docs/start/basic-examples.md"
+
   [[module.mounts]]
-    source = "../docs/TINY_EXAMPLES.md"
-    target = "content/docs/start/tiny-examples.md"
+    source = "../docs/VALIDATE_AND_RESULT.md"
+    target = "content/docs/validation-results/_index.md"
+  [[module.mounts]]
+    source = "../docs/CHECKS.md"
+    target = "content/docs/validation-results/checks.md"
+  [[module.mounts]]
+    source = "../docs/RESULT_CE.md"
+    target = "content/docs/validation-results/result-ce.md"
+  [[module.mounts]]
+    source = "../docs/VALIDATE_CE.md"
+    target = "content/docs/validation-results/validate-ce.md"
+  [[module.mounts]]
+    source = "../docs/DIAGNOSTICS.md"
+    target = "content/docs/validation-results/diagnostics.md"
 
   [[module.mounts]]
     source = "../docs/WHY_FSFLOW.md"
@@ -53,11 +69,14 @@ defaultContentLanguage = "en"
     source = "../docs/TASK_ASYNC_INTEROP.md"
     target = "content/docs/core-model/task-async-interop.md"
   [[module.mounts]]
+    source = "../docs/CAPS.md"
+    target = "content/docs/core-model/managing-dependencies.md"
+  [[module.mounts]]
     source = "../docs/ENV_SLICING.md"
     target = "content/docs/core-model/env-slicing.md"
   [[module.mounts]]
-    source = "../docs/CAPS.md"
-    target = "content/docs/core-model/caps.md"
+    source = "../docs/CAPABILITIES.md"
+    target = "content/docs/core-model/capabilities.md"
   [[module.mounts]]
     source = "../docs/ARCHITECTURAL_STYLES.md"
     target = "content/docs/core-model/architectural-styles.md"
@@ -108,6 +127,7 @@ defaultContentLanguage = "en"
     style = "tango"
 
 [params]
+  offlineSearch = true
   copyright = "Adam Davies"
   github_repo = "https://github.com/adz/FsFlow"
   version = "next"

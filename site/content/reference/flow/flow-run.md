@@ -1,5 +1,6 @@
 ---
-title: run
+title: Flow.run
+linkTitle: run
 type: docs
 ---
 

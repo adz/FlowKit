@@ -1,5 +1,6 @@
 ---
-title: map
+title: Flow.map
+linkTitle: map
 type: docs
 ---
 

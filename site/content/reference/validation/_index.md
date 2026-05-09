@@ -1,5 +1,6 @@
 ---
 title: "Validation"
+linkTitle: Validation
 type: docs
 weight: 60
 ---

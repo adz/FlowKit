@@ -1,5 +1,6 @@
 ---
-title: fail
+title: AsyncFlow.fail
+linkTitle: fail
 type: docs
 ---
 

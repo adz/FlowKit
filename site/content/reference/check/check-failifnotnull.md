@@ -1,5 +1,6 @@
 ---
-title: failIfNotNull
+title: Check.failIfNotNull
+linkTitle: failIfNotNull
 type: docs
 ---
 

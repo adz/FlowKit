@@ -1,5 +1,6 @@
 ---
 title: "TaskFlow"
+linkTitle: TaskFlow
 type: docs
 weight: 30
 ---
@@ -7,10 +8,6 @@ weight: 30
 Represents a cold task-based workflow that reads an environment, observes a runtime cancellation token,
 returns a typed result, and is executed explicitly through `TaskFlow.run`.
 
-
-```fsharp
-type TaskFlow<'env, 'error, 'value>
-```
 
 
 

@@ -1,5 +1,6 @@
 ---
-title: not
+title: Check.not
+linkTitle: not
 type: docs
 ---
 

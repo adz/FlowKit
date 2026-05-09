@@ -1,5 +1,6 @@
 ---
-title: apply
+title: TaskFlow.apply
+linkTitle: apply
 type: docs
 ---
 

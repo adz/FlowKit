@@ -1,5 +1,6 @@
 ---
-title: toAsync
+title: AsyncFlow.toAsync
+linkTitle: toAsync
 type: docs
 ---
 

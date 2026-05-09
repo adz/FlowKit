@@ -1,5 +1,6 @@
 ---
-title: succeed
+title: TaskFlow.succeed
+linkTitle: succeed
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: orElse
+title: Flow.orElse
+linkTitle: orElse
 type: docs
 ---
 

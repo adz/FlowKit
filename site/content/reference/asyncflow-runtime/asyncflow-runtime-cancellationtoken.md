@@ -1,5 +1,6 @@
 ---
-title: cancellationToken
+title: AsyncFlow.Runtime.cancellationToken
+linkTitle: cancellationToken
 type: docs
 ---
 

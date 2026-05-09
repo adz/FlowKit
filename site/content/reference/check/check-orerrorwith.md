@@ -1,5 +1,6 @@
 ---
-title: orErrorWith
+title: Check.orErrorWith
+linkTitle: orErrorWith
 type: docs
 ---
 

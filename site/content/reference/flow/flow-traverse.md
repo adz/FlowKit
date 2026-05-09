@@ -1,5 +1,6 @@
 ---
-title: traverse
+title: Flow.traverse
+linkTitle: traverse
 type: docs
 ---
 

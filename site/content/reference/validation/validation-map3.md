@@ -1,5 +1,6 @@
 ---
-title: map3
+title: Validation.map3
+linkTitle: map3
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
 title: "Diagnostics"
+linkTitle: Diagnostics
 type: docs
 weight: 80
 ---

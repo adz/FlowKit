@@ -1,5 +1,6 @@
 ---
-title: fromResult
+title: Flow.fromResult
+linkTitle: fromResult
 type: docs
 ---
 

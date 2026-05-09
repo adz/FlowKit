@@ -1,5 +1,6 @@
 ---
-title: sequence
+title: Validation.sequence
+linkTitle: sequence
 type: docs
 ---
 

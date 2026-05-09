@@ -1,5 +1,6 @@
 ---
-title: value
+title: Flow.value
+linkTitle: value
 type: docs
 ---
 

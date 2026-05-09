@@ -1,5 +1,6 @@
 ---
-title: map
+title: AsyncFlow.map
+linkTitle: map
 type: docs
 ---
 

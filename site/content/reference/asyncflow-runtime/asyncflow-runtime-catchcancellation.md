@@ -1,5 +1,6 @@
 ---
-title: catchCancellation
+title: AsyncFlow.Runtime.catchCancellation
+linkTitle: catchCancellation
 type: docs
 ---
 

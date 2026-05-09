@@ -1,5 +1,6 @@
 ---
-title: runtime
+title: Capability.runtime
+linkTitle: runtime
 type: docs
 ---
 

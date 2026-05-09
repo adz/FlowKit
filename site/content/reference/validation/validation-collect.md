@@ -1,5 +1,6 @@
 ---
-title: collect
+title: Validation.collect
+linkTitle: collect
 type: docs
 ---
 

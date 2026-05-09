@@ -1,5 +1,6 @@
 ---
-title: timeout
+title: AsyncFlow.Runtime.timeout
+linkTitle: timeout
 type: docs
 ---
 

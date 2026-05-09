@@ -1,5 +1,6 @@
 ---
-title: mapError
+title: Flow.mapError
+linkTitle: mapError
 type: docs
 ---
 

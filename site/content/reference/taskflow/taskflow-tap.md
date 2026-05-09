@@ -1,5 +1,6 @@
 ---
-title: tap
+title: TaskFlow.tap
+linkTitle: tap
 type: docs
 ---
 

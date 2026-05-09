@@ -1,5 +1,6 @@
 ---
-title: ok
+title: Flow.ok
+linkTitle: ok
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: equal
+title: Check.equal
+linkTitle: equal
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: catch
+title: Flow.catch
+linkTitle: catch
 type: docs
 ---
 

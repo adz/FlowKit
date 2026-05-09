@@ -1,5 +1,6 @@
 ---
-title: okIf
+title: Check.okIf
+linkTitle: okIf
 type: docs
 ---
 

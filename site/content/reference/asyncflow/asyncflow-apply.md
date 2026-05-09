@@ -1,5 +1,6 @@
 ---
-title: apply
+title: AsyncFlow.apply
+linkTitle: apply
 type: docs
 ---
 

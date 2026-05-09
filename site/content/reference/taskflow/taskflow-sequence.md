@@ -1,5 +1,6 @@
 ---
-title: sequence
+title: TaskFlow.sequence
+linkTitle: sequence
 type: docs
 ---
 

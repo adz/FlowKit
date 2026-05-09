@@ -1,5 +1,6 @@
 ---
-title: all
+title: Check.all
+linkTitle: all
 type: docs
 ---
 

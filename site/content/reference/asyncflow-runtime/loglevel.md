@@ -1,5 +1,6 @@
 ---
 title: LogLevel
+linkTitle: LogLevel
 type: docs
 ---
 

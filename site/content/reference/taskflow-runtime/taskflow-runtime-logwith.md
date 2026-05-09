@@ -1,5 +1,6 @@
 ---
-title: logWith
+title: TaskFlow.Runtime.logWith
+linkTitle: logWith
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: okIfNonEmptyStr
+title: Check.okIfNonEmptyStr
+linkTitle: okIfNonEmptyStr
 type: docs
 ---
 

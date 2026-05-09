@@ -9,11 +9,6 @@ type: docs
 The fail-fast `result { }` computation expression.
 
 
-```fsharp
-let result
-```
-
-
 ## Remarks
 
 <para>
@@ -45,4 +40,3 @@ let parsedUser =
         return { Age = age; Name = name }
     }
 ```
-

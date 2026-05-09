@@ -1,5 +1,6 @@
 ---
-title: catchCancellation
+title: TaskFlow.Runtime.catchCancellation
+linkTitle: catchCancellation
 type: docs
 ---
 

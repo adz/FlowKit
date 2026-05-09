@@ -1,5 +1,6 @@
 ---
-title: orElseAsyncFlow
+title: AsyncFlow.orElseAsyncFlow
+linkTitle: orElseAsyncFlow
 type: docs
 ---
 

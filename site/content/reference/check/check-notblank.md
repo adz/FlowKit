@@ -1,5 +1,6 @@
 ---
-title: notBlank
+title: Check.notBlank
+linkTitle: notBlank
 type: docs
 ---
 

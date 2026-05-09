@@ -1,5 +1,6 @@
 ---
-title: merge
+title: Diagnostics.merge
+linkTitle: merge
 type: docs
 ---
 

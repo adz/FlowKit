@@ -1,5 +1,6 @@
 ---
-title: service
+title: Capability.service
+linkTitle: service
 type: docs
 ---
 

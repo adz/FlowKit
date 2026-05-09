@@ -1,5 +1,6 @@
 ---
-title: empty
+title: Diagnostics.empty
+linkTitle: empty
 type: docs
 ---
 

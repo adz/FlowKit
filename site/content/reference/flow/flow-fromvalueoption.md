@@ -1,5 +1,6 @@
 ---
-title: fromValueOption
+title: Flow.fromValueOption
+linkTitle: fromValueOption
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: bind
+title: AsyncFlow.bind
+linkTitle: bind
 type: docs
 ---
 

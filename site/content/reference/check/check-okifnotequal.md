@@ -1,5 +1,6 @@
 ---
-title: okIfNotEqual
+title: Check.okIfNotEqual
+linkTitle: okIfNotEqual
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: ensureNotCanceled
+title: TaskFlow.Runtime.ensureNotCanceled
+linkTitle: ensureNotCanceled
 type: docs
 ---
 

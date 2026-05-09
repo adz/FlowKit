@@ -1,5 +1,6 @@
 ---
-title: traverseIndexed
+title: Validation.traverseIndexed
+linkTitle: traverseIndexed
 type: docs
 ---
 

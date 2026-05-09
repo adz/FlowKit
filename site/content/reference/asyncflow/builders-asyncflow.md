@@ -1,14 +1,11 @@
 ---
-title: asyncFlow
+title: Builders.asyncFlow
+linkTitle: asyncFlow
 type: docs
 ---
 
 The core `asyncFlow { }` computation expression.
 
-
-```fsharp
-let asyncFlow
-```
 
 
 ## Remarks

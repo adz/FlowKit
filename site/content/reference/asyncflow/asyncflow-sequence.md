@@ -1,5 +1,6 @@
 ---
-title: sequence
+title: AsyncFlow.sequence
+linkTitle: sequence
 type: docs
 ---
 

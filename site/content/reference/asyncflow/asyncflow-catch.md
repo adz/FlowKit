@@ -1,5 +1,6 @@
 ---
-title: catch
+title: AsyncFlow.catch
+linkTitle: catch
 type: docs
 ---
 

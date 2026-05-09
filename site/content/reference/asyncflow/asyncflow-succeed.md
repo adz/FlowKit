@@ -1,5 +1,6 @@
 ---
-title: succeed
+title: AsyncFlow.succeed
+linkTitle: succeed
 type: docs
 ---
 

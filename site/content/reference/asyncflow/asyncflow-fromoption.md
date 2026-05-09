@@ -1,5 +1,6 @@
 ---
-title: fromOption
+title: AsyncFlow.fromOption
+linkTitle: fromOption
 type: docs
 ---
 

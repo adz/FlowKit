@@ -1,5 +1,6 @@
 ---
-title: toResult
+title: Validation.toResult
+linkTitle: toResult
 type: docs
 ---
 

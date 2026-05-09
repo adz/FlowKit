@@ -1,5 +1,6 @@
 ---
-title: sequence
+title: Flow.sequence
+linkTitle: sequence
 type: docs
 ---
 

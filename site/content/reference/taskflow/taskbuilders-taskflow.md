@@ -1,14 +1,11 @@
 ---
-title: taskFlow
+title: TaskBuilders.taskFlow
+linkTitle: taskFlow
 type: docs
 ---
 
 The .NET `taskFlow { }` computation expression.
 
-
-```fsharp
-let taskFlow
-```
 
 
 ## Remarks

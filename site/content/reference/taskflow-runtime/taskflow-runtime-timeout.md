@@ -1,5 +1,6 @@
 ---
-title: timeout
+title: TaskFlow.Runtime.timeout
+linkTitle: timeout
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: tap
+title: AsyncFlow.tap
+linkTitle: tap
 type: docs
 ---
 

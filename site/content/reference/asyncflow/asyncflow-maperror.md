@@ -1,5 +1,6 @@
 ---
-title: mapError
+title: AsyncFlow.mapError
+linkTitle: mapError
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: environment
+title: Capability.environment
+linkTitle: environment
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: serviceFromProvider
+title: Capability.serviceFromProvider
+linkTitle: serviceFromProvider
 type: docs
 ---
 

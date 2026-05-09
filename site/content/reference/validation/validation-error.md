@@ -1,5 +1,6 @@
 ---
-title: error
+title: Validation.error
+linkTitle: error
 type: docs
 ---
 

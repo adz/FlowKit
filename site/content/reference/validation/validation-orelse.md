@@ -1,5 +1,6 @@
 ---
-title: orElse
+title: Validation.orElse
+linkTitle: orElse
 type: docs
 ---
 

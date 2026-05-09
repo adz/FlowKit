@@ -1,5 +1,6 @@
 ---
 title: Needs
+linkTitle: Needs
 type: docs
 ---
 

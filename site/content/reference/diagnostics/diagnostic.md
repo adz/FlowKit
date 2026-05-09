@@ -1,5 +1,6 @@
 ---
 title: Diagnostic
+linkTitle: Diagnostic
 type: docs
 ---
 

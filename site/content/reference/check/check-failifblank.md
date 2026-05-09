@@ -1,5 +1,6 @@
 ---
-title: failIfBlank
+title: Check.failIfBlank
+linkTitle: failIfBlank
 type: docs
 ---
 

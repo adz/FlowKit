@@ -1,5 +1,6 @@
 ---
-title: index
+title: Validation.index
+linkTitle: index
 type: docs
 ---
 

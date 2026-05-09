@@ -1,5 +1,6 @@
 ---
-title: fromOption
+title: TaskFlow.fromOption
+linkTitle: fromOption
 type: docs
 ---
 

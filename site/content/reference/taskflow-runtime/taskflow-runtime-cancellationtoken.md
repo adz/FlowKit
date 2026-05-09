@@ -1,5 +1,6 @@
 ---
-title: cancellationToken
+title: TaskFlow.Runtime.cancellationToken
+linkTitle: cancellationToken
 type: docs
 ---
 

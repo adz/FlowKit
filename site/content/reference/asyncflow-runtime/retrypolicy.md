@@ -1,5 +1,6 @@
 ---
 title: RetryPolicy
+linkTitle: RetryPolicy
 type: docs
 ---
 

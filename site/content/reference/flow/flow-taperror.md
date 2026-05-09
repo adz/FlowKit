@@ -1,5 +1,6 @@
 ---
-title: tapError
+title: Flow.tapError
+linkTitle: tapError
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: merge
+title: Validation.merge
+linkTitle: merge
 type: docs
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: ignore
+title: TaskFlow.ignore
+linkTitle: ignore
 type: docs
 ---
 

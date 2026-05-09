@@ -1,5 +1,6 @@
 ---
-title: tap
+title: Flow.tap
+linkTitle: tap
 type: docs
 ---
 

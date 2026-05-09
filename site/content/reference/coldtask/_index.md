@@ -1,5 +1,6 @@
 ---
 title: "ColdTask"
+linkTitle: ColdTask
 type: docs
 weight: 120
 ---

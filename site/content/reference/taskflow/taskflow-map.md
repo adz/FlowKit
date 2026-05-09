@@ -1,5 +1,6 @@
 ---
-title: map
+title: TaskFlow.map
+linkTitle: map
 type: docs
 ---
 
