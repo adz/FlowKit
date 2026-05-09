@@ -917,6 +917,32 @@ type TaskFlowBuilder() =
 
     member _.Bind
         (
+            _request: Env<'dep>,
+            binder: 'dep -> TaskFlow<'env, 'error, 'next>
+        ) : TaskFlow<'env, 'error, 'next>
+        when 'env :> Needs<'dep> =
+        TaskFlow(fun environment cancellationToken ->
+            task {
+                let dependency = (environment :> Needs<'dep>).Dep
+
+                return! TaskFlow.run environment cancellationToken (binder dependency)
+            })
+
+    member _.Bind
+        (
+            _request: Env<'dep>,
+            binder: unit -> TaskFlow<'env, 'error, 'next>
+        ) : TaskFlow<'env, 'error, 'next>
+        when 'env :> Needs<'dep> =
+        TaskFlow(fun environment cancellationToken ->
+            task {
+                let _dependency = (environment :> Needs<'dep>).Dep
+
+                return! TaskFlow.run environment cancellationToken (binder ())
+            })
+
+    member _.Bind
+        (
             flow: AsyncFlow<'env, 'error, 'value>,
             binder: 'value -> TaskFlow<'env, 'error, 'next>
         ) : TaskFlow<'env, 'error, 'next> =

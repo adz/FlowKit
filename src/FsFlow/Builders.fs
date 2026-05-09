@@ -44,6 +44,30 @@ type FlowBuilder() =
 
     member _.Bind
         (
+            _request: Env<'dep>,
+            binder: 'dep -> Flow<'env, 'error, 'next>
+        ) : Flow<'env, 'error, 'next>
+        when 'env :> Needs<'dep> =
+        Flow(fun environment ->
+            let dependency = (environment :> Needs<'dep>).Dep
+
+            binder dependency
+            |> Flow.run environment)
+
+    member _.Bind
+        (
+            _request: Env<'dep>,
+            binder: unit -> Flow<'env, 'error, 'next>
+        ) : Flow<'env, 'error, 'next>
+        when 'env :> Needs<'dep> =
+        Flow(fun environment ->
+            let _dependency = (environment :> Needs<'dep>).Dep
+
+            binder ()
+            |> Flow.run environment)
+
+    member _.Bind
+        (
             result: Result<'value, 'error>,
             binder: 'value -> Flow<'env, 'error, 'next>
         ) : Flow<'env, 'error, 'next> =
@@ -197,6 +221,32 @@ type AsyncFlowBuilder() =
             binder: 'value -> AsyncFlow<'env, 'error, 'next>
         ) : AsyncFlow<'env, 'error, 'next> =
         AsyncFlow.bind binder flow
+
+    member _.Bind
+        (
+            _request: Env<'dep>,
+            binder: 'dep -> AsyncFlow<'env, 'error, 'next>
+        ) : AsyncFlow<'env, 'error, 'next>
+        when 'env :> Needs<'dep> =
+        AsyncFlow(fun environment ->
+            async {
+                let dependency = (environment :> Needs<'dep>).Dep
+
+                return! AsyncFlow.run environment (binder dependency)
+            })
+
+    member _.Bind
+        (
+            _request: Env<'dep>,
+            binder: unit -> AsyncFlow<'env, 'error, 'next>
+        ) : AsyncFlow<'env, 'error, 'next>
+        when 'env :> Needs<'dep> =
+        AsyncFlow(fun environment ->
+            async {
+                let _dependency = (environment :> Needs<'dep>).Dep
+
+                return! AsyncFlow.run environment (binder ())
+            })
 
     member _.Bind
         (

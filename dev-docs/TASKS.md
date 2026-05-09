@@ -12,7 +12,7 @@ The numbered items below are intentionally linear so the ralph loop can move thr
    with XML doc comments and examples that match `dev-docs/CAPS_PLAN.md`; keep the names available
    from the normal `open FsFlow` surface; add focused tests for the primitive shapes and public type
    visibility.
-2. [ ] Bind whole-dependency `Env<'dep>` requests in `flow {}`, `asyncFlow {}`, and `taskFlow {}`:
+2. [x] Bind whole-dependency `Env<'dep>` requests in `flow {}`, `asyncFlow {}`, and `taskFlow {}`:
    each builder should read the dependency from environments satisfying `Needs<'dep>`, pass it to the
    continuation, preserve existing cold/restartable semantics, and include tests for success,
    missing/wrong environment compile failures where practical, and parity across all three flow

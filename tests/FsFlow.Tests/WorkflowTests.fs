@@ -11,6 +11,111 @@ open Swensen.Unquote
 open Xunit
 
 module WorkflowTests =
+        type private DeviceClient(name: string) =
+            interface IDeviceClient with
+                member _.Name = name
+
+        type private CountingCaps() =
+            let accessCount = ref 0
+
+            member _.AccessCount = accessCount.Value
+
+            interface Needs<IDeviceClient> with
+                member _.Dep =
+                    accessCount.Value <- accessCount.Value + 1
+                    DeviceClient($"dep-{accessCount.Value}") :> IDeviceClient
+
+        let private assertEnvRequestDoesNotCompile
+            (workflowTypeName: string)
+            (builderName: string) =
+            let assemblyPath = typeof<FlowBuilder>.Assembly.Location
+
+            let script =
+                $"""
+#r @"{assemblyPath}"
+open FsFlow
+
+type WrongEnv =
+    {{ DeviceClient: string }}
+
+let request : Env<string> = Unchecked.defaultof<_>
+
+let probe : {workflowTypeName}<WrongEnv, string, string> =
+
+    {builderName} {{
+        do! request
+        let! (value: string) = request
+        return value
+    }}
+"""
+
+            let exitCode, output = runFsiScript script
+
+            test <@ exitCode <> 0 @>
+            test <@ not (String.IsNullOrWhiteSpace output) @>
+
+        [<Fact>]
+        let ``whole dependency Env requests stay cold across flow families`` () =
+            let flowCaps = CountingCaps()
+            let asyncCaps = CountingCaps()
+            let taskCaps = CountingCaps()
+            let request : Env<IDeviceClient> = Unchecked.defaultof<_>
+
+            let flowWorkflow : Flow<CountingCaps, string, string> =
+                flow {
+                    do! request
+                    let! (client: IDeviceClient) = request
+                    return client.Name
+                }
+
+            let asyncWorkflow : AsyncFlow<CountingCaps, string, string> =
+                asyncFlow {
+                    do! request
+                    let! (client: IDeviceClient) = request
+                    return client.Name
+                }
+
+            let taskWorkflow : TaskFlow<CountingCaps, string, string> =
+                taskFlow {
+                    do! request
+                    let! (client: IDeviceClient) = request
+                    return client.Name
+                }
+
+            let flowRun1 = Flow.run flowCaps flowWorkflow
+            let flowRun2 = Flow.run flowCaps flowWorkflow
+            let asyncRun1 = AsyncFlow.run asyncCaps asyncWorkflow |> Async.RunSynchronously
+            let asyncRun2 = AsyncFlow.run asyncCaps asyncWorkflow |> Async.RunSynchronously
+            let taskRun1 =
+                TaskFlow.run taskCaps CancellationToken.None taskWorkflow
+                |> fun task -> task.GetAwaiter().GetResult()
+
+            let taskRun2 =
+                TaskFlow.run taskCaps CancellationToken.None taskWorkflow
+                |> fun task -> task.GetAwaiter().GetResult()
+
+            test <@ flowRun1 = Ok "dep-2" @>
+            test <@ flowRun2 = Ok "dep-4" @>
+            test <@ flowCaps.AccessCount = 4 @>
+            test <@ asyncRun1 = Ok "dep-2" @>
+            test <@ asyncRun2 = Ok "dep-4" @>
+            test <@ asyncCaps.AccessCount = 4 @>
+            test <@ taskRun1 = Ok "dep-2" @>
+            test <@ taskRun2 = Ok "dep-4" @>
+            test <@ taskCaps.AccessCount = 4 @>
+
+        [<Fact>]
+        let ``whole dependency Env requests fail without Needs on flow`` () =
+            assertEnvRequestDoesNotCompile "Flow" "flow"
+
+        [<Fact>]
+        let ``whole dependency Env requests fail without Needs on asyncFlow`` () =
+            assertEnvRequestDoesNotCompile "AsyncFlow" "asyncFlow"
+
+        [<Fact>]
+        let ``whole dependency Env requests fail without Needs on taskFlow`` () =
+            assertEnvRequestDoesNotCompile "TaskFlow" "taskFlow"
+
         [<Fact>]
         let ``Flow is sync result only`` () =
             let workflow : Flow<int, string, int> =

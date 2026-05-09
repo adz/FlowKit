@@ -21,6 +21,8 @@ module CapsPrimitiveTests =
         test <@ needsType.IsPublic @>
         test <@ tokenType.IsPublic @>
         test <@ projectedType.IsPublic @>
+        test <@ tokenType.IsValueType @>
+        test <@ projectedType.IsValueType @>
         test <@ FSharpType.IsUnion tokenType @>
         test <@ FSharpType.IsUnion projectedType @>
 
@@ -32,9 +34,8 @@ module CapsPrimitiveTests =
         let tokenFields = tokenCase.GetFields()
         let projectedFieldsInfo = projectedCase.GetFields()
 
-        test <@ tokenFields.Length = 1 @>
+        test <@ tokenFields.Length = 0 @>
         test <@ projectedFieldsInfo.Length = 1 @>
-        test <@ tokenFields[0].PropertyType = typeof<unit> @>
 
         let projectedFieldType = projectedFieldsInfo[0].PropertyType
 
@@ -46,7 +47,7 @@ module CapsPrimitiveTests =
         test <@ projectedFieldArguments[0] = typeof<IDeviceClient> @>
         test <@ projectedFieldArguments[1] = typeof<int> @>
 
-        let tokenValue = FSharpValue.MakeUnion(tokenCase, [| box () |])
+        let tokenValue = FSharpValue.MakeUnion(tokenCase, [||])
 
         let projectedValue =
             FSharpValue.MakeUnion(projectedCase, [| box (fun (client: IDeviceClient) -> client.Name.Length) |])
@@ -56,7 +57,7 @@ module CapsPrimitiveTests =
 
         test <@ tokenCase'.Name = tokenCase.Name @>
         test <@ projectedCase'.Name = projectedCase.Name @>
-        test <@ tokenFields.Length = 1 @>
+        test <@ tokenFields.Length = 0 @>
         test <@ projectedFields.Length = 1 @>
 
         let projected = projectedFields[0] :?> (IDeviceClient -> int)

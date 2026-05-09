@@ -90,14 +90,17 @@ type Needs<'dep> =
 /// <example>
 /// <code lang="fsharp">
 /// let chooseClock : Flow&lt;ClockCaps, string, IClock&gt; =
+///     let request : Env&lt;IClock&gt; = Unchecked.defaultof&lt;_&gt;
+///
 ///     flow {
-///         let! clock = Env&lt;IClock&gt;
+///         let! clock = request
 ///         return clock
 ///     }
 /// </code>
 /// </example>
+[<Struct>]
 type Env<'dep> =
-    | Env of unit
+    | Env
 
 /// <summary>
 /// Request token for projecting a value from a dependency.
@@ -117,6 +120,7 @@ type Env<'dep> =
 ///     }
 /// </code>
 /// </example>
+[<Struct>]
 type Env<'dep, 'value> =
     | Env of ('dep -> 'value)
 
