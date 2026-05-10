@@ -46,9 +46,9 @@ The current priority is **Convergent Evolution**: merging the separate effect fa
 - This eliminates the need for `Async`-suffixed capability methods and allows CAPS to be used interchangeably across all boundaries.
 
 Target package families (Post-Unification):
-- `FsFlow.Caps.Core`
-- `FsFlow.Caps.Context`
-- `FsFlow.Caps.Observability`
+- `FsFlow.Caps.Core` (Shared primitives)
+- `FsFlow.Hosting` (Runtime & Host integration)
+- `FsFlow.Runtime.Telemetry` (Automatic observability)
 - ... (rest of the families) ...
 
 `dev-docs/TASKS.md` is the executable backlog for this phase.

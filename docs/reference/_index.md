@@ -17,7 +17,6 @@ This package groups the main public surfaces:
 - the [`flow {}`](/reference/flow/builders-flow.md) and [`validate {}`](/reference/validation/builders-validate.md) entry points
 - the CAPS request tokens [`Needs<'dep>`](/reference/caps/) and [`Env<'dep>`](/reference/caps/) / `Env<'dep, 'value>` for explicit capability boundaries
 - the [`FsFlow.Caps.Core`](/reference/caps-core/) package for the shared clock, random, GUID, and environment-variable primitives
-- the [`FsFlow.Caps.Context`](/reference/caps-context/) package for request, user, locale, metadata, and request-flag context
 
 The builder types themselves stay below the surface. The flow, capability, and validation modules are the public story.
 
@@ -89,7 +88,7 @@ The builder types themselves stay below the surface. The flow, capability, and v
 <section class="docs-card">
 <span class="label">CAPS packages</span>
 <h3>Shared context packages</h3>
-<p>The CAPS packages keep common application concerns explicit: <code>FsFlow.Caps.Core</code> for shared primitives and <code>FsFlow.Caps.Context</code> for request-scoped metadata.</p>
+<p>The CAPS packages keep common application concerns explicit: <code>FsFlow.Caps.Core</code> for shared primitives.</p>
 </section>
 
 <section class="docs-card">
@@ -139,12 +138,6 @@ The builder types themselves stay below the surface. The flow, capability, and v
 <span class="label">CAPS Core</span>
 <h3><a href="/reference/caps-core/">Shared primitives</a></h3>
 <p>The clock, random, GUID, and environment-variable package.</p>
-</section>
-
-<section class="docs-card">
-<span class="label">CAPS Context</span>
-<h3><a href="/reference/caps-context/">Request context</a></h3>
-<p>Request-scoped user, locale, metadata, and flag helpers.</p>
 </section>
 
 </div>
