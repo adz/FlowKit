@@ -48,11 +48,12 @@ type FlowBuilder() =
             binder: 'dep -> Flow<'env, 'error, 'next>
         ) : Flow<'env, 'error, 'next>
         when 'env :> Needs<'dep> =
-        Flow(fun environment ->
+        Flow(fun environment _ ->
             let dependency = (environment :> Needs<'dep>).Dep
 
             binder dependency
-            |> Flow.run environment)
+            |> Flow.run environment
+            |> EffectFlow.ofResult)
 
     member _.Bind
         (
@@ -60,11 +61,12 @@ type FlowBuilder() =
             binder: unit -> Flow<'env, 'error, 'next>
         ) : Flow<'env, 'error, 'next>
         when 'env :> Needs<'dep> =
-        Flow(fun environment ->
+        Flow(fun environment _ ->
             let _dependency = (environment :> Needs<'dep>).Dep
 
             binder ()
-            |> Flow.run environment)
+            |> Flow.run environment
+            |> EffectFlow.ofResult)
 
     member _.Bind
         (
@@ -72,12 +74,13 @@ type FlowBuilder() =
             binder: 'value -> Flow<'env, 'error, 'next>
         ) : Flow<'env, 'error, 'next>
         when 'env :> Needs<'dep> =
-        Flow(fun environment ->
+        Flow(fun environment _ ->
             let dependency = (environment :> Needs<'dep>).Dep
             let (Env project) = request
 
             binder (project dependency)
-            |> Flow.run environment)
+            |> Flow.run environment
+            |> EffectFlow.ofResult)
 
     member _.Bind
         (
@@ -85,13 +88,14 @@ type FlowBuilder() =
             binder: 'value -> Flow<'env, 'error, 'next>
         ) : Flow<'env, 'error, 'next>
         when 'env :> Needs<'dep> =
-        Flow(fun environment ->
+        Flow(fun environment _ ->
             let dependency = (environment :> Needs<'dep>).Dep
             let (Env project) = request
 
             project dependency
             |> Flow.bind binder
-            |> Flow.run environment)
+            |> Flow.run environment
+            |> EffectFlow.ofResult)
 
     member _.Bind
         (
@@ -99,14 +103,15 @@ type FlowBuilder() =
             binder: 'value -> Flow<'env, 'error, 'next>
         ) : Flow<'env, 'error, 'next>
         when 'env :> Needs<'dep> =
-        Flow(fun environment ->
+        Flow(fun environment _ ->
             let dependency = (environment :> Needs<'dep>).Dep
             let (Env project) = request
 
             project dependency
             |> Flow.fromResult
             |> Flow.bind binder
-            |> Flow.run environment)
+            |> Flow.run environment
+            |> EffectFlow.ofResult)
 
     member _.Bind
         (
@@ -114,7 +119,7 @@ type FlowBuilder() =
             binder: 'value -> Flow<'env, unit, 'next>
         ) : Flow<'env, unit, 'next>
         when 'env :> Needs<'dep> =
-        Flow(fun environment ->
+        Flow(fun environment _ ->
             let dependency = (environment :> Needs<'dep>).Dep
             let (Env project) = request
 
@@ -122,7 +127,8 @@ type FlowBuilder() =
             |> OptionFlow.toUnitResult
             |> Flow.fromResult
             |> Flow.bind binder
-            |> Flow.run environment)
+            |> Flow.run environment
+            |> EffectFlow.ofResult)
 
     member _.Bind
         (
@@ -130,7 +136,7 @@ type FlowBuilder() =
             binder: 'value -> Flow<'env, unit, 'next>
         ) : Flow<'env, unit, 'next>
         when 'env :> Needs<'dep> =
-        Flow(fun environment ->
+        Flow(fun environment _ ->
             let dependency = (environment :> Needs<'dep>).Dep
             let (Env project) = request
 
@@ -138,7 +144,8 @@ type FlowBuilder() =
             |> OptionFlow.toUnitResultValueOption
             |> Flow.fromResult
             |> Flow.bind binder
-            |> Flow.run environment)
+            |> Flow.run environment
+            |> EffectFlow.ofResult)
 
     member _.Bind
         (
@@ -188,16 +195,19 @@ type FlowBuilder() =
             flow: Flow<'env, 'error, 'value>,
             handler: exn -> Flow<'env, 'error, 'value>
         ) : Flow<'env, 'error, 'value> =
-        Flow(fun environment ->
+        Flow(fun environment _ ->
             try
                 Flow.run environment flow
+                |> EffectFlow.ofResult
             with error ->
-                Flow.run environment (handler error))
+                Flow.run environment (handler error)
+                |> EffectFlow.ofResult)
 
     member _.TryFinally(flow: Flow<'env, 'error, 'value>, compensation: unit -> unit) : Flow<'env, 'error, 'value> =
-        Flow(fun environment ->
+        Flow(fun environment _ ->
             try
                 Flow.run environment flow
+                |> EffectFlow.ofResult
             finally
                 compensation ())
 

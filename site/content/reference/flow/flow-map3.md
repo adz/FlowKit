@@ -17,5 +17,5 @@ let map3 (mapper: 'left -> 'middle -> 'right -> 'value) (left: Flow<'env, 'error
 ## Information
 
 - **Module**: `Flow`
-- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs#L299)
+- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs#L296)
 

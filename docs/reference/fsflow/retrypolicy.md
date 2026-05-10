@@ -16,5 +16,5 @@ type RetryPolicy<'error>
 ## Information
 
 - **Module**: Global
-- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L53)
+- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L63)
 

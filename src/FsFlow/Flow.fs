@@ -1,6 +1,7 @@
 namespace FsFlow
 
 open System
+open System.Threading
 open System.Threading.Tasks
 
 module Flow =
@@ -13,11 +14,11 @@ module Flow =
     /// </code>
     /// </example>
     let run (environment: 'env) (Flow operation: Flow<'env, 'error, 'value>) : Result<'value, 'error> =
-        operation environment
+        (operation environment CancellationToken.None).GetAwaiter().GetResult()
 
     /// <summary>Creates a successful synchronous flow.</summary>
     let ok (value: 'value) : Flow<'env, 'error, 'value> =
-        Flow(fun _ -> Ok value)
+        Flow(fun _ _ -> EffectFlow.ofValue value)
 
     /// <summary>Alias for <see cref="ok" /> that reads well in some call sites.</summary>
     /// <example>
@@ -41,7 +42,7 @@ module Flow =
 
     /// <summary>Creates a failing synchronous flow.</summary>
     let error (failure: 'error) : Flow<'env, 'error, 'value> =
-        Flow(fun _ -> Error failure)
+        Flow(fun _ _ -> EffectFlow.ofError failure)
 
     /// <summary>Alias for <see cref="error" /> that reads well in some call sites.</summary>
     /// <example>
@@ -62,7 +63,7 @@ module Flow =
     /// </code>
     /// </example>
     let fromResult (result: Result<'value, 'error>) : Flow<'env, 'error, 'value> =
-        Flow(fun _ -> result)
+        Flow(fun _ _ -> EffectFlow.ofResult result)
 
     /// <summary>Lifts an option into a synchronous flow with the supplied error.</summary>
     /// <example>
@@ -98,13 +99,13 @@ module Flow =
         (errorFlow: Flow<'env, 'error, 'error>)
         (result: Result<'value, unit>)
         : Flow<'env, 'error, 'value> =
-        Flow(fun environment ->
+        Flow(fun environment _ ->
             match result with
-            | Ok value -> Ok value
+            | Ok value -> EffectFlow.ofValue value
             | Error () ->
                 match run environment errorFlow with
-                | Ok error -> Error error
-                | Error error -> Error error)
+                | Ok error -> EffectFlow.ofError error
+                | Error error -> EffectFlow.ofError error)
 
     /// <summary>Reads the current environment as the flow value.</summary>
     /// <remarks>
@@ -113,7 +114,7 @@ module Flow =
     /// </remarks>
     /// <returns>A <see cref="T:FsFlow.Flow`3" /> whose successful value is the current environment.</returns>
     let env<'env, 'error> : Flow<'env, 'error, 'env> =
-        Flow(fun environment -> Ok environment)
+        Flow(fun environment _ -> EffectFlow.ofValue environment)
 
     /// <summary>Projects a value from the current environment.</summary>
     /// <remarks>
@@ -123,7 +124,7 @@ module Flow =
     /// <param name="projection">A function that extracts a value from the environment.</param>
     /// <returns>A <see cref="T:FsFlow.Flow`3" /> containing the projected value.</returns>
     let read (projection: 'env -> 'value) : Flow<'env, 'error, 'value> =
-        Flow(fun environment -> Ok(projection environment))
+        Flow(fun environment _ -> EffectFlow.ofValue (projection environment))
 
     /// <summary>Maps the successful value of a synchronous flow.</summary>
     /// <remarks>
@@ -137,7 +138,10 @@ module Flow =
         (mapper: 'value -> 'next)
         (flow: Flow<'env, 'error, 'value>)
         : Flow<'env, 'error, 'next> =
-        Flow(InternalCombinatorCore.mapWith (fun mapOutcome outcome -> mapOutcome outcome) mapper (fun environment -> run environment flow))
+        Flow(fun environment _ ->
+            run environment flow
+            |> Result.map mapper
+            |> EffectFlow.ofResult)
 
     /// <summary>Maps the successful value of a synchronous flow to <c>unit</c>.</summary>
     let ignore (flow: Flow<'env, 'error, 'value>) : Flow<'env, 'error, unit> =
@@ -155,16 +159,10 @@ module Flow =
         (binder: 'value -> Flow<'env, 'error, 'next>)
         (flow: Flow<'env, 'error, 'value>)
         : Flow<'env, 'error, 'next> =
-        Flow(
-            InternalCombinatorCore.bindWith
-                (fun outcome onSuccess onError ->
-                    match outcome with
-                    | Ok value -> onSuccess value
-                    | Error error -> onError error)
-                (fun environment value -> binder value |> run environment)
-                Error
-                (fun environment -> run environment flow)
-        )
+        Flow(fun environment _ ->
+            match run environment flow with
+            | Ok value -> run environment (binder value) |> EffectFlow.ofResult
+            | Error error -> EffectFlow.ofError error)
 
     /// <summary>Sequences a synchronous continuation after a successful value.</summary>
     let inline (>>=)
@@ -205,13 +203,13 @@ module Flow =
         (binder: 'error -> Flow<'env, 'error, unit>)
         (flow: Flow<'env, 'error, 'value>)
         : Flow<'env, 'error, 'value> =
-        Flow(fun environment ->
+        Flow(fun environment _ ->
             match run environment flow with
-            | Ok value -> Ok value
+            | Ok value -> EffectFlow.ofValue value
             | Error error ->
                 match binder error |> run environment with
-                | Ok () -> Error error
-                | Error nextError -> Error nextError)
+                | Ok () -> EffectFlow.ofError error
+                | Error nextError -> EffectFlow.ofError nextError)
 
     /// <summary>Maps the error value of a synchronous flow.</summary>
     /// <remarks>
@@ -225,12 +223,10 @@ module Flow =
         (mapper: 'error -> 'nextError)
         (flow: Flow<'env, 'error, 'value>)
         : Flow<'env, 'nextError, 'value> =
-        Flow(
-            InternalCombinatorCore.mapErrorWith
-                (fun mapOutcome outcome -> mapOutcome outcome)
-                mapper
-                (fun environment -> run environment flow)
-        )
+        Flow(fun environment _ ->
+            run environment flow
+            |> Result.mapError mapper
+            |> EffectFlow.ofResult)
 
     /// <summary>Catches exceptions raised during execution and maps them to a typed error.</summary>
     /// <remarks>
@@ -244,11 +240,12 @@ module Flow =
         (handler: exn -> 'error)
         (flow: Flow<'env, 'error, 'value>)
         : Flow<'env, 'error, 'value> =
-        Flow(fun environment ->
+        Flow(fun environment _ ->
             try
                 run environment flow
+                |> EffectFlow.ofResult
             with error ->
-                Error(handler error))
+                EffectFlow.ofError (handler error))
 
     /// <summary>Falls back to another flow when the source flow fails.</summary>
     /// <summary>Computes a fallback flow from the source error when the source flow fails.</summary>
@@ -256,10 +253,10 @@ module Flow =
         (fallback: 'error -> Flow<'env, 'error, 'value>)
         (flow: Flow<'env, 'error, 'value>)
         : Flow<'env, 'error, 'value> =
-        Flow(fun environment ->
+        Flow(fun environment _ ->
             match run environment flow with
-            | Ok value -> Ok value
-            | Error error -> run environment (fallback error))
+            | Ok value -> EffectFlow.ofValue value
+            | Error error -> run environment (fallback error) |> EffectFlow.ofResult)
 
     /// <summary>Falls back to another flow when the source flow fails.</summary>
     let orElse
@@ -325,28 +322,28 @@ module Flow =
         (mapping: 'outerEnvironment -> 'innerEnvironment)
         (flow: Flow<'innerEnvironment, 'error, 'value>)
         : Flow<'outerEnvironment, 'error, 'value> =
-        Flow(InternalCombinatorCore.localEnvWith run mapping flow)
+        Flow(fun environment ct -> let innerEnvironment = mapping environment in run innerEnvironment flow |> EffectFlow.ofResult)
 
     /// <summary>Provides a derived environment from a layer flow to a downstream flow.</summary>
     let provideLayer
         (layer: Flow<'input, 'error, 'environment>)
         (flow: Flow<'environment, 'error, 'value>)
         : Flow<'input, 'error, 'value> =
-        Flow(fun environment ->
+        Flow(fun environment _ ->
             match run environment layer with
-            | Ok environment -> run environment flow
-            | Error error -> Error error)
+            | Ok environment -> run environment flow |> EffectFlow.ofResult
+            | Error error -> EffectFlow.ofError error)
 
     /// <summary>Defers flow construction until execution time.</summary>
     let delay (factory: unit -> Flow<'env, 'error, 'value>) : Flow<'env, 'error, 'value> =
-        Flow(InternalCombinatorCore.delayWith run factory)
+        Flow(fun environment ct -> run environment (factory ()) |> EffectFlow.ofResult)
 
     /// <summary>Transforms a sequence of values into a flow and stops at the first failure.</summary>
     let traverse
         (mapping: 'value -> Flow<'env, 'error, 'next>)
         (values: seq<'value>)
         : Flow<'env, 'error, 'next list> =
-        Flow(fun environment ->
+        Flow(fun environment _ ->
             let results = ResizeArray()
             let mutable currentError = None
             use enumerator = values.GetEnumerator()
@@ -357,8 +354,8 @@ module Flow =
                 | Error error -> currentError <- Some error
 
             match currentError with
-            | Some error -> Error error
-            | None -> Ok(List.ofSeq results))
+            | Some error -> EffectFlow.ofError error
+            | None -> EffectFlow.ofValue (List.ofSeq results))
 
     /// <summary>Transforms a sequence of flows into a flow of a sequence and stops at the first failure.</summary>
     let sequence (flows: seq<Flow<'env, 'error, 'value>>) : Flow<'env, 'error, 'value list> =

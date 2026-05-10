@@ -8,17 +8,17 @@ This page shows the source-documented capability and layer surface, including th
 
 ## CAPS tokens
 
-- type [`Needs`](./needs.md): Describes the capability contract for a single dependency. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L88)
-- type [`Env`](./env.md): Request token for binding a whole dependency inside a workflow. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L115)
+- type [`Needs`](./needs.md): Describes the capability contract for a single dependency. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L98)
+- type [`Env`](./env.md): Request token for binding a whole dependency inside a workflow. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L125)
 ### Constructors
 
-- `Env` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L116)
+- `Env` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L126)
 
 
 ## Capabilities
 
 - module [`Capability`](./capability.md): Capability helpers for record projections, runtime adapters, and .NET service-provider interop. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs#L813)
-- type [`MissingCapability`](./missingcapability.md): Describes a missing service-provider capability. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L224)
+- type [`MissingCapability`](./missingcapability.md): Describes a missing service-provider capability. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L248)
 - [`Capability.service`](./capability-service.md): Reads a capability from a record-based environment projection. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs#L819)
 - [`Capability.runtime`](./capability-runtime.md): Reads a capability from the runtime half of a two-context runtime environment. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs#L824)
 - [`Capability.environment`](./capability-environment.md): Reads a capability from the application half of a two-context runtime environment. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs#L830)

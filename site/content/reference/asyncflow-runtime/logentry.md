@@ -17,5 +17,5 @@ type LogEntry
 ## Information
 
 - **Module**: Global
-- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L43)
+- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L53)
 

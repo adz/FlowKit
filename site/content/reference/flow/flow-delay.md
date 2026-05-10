@@ -17,5 +17,5 @@ let delay (factory: unit -> Flow<'env, 'error, 'value>) : Flow<'env, 'error, 'va
 ## Information
 
 - **Module**: `Flow`
-- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs#L341)
+- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs#L338)
 

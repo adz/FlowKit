@@ -7,7 +7,7 @@ Keep live product and architecture direction in `dev-docs/PLAN.md`.
 
 ## Phase 1: The Unified Core (Convergence)
 
-1. [ ] Define the unified `Flow<'env, 'e, 'v>` type in `FsFlow/Core.fs` using a `ValueTask`/`Promise` bridge with `#if FABLE_COMPILER` guards; include the standard `Result` wrapping.
+1. [x] Define the unified `Flow<'env, 'e, 'v>` type in `FsFlow/Core.fs` using a `ValueTask`/`Promise` bridge with `#if FABLE_COMPILER` guards; include the standard `Result` wrapping.
 2. [ ] Implement the core `Flow` module primitives (`ok`, `error`, `read`, `map`, `bind`, `tap`, `fromResult`) using the new unified signature.
 3. [ ] Implement the universal `flow { }` builder in `FsFlow/Builders.fs` using method overloading to support `Async`, `Task`, `Result`, and environment requests; ensure full `CancellationToken` propagation.
 4. [ ] Implement `Flow.run` and `Flow.runFull` (and `runWithToken`) for the unified type, supporting both synchronous and asynchronous execution paths on .NET and native Promise execution on Fable.

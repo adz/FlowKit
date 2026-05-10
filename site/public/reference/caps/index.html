@@ -768,17 +768,17 @@ CAPS tokens type Needs: Describes the capability contract for a single dependenc
 	<p>This page shows the source-documented capability and layer surface, including the CAPS request tokens, named capability helpers, and layer composition used for environment management in task workflows.</p>
 <h2 id="caps-tokens">CAPS tokens</h2>
 <ul>
-<li>type <a href="http://localhost:3000/FsFlow/reference/caps/needs/"><code>Needs</code></a>: Describes the capability contract for a single dependency. <a href="https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L88" target="_blank" rel="noopener">source</a></li>
-<li>type <a href="http://localhost:3000/FsFlow/reference/caps/env/"><code>Env</code></a>: Request token for binding a whole dependency inside a workflow. <a href="https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L115" target="_blank" rel="noopener">source</a></li>
+<li>type <a href="http://localhost:3000/FsFlow/reference/caps/needs/"><code>Needs</code></a>: Describes the capability contract for a single dependency. <a href="https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L98" target="_blank" rel="noopener">source</a></li>
+<li>type <a href="http://localhost:3000/FsFlow/reference/caps/env/"><code>Env</code></a>: Request token for binding a whole dependency inside a workflow. <a href="https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L125" target="_blank" rel="noopener">source</a></li>
 </ul>
 <h3 id="constructors">Constructors</h3>
 <ul>
-<li><code>Env</code> <a href="https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L116" target="_blank" rel="noopener">source</a></li>
+<li><code>Env</code> <a href="https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L126" target="_blank" rel="noopener">source</a></li>
 </ul>
 <h2 id="capabilities">Capabilities</h2>
 <ul>
 <li>module <a href="./capability.md" class="broken-link"><code>Capability</code></a>: Capability helpers for record projections, runtime adapters, and .NET service-provider interop. <a href="https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs#L813" target="_blank" rel="noopener">source</a></li>
-<li>type <a href="http://localhost:3000/FsFlow/reference/caps/missingcapability/"><code>MissingCapability</code></a>: Describes a missing service-provider capability. <a href="https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L224" target="_blank" rel="noopener">source</a></li>
+<li>type <a href="http://localhost:3000/FsFlow/reference/caps/missingcapability/"><code>MissingCapability</code></a>: Describes a missing service-provider capability. <a href="https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L248" target="_blank" rel="noopener">source</a></li>
 <li><a href="http://localhost:3000/FsFlow/reference/caps/capability-service/"><code>Capability.service</code></a>: Reads a capability from a record-based environment projection. <a href="https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs#L819" target="_blank" rel="noopener">source</a></li>
 <li><a href="http://localhost:3000/FsFlow/reference/caps/capability-runtime/"><code>Capability.runtime</code></a>: Reads a capability from the runtime half of a two-context runtime environment. <a href="https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs#L824" target="_blank" rel="noopener">source</a></li>
 <li><a href="http://localhost:3000/FsFlow/reference/caps/capability-environment/"><code>Capability.environment</code></a>: Reads a capability from the application half of a two-context runtime environment. <a href="https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs#L830" target="_blank" rel="noopener">source</a></li>

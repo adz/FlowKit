@@ -17,5 +17,5 @@ let apply (flow: Flow<'env, 'error, 'value -> 'next>) (value: Flow<'env, 'error,
 ## Information
 
 - **Module**: `Flow`
-- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs#L292)
+- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs#L289)
 

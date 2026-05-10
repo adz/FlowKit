@@ -16,5 +16,5 @@ let sequence (flows: seq<Flow<'env, 'error, 'value>>) : Flow<'env, 'error, 'valu
 ## Information
 
 - **Module**: `Flow`
-- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs#L364)
+- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs#L361)
 

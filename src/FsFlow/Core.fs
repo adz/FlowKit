@@ -1,18 +1,28 @@
 namespace FsFlow
 
 open System
+open System.Threading
 open System.Threading.Tasks
 
 /// <summary>
-/// Represents a cold synchronous workflow that reads an environment, returns a typed result,
-/// and is executed explicitly through <c>Flow.run</c>.
+/// Represents the portable execution shape used by the unified <see cref="T:FsFlow.Flow`3" />.
+/// </summary>
+#if FABLE_COMPILER
+type Effect<'value, 'error> = JS.Promise<Result<'value, 'error>>
+#else
+type Effect<'value, 'error> = ValueTask<Result<'value, 'error>>
+#endif
+
+/// <summary>
+/// Represents a cold workflow that reads an environment, returns a typed result, and is executed
+/// explicitly through <c>Flow.run</c>.
 /// </summary>
 /// <typeparam name="env">The type of the environment dependency.</typeparam>
 /// <typeparam name="error">The type of the failure value.</typeparam>
 /// <typeparam name="value">The type of the success value.</typeparam>
 type Flow<'env, 'error, 'value> =
     private
-    | Flow of ('env -> Result<'value, 'error>)
+    | Flow of ('env -> CancellationToken -> Effect<'value, 'error>)
 
 /// <summary>
 /// Represents a cold async workflow that reads an environment, returns a typed result,
@@ -184,6 +194,20 @@ module internal OptionFlow =
         | ValueSome innerValue -> Ok innerValue
         | ValueNone -> Error error
 
+module internal EffectFlow =
+    let ofResult (result: Result<'value, 'error>) : Effect<'value, 'error> =
+#if FABLE_COMPILER
+        JS.Constructors.Promise.resolve result
+#else
+        ValueTask<Result<'value, 'error>>(result)
+#endif
+
+    let ofValue (value: 'value) : Effect<'value, 'error> =
+        ofResult (Ok value)
+
+    let ofError (error: 'error) : Effect<'value, 'error> =
+        ofResult (Error error)
+
 module internal InternalCombinatorCore =
     let mapWith
         (mapOutcome: (Result<'value, 'error> -> Result<'next, 'error>) -> 'operation -> 'nextOperation)
@@ -230,19 +254,19 @@ type Flow<'env, 'error, 'value> with
     static member CapabilityService
         (projection: 'env -> 'service)
         : Flow<'env, 'error, 'service> =
-        Flow(fun environment -> Ok(projection environment))
+        Flow(fun environment _ -> EffectFlow.ofValue (projection environment))
 
     static member ServiceFromProvider
         ()
         : Flow<IServiceProvider, MissingCapability, 'service> =
-        Flow(fun provider ->
+        Flow(fun provider _ ->
             match provider.GetService typeof<'service> with
             | null ->
-                Error
+                EffectFlow.ofError
                     {
                         CapabilityType = typeof<'service>
                     }
-            | value -> Ok(unbox<'service> value))
+            | value -> EffectFlow.ofValue (unbox<'service> value))
 
     static member ProvideLayer
         (
@@ -252,10 +276,10 @@ type Flow<'env, 'error, 'value> with
         let (Flow layerOperation) = layer
         let (Flow flowOperation) = flow
 
-        Flow(fun environment ->
-            match layerOperation environment with
-            | Ok environment -> flowOperation environment
-            | Error error -> Error error)
+        Flow(fun environment ct ->
+            match (layerOperation environment ct).GetAwaiter().GetResult() with
+            | Ok environment -> flowOperation environment ct
+            | Error error -> EffectFlow.ofError error)
 
 type AsyncFlow<'env, 'error, 'value> with
     static member CapabilityService

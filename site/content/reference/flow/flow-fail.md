@@ -17,7 +17,7 @@ let fail (failure: 'error) : Flow<'env, 'error, 'value>
 ## Information
 
 - **Module**: `Flow`
-- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs#L54)
+- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs#L55)
 
 ## Examples
 

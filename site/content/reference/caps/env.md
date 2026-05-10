@@ -36,7 +36,7 @@ let readClock : Flow&lt;#ClockCaps, unit, IClock&gt; =
     }
 ```
 
-- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L115)
+- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L125)
 
 ### `type Env<'dep, 'value>`
 
@@ -64,10 +64,10 @@ let readClockNow : TaskFlow&lt;#ClockCaps, unit, DateTimeOffset&gt; =
     }
 ```
 
-- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L144)
+- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L154)
 
 ## Information
 
 - **Module**: Global
-- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L115)
+- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L125)
 

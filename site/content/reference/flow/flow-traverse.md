@@ -17,5 +17,5 @@ let traverse (mapping: 'value -> Flow<'env, 'error, 'next>) (values: seq<'value>
 ## Information
 
 - **Module**: `Flow`
-- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs#L345)
+- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs#L342)
 

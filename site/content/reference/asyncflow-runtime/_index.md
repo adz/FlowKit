@@ -8,23 +8,23 @@ This page shows the source-documented `AsyncFlow.Runtime` surface: logging, retr
 
 ## Logging
 
-- type [`LogLevel`](./loglevel.md): Log levels used by runtime logging helpers and environment-provided logging functions. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L32)
+- type [`LogLevel`](./loglevel.md): Log levels used by runtime logging helpers and environment-provided logging functions. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L42)
 ### Constructors
 
-- `Trace` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L33)
-- `Debug` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L34)
-- `Information` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L35)
-- `Warning` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L36)
-- `Error` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L37)
-- `Critical` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L38)
+- `Trace` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L43)
+- `Debug` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L44)
+- `Information` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L45)
+- `Warning` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L46)
+- `Error` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L47)
+- `Critical` [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L48)
 
-- type [`LogEntry`](./logentry.md): A structured log entry written through a runtime logger. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L43)
+- type [`LogEntry`](./logentry.md): A structured log entry written through a runtime logger. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L53)
 
 ## Retry policy
 
-- type [`RetryPolicy`](./retrypolicy.md): Defines how runtime retry helpers repeat typed failures in a controlled way. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L53)
-- module `RetryPolicy`: Standard retry policies for runtime helpers. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L64)
-- [`RetryPolicy.noDelay`](./retrypolicy-nodelay.md) [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L65)
+- type [`RetryPolicy`](./retrypolicy.md): Defines how runtime retry helpers repeat typed failures in a controlled way. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L63)
+- module `RetryPolicy`: Standard retry policies for runtime helpers. [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L74)
+- [`RetryPolicy.noDelay`](./retrypolicy-nodelay.md) [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L75)
 
 ## Async operational helpers
 

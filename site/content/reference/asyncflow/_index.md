@@ -16,14 +16,14 @@ and is executed explicitly through `AsyncFlow.run`.
 
 ### `type AsyncFlow<'env, 'error, 'value>`
 
-- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L24)
+- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L34)
 
 ### `type AsyncFlow<'env, 'error, 'value> with static member CapabilityService (projection: 'env -> 'service) : AsyncFlow<'env, 'error, 'service>`
 
-- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L260)
+- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L284)
 
 ## Information
 
 - **Module**: Global
-- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L24)
+- **Source**: [source](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Core.fs#L34)
 

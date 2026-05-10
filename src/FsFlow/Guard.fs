@@ -103,10 +103,10 @@ type Guard private () =
         )
 
     static member Of(error: 'error, flow: Flow<'env, unit, 'value>) : Flow<'env, 'error, 'value> =
-        Flow(fun environment ->
+        Flow(fun environment _ ->
             match Flow.run environment flow with
-            | Ok value -> Ok value
-            | Error () -> Error error)
+            | Ok value -> EffectFlow.ofValue value
+            | Error () -> EffectFlow.ofError error)
 
     static member Of(error: 'error, flow: AsyncFlow<'env, unit, 'value>) : AsyncFlow<'env, 'error, 'value> =
         AsyncFlow(fun environment ->
