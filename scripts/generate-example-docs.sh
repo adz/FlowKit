@@ -96,16 +96,8 @@ render_example_section \
   "https://github.com/adz/FsFlow/blob/main/examples/FsFlow.Caps.Core.Examples/CoreCapabilitiesExample.fs" \
   "dotnet run --project examples/FsFlow.Caps.Core.Examples/FsFlow.Caps.Core.Examples.fsproj --nologo"
 
-render_example_section \
-  "CAPS Context Example" \
-  'This example shows the FsFlow.Caps.Context surface: request id, correlation id, tenant id, current user, locale, metadata, and request-scoped flags flowing into logging, auditing, and authorization.' \
-  "$root_dir/examples/FsFlow.Caps.Context.Examples/FsFlow.Caps.Context.Examples.fsproj" \
-  "$root_dir/examples/FsFlow.Caps.Context.Examples/ContextExample.fs" \
-  "https://github.com/adz/FsFlow/blob/main/examples/FsFlow.Caps.Context.Examples/ContextExample.fs" \
-  "dotnet run --project examples/FsFlow.Caps.Context.Examples/FsFlow.Caps.Context.Examples.fsproj --nologo"
-
-render_example_section \
-  "Playground Example" \
+  generate_example \
+  'Playground Example' \
   "This example shows the same core boundary across Flow using the normal direct-bind style inside each computation expression." \
   "$root_dir/examples/FsFlow.Playground/FsFlow.Playground.fsproj" \
   "$root_dir/examples/FsFlow.Playground/Program.fs" \

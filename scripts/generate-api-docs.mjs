@@ -17,7 +17,15 @@ const pageSpecs = [
     description: 'Source-documented synchronous workflow surface in FsFlow.',
     intro:
       "This page shows the source-documented `Flow` surface: the core type, the module functions, and the `flow { }` builder.",
-    sourceFiles: ['src/FsFlow/Core.fs', 'src/FsFlow/Flow.fs', 'src/FsFlow/Builders.fs'],
+    sourceFiles: [
+      'src/FsFlow/Core.fs', 
+      'src/FsFlow/Flow.fs', 
+      'src/FsFlow/Builders.fs',
+      'src/FsFlow/Ref.fs',
+      'src/FsFlow/Stm.fs',
+      'src/FsFlow/Stream.fs',
+      'src/FsFlow/Schedule.fs'
+    ],
     sections: [
       
       {
@@ -31,6 +39,26 @@ const pageSpecs = [
       {
         title: 'Module functions',
         symbols: ['module:Flow', 'Flow.run', 'Flow.runFull', 'Flow.runWithToken', 'Flow.ok', 'Flow.error', 'Flow.succeed', 'Flow.value', 'Flow.fail', 'Flow.fromResult', 'Flow.fromOption', 'Flow.fromValueOption', 'Flow.orElseFlow', 'Flow.env', 'Flow.read', 'Flow.map', 'Flow.bind', 'Flow.tap', 'Flow.tapError', 'Flow.mapError', 'Flow.catch', 'Flow.orElseWith', 'Flow.orElse', 'Flow.zip', 'Flow.map2', 'Flow.map3', 'Flow.apply', 'Flow.ignore', 'Flow.localEnv', 'Flow.provideLayer', 'Flow.delay', 'Flow.traverse', 'Flow.sequence'],
+      },
+      {
+        title: 'Concurrency',
+        symbols: ['type:Fiber', 'Flow.fork', 'Flow.join', 'Flow.interrupt'],
+      },
+      {
+        title: 'Parallel orchestration',
+        symbols: ['Flow.zipPar', 'Flow.race'],
+      },
+      {
+        title: 'State management',
+        symbols: ['type:Ref', 'Ref.make', 'Ref.get', 'Ref.set', 'Ref.update', 'Ref.modify', 'type:TRef', 'type:STM', 'STM.atomically', 'TRef.make', 'TRef.get', 'TRef.set', 'TRef.update', 'Builders.stm'],
+      },
+      {
+        title: 'Streaming',
+        symbols: ['type:FlowStream', 'FlowStream.fromSeq', 'FlowStream.runForEach', 'FlowStream.map'],
+      },
+      {
+        title: 'Scheduling',
+        symbols: ['type:Schedule', 'Schedule.recurs', 'Schedule.spaced', 'Schedule.exponential', 'Schedule.jittered', 'Flow.Retry', 'Flow.Repeat'],
       },
     ],
   },
@@ -146,36 +174,6 @@ const pageSpecs = [
       {
         title: 'Environment variables',
         symbols: ['module:EnvironmentVariables', 'EnvironmentVariables.tryGet', 'EnvironmentVariables.live', 'EnvironmentVariables.fromPairs', 'module:EnvironmentVariable', 'EnvironmentVariable.tryGet', 'EnvironmentVariable.get', 'EnvironmentVariable.getInt', 'EnvironmentVariable.getGuid', 'EnvironmentVariable.getBool', 'module:EnvironmentVariableErrors', 'EnvironmentVariableErrors.describe'],
-      },
-    ],
-  },
-  {
-    outPath: ['caps-context', 'context.md'],
-    title: 'CAPS Context',
-    description: 'Source-documented request and execution-context primitives for FsFlow.Caps.Context.',
-    intro:
-      "This page shows the source-documented `FsFlow.Caps.Context` surface: the current-user model, request context record, request identifiers, locale, metadata, and request-scoped flags.",
-    sourceFiles: ['src/FsFlow.Caps.Context/Context.fs'],
-    sections: [
-      {
-        title: 'Context types',
-        symbols: ['type:UserContext', 'type:RequestContext'],
-      },
-      {
-        title: 'Current user',
-        symbols: ['module:CurrentUser', 'CurrentUser.create', 'CurrentUser.fromClaimsPrincipal', 'CurrentUser.live', 'CurrentUser.hasRole', 'CurrentUser.claim'],
-      },
-      {
-        title: 'Request context',
-        symbols: ['module:RequestContext', 'RequestContext.create', 'RequestContext.live', 'RequestContext.withRequestId', 'RequestContext.withCorrelationId', 'RequestContext.withTenantId', 'RequestContext.withCurrentUser', 'RequestContext.withCulture', 'RequestContext.withMetadata', 'RequestContext.withFlags'],
-      },
-      {
-        title: 'Request identity',
-        symbols: ['module:RequestId', 'RequestId.get', 'RequestId.live', 'module:CorrelationId', 'CorrelationId.tryGet', 'CorrelationId.live', 'module:TenantId', 'TenantId.tryGet', 'TenantId.live', 'module:Locale', 'Locale.get', 'Locale.live'],
-      },
-      {
-        title: 'Metadata and flags',
-        symbols: ['module:RequestMetadata', 'RequestMetadata.empty', 'RequestMetadata.fromPairs', 'RequestMetadata.tryGet', 'RequestMetadata.contains', 'module:RequestFlags', 'RequestFlags.empty', 'RequestFlags.fromPairs', 'RequestFlags.tryGet', 'RequestFlags.isEnabled'],
       },
     ],
   },
