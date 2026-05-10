@@ -5,68 +5,32 @@ Keep completed work out of this file.
 Keep settled design decisions in `dev-docs/decisions/`.
 Keep live product and architecture direction in `dev-docs/PLAN.md`.
 
-The CAPS implementation backlog is intentionally linear so each package can land with its own tests,
-examples, and docs.
+## Phase 1: The Unified Core (Convergence)
 
-Shared conventions for the package work:
+1. [ ] Define the unified `Flow<'env, 'e, 'v>` type in `FsFlow/Core.fs` using a `ValueTask`/`Promise` bridge with `#if FABLE_COMPILER` guards; include the standard `Result` wrapping.
+2. [ ] Implement the core `Flow` module primitives (`ok`, `error`, `read`, `map`, `bind`, `tap`, `fromResult`) using the new unified signature.
+3. [ ] Implement the universal `flow { }` builder in `FsFlow/Builders.fs` using method overloading to support `Async`, `Task`, `Result`, and environment requests; ensure full `CancellationToken` propagation.
+4. [ ] Implement `Flow.run` and `Flow.runFull` (and `runWithToken`) for the unified type, supporting both synchronous and asynchronous execution paths on .NET and native Promise execution on Fable.
+5. [ ] Add unit tests for the unified `flow { }` builder covering mixed effect orchestration (Sync, Async, Task, Result) and verify against the Fable 5 transpilation mapping.
 
-- follow existing FsFlow naming where possible, but expose capability functions with the first
-  letter lower-cased and without `Async` suffixes
-- auto-pass `CancellationToken` for operations that need it instead of making every call site thread
-  it manually
-- wrap expected, app-important failures in the typed result model
-- let defects, programmer errors, and unexpected provider failures bubble to the nearest higher
-  boundary where they can be caught and translated
-- keep each package as its own NuGet so users only pull in the capabilities they explicitly choose
+## Phase 2: Migration & Cleanup
 
-1. [x] Implement `FsFlow.Caps.Core` as the smallest shared capability package: provide clock,
-   random, GUID, and environment-variable capabilities with live and test implementations, typed
-   errors for meaningful absence or invalid values, and docs/examples showing the sync-first surface
-   shape.
-2. [x] Implement `FsFlow.Caps.Context` as the execution-context package: provide request id,
-   correlation id, tenant id, current user, locale/culture, request metadata, and any request-scoped
-   flags needed by app code, with simple live/test context providers and docs/examples that show the
-   context flowing into logging, auditing, and authorization.
-3. [ ] Implement `FsFlow.Caps.Observability` as the FsFlow-owned observability abstraction package:
-   provide logging, spans/traces, metrics, baggage/annotations, and structured log entry support;
-   keep the core surface independent of provider libraries; document which observability failures are
-   returned as results and which are treated as higher-level defects.
-4. [ ] Implement `FsFlow.Caps.Observability.MicrosoftLogging` as the Microsoft logging adapter:
-   bridge `ILogger` and `ILoggerFactory` into the FsFlow observability abstractions, support logger
-   categories and scopes, and include tests/examples/docs that prove the adapter preserves the
-   expected level mapping and structured state.
-5. [ ] Implement `FsFlow.Caps.Observability.OpenTelemetry` as the OpenTelemetry adapter: bridge
-   `ActivitySource`, `Meter`, and the provider types into the FsFlow observability abstractions,
-   support span creation, metric emission, and export-friendly configuration, and add tests/examples
-   docs for the adapter boundary.
-6. [ ] Implement `FsFlow.Caps.Console` as the console IO package: provide `console.write`,
-   `console.writeLine`, `console.readLine`, `console.readKey`, and any other boring console helpers
-   that stay synchronous at the API surface while auto-threading cancellation where applicable; add a
-   captured-output/scripted-input test runtime and runnable examples.
-7. [ ] Implement `FsFlow.Caps.FileSystem` as the file and directory package: provide
-   `file.readAllText`, `file.writeAllText`, `file.exists`, `file.openRead`, `file.copy`, `file.move`,
-   `file.delete`, `directory.exists`, `directory.create`, `directory.enumerateFiles`,
-   `directory.delete`, `path.combine`, and temp-file/temp-directory helpers; return typed errors for
-   not-found, unauthorized, invalid-path, already-exists, IO, and cancellation cases; add fake/live
-   file-system support plus docs/examples.
-8. [ ] Implement `FsFlow.Caps.Http` as the HTTP package: provide `http.send`, `http.getString`,
-   `http.getJson`, `http.postJson`, and the other basic request helpers that mirror the existing
-   FsFlow style without async suffixes; auto-pass cancellation, wrap expected HTTP failures such as
-   invalid URI, timeout, non-success status, and decode errors in the result model, and keep the
-   package testable with an in-memory handler or fake client.
-9. [ ] Implement `FsFlow.Caps.Process` as the process execution package: provide
-   `process.run`, `process.start`, `process.capture`, standard working-directory/environment/stdio
-   configuration, and exit-code/timeout handling; wrap expected process failures such as executable
-   not found, start failure, non-zero exit, timeout, and cancellation in typed errors, with tests,
-   examples, and docs for both live and fake execution.
-10. [ ] Implement `FsFlow.Caps.ServiceProvider` as the DI bridge package: provide
-    `service.get`, `service.tryGet`, `options.get`, and keyed-service lookup helpers against
-    `IServiceProvider`; keep the dependency on `Microsoft.Extensions.DependencyInjection.Abstractions`
-    isolated here; document how the package maps container lookups into FsFlow results and when
-    missing services should be treated as expected failures versus higher-level defects.
-11. [ ] Add package-specific tests, runnable examples, and reference docs for every CAPS package:
-    create/refresh the example projects, make the docs entry pages point at the package surface, and
-    keep the examples aligned with the sync-first, lower-cased capability style.
-12. [ ] Validate the full CAPS package story end to end: run the test suite, regenerate API docs, and
-    build the site; fix any broken links, stale examples, or reference gaps before considering the
-    package set complete.
+6. [ ] Migrate existing `FsFlow` internal modules (Guard, Validate) to use the new unified `Flow` type instead of separate `Flow`/`AsyncFlow`/`TaskFlow`.
+7. [ ] Refactor the project structure to remove the separate `AsyncFlow.fs` and `TaskFlow.fs` files, merging their unique logic (e.g., retries, timeouts) into the unified `Flow` module.
+8. [ ] Update existing unit tests and examples in `tests/FsFlow.Tests` and `examples/FsFlow.Examples` to use the unified `flow { }` builder.
+9. [ ] Regenerate API documentation to reflect the single-type model and the removal of the effect-family split.
+
+## Phase 3: ZIO Core Features (The Runtime)
+
+10. [ ] Implement the `Fiber` abstraction for light-weight concurrency; provide `Flow.fork`, `Flow.join`, and `Flow.interrupt` with platform-specific implementations for the .NET ThreadPool and JS Microtasks.
+11. [ ] Implement `Flow.zipPar` and `Flow.race` using the Fiber runtime to enable high-performance parallel orchestration.
+12. [ ] Implement Software Transactional Memory (STM) core: provide `Ref<'T>`, `TRef<'T>`, and the `stm { }` builder for atomic state updates.
+13. [ ] Implement the `FlowStream<'env, 'e, 'v>` type: provide environment-aware, error-typed streaming with `map`, `filter`, `fold`, and backpressure support (using `IAsyncEnumerable` for Fable 5 parity).
+14. [ ] Implement the Scheduling API: provide fluent retry and repeat logic (e.g., `Schedule.exponential`, `Schedule.jittered`, `Schedule.recur`).
+
+## Phase 4: Post-Unification CAPS
+
+15. [ ] Refactor `FsFlow.Caps.Core` and `FsFlow.Caps.Context` to use the unified `Flow` type; remove `Async` suffixes from capability methods and ensure they are Fable-compatible.
+16. [ ] Implement `FsFlow.Caps.Observability` on the unified model: provide integrated tracing and metrics that auto-capture context from the `Flow` environment.
+17. [ ] Implement the remaining CAPS packages (Console, FileSystem, Http, Process) as unified-only effects.
+18. [ ] Perform a full project-wide validation: run all tests, verify Fable 5 transpilation for all packages, and update all documentation for the FsFlow 2.0 (Unified) release.
