@@ -1,23 +1,21 @@
 ---
 weight: 20
 title: Execution Semantics
-description: Exact execution rules for Flow, AsyncFlow, TaskFlow, and ColdTask.
+description: Exact execution rules for Flow and ColdTask.
 ---
 
 
 # Execution Semantics
 
-This page shows the exact execution model of Flow, AsyncFlow, TaskFlow, and ColdTask.
+This page shows the exact execution model of Flow and ColdTask.
 
 Task-oriented semantics on this page refer to the task surface that ships in the main `FsFlow` package.
 The public surface now includes sync, async, and task concepts together.
-The task surface means the TaskFlow builder plus its task-aware extension members for `Task`, `ValueTask`, and ColdTask.
+The task surface means the Flow builder plus its task-aware extension members for `Task`, `ValueTask`, and ColdTask.
 
 ## Success And Typed Failure
 
 - `Flow.succeed value` returns `Ok value`
-- `AsyncFlow.succeed value` returns `Ok value`
-- `TaskFlow.succeed value` returns `Ok value`
 - `fail` produces the typed `Error`
 - `map` only transforms successful values
 - `mapError` only transforms typed failures
@@ -29,7 +27,7 @@ The first typed failure stops the current workflow unless you explicitly recover
 
 ## Short-Circuiting Versus Accumulated Validation
 
-Check, Result, [`result {}`]({{< relref "builders-result.md" >}}), Flow, AsyncFlow, and TaskFlow model ordered workflows.
+Check, Result, [`result {}`]({{< relref "builders-result.md" >}}), and Flow model ordered workflows.
 They stop on the first typed failure unless you explicitly recover from it.
 
 Validation and [`validate {}`]({{< relref "builders-validate.md" >}}) are the accumulating path.
@@ -49,48 +47,35 @@ Use the validation model when:
 
 ## Cold By Default
 
-All three computation families are cold.
+The flow computation is cold.
 Building a computation does not run it.
 
 Rerun behavior:
 
-- Flow reruns from scratch each time you call `Flow.run`
-- AsyncFlow reruns from scratch each time you call `AsyncFlow.run` or `AsyncFlow.toAsync`
-- TaskFlow reruns from scratch each time you call `TaskFlow.run` or `TaskFlow.toTask`
+- rerunning a computation runs it from scratch each time you call `Flow.run`
+- direct `Async` or `Task` values bound inside the workflow follow their own execution semantics
 
 The `delay` combinator preserves that behavior in each family.
 
 ## Execution Is Explicit
 
-Run each computation family with its own execution function:
-
-- `Flow.run env flow`
-- `AsyncFlow.toAsync env flow`
-- `TaskFlow.toTask env cancellationToken flow`
-
-The runtime shape is part of the public contract.
-That is why the library keeps three families instead of forcing every computation through one wrapper.
+Run the flow with `Flow.run env flow`.
+Use `Flow.runFull env cancellationToken flow` when you need to pass an explicit cancellation token.
 
 ## Exceptions
 
-Each family exposes `catch` to convert exceptions into typed errors:
-
-- `Flow.catch`
-- `AsyncFlow.catch`
-- `TaskFlow.catch`
+`Flow.catch` converts exceptions into typed errors.
 
 This handles exceptions that occur while the computation is being executed.
 Typed failures still stay in Result.
 
 ## Environments
 
-Each family reads dependencies explicitly:
+Flow reads dependencies explicitly:
 
 - `env` reads the whole environment
 - `read` projects one dependency
 - `localEnv` runs a smaller computation inside a larger environment
-
-The environment semantics are aligned across all three families.
 
 ## Pairing And Small Composition
 
@@ -104,7 +89,7 @@ These helpers are useful when a full computation expression would add more cerem
 
 ## Task Temperature
 
-TaskFlow and the `.NET` extensions for [`asyncFlow {}`]({{< relref "builders-asyncflow.md" >}}) distinguish between:
+Flow distinguishes between:
 
 - already-started task values such as `Task<'value>` and `ValueTask<'value>`
 - delayed task work represented by `ColdTask<'value>`
@@ -134,8 +119,8 @@ Example with a started task:
 ```fsharp
 let started = Task.FromResult 42
 
-let computation : TaskFlow<unit, string, int> =
-    taskFlow {
+let computation : Flow<unit, string, int> =
+    flow {
         let! value = started
         return value
     }
@@ -151,8 +136,8 @@ let readValue : ColdTask<int> =
     ColdTask(fun cancellationToken ->
         Task.FromResult 42)
 
-let computation : TaskFlow<unit, string, int> =
-    taskFlow {
+let computation : Flow<unit, string, int> =
+    flow {
         let! value = readValue
         return value
     }
@@ -164,8 +149,8 @@ Each run calls the ColdTask factory again and passes in the current computation 
 
 Operational helpers for logging, timeout, retry, and resource handling are grouped into `Runtime` modules:
 
-- **`AsyncFlow.Runtime`**: Helpers for AsyncFlow computations (cancellation, sleep, log, timeout, retry).
-- **`TaskFlow.Runtime`**: Task-native helpers for TaskFlow computations, including support for `RuntimeContext`.
+- **`Flow.Runtime`**: Helpers for Flow computations (cancellation, sleep, log, timeout, retry).
+- **`RuntimeContext`**: Helpers for building and reshaping runtime contexts.
 
 There is no `Flow.Runtime` because synchronous flows are intended for pure logic that does not
 require operational runtime support like cancellation or timeouts.
@@ -177,32 +162,30 @@ nulls, collections, equality, and strings.
 
 Use `Check.orError` to attach a typed error after the pure validation step.
 
-When the same source should bind directly in [`flow {}`]({{< relref "builders-flow.md" >}}), [`asyncFlow {}`]({{< relref "builders-asyncflow.md" >}}), or [`taskFlow {}`]({{< relref "taskbuilders-taskflow.md" >}}),
-use `Guard.Of` for `bool`, `option`, `voption`, `Result<'value, unit>`, and
-`Validation<'value, unit>` sources, or `Guard.MapError` when the source already carries an
-error value.
+When the same source should bind directly in `flow {}`, use `Guard.Of` for `bool`, `option`,
+`voption`, `Result<'value, unit>`, and `Validation<'value, unit>` sources, or `Guard.MapError`
+when the source already carries an error value.
 
 When the error value itself needs environment or effectful evaluation, use the bridge helpers on
-Flow, AsyncFlow, or TaskFlow.
+Flow.
 
 Use Validation and [`validate {}`]({{< relref "builders-validate.md" >}}) when the failures should accumulate into a structured
 `Diagnostics` graph instead of short-circuiting.
 
 ## Family Direction
 
-The computation families intentionally compose upward:
+The flow model intentionally composes upward:
 
-- AsyncFlow can lift Flow
-- TaskFlow can lift Flow
-- TaskFlow can lift AsyncFlow
-
-Keep the smallest honest computation at each boundary, then lift it only when the outer runtime actually changes.
+- Flow can lift sync values directly
+- Flow can bind `Async`, `Task`, `ValueTask`, and `ColdTask` directly
+- keep the smallest honest computation at each boundary
 
 ## What The Tests Cover
 
 The test suite currently verifies:
 
-- sync, async, and task execution
+- sync execution
+- async and task direct-binding execution
 - rerun behavior for `delay`
 - direct binding across the supported wrapper shapes
 - ColdTask hot and cold adaptation behavior
@@ -212,8 +195,8 @@ The test suite currently verifies:
 
 ## Next
 
-Read [`docs/GETTING_STARTED.md`](./GETTING_STARTED.md) for the computation-family overview,
+Read [`docs/GETTING_STARTED.md`](./GETTING_STARTED.md) for the computation overview,
 [`docs/TASK_ASYNC_INTEROP.md`](./TASK_ASYNC_INTEROP.md) for the direct binding surface,
 or [`src/FsFlow/Flow.fs`](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs) and
-[`src/FsFlow/TaskFlow.fs`](https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs)
+[`src/FsFlow/Builders.fs`](https://github.com/adz/FsFlow/blob/main/src/FsFlow/Builders.fs)
 for the full API surface.

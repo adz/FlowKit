@@ -16,7 +16,7 @@ In a CAPS workflow, you use the `Env<'dep>` token to request a dependency by its
 
 ```fsharp
 let getTime =
-    taskFlow {
+    flow {
         // Request the IClock dependency directly
         let! clock = Env<IClock> 
         return clock.UtcNow()
@@ -25,11 +25,11 @@ let getTime =
 
 ### Projecting with `Env<'dep>`
 
-Just like `TaskFlow.read` in the Record Pattern, you can project a value or call a method directly from the dependency using a lambda or the `_.Field` shorthand.
+Just like `Flow.read` in the Record Pattern, you can project a value or call a method directly from the dependency using a lambda or the `_.Field` shorthand.
 
 ```fsharp
 let readTime =
-    taskFlow {
+    flow {
         // Project UtcNow from the IClock dependency
         let! now = Env<IClock> (fun clock -> clock.UtcNow())
         
@@ -63,8 +63,8 @@ type LoginCaps =
     abstract UserStore : IUserStore
     abstract Clock : IClock
 
-let login email : TaskFlow<#LoginCaps, AppError, Session> =
-    taskFlow {
+let login email : Flow<#LoginCaps, AppError, Session> =
+    flow {
         let! store = Env<IUserStore>
         let! clock = Env<IClock>
         
@@ -102,7 +102,7 @@ type AppRuntime =
 
 // Even though AppRuntime is huge, it can run the login flow
 login "ada@example.com"
-|> TaskFlow.run appRuntime CancellationToken.None
+|> Flow.run appRuntime CancellationToken.None
 ```
 
 ## Testing Stays Small
@@ -114,7 +114,7 @@ type TestRuntime =
     { Clock : IClock }
     interface Needs<IClock> with member x.Dep = x.Clock
 
-getTime |> TaskFlow.run { Clock = MockClock() } CancellationToken.None
+getTime |> Flow.run { Clock = MockClock() } CancellationToken.None
 ```
 
 ---

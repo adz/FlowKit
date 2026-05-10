@@ -30,7 +30,7 @@
 
   <meta itemprop="name" content="FsToolkit.ErrorHandling">
   <meta itemprop="description" content="Comparing FsFlow and FsToolkit.ErrorHandling models and how they work together.">
-  <meta itemprop="wordCount" content="395">
+  <meta itemprop="wordCount" content="387">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="FsToolkit.ErrorHandling">
   <meta name="twitter:description" content="Comparing FsFlow and FsToolkit.ErrorHandling models and how they work together.">
@@ -263,7 +263,7 @@ focuses on a unified execution model that carries environments and runtime polic
 <p><code>FsToolkit.ErrorHandling</code> provides a broad toolbox of helpers for working with Result,
 <code>AsyncResult</code>, and <code>TaskResult</code> as separate, wrapped types.</p>
 <p>FsFlow provides a single, scalable progression:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>[Check](/reference/check/) -&gt; [Result](/reference/result/builders-result/) -&gt; [Validation](/reference/validation/) -&gt; [Flow](/reference/flow/) -&gt; [AsyncFlow](/reference/asyncflow/) -&gt; [TaskFlow](/reference/taskflow/)
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>[Check](/reference/check/) -&gt; [Result](/reference/result/builders-result/) -&gt; [Validation](/reference/validation/) -&gt; [Flow](/reference/flow/)
 </span></span></code></pre></div><p>In FsFlow, the environment and runtime concerns are baked into the computation, allowing you to
 write orchestration logic that remains agnostic of whether the underlying work is sync or async
 until it hits the application boundary.</p>
@@ -287,11 +287,11 @@ until it hits the application boundary.</p>
       </tr>
       <tr>
           <td><code>asyncResult { }</code></td>
-          <td><code>asyncFlow {}</code></td>
+          <td><code>flow {}</code></td>
       </tr>
       <tr>
           <td><code>taskResult { }</code></td>
-          <td><code>taskFlow {}</code></td>
+          <td><code>flow {}</code></td>
       </tr>
       <tr>
           <td>Validation helpers</td>
@@ -305,8 +305,7 @@ standard result wrappers:</p>
 <ol>
 <li><strong>Unified Environment</strong>: Every flow has access to an explicit <code>'env</code>, removing the need
 to manually thread dependencies through every function.</li>
-<li><strong>Runtime Policies</strong>: Retries, timeouts, and logging are first-class citizens in the
-<code>AsyncFlow.Runtime</code> and <code>TaskFlow.Runtime</code> modules.</li>
+<li><strong>Runtime Policies</strong>: Retries, timeouts, and logging are first-class citizens in the <code>Flow.Runtime</code> module.</li>
 <li><strong>Task Temperature</strong>: Built-in support for ColdTask, ensuring tasks only start when
 the flow is actually executed.</li>
 <li><strong>Diagnostics Graph</strong>: A structured, path-aware error graph for complex validation that
@@ -319,8 +318,7 @@ functions.</p>
 <ul>
 <li><strong>Keep existing pure helpers</strong>: If you have a library of Result transformation helpers
 from FsToolkit, keep using them! FsFlow&rsquo;s <code>flow {}</code> builders bind Result directly.</li>
-<li><strong>Move orchestration</strong>: Use TaskFlow or AsyncFlow when you need to combine those pure
-functions with I/O, configuration, or operational policies.</li>
+<li><strong>Move orchestration</strong>: Use Flow when you need to combine those pure functions with I/O, configuration, or operational policies.</li>
 </ul>
 <h2 id="semantic-boundary">Semantic Boundary</h2>
 <p>FsFlow flows are short-circuiting by default. If your current FsToolkit usage leans on

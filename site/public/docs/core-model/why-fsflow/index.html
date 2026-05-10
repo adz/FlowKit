@@ -19,21 +19,21 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/FsFlow/favicons/android-192x192.png" sizes="192x192">
 
 <title>The FsFlow Model | FsFlow</title>
-<meta name="description" content="The core FsFlow progression from Check and Result into Validation, Flow, AsyncFlow, and TaskFlow.">
+<meta name="description" content="The core FsFlow progression from Check and Result into Validation and Flow.">
 <meta property="og:url" content="http://localhost:3000/FsFlow/docs/core-model/why-fsflow/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="The FsFlow Model">
-  <meta property="og:description" content="The core FsFlow progression from Check and Result into Validation, Flow, AsyncFlow, and TaskFlow.">
+  <meta property="og:description" content="The core FsFlow progression from Check and Result into Validation and Flow.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="docs">
 
   <meta itemprop="name" content="The FsFlow Model">
-  <meta itemprop="description" content="The core FsFlow progression from Check and Result into Validation, Flow, AsyncFlow, and TaskFlow.">
-  <meta itemprop="wordCount" content="886">
+  <meta itemprop="description" content="The core FsFlow progression from Check and Result into Validation and Flow.">
+  <meta itemprop="wordCount" content="867">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="The FsFlow Model">
-  <meta name="twitter:description" content="The core FsFlow progression from Check and Result into Validation, Flow, AsyncFlow, and TaskFlow.">
+  <meta name="twitter:description" content="The core FsFlow progression from Check and Result into Validation and Flow.">
 <link href="http://localhost:3000/FsFlow/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -256,21 +256,21 @@
   </ol>
 </nav>
 <div class="td-content">
-	<div class="lead">The core FsFlow progression from Check and Result into Validation, Flow, AsyncFlow, and TaskFlow.</div>
+	<div class="lead">The core FsFlow progression from Check and Result into Validation and Flow.</div>
 	<header class="article-meta">
 		
 </header>
 	<h1 id="the-fsflow-model">The FsFlow Model</h1>
 <p>This page shows why FsFlow is best understood as one scalable model for Result-based programs rather than a small helper for application boundaries.</p>
 <p>The core progression is:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Check -&gt; Result -&gt; Validation -&gt; Flow -&gt; AsyncFlow -&gt; TaskFlow
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Check -&gt; Result -&gt; Validation -&gt; Flow
 </span></span></code></pre></div><p>The validation vocabulary stays the same while the execution context grows.</p>
 <ul>
 <li>start with reusable predicate checks, whether they preserve a value on success or act as a gate</li>
 <li>keep fail-fast logic in plain Result</li>
 <li>accumulate sibling failures with Validation and <code>validate {}</code></li>
 <li>lift into Flow when you need explicit environment access</li>
-<li>lift again into AsyncFlow or TaskFlow when the runtime becomes asynchronous</li>
+<li>lift again into Flow or Flow when the runtime becomes asynchronous</li>
 </ul>
 <p>That matters because many F# codebases end up with separate worlds:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#000">Result</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">value</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">error</span><span style="color:#ce5c00;font-weight:bold">&gt;</span>
@@ -284,14 +284,13 @@ and repeated adaptation between pure validation and effectful orchestration.</p>
 </span></span><span style="display:flex;"><span><span style="color:#000">Result</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">value</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">error</span><span style="color:#ce5c00;font-weight:bold">&gt;</span>
 </span></span><span style="display:flex;"><span><span style="color:#000">Validation</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">value</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">error</span><span style="color:#ce5c00;font-weight:bold">&gt;</span>
 </span></span><span style="display:flex;"><span><span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">env</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">error</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">value</span><span style="color:#ce5c00;font-weight:bold">&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">AsyncFlow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">env</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">error</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">value</span><span style="color:#ce5c00;font-weight:bold">&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">TaskFlow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">env</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">error</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">value</span><span style="color:#ce5c00;font-weight:bold">&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">env</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">error</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">value</span><span style="color:#ce5c00;font-weight:bold">&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">env</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">error</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">value</span><span style="color:#ce5c00;font-weight:bold">&gt;</span>
 </span></span></code></pre></div><p>The point is not to replace Result, <code>Async</code>, or <code>Task</code>.
 The point is to let one Result-based style scale into real application boundaries without changing the mental model.</p>
-<p>AsyncFlow is the async-native sibling. TaskFlow is the .NET task sibling.
-Use AsyncFlow by itself when you want an <code>Async</code> boundary without <code>Task</code> or ColdTask interop.
+<p>Flow is the boundary model. The same builder can bind sync values, <code>Async</code>, <code>Task</code>, <code>ValueTask</code>, and <code>ColdTask</code> directly.
 Guard is the explicit bridge that keeps check-like sources and existing error-bearing sources readable
-when they need to enter <code>flow {}</code>, <code>asyncFlow {}</code>, or <code>taskFlow {}</code>.</p>
+when they need to enter <code>flow {}</code>.</p>
 <h2 id="the-main-claim">The Main Claim</h2>
 <p>FsFlow unifies Result-based programming across pure logic and effectful execution.</p>
 <ul>
@@ -329,10 +328,10 @@ when they need to enter <code>flow {}</code>, <code>asyncFlow {}</code>, or <cod
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#000">LoadUser</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">int</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#000">Task</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">Result</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">User</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">RegistrationError</span><span style="color:#ce5c00;font-weight:bold">&gt;&gt;</span>
 </span></span><span style="display:flex;"><span>      <span style="color:#000">SaveUser</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">User</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#000">Task</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">Result</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">unit</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">RegistrationError</span><span style="color:#ce5c00;font-weight:bold">&gt;&gt;</span> <span style="color:#ce5c00;font-weight:bold">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">register</span> <span style="color:#000">userId</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">TaskFlow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">RegistrationEnv</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">RegistrationError</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">unit</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">taskFlow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">loadUser</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">TaskFlow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">LoadUser</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">saveUser</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">TaskFlow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">SaveUser</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">register</span> <span style="color:#000">userId</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">RegistrationEnv</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">RegistrationError</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">unit</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">loadUser</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">LoadUser</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">saveUser</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">SaveUser</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">user</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">loadUser</span> <span style="color:#000">userId</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">do</span><span style="color:#ce5c00;font-weight:bold">!</span> <span style="color:#000">validateEmail</span> <span style="color:#000">user</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Email</span>
@@ -365,7 +364,7 @@ There is no separate task-result validation vocabulary to switch to first.</p>
 <li>plain Result when it already reads clearly</li>
 </ul>
 <h2 id="short-circuiting-is-intentional">Short-Circuiting Is Intentional</h2>
-<p>Check, Result, Flow, AsyncFlow, and TaskFlow are short-circuiting.
+<p>Check, Result, Validation, and Flow are short-circuiting.
 They stop on the first typed failure.</p>
 <p>That is a feature, not a missing applicative layer.</p>
 <p>If you need accumulated validation, use Validation and <code>validate {}</code> explicitly.
@@ -373,8 +372,8 @@ FsFlow does not try to hide that behavior inside the workflow builders.</p>
 <h2 id="what-keeps-it-readable">What Keeps It Readable</h2>
 <p>The design stays explicit in the places that matter for teams:</p>
 <ul>
-<li>env access is visible through <code>Flow.read</code>, <code>AsyncFlow.read</code>, or <code>TaskFlow.read</code></li>
-<li>execution is visible through <code>Flow.run</code>, <code>AsyncFlow.toAsync</code>, or <code>TaskFlow.toTask</code></li>
+<li>env access is visible through <code>Flow.read</code>, <code>Flow.read</code>, or <code>Flow.read</code></li>
+<li>execution is visible through <code>Flow.run</code> or <code>Flow.runFull</code></li>
 <li>expected failures stay in the type</li>
 <li>the computation family tells you whether the use case is sync, <code>Async</code>, or <code>.NET Task</code></li>
 </ul>

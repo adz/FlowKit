@@ -30,7 +30,7 @@
 
   <meta itemprop="name" content="Ecosystem Overview">
   <meta itemprop="description" content="How FsFlow fits beside FsToolkit, Validus, IcedTasks, and FSharpPlus.">
-  <meta itemprop="wordCount" content="611">
+  <meta itemprop="wordCount" content="615">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Ecosystem Overview">
   <meta name="twitter:description" content="How FsFlow fits beside FsToolkit, Validus, IcedTasks, and FSharpPlus.">
@@ -276,8 +276,8 @@
 <li>Result for fail-fast typed failures</li>
 <li>Validation for structured accumulation</li>
 <li>Flow for synchronous boundaries</li>
-<li>AsyncFlow for async boundaries</li>
-<li>TaskFlow for task boundaries</li>
+<li>Flow for async boundaries</li>
+<li>Flow for task boundaries</li>
 <li><code>'env</code> / <code>'ctx</code> style context threading for implicit dependencies, request metadata, and other runtime state</li>
 </ul>
 <p>That gives you a smaller surface area when the application boundary is what you want to make explicit.</p>
@@ -293,7 +293,7 @@
 <p>This is the closest migration path for existing railway-oriented code:</p>
 <ul>
 <li>keep pure validation and mapping code as plain Result</li>
-<li>move the orchestration boundary into Flow, AsyncFlow, or TaskFlow</li>
+<li>move the orchestration boundary into Flow and bind async/task work directly where needed</li>
 <li>use Check when the check itself can stay pure and only the final error provisioning becomes effectful</li>
 </ul>
 <p>Go to <a href="http://localhost:3000/FsFlow/docs/ecosystem/integrations-fstoolkit/"><code>Replacing FsToolkit.ErrorHandling</code></a> for the migration shape and coexistence patterns.</p>

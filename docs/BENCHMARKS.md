@@ -37,23 +37,23 @@ Measures 20 steps of `flow { let! x = Ok 1; return x + 1 }` against manual `resu
 | Manual Result | 12.4 ns | - |
 | Flow | 45.2 ns | 160 B |
 
-### Task-Oriented (TaskFlow)
+### Task-Oriented (Flow)
 
 Measures the same 20-step short-circuiting shape for task-oriented computations.
 
 | Method | Mean | Allocated |
 | --- | --- | --- |
 | `Manual Task<Result>` | 142.1 ns | 640 B |
-| TaskFlow | 185.4 ns | 1.2 KB |
+| Flow | 185.4 ns | 1.2 KB |
 
 ### Implicit Token Propagation
 
-Compares TaskFlow implicit token propagation with explicit token threading in a manual `Task<Result<_,_>>` computation.
+Compares Flow implicit token propagation with explicit token threading in a manual `Task<Result<_,_>>` computation.
 
 | Method | Mean | Allocated |
 | --- | --- | --- |
 | Manual Threading | 158.2 ns | 720 B |
-| TaskFlow | 185.4 ns | 1.2 KB |
+| Flow | 185.4 ns | 1.2 KB |
 
 The overhead is the cost of carrying the Env and `CancellationToken` through the computation expression.
 
@@ -69,9 +69,9 @@ Measures a 5-step computation where each step yields to the thread pool.
 | Computation | FailAt | Mean | Allocated |
 | --- | --- | --- | --- |
 | Manual Async | - | 1.2 us | 480 B |
-| AsyncFlow | - | 1.4 us | 720 B |
+| Flow | - | 1.4 us | 720 B |
 | Manual Async | Step 3 | 0.8 us | 320 B |
-| AsyncFlow | Step 3 | 0.9 us | 480 B |
+| Flow | Step 3 | 0.9 us | 480 B |
 
 The important metric for teams is that the migration story is still defensible because the gap narrows when more of the computation actually runs.
 
@@ -82,7 +82,7 @@ Measures a 5-step computation where each step is an awaited `Task.Yield()`.
 | Computation | FailAt | Mean | Allocated |
 | --- | --- | --- | --- |
 | Manual Task | - | 2.1 us | 1.2 KB |
-| TaskFlow | - | 2.4 us | 1.8 KB |
+| Flow | - | 2.4 us | 1.8 KB |
 
 The relative gap shrinks as more of the computation executes.
 
@@ -103,7 +103,7 @@ The "cold" property is for effectful orchestration, not for caching data.
 
 ## ValueTask Tradeoffs
 
-TaskFlow uses `ValueTask` internally where possible, but the cold nature of the library means it cannot always avoid allocations when binding hot tasks.
+Flow uses `ValueTask` internally where possible, but the cold nature of the library means it cannot always avoid allocations when binding hot tasks.
 
 ### Binding Hot Task vs ColdTask
 
@@ -125,7 +125,7 @@ ColdTask is slightly faster and leaner because it avoids the `ValueTask` wrapper
 | Computation | Mean | Allocated |
 | --- | --- | --- |
 | `Flow.run` | 45.2 ns | 160 B |
-| `AsyncFlow.run` | 152.1 ns | 960 B |
-| `TaskFlow.run` | 185.4 ns | 1.2 KB |
+| `Flow.run` | 152.1 ns | 960 B |
+| `Flow.run` | 185.4 ns | 1.2 KB |
 
 Measurements taken with `FsFlow.Benchmarks` in the repository.

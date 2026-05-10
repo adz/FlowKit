@@ -32,7 +32,7 @@
 
   <meta itemprop="name" content="Home">
   <meta itemprop="description" content="FsFlow technical guides, semantics, and API reference.">
-  <meta itemprop="wordCount" content="153">
+  <meta itemprop="wordCount" content="147">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Home">
   <meta name="twitter:description" content="FsFlow technical guides, semantics, and API reference.">
@@ -115,11 +115,11 @@
 <p><span class="eyebrow">One model from predicate checks to task execution</span></p>
 <h1 id="a-single-model-for-result-based-programs-in-f">A single model for Result-based programs in F#.</h1>
 <div class="lede">
-Write predicate checks once. Keep fail-fast logic in <code>Result</code>, accumulate sibling failures with <code>Validation</code>, then lift the same logic into <code>Flow</code>, <code>AsyncFlow</code>, or <code>TaskFlow</code> when the boundary needs environment access, async work, task interop, cancellation, or runtime policy.
+Write predicate checks once. Keep fail-fast logic in <code>Result</code>, accumulate sibling failures with <code>Validation</code>, then lift the same logic into <code>Flow</code> when the boundary needs environment access, async work, task interop, cancellation, or runtime policy.
 </div>
 <div class="docs-home-meta">
 <a class="docs-chip" href="./docs/validation-results/">Check -> Result -> Validation</a>
-<a class="docs-chip" href="./docs/start/getting-started/">Flow / AsyncFlow / TaskFlow</a>
+<a class="docs-chip" href="./docs/start/getting-started/">Flow family</a>
 <a class="docs-chip" href="./docs/core-model/why-fsflow/">Typed failure</a>
 <a class="docs-chip" href="./docs/core-model/env-slicing/">Explicit environment</a>
 <a class="docs-chip" href="./docs/core-model/task-async-interop/">Runtime context</a>
@@ -156,7 +156,7 @@ Write predicate checks once. Keep fail-fast logic in <code>Result</code>, accumu
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#000">UtcNow</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">DateTimeOffset</span> <span style="color:#ce5c00;font-weight:bold">}</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">readVerifiedEmail</span> <span style="color:#000">userId</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">taskFlow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">user</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Env</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">Api</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">(_.</span><span style="color:#000">LoadUser</span> <span style="color:#000">userId</span><span style="color:#ce5c00;font-weight:bold">)</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">checkedAt</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Env</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">Clock</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">UtcNow</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">email</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">validateEmail</span> <span style="color:#000">user</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Email</span>

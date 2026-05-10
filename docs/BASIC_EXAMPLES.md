@@ -27,7 +27,7 @@ let result = getUrl |> Flow.run { ApiUrl = "https://api.example.com" }
 
 ## 2. Combining Sync and Async Work
 
-Use `asyncFlow {}` to mix pure functions, `Async` blocks, and other flows.
+Use `flow {}` to mix pure functions, `Async` blocks, and other flows.
 
 ```fsharp
 let validateId id =
@@ -37,32 +37,32 @@ let fetchUser id =
     async { return { Id = id; Name = "Ada" } }
 
 let workflow id =
-    asyncFlow {
+    flow {
         let! validId = validateId id
         let! user = fetchUser validId
         return user.Name
     }
 
-let result = workflow 42 |> AsyncFlow.run ()
+let result = workflow 42 |> Flow.run ()
 // Async<Result<string, string>>
 ```
 
 ## 3. Retrying a Task
 
-Use the `TaskFlow.Runtime` module to add operational policies like retries.
+Use the `Flow.Runtime` module to add operational policies like retries.
 
 ```fsharp
 open FsFlow.Net
 
 let flakyTask =
-    taskFlow {
+    flow {
         // Imagine this calls a flaky API
         return! Task.FromResult (Ok "Success")
     }
 
 let resilientWorkflow =
     flakyTask
-    |> TaskFlow.Runtime.retry (RetryPolicy.constant (TimeSpan.FromSeconds 1) 3)
+    |> Flow.Runtime.retry (RetryPolicy.constant (TimeSpan.FromSeconds 1) 3)
 
 // Will retry up to 3 times with a 1-second delay
 ```
@@ -73,7 +73,7 @@ Since FsFlow builders are just F# computation expressions, you can use standard 
 
 ```fsharp
 let conditionalWorkflow input =
-    taskFlow {
+    flow {
         if String.IsNullOrWhiteSpace input then
             return "No input provided"
         else
@@ -89,7 +89,7 @@ Use `mapError` to translate low-level errors into high-level domain errors.
 ```fsharp
 let domainWorkflow =
     lowLevelFlow
-    |> TaskFlow.mapError (function
+    |> Flow.mapError (function
         | DbError _ -> DatabaseUnavailable
         | NetworkError _ -> ExternalServiceDown)
 ```

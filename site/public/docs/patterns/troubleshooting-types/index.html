@@ -36,7 +36,7 @@ Error: A Unique Overload For Method Bind Could Not Be Determined This usually ha
   <meta itemprop="description" content="Troubleshooting Types This page shows the compiler errors that usually mean you picked the wrong workflow family or crossed a wrapper boundary in the wrong place.
 Most FsFlow type errors are not exotic. The compiler usually sees one wrapper shape and you intended another.
 Error: A Unique Overload For Method Bind Could Not Be Determined This usually happens when the compiler cannot tell which wrapper shape a let! value should use.">
-  <meta itemprop="wordCount" content="549">
+  <meta itemprop="wordCount" content="544">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Troubleshooting Types">
   <meta name="twitter:description" content="Troubleshooting Types This page shows the compiler errors that usually mean you picked the wrong workflow family or crossed a wrapper boundary in the wrong place.
@@ -277,16 +277,16 @@ The compiler usually sees one wrapper shape and you intended another.</p>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">async</span> <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">Ok</span> <span style="color:#000">42</span> <span style="color:#ce5c00;font-weight:bold">}</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">workflow</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">AsyncFlow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">unit</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">int</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">asyncFlow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">workflow</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">unit</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">int</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">next</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">nested</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">value</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">next</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">value</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
 </span></span></code></pre></div><p>The second <code>let!</code> is ambiguous.</p>
 <p>Fix it with a type annotation:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">workflow</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">AsyncFlow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">unit</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">int</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">asyncFlow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">workflow</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">unit</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">int</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">next</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">nested</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let</span><span style="color:#ce5c00;font-weight:bold">!</span> <span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">value</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">int</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">next</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">value</span>
@@ -299,14 +299,14 @@ The compiler usually sees one wrapper shape and you intended another.</p>
 </span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">value</span>
 </span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">}</span>
 </span></span></code></pre></div><p><code>flow {}</code> is sync-only.</p>
-<p>Fix it by moving to the honest family:</p>
+<p>Fix it by moving to the honest boundary:</p>
 <ul>
-<li>use <code>asyncFlow {}</code> for <code>Async</code></li>
-<li>use <code>taskFlow {}</code> for <code>.NET Task</code></li>
+<li>use <code>flow {}</code> for <code>Async</code></li>
+<li>use <code>flow {}</code> for <code>.NET Task</code></li>
 </ul>
 <p>Example:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">workflow</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">AsyncFlow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">unit</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">int</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">asyncFlow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">workflow</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">unit</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">int</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">value</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">async</span> <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">42</span> <span style="color:#ce5c00;font-weight:bold">}</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">value</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
@@ -324,7 +324,7 @@ The compiler usually sees one wrapper shape and you intended another.</p>
 </span></span></code></pre></div><p>If you want to run it in <code>BigEnv</code>, derive the smaller local env from the outer one:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">greetInBigEnv</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">BigEnv</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">greet</span> <span style="color:#ce5c00;font-weight:bold">|&gt;</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">localEnv</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">App</span>
-</span></span></code></pre></div><p>The same rule applies to <code>AsyncFlow.localEnv</code> and <code>TaskFlow.localEnv</code>.</p>
+</span></span></code></pre></div><p>The same rule applies to <code>Flow.localEnv</code> and <code>Flow.localEnv</code>.</p>
 <h2 id="error-option-or-valueoption-does-not-match-your-error-type">Error: <code>Option</code> Or <code>ValueOption</code> Does Not Match Your Error Type</h2>
 <p>Implicit option binding only works when the workflow error type is <code>unit</code>.</p>
 <p>This fails:</p>
@@ -337,15 +337,15 @@ The compiler usually sees one wrapper shape and you intended another.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">workflow</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">unit</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">int</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">Some</span> <span style="color:#000">42</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">|&gt;</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">fromOption</span> <span style="color:#4e9a06">&#34;missing value&#34;</span>
-</span></span></code></pre></div><p>The same pattern exists for AsyncFlow and TaskFlow.</p>
+</span></span></code></pre></div><p>The same pattern exists for Flow and Flow.</p>
 <h2 id="error-coldtask-does-not-match-task">Error: ColdTask Does Not Match <code>Task</code></h2>
-<p><code>TaskFlow.fromTask</code> and direct <code>taskFlow { let! ... }</code> support <code>ColdTask&lt;'value&gt;</code> for delayed task work.</p>
+<p><code>Flow.fromTask</code> and direct <code>flow { let! ... }</code> support <code>ColdTask&lt;'value&gt;</code> for delayed task work.</p>
 <p><code>ColdTask&lt;'value&gt;</code> means:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#000">CancellationToken</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#000">Task</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">&#39;</span><span style="color:#000">value</span><span style="color:#ce5c00;font-weight:bold">&gt;</span>
 </span></span></code></pre></div><p>Wrap the factory explicitly:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">load</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">ColdTask</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">int</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">ColdTask</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">fun</span> <span style="color:#ce5c00;font-weight:bold">_</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#000">Task</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">FromResult</span> <span style="color:#000">42</span><span style="color:#ce5c00;font-weight:bold">)</span>
-</span></span></code></pre></div><p>If you already have a started <code>Task&lt;'value&gt;</code>, bind it directly in <code>taskFlow {}</code> instead.</p>
+</span></span></code></pre></div><p>If you already have a started <code>Task&lt;'value&gt;</code>, bind it directly in <code>flow {}</code> instead.</p>
 <h2 id="when-type-errors-usually-mean-a-boundary-problem">When Type Errors Usually Mean A Boundary Problem</h2>
 <p>If the compiler error mentions one of these shapes, check the boundary first:</p>
 <ul>
@@ -355,12 +355,12 @@ The compiler usually sees one wrapper shape and you intended another.</p>
 <li><code>Task&lt;...&gt;</code></li>
 <li><code>Task&lt;Result&lt;...&gt;&gt;</code></li>
 <li><code>Flow&lt;...&gt;</code></li>
-<li><code>AsyncFlow&lt;...&gt;</code></li>
-<li><code>TaskFlow&lt;...&gt;</code></li>
+<li><code>Flow&lt;...&gt;</code></li>
+<li><code>Flow&lt;...&gt;</code></li>
 </ul>
 <p>Most fixes are one of:</p>
 <ul>
-<li>choose <code>flow {}</code>, <code>asyncFlow {}</code>, or <code>taskFlow {}</code> based on the real runtime shape</li>
+<li>choose <code>flow {}</code> based on the real runtime shape</li>
 <li>add a type annotation to disambiguate <code>let!</code></li>
 <li>derive a smaller local environment with <code>localEnv</code></li>
 <li>move back to plain Result until the real workflow boundary appears</li>

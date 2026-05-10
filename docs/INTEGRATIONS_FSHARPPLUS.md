@@ -32,7 +32,7 @@ Typical coexistence patterns:
 
 - keep pure transformations in `FSharpPlus`
 - use FsFlow to sequence those transformations against a runtime boundary
-- let FsFlow own the Flow, AsyncFlow, or TaskFlow type at the edge
+- let FsFlow own the Flow boundary at the edge
 
 The practical rule is: if the code is generic and reusable across many domains, `FSharpPlus` can own it. If the code is choosing the runtime shape, the environment, or the typed failure boundary, FsFlow can own it.
 
@@ -64,10 +64,10 @@ If you already use `FSharpPlus` for generic mapping or chaining, keep that code 
 The same helper can sit under an async boundary without changing its shape:
 
 ```fsharp
-let greetAsync : AsyncFlow<AppEnv, string, string> =
-    asyncFlow {
-        let! prefix = AsyncFlow.read _.Prefix
-        let! name = AsyncFlow.read _.Name
+let greetAsync : Flow<AppEnv, string, string> =
+    flow {
+        let! prefix = Flow.read _.Prefix
+        let! name = Flow.read _.Name
         return buildGreeting prefix name
     }
 ```

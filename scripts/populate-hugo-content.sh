@@ -70,19 +70,12 @@ weight: $weight
 
 # API Reference Sections
 create_ref_section "flow" "Flow" 10 "flow.md"
-create_ref_section "asyncflow" "AsyncFlow" 20 "asyncflow.md"
-create_ref_section "taskflow" "TaskFlow" 30 "taskflow.md"
 create_ref_section "check" "Check" 40 "check.md"
 create_ref_section "guard" "Guard" 50 "guard.md"
 create_ref_section "validation" "Validation" 60 "validation.md"
 create_ref_section "result" "Result" 70 "builders-result.md"
 create_ref_section "diagnostics" "Diagnostics" 80 "diagnostics.md"
-create_ref_section "asyncflow-runtime" "Runtime" 90 "runtime.md"
-create_ref_section "taskflow-runtime" "TaskFlow Runtime" 100 "taskflow-runtime.md"
-create_ref_section "taskflow-spec" "TaskFlowSpec" 110 "taskflow-spec.md"
-create_ref_section "coldtask" "ColdTask" 120 "coldtask.md"
 create_ref_section "caps" "CAPS" 130 "capability.md"
-create_ref_section "interop" "Interop" 140 "interop.md"
 
 # Helper to copy patterns
 copy_group() {
@@ -96,13 +89,6 @@ copy_group() {
 }
 
 copy_group "flow" "builders-flow.md" "flow-*.md"
-copy_group "asyncflow" "builders-asyncflow.md" "asyncflow-*.md"
-rm -f "$ref_dir/asyncflow/asyncflow-runtime-"*
-
-copy_group "taskflow" "taskbuilders-taskflow.md" "taskflow-*.md"
-rm -f "$ref_dir/taskflow/taskflow-runtime-"*
-rm -f "$ref_dir/taskflow/taskflow-spec.md"
-
 copy_group "check" "check-*.md"
 copy_group "guard" "guard.md"
 copy_group "result" "builders-result.md"

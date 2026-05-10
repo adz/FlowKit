@@ -19,21 +19,21 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/FsFlow/favicons/android-192x192.png" sizes="192x192">
 
 <title>Execution Semantics | FsFlow</title>
-<meta name="description" content="Exact execution rules for Flow, AsyncFlow, TaskFlow, and ColdTask.">
+<meta name="description" content="Exact execution rules for Flow and ColdTask.">
 <meta property="og:url" content="http://localhost:3000/FsFlow/docs/core-model/semantics/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Execution Semantics">
-  <meta property="og:description" content="Exact execution rules for Flow, AsyncFlow, TaskFlow, and ColdTask.">
+  <meta property="og:description" content="Exact execution rules for Flow and ColdTask.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="docs">
 
   <meta itemprop="name" content="Execution Semantics">
-  <meta itemprop="description" content="Exact execution rules for Flow, AsyncFlow, TaskFlow, and ColdTask.">
-  <meta itemprop="wordCount" content="983">
+  <meta itemprop="description" content="Exact execution rules for Flow and ColdTask.">
+  <meta itemprop="wordCount" content="901">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Execution Semantics">
-  <meta name="twitter:description" content="Exact execution rules for Flow, AsyncFlow, TaskFlow, and ColdTask.">
+  <meta name="twitter:description" content="Exact execution rules for Flow and ColdTask.">
 <link href="http://localhost:3000/FsFlow/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -259,20 +259,18 @@
   </ol>
 </nav>
 <div class="td-content">
-	<div class="lead">Exact execution rules for Flow, AsyncFlow, TaskFlow, and ColdTask.</div>
+	<div class="lead">Exact execution rules for Flow and ColdTask.</div>
 	<header class="article-meta">
 		
 </header>
 	<h1 id="execution-semantics">Execution Semantics</h1>
-<p>This page shows the exact execution model of Flow, AsyncFlow, TaskFlow, and ColdTask.</p>
+<p>This page shows the exact execution model of Flow and ColdTask.</p>
 <p>Task-oriented semantics on this page refer to the task surface that ships in the main <code>FsFlow</code> package.
 The public surface now includes sync, async, and task concepts together.
-The task surface means the TaskFlow builder plus its task-aware extension members for <code>Task</code>, <code>ValueTask</code>, and ColdTask.</p>
+The task surface means the Flow builder plus its task-aware extension members for <code>Task</code>, <code>ValueTask</code>, and ColdTask.</p>
 <h2 id="success-and-typed-failure">Success And Typed Failure</h2>
 <ul>
 <li><code>Flow.succeed value</code> returns <code>Ok value</code></li>
-<li><code>AsyncFlow.succeed value</code> returns <code>Ok value</code></li>
-<li><code>TaskFlow.succeed value</code> returns <code>Ok value</code></li>
 <li><code>fail</code> produces the typed <code>Error</code></li>
 <li><code>map</code> only transforms successful values</li>
 <li><code>mapError</code> only transforms typed failures</li>
@@ -282,7 +280,7 @@ The task surface means the TaskFlow builder plus its task-aware extension member
 <p>All of these semantics are short-circuiting.
 The first typed failure stops the current workflow unless you explicitly recover from it.</p>
 <h2 id="short-circuiting-versus-accumulated-validation">Short-Circuiting Versus Accumulated Validation</h2>
-<p>Check, Result, <code>result {}</code>, Flow, AsyncFlow, and TaskFlow model ordered workflows.
+<p>Check, Result, <code>result {}</code>, and Flow model ordered workflows.
 They stop on the first typed failure unless you explicitly recover from it.</p>
 <p>Validation and <code>validate {}</code> are the accumulating path.
 They merge sibling failures into the diagnostics graph instead of stopping at the first one.</p>
@@ -299,41 +297,28 @@ They merge sibling failures into the diagnostics graph instead of stopping at th
 <li>the problem is sibling validation rather than workflow orchestration</li>
 </ul>
 <h2 id="cold-by-default">Cold By Default</h2>
-<p>All three computation families are cold.
+<p>The flow computation is cold.
 Building a computation does not run it.</p>
 <p>Rerun behavior:</p>
 <ul>
-<li>Flow reruns from scratch each time you call <code>Flow.run</code></li>
-<li>AsyncFlow reruns from scratch each time you call <code>AsyncFlow.run</code> or <code>AsyncFlow.toAsync</code></li>
-<li>TaskFlow reruns from scratch each time you call <code>TaskFlow.run</code> or <code>TaskFlow.toTask</code></li>
+<li>rerunning a computation runs it from scratch each time you call <code>Flow.run</code></li>
+<li>direct <code>Async</code> or <code>Task</code> values bound inside the workflow follow their own execution semantics</li>
 </ul>
 <p>The <code>delay</code> combinator preserves that behavior in each family.</p>
 <h2 id="execution-is-explicit">Execution Is Explicit</h2>
-<p>Run each computation family with its own execution function:</p>
-<ul>
-<li><code>Flow.run env flow</code></li>
-<li><code>AsyncFlow.toAsync env flow</code></li>
-<li><code>TaskFlow.toTask env cancellationToken flow</code></li>
-</ul>
-<p>The runtime shape is part of the public contract.
-That is why the library keeps three families instead of forcing every computation through one wrapper.</p>
+<p>Run the flow with <code>Flow.run env flow</code>.
+Use <code>Flow.runFull env cancellationToken flow</code> when you need to pass an explicit cancellation token.</p>
 <h2 id="exceptions">Exceptions</h2>
-<p>Each family exposes <code>catch</code> to convert exceptions into typed errors:</p>
-<ul>
-<li><code>Flow.catch</code></li>
-<li><code>AsyncFlow.catch</code></li>
-<li><code>TaskFlow.catch</code></li>
-</ul>
+<p><code>Flow.catch</code> converts exceptions into typed errors.</p>
 <p>This handles exceptions that occur while the computation is being executed.
 Typed failures still stay in Result.</p>
 <h2 id="environments">Environments</h2>
-<p>Each family reads dependencies explicitly:</p>
+<p>Flow reads dependencies explicitly:</p>
 <ul>
 <li><code>env</code> reads the whole environment</li>
 <li><code>read</code> projects one dependency</li>
 <li><code>localEnv</code> runs a smaller computation inside a larger environment</li>
 </ul>
-<p>The environment semantics are aligned across all three families.</p>
 <h2 id="pairing-and-small-composition">Pairing And Small Composition</h2>
 <p>Each family also exposes low-ceremony helpers for common composition shapes:</p>
 <ul>
@@ -343,7 +328,7 @@ Typed failures still stay in Result.</p>
 </ul>
 <p>These helpers are useful when a full computation expression would add more ceremony than value.</p>
 <h2 id="task-temperature">Task Temperature</h2>
-<p>TaskFlow and the <code>.NET</code> extensions for <code>asyncFlow {}</code> distinguish between:</p>
+<p>Flow distinguishes between:</p>
 <ul>
 <li>already-started task values such as <code>Task&lt;'value&gt;</code> and <code>ValueTask&lt;'value&gt;</code></li>
 <li>delayed task work represented by <code>ColdTask&lt;'value&gt;</code></li>
@@ -366,8 +351,8 @@ Use ColdTask when the effect should start at computation execution time, rerun f
 <p>Example with a started task:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">started</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Task</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">FromResult</span> <span style="color:#000">42</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">computation</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">TaskFlow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">unit</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">int</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">taskFlow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">computation</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">unit</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">int</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">value</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">started</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">value</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
@@ -378,8 +363,8 @@ It does not create a new task.</p>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">ColdTask</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">fun</span> <span style="color:#000">cancellationToken</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#000">Task</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">FromResult</span> <span style="color:#000">42</span><span style="color:#ce5c00;font-weight:bold">)</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">computation</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">TaskFlow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">unit</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">int</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">taskFlow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">computation</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">unit</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">int</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">value</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">readValue</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">value</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
@@ -387,8 +372,8 @@ It does not create a new task.</p>
 <h2 id="runtime-helpers">Runtime Helpers</h2>
 <p>Operational helpers for logging, timeout, retry, and resource handling are grouped into <code>Runtime</code> modules:</p>
 <ul>
-<li><strong><code>AsyncFlow.Runtime</code></strong>: Helpers for AsyncFlow computations (cancellation, sleep, log, timeout, retry).</li>
-<li><strong><code>TaskFlow.Runtime</code></strong>: Task-native helpers for TaskFlow computations, including support for <code>RuntimeContext</code>.</li>
+<li><strong><code>Flow.Runtime</code></strong>: Helpers for Flow computations (cancellation, sleep, log, timeout, retry).</li>
+<li><strong><code>RuntimeContext</code></strong>: Helpers for building and reshaping runtime contexts.</li>
 </ul>
 <p>There is no <code>Flow.Runtime</code> because synchronous flows are intended for pure logic that does not
 require operational runtime support like cancellation or timeouts.</p>
@@ -396,26 +381,25 @@ require operational runtime support like cancellation or timeouts.</p>
 <p><code>FsFlow.Check</code> provides pure <code>Result&lt;'value, unit&gt;</code> checks for booleans, options, value options,
 nulls, collections, equality, and strings.</p>
 <p>Use <code>Check.orError</code> to attach a typed error after the pure validation step.</p>
-<p>When the same source should bind directly in <code>flow {}</code>, <code>asyncFlow {}</code>, or <code>taskFlow {}</code>,
-use <code>Guard.Of</code> for <code>bool</code>, <code>option</code>, <code>voption</code>, <code>Result&lt;'value, unit&gt;</code>, and
-<code>Validation&lt;'value, unit&gt;</code> sources, or <code>Guard.MapError</code> when the source already carries an
-error value.</p>
+<p>When the same source should bind directly in <code>flow {}</code>, use <code>Guard.Of</code> for <code>bool</code>, <code>option</code>,
+<code>voption</code>, <code>Result&lt;'value, unit&gt;</code>, and <code>Validation&lt;'value, unit&gt;</code> sources, or <code>Guard.MapError</code>
+when the source already carries an error value.</p>
 <p>When the error value itself needs environment or effectful evaluation, use the bridge helpers on
-Flow, AsyncFlow, or TaskFlow.</p>
+Flow.</p>
 <p>Use Validation and <code>validate {}</code> when the failures should accumulate into a structured
 <code>Diagnostics</code> graph instead of short-circuiting.</p>
 <h2 id="family-direction">Family Direction</h2>
-<p>The computation families intentionally compose upward:</p>
+<p>The flow model intentionally composes upward:</p>
 <ul>
-<li>AsyncFlow can lift Flow</li>
-<li>TaskFlow can lift Flow</li>
-<li>TaskFlow can lift AsyncFlow</li>
+<li>Flow can lift sync values directly</li>
+<li>Flow can bind <code>Async</code>, <code>Task</code>, <code>ValueTask</code>, and <code>ColdTask</code> directly</li>
+<li>keep the smallest honest computation at each boundary</li>
 </ul>
-<p>Keep the smallest honest computation at each boundary, then lift it only when the outer runtime actually changes.</p>
 <h2 id="what-the-tests-cover">What The Tests Cover</h2>
 <p>The test suite currently verifies:</p>
 <ul>
-<li>sync, async, and task execution</li>
+<li>sync execution</li>
+<li>async and task direct-binding execution</li>
 <li>rerun behavior for <code>delay</code></li>
 <li>direct binding across the supported wrapper shapes</li>
 <li>ColdTask hot and cold adaptation behavior</li>
@@ -424,10 +408,10 @@ Flow, AsyncFlow, or TaskFlow.</p>
 <li>option and value-option behavior across all builders</li>
 </ul>
 <h2 id="next">Next</h2>
-<p>Read <a href="http://localhost:3000/FsFlow/docs/start/getting-started/"><code>docs/GETTING_STARTED.md</code></a> for the computation-family overview,
+<p>Read <a href="http://localhost:3000/FsFlow/docs/start/getting-started/"><code>docs/GETTING_STARTED.md</code></a> for the computation overview,
 <a href="http://localhost:3000/FsFlow/docs/core-model/task-async-interop/"><code>docs/TASK_ASYNC_INTEROP.md</code></a> for the direct binding surface,
 or <a href="https://github.com/adz/FsFlow/blob/main/src/FsFlow/Flow.fs" target="_blank" rel="noopener"><code>src/FsFlow/Flow.fs</code></a> and
-<a href="https://github.com/adz/FsFlow/blob/main/src/FsFlow/TaskFlow.fs" target="_blank" rel="noopener"><code>src/FsFlow/TaskFlow.fs</code></a>
+<a href="https://github.com/adz/FsFlow/blob/main/src/FsFlow/Builders.fs" target="_blank" rel="noopener"><code>src/FsFlow/Builders.fs</code></a>
 for the full API surface.</p>
 
 	

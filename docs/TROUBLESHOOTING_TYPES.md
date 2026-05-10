@@ -22,8 +22,8 @@ let nested : Async<Async<Result<int, string>>> =
         return async { return Ok 42 }
     }
 
-let workflow : AsyncFlow<unit, string, int> =
-    asyncFlow {
+let workflow : Flow<unit, string, int> =
+    flow {
         let! next = nested
         let! value = next
         return value
@@ -35,8 +35,8 @@ The second `let!` is ambiguous.
 Fix it with a type annotation:
 
 ```fsharp
-let workflow : AsyncFlow<unit, string, int> =
-    asyncFlow {
+let workflow : Flow<unit, string, int> =
+    flow {
         let! next = nested
         let! (value: int) = next
         return value
@@ -58,16 +58,16 @@ flow {
 
 [`flow {}`]({{< relref "builders-flow.md" >}}) is sync-only.
 
-Fix it by moving to the honest family:
+Fix it by moving to the honest boundary:
 
-- use [`asyncFlow {}`]({{< relref "builders-asyncflow.md" >}}) for `Async`
-- use [`taskFlow {}`]({{< relref "taskbuilders-taskflow.md" >}}) for `.NET Task`
+- use `flow {}` for `Async`
+- use `flow {}` for `.NET Task`
 
 Example:
 
 ```fsharp
-let workflow : AsyncFlow<unit, string, int> =
-    asyncFlow {
+let workflow : Flow<unit, string, int> =
+    flow {
         let! value = async { return 42 }
         return value
     }
@@ -97,7 +97,7 @@ let greetInBigEnv : Flow<BigEnv, string, string> =
     greet |> Flow.localEnv _.App
 ```
 
-The same rule applies to `AsyncFlow.localEnv` and `TaskFlow.localEnv`.
+The same rule applies to `Flow.localEnv` and `Flow.localEnv`.
 
 ## Error: `Option` Or `ValueOption` Does Not Match Your Error Type
 
@@ -121,11 +121,11 @@ let workflow : Flow<unit, string, int> =
     |> Flow.fromOption "missing value"
 ```
 
-The same pattern exists for AsyncFlow and TaskFlow.
+The same pattern exists for Flow and Flow.
 
 ## Error: ColdTask Does Not Match `Task`
 
-`TaskFlow.fromTask` and direct `taskFlow { let! ... }` support `ColdTask<'value>` for delayed task work.
+`Flow.fromTask` and direct `flow { let! ... }` support `ColdTask<'value>` for delayed task work.
 
 `ColdTask<'value>` means:
 
@@ -140,7 +140,7 @@ let load : ColdTask<int> =
     ColdTask(fun _ -> Task.FromResult 42)
 ```
 
-If you already have a started `Task<'value>`, bind it directly in [`taskFlow {}`]({{< relref "taskbuilders-taskflow.md" >}}) instead.
+If you already have a started `Task<'value>`, bind it directly in `flow {}` instead.
 
 ## When Type Errors Usually Mean A Boundary Problem
 
@@ -152,12 +152,12 @@ If the compiler error mentions one of these shapes, check the boundary first:
 - `Task<...>`
 - `Task<Result<...>>`
 - `Flow<...>`
-- `AsyncFlow<...>`
-- `TaskFlow<...>`
+- `Flow<...>`
+- `Flow<...>`
 
 Most fixes are one of:
 
-- choose [`flow {}`]({{< relref "builders-flow.md" >}}), [`asyncFlow {}`]({{< relref "builders-asyncflow.md" >}}), or [`taskFlow {}`]({{< relref "taskbuilders-taskflow.md" >}}) based on the real runtime shape
+- choose `flow {}` based on the real runtime shape
 - add a type annotation to disambiguate `let!`
 - derive a smaller local environment with `localEnv`
 - move back to plain Result until the real workflow boundary appears

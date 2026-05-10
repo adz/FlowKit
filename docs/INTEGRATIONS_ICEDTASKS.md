@@ -31,7 +31,7 @@ The difference is the model:
 ## Why The Pair Works
 
 - `IcedTasks` keeps the task side fast and ergonomic
-- the task surface keeps the boundary model explicit with `TaskFlow<'env, 'error, 'value>`
+- the task surface keeps the boundary model explicit with `Flow<'env, 'error, 'value>`
 - the combination works well when you need task-native interop without giving up typed failures or environment/threaded context
 
 One naming caveat matters here: `IcedTasks` uses ColdTask as an alias-style task shape, while the task surface uses a nominal `ColdTask<'value>` wrapper type. The names are similar, but the types are not interchangeable without an explicit bridge.
@@ -42,7 +42,7 @@ This page is about coexistence, not a literal side-by-side API sample from both 
 
 Use `IcedTasks` when the codebase already centers `task {}` and its adjacent task CE helpers.
 
-Use TaskFlow when you want:
+Use Flow when you want:
 
 - a typed success/error boundary
 - explicit environment threading
@@ -67,14 +67,14 @@ let icedLoadConfig =
         return { Prefix = "Hello" }
     }
 
-let fsFlowUsesIcedTasks : TaskFlow<unit, string, string> =
-    taskFlow {
+let fsFlowUsesIcedTasks : Flow<unit, string, string> =
+    flow {
         let! config = ColdTask.fromTaskFactory icedLoadConfig
         return config.Prefix
     }
 ```
 
-[`taskFlow {}`]({{< relref "taskbuilders-taskflow.md" >}}) auto-binds the `ColdTask<'value>` wrapper produced by `ColdTask.fromTaskFactory icedLoadConfig`, so the IcedTasks helper stays cold until the boundary runs. The distinction still matters: `icedLoadConfig` is an IcedTasks alias-style cold task, while `ColdTask<'value>` is a nominal wrapper type.
+`flow {}` auto-binds the `ColdTask<'value>` wrapper produced by `ColdTask.fromTaskFactory icedLoadConfig`, so the IcedTasks helper stays cold until the boundary runs. The distinction still matters: `icedLoadConfig` is an IcedTasks alias-style cold task, while `ColdTask<'value>` is a nominal wrapper type.
 
 `coldTask` does not take a `CancellationToken`; it is just `unit -> Task<'value>`. If the IcedTasks helper needs token flow, use `cancellableTask` instead:
 
@@ -89,30 +89,30 @@ let icedLoadText path =
 The second bridge goes back the other way:
 
 ```fsharp
-let fsGreeting : TaskFlow<unit, string, string> =
-    taskFlow {
+let fsGreeting : Flow<unit, string, string> =
+    flow {
         return "Hello from FsFlow"
     }
 
 let icedTasksUsesFsFlow =
     cancellableTask {
         let! ct = CancellableTask.getCancellationToken ()
-        let! result = TaskFlow.toTask () ct fsGreeting
+        let result = Flow.runFull () ct fsGreeting
         return result
     }
 ```
 
-Use `TaskFlow.toTask` when you want to consume an FsFlow boundary from an IcedTasks computation. Use `cancellableTask` when you want the IcedTasks side to carry a token through the bridge.
+Use `Flow.runFull` when you want to consume an FsFlow boundary from an IcedTasks computation and pass the current cancellation token through the bridge. Use `cancellableTask` when you want the IcedTasks side to carry a token through the bridge.
 
 ## Keep Started Task Work As Task
 
-If you already have started `Task` work, keep it as `Task` and bind it directly in [`taskFlow {}`]({{< relref "taskbuilders-taskflow.md" >}}):
+If you already have started `Task` work, keep it as `Task` and bind it directly in `flow {}`:
 
 ```fsharp
 let started = Task.FromResult 42
 
-let taskBoundary : TaskFlow<unit, string, int> =
-    taskFlow {
+let taskBoundary : Flow<unit, string, int> =
+    flow {
         let! value = started
         return value
     }

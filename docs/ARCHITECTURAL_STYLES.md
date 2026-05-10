@@ -139,10 +139,10 @@ type AppEnv =
     { Gateway: IShippingGateway }
 
 type ShipOrderWorkflow() =
-    member _.Run(input: ShipOrderInput) : TaskFlow<RuntimeContext<RuntimeServices, AppEnv>, AppError, ShipmentId> =
-        taskFlow {
-            let! logger = TaskFlow.readRuntime _.Logger
-            let! gateway = TaskFlow.read _.Gateway
+    member _.Run(input: ShipOrderInput) : Flow<RuntimeContext<RuntimeServices, AppEnv>, AppError, ShipmentId> =
+        flow {
+            let! logger = Flow.readRuntime _.Logger
+            let! gateway = Flow.read _.Gateway
 
             logger.LogInformation("shipping order {OrderId}", input.OrderId)
             let! shipmentId = gateway.CreateShipment(input.OrderId)
@@ -161,7 +161,7 @@ Use this style for:
 Choose this when familiarity and low migration risk matter most.
 
 If the task boundary needs separate runtime services and application capabilities, use
-`RuntimeContext<'runtime, 'env>` and the `TaskFlow.readRuntime` / `TaskFlow.read` split instead of
+`RuntimeContext<'runtime, 'env>` and the `Flow.readRuntime` / `Flow.read` split instead of
 forcing everything into one record.
 
 ## Which Style To Prefer

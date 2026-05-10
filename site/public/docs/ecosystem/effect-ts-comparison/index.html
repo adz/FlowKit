@@ -30,7 +30,7 @@
 
   <meta itemprop="name" content="Effect-TS Comparison">
   <meta itemprop="description" content="Where FsFlow overlaps with Effect-TS and where it stays intentionally smaller.">
-  <meta itemprop="wordCount" content="263">
+  <meta itemprop="wordCount" content="267">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Effect-TS Comparison">
   <meta name="twitter:description" content="Where FsFlow overlaps with Effect-TS and where it stays intentionally smaller.">
@@ -269,9 +269,9 @@
 <h2 id="what-is-different">What Is Different</h2>
 <p>FsFlow is aimed at ordinary F# application code:</p>
 <ul>
-<li><code>flow {}</code>, <code>asyncFlow {}</code>, and <code>taskFlow {}</code> instead of generator-based syntax</li>
+<li><code>flow {}</code> instead of generator-based syntax, with direct binding for <code>Async</code>, <code>Task</code>, <code>ValueTask</code>, and <code>ColdTask</code></li>
 <li>first-class interop with Result, <code>Async</code>, and <code>.NET Task</code></li>
-<li>explicit environment reads such as <code>Flow.read _.Gateway</code> or <code>TaskFlow.read _.Gateway</code></li>
+<li>explicit environment reads such as <code>Flow.read _.Gateway</code> or <code>Flow.read _.Gateway</code></li>
 <li>a much smaller surface focused on application flows rather than a broader runtime platform</li>
 </ul>
 <h2 id="what-effect-ts-still-has-that-fsflow-does-not">What Effect-TS Still Has That FsFlow Does Not</h2>

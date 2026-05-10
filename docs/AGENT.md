@@ -50,9 +50,8 @@ Use `Guard.MapError` when the source already carries a meaningful error value.
 | `Result<'T, 'E1>` | `let! x = result |> Guard.MapError mapper` |
 | `Validation<'T, 'E1>` | `let! x = validation |> Guard.MapError mapper` |
 | `Flow<'Env, 'E1, 'T>` | `let! x = flow |> Guard.MapError mapper` |
-| `AsyncFlow<'Env, 'E1, 'T>` | `let! x = asyncFlow |> Guard.MapError mapper` |
 | `Async<Result<'T, 'E1>>` | `let! x = aResult |> Guard.MapError mapper` |
-| `TaskFlow<'Env, 'E1, 'T>` | `let! x = taskFlow |> Guard.MapError mapper` |
+| `Task<Result<'T, 'E1>>` | `let! x = tResult |> Guard.MapError mapper` |
 
 ### 4. Same-Family Fallbacks
 Use `orElse` and `orElseWith` for alternate computations in the same flow family.
@@ -66,7 +65,7 @@ Use CAPS when the boundary should name a capability contract instead of exposing
 | Named contract | `type LoginCaps = inherit Needs<IClock>` |
 | Whole dependency | `let! clock = Env<IClock>` |
 | Projected value | `let! now = Env<IClock> _.UtcNow` |
-| Flexible public API | `let login : TaskFlow<#LoginCaps, _, _> = ...` |
+| Flexible public API | `let login : Flow<#LoginCaps, _, _> = ...` |
 
 Prefer this over raw `IServiceProvider` lookup or exact runtime types when callers may provide a larger app runtime.
 
@@ -89,9 +88,7 @@ FsFlow unifies several types. Later types can "bind" (consume) earlier types dir
 1. **Check**: Unit-error predicates (`Result<'T, unit>`).
 2. **Guard**: Bindable guards that lift check-like or error-bearing sources into flows.
 3. **Result**: Pure typed errors (`Result<'T, 'E>`).
-4. **Flow**: Synchronous environment-aware workflows (`Flow<'Env, 'E, 'T>`).
-5. **AsyncFlow**: Asynchronous environment-aware workflows (`AsyncFlow<'Env, 'E, 'T>`).
-6. **TaskFlow**: Task-based environment-aware workflows (`TaskFlow<'Env, 'E, 'T>`).
+4. **Flow**: Environment-aware workflows (`Flow<'Env, 'E, 'T>`) for synchronous, async, and task-based composition.
 
 ## Machine-Readable Reference
 

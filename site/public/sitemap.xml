@@ -18,8 +18,6 @@
   </url><url>
     <loc>http://localhost:3000/FsFlow/docs/validation-results/</loc>
   </url><url>
-    <loc>http://localhost:3000/FsFlow/reference/asyncflow/</loc>
-  </url><url>
     <loc>http://localhost:3000/FsFlow/docs/core-model/</loc>
   </url><url>
     <loc>http://localhost:3000/FsFlow/docs/</loc>
@@ -48,8 +46,6 @@
   </url><url>
     <loc>http://localhost:3000/FsFlow/docs/core-model/task-async-interop/</loc>
   </url><url>
-    <loc>http://localhost:3000/FsFlow/reference/taskflow/</loc>
-  </url><url>
     <loc>http://localhost:3000/FsFlow/docs/validation-results/validate-ce/</loc>
   </url><url>
     <loc>http://localhost:3000/FsFlow/docs/core-model/architectural-styles/</loc>
@@ -74,21 +70,11 @@
   </url><url>
     <loc>http://localhost:3000/FsFlow/reference/diagnostics/</loc>
   </url><url>
-    <loc>http://localhost:3000/FsFlow/reference/asyncflow-runtime/</loc>
-  </url><url>
-    <loc>http://localhost:3000/FsFlow/reference/taskflow-runtime/</loc>
-  </url><url>
-    <loc>http://localhost:3000/FsFlow/reference/taskflow-spec/</loc>
-  </url><url>
-    <loc>http://localhost:3000/FsFlow/reference/coldtask/</loc>
-  </url><url>
     <loc>http://localhost:3000/FsFlow/reference/caps/</loc>
   </url><url>
     <loc>http://localhost:3000/FsFlow/reference/caps-core/</loc>
   </url><url>
     <loc>http://localhost:3000/FsFlow/reference/caps-context/</loc>
-  </url><url>
-    <loc>http://localhost:3000/FsFlow/reference/interop/</loc>
   </url><url>
     <loc>http://localhost:3000/FsFlow/reference/check/check-all/</loc>
   </url><url>

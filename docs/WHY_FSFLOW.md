@@ -1,7 +1,7 @@
 ---
 weight: 10
 title: The FsFlow Model
-description: The core FsFlow progression from Check and Result into Validation, Flow, AsyncFlow, and TaskFlow.
+description: The core FsFlow progression from Check and Result into Validation and Flow.
 ---
 
 
@@ -12,7 +12,7 @@ This page shows why FsFlow is best understood as one scalable model for Result-b
 The core progression is:
 
 ```text
-Check -> Result -> Validation -> Flow -> AsyncFlow -> TaskFlow
+Check -> Result -> Validation -> Flow
 ```
 
 The validation vocabulary stays the same while the execution context grows.
@@ -21,7 +21,7 @@ The validation vocabulary stays the same while the execution context grows.
 - keep fail-fast logic in plain Result
 - accumulate sibling failures with Validation and [`validate {}`]({{< relref "builders-validate.md" >}})
 - lift into Flow when you need explicit environment access
-- lift again into AsyncFlow or TaskFlow when the runtime becomes asynchronous
+- lift again into Flow or Flow when the runtime becomes asynchronous
 
 That matters because many F# codebases end up with separate worlds:
 
@@ -42,17 +42,16 @@ Check<'value>
 Result<'value, 'error>
 Validation<'value, 'error>
 Flow<'env, 'error, 'value>
-AsyncFlow<'env, 'error, 'value>
-TaskFlow<'env, 'error, 'value>
+Flow<'env, 'error, 'value>
+Flow<'env, 'error, 'value>
 ```
 
 The point is not to replace Result, `Async`, or `Task`.
 The point is to let one Result-based style scale into real application boundaries without changing the mental model.
 
-AsyncFlow is the async-native sibling. TaskFlow is the .NET task sibling.
-Use AsyncFlow by itself when you want an `Async` boundary without `Task` or ColdTask interop.
+Flow is the boundary model. The same builder can bind sync values, `Async`, `Task`, `ValueTask`, and `ColdTask` directly.
 Guard is the explicit bridge that keeps check-like sources and existing error-bearing sources readable
-when they need to enter [`flow {}`]({{< relref "builders-flow.md" >}}), [`asyncFlow {}`]({{< relref "builders-asyncflow.md" >}}), or [`taskFlow {}`]({{< relref "taskbuilders-taskflow.md" >}}).
+when they need to enter `flow {}`.
 
 ## The Main Claim
 
@@ -105,10 +104,10 @@ type RegistrationEnv =
     { LoadUser: int -> Task<Result<User, RegistrationError>>
       SaveUser: User -> Task<Result<unit, RegistrationError>> }
 
-let register userId : TaskFlow<RegistrationEnv, RegistrationError, unit> =
-    taskFlow {
-        let! loadUser = TaskFlow.read _.LoadUser
-        let! saveUser = TaskFlow.read _.SaveUser
+let register userId : Flow<RegistrationEnv, RegistrationError, unit> =
+    flow {
+        let! loadUser = Flow.read _.LoadUser
+        let! saveUser = Flow.read _.SaveUser
 
         let! user = loadUser userId
         do! validateEmail user.Email
@@ -148,7 +147,7 @@ Keep the domain plain F# by default:
 
 ## Short-Circuiting Is Intentional
 
-Check, Result, Flow, AsyncFlow, and TaskFlow are short-circuiting.
+Check, Result, Validation, and Flow are short-circuiting.
 They stop on the first typed failure.
 
 That is a feature, not a missing applicative layer.
@@ -160,8 +159,8 @@ FsFlow does not try to hide that behavior inside the workflow builders.
 
 The design stays explicit in the places that matter for teams:
 
-- env access is visible through `Flow.read`, `AsyncFlow.read`, or `TaskFlow.read`
-- execution is visible through `Flow.run`, `AsyncFlow.toAsync`, or `TaskFlow.toTask`
+- env access is visible through `Flow.read`, `Flow.read`, or `Flow.read`
+- execution is visible through `Flow.run` or `Flow.runFull`
 - expected failures stay in the type
 - the computation family tells you whether the use case is sync, `Async`, or `.NET Task`
 

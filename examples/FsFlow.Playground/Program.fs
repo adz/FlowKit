@@ -6,22 +6,22 @@ open FsFlow
 type AppEnv =
     { Prefix: string
       Name: string
-      LoadSuffix: ColdTask<string> }
+      LoadSuffix: Task<string> }
 
 let greetingFlow : Flow<AppEnv, string, string> =
     Flow.read (fun env -> $"{env.Prefix} {env.Name}") // Flow<AppEnv, string, string>
 
-let greetingAsyncFlow : AsyncFlow<AppEnv, string, string> =
-    asyncFlow {
-        let! greeting = greetingFlow // AsyncFlow<AppEnv, string, string>
+let greetingAsync : Flow<AppEnv, string, string> =
+    flow {
+        let! greeting = greetingFlow
         return greeting.ToUpperInvariant()
     }
 
-let greetingTaskFlow : TaskFlow<AppEnv, string, string> =
-    taskFlow {
-        let! env = TaskFlow.env // TaskFlow<AppEnv, string, AppEnv>
-        let! greeting = greetingFlow // TaskFlow<AppEnv, string, string>
-        let! suffix = env.LoadSuffix // TaskFlow<AppEnv, string, string>
+let greetingTask : Flow<AppEnv, string, string> =
+    flow {
+        let! env = Flow.env // Flow<AppEnv, string, AppEnv>
+        let! greeting = greetingFlow // Flow<AppEnv, string, string>
+        let! suffix = env.LoadSuffix // Flow<AppEnv, string, string>
         return $"{greeting}{suffix}"
     }
 
@@ -30,26 +30,24 @@ let main _ =
     let env =
         { Prefix = "Hello"
           Name = "Ada"
-          LoadSuffix = ColdTask(fun _ -> Task.FromResult "!") }
+          LoadSuffix = Task.FromResult "!" }
 
     let syncResult =
         greetingFlow
         |> Flow.run env
 
     let asyncResult =
-        greetingAsyncFlow
-        |> AsyncFlow.run env
-        |> Async.RunSynchronously
+        greetingAsync
+        |> Flow.run env
 
     let taskResult =
-        greetingTaskFlow
-        |> TaskFlow.run env CancellationToken.None
-        |> fun task -> task.GetAwaiter().GetResult()
+        greetingTask
+        |> Flow.run env
 
     printfn "Flow: %A" syncResult
-    printfn "AsyncFlow: %A" asyncResult
-    printfn "TaskFlow: %A" taskResult
+    printfn "Async: %A" asyncResult
+    printfn "Task: %A" taskResult
     // Flow: Ok "Hello Ada"
-    // AsyncFlow: Ok "HELLO ADA"
-    // TaskFlow: Ok "Hello Ada!"
+    // Async: Ok "HELLO ADA"
+    // Task: Ok "Hello Ada!"
     0

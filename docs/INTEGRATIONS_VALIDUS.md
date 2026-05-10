@@ -16,7 +16,7 @@ FsFlow can usually begin after that work is done.
 
 `Validus` and `FsFlow.Check` fit especially well together: `Validus` can handle richer validation rules,
 while `FsFlow.Check` stays available for smaller pure guards that feed directly into Result,
-Validation, Flow, AsyncFlow, or TaskFlow.
+Validation, or Flow.
 
 ## Keep Validation Before Workflow Orchestration
 

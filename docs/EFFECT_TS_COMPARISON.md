@@ -22,9 +22,9 @@ These ideas are shared:
 
 FsFlow is aimed at ordinary F# application code:
 
-- [`flow {}`]({{< relref "builders-flow.md" >}}), [`asyncFlow {}`]({{< relref "builders-asyncflow.md" >}}), and [`taskFlow {}`]({{< relref "taskbuilders-taskflow.md" >}}) instead of generator-based syntax
+- `flow {}` instead of generator-based syntax, with direct binding for `Async`, `Task`, `ValueTask`, and `ColdTask`
 - first-class interop with Result, `Async`, and `.NET Task`
-- explicit environment reads such as `Flow.read _.Gateway` or `TaskFlow.read _.Gateway`
+- explicit environment reads such as `Flow.read _.Gateway` or `Flow.read _.Gateway`
 - a much smaller surface focused on application flows rather than a broader runtime platform
 
 ## What Effect-TS Still Has That FsFlow Does Not

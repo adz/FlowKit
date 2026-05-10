@@ -47,9 +47,9 @@ module ContextExample =
             Authorizer: IAuthorizer
         }
 
-    let handleRequest (resource: string) : TaskFlow<AppEnv, string, string> =
-        taskFlow {
-            let! env = TaskFlow.env
+    let handleRequest (resource: string) : Flow<AppEnv, string, string> =
+        flow {
+            let! env = Flow.env
             let context = env.Context
             let requestId = RequestId.get context
             let correlationId = CorrelationId.tryGet context |> Option.defaultValue "none"
@@ -61,7 +61,7 @@ module ContextExample =
                 |> Option.defaultValue "anonymous"
 
             if not (env.Authorizer.CanAccess context resource) then
-                return! TaskFlow.fail "forbidden"
+                return! Flow.fail "forbidden"
 
             let path = RequestMetadata.tryGet "path" context.Metadata |> Option.defaultValue "/"
             env.Logger.WriteLine $"log request={requestId} correlation={correlationId} tenant={tenantId} user={userLabel} locale={locale.Name}"
@@ -102,8 +102,7 @@ module ContextExample =
 
         let outcome =
             handleRequest "orders.read"
-            |> TaskFlow.run env CancellationToken.None
-            |> fun task -> task.GetAwaiter().GetResult()
+            |> Flow.run env
 
         printfn "result=%A" outcome
         logger.Lines |> List.iter (printfn "%s")

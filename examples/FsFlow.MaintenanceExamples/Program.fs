@@ -7,19 +7,17 @@ let runFlow label env workflow =
     let result = Flow.run env workflow
     printfn "%s: %A" label result
 
-let runAsyncFlow label env workflow =
+let runAsyncExample label env workflow =
     let result =
         workflow
-        |> AsyncFlow.run env
-        |> Async.RunSynchronously
+        |> Flow.run env
 
     printfn "%s: %A" label result
 
-let runTaskFlow label env workflow =
+let runTaskExample label env workflow =
     let result =
         workflow
-        |> TaskFlow.run env CancellationToken.None
-        |> fun task -> task.GetAwaiter().GetResult()
+        |> Flow.run env
 
     printfn "%s: %A" label result
 
@@ -27,25 +25,25 @@ let syncExample : Flow<int, string, int> =
     Flow.read id // Flow<int, string, int>
     |> Flow.map ((+) 1)
 
-let asyncExample : AsyncFlow<int, string, int> =
-    asyncFlow {
-        let! value = syncExample // AsyncFlow<int, string, int>
+let asyncExample : Flow<int, string, int> =
+    flow {
+        let! value = async { return 21 }
         return value * 2
     }
 
-let taskExample : TaskFlow<int, string, int> =
-    taskFlow {
-        let! env = TaskFlow.env // TaskFlow<int, string, int>
-        let! suffix = ColdTask(fun _ -> Task.FromResult 5) // TaskFlow<int, string, int>
+let taskExample : Flow<int, string, int> =
+    flow {
+        let! env = Flow.read id
+        let! suffix = Task.FromResult 5
         return env + suffix
     }
 
 [<EntryPoint>]
 let main _ =
     runFlow "Flow" 20 syncExample
-    runAsyncFlow "AsyncFlow" 20 asyncExample
-    runTaskFlow "TaskFlow" 20 taskExample
+    runAsyncExample "Async" 20 asyncExample
+    runTaskExample "Task" 20 taskExample
     // Flow: Ok 21
-    // AsyncFlow: Ok 42
-    // TaskFlow: Ok 25
+    // Async: Ok 42
+    // Task: Ok 25
     0

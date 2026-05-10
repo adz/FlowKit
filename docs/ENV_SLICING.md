@@ -18,9 +18,9 @@ type AppEnv =
       Logger: ILogger }
 
 let ping =
-    taskFlow {
+    flow {
         // 'env' is the full AppEnv record
-        let! gateway = TaskFlow.read (fun env -> env.Gateway)
+        let! gateway = Flow.read (fun env -> env.Gateway)
         return! gateway.Ping()
     }
 ```
@@ -31,9 +31,9 @@ F# provides a nice shorthand for these simple projections. Instead of `(fun env 
 
 ```fsharp
 let ping =
-    taskFlow {
-        let! gateway = TaskFlow.read _.Gateway
-        let! logger = TaskFlow.read _.Logger
+    flow {
+        let! gateway = Flow.read _.Gateway
+        let! logger = Flow.read _.Logger
         
         logger.Info "Starting ping"
         return! gateway.Ping()
@@ -47,11 +47,11 @@ let ping =
 ```fsharp
 type SmallEnv = { Logger: ILogger }
 
-let smallWorkflow : TaskFlow<SmallEnv, unit, unit> = ...
+let smallWorkflow : Flow<SmallEnv, unit, unit> = ...
 
-let bigWorkflow : TaskFlow<AppEnv, unit, unit> =
+let bigWorkflow : Flow<AppEnv, unit, unit> =
     smallWorkflow
-    |> TaskFlow.localEnv (fun env -> { Logger = env.Logger })
+    |> Flow.localEnv (fun env -> { Logger = env.Logger })
 ```
 
 ## Splitting Runtime Services from App Dependencies
@@ -62,12 +62,12 @@ In complex apps, you often want to separate **Operational Services** (logging, m
 type RuntimeServices = { Log: string -> unit }
 type AppEnv = { Gateway: IPingGateway }
 
-let workflow : TaskFlow<RuntimeContext<RuntimeServices, AppEnv>, unit, unit> =
-    taskFlow {
+let workflow : Flow<RuntimeContext<RuntimeServices, AppEnv>, unit, unit> =
+    flow {
         // Read from the 'runtime' half
-        let! log = TaskFlow.readRuntime _.Log
+        let! log = Flow.readRuntime _.Log
         // Read from the 'env' half
-        let! gateway = TaskFlow.readEnvironment _.Gateway
+        let! gateway = Flow.readEnvironment _.Gateway
 
         log "starting"
         return! gateway.Ping()
@@ -76,7 +76,7 @@ let workflow : TaskFlow<RuntimeContext<RuntimeServices, AppEnv>, unit, unit> =
 
 ## The Capability Module
 
-The `Capability` module provides helpers that work across all flow types (`Flow`, `AsyncFlow`, `TaskFlow`) using a single API.
+The `Capability` module provides helpers that work across all flow types (`Flow`, `Flow`, `Flow`) using a single API.
 
 - `Capability.service`: Polymorphic version of `read`.
 - `Capability.runtime`: Polymorphic version of `readRuntime`.
@@ -84,7 +84,7 @@ The `Capability` module provides helpers that work across all flow types (`Flow`
 
 ```fsharp
 let log message =
-    taskFlow {
+    flow {
         let! logger = Capability.service _.Logger
         logger.Log message
     }
@@ -92,13 +92,13 @@ let log message =
 
 ## Layering and Composition
 
-Layers are flows that produce a derived environment. Use `TaskFlow.provideLayer` to "connect" a layer to a downstream workflow.
+Layers are flows that produce a derived environment. Use `Flow.provideLayer` to "connect" a layer to a downstream workflow.
 
 ```fsharp
-let appLayer : TaskFlow<RuntimeServices, AppError, AppDependencies> = ...
-let workflow : TaskFlow<AppDependencies, AppError, Response> = ...
+let appLayer : Flow<RuntimeServices, AppError, AppDependencies> = ...
+let workflow : Flow<AppDependencies, AppError, Response> = ...
 
-let runnable = workflow |> TaskFlow.provideLayer appLayer
+let runnable = workflow |> Flow.provideLayer appLayer
 ```
 
 The downstream workflow stays typed against the smaller environment, while the final runnable workflow accepts the outer environment needed to build it.

@@ -26,8 +26,8 @@ FsFlow captures the common application boundary needs in one model:
 - Result for fail-fast typed failures
 - Validation for structured accumulation
 - Flow for synchronous boundaries
-- AsyncFlow for async boundaries
-- TaskFlow for task boundaries
+- Flow for async boundaries
+- Flow for task boundaries
 - `'env` / `'ctx` style context threading for implicit dependencies, request metadata, and other runtime state
 
 That gives you a smaller surface area when the application boundary is what you want to make explicit.
@@ -48,7 +48,7 @@ Use `FsToolkit.ErrorHandling` when you already have Result, `AsyncResult`, or `T
 This is the closest migration path for existing railway-oriented code:
 
 - keep pure validation and mapping code as plain Result
-- move the orchestration boundary into Flow, AsyncFlow, or TaskFlow
+- move the orchestration boundary into Flow and bind async/task work directly where needed
 - use Check when the check itself can stay pure and only the final error provisioning becomes effectful
 
 Go to [`Replacing FsToolkit.ErrorHandling`](./INTEGRATIONS_FSTOOLKIT.md) for the migration shape and coexistence patterns.

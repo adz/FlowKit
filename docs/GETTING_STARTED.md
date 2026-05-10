@@ -1,7 +1,7 @@
 ---
 weight: 10
 title: Getting Started
-description: The fastest path from Check and Result into Flow, AsyncFlow, and TaskFlow.
+description: The fastest path from Check and Result into Flow.
 ---
 
 
@@ -9,7 +9,7 @@ description: The fastest path from Check and Result into Flow, AsyncFlow, and Ta
 
 This page shows the fastest path from plain checks into the right FsFlow family as the execution context grows.
 
-The core `FsFlow` package contains Flow, AsyncFlow, TaskFlow, Check, Result, Validation, and [`validate {}`]({{< relref "builders-validate.md" >}}).
+The core `FsFlow` package contains Flow, Check, Result, Validation, and [`validate {}`]({{< relref "builders-validate.md" >}}).
 The task APIs now live in the `FsFlow` namespace and ship in the main package.
 
 ## 1. Start With The Continuum
@@ -17,7 +17,7 @@ The task APIs now live in the `FsFlow` namespace and ship in the main package.
 FsFlow is meant to scale one Result-based style through richer boundaries:
 
 ```text
-Check -> Result -> Validation -> Flow -> AsyncFlow -> TaskFlow
+Check -> Result -> Validation -> Flow
 ```
 
 Start as small as possible, then lift only when the boundary truly needs more runtime context.
@@ -40,13 +40,12 @@ let requireName (name: string) : Result<string, ValidationError> =
 
 That keeps the pure validation surface small and easy to reuse.
 
-When the same source needs to cross into [`flow {}`]({{< relref "builders-flow.md" >}}), [`asyncFlow {}`]({{< relref "builders-asyncflow.md" >}}), or [`taskFlow {}`]({{< relref "taskbuilders-taskflow.md" >}}),
-use `Guard.Of` or `Guard.MapError`. Guard keeps the source value visible to the computation
-expression and carries the failure value alongside it:
+When the same source needs to cross into `flow {}`, use `Guard.Of` or `Guard.MapError`.
+Guard keeps the source value visible to the computation expression and carries the failure value alongside it:
 
 ```fsharp
 let login username password =
-    asyncFlow {
+    flow {
         let! user = tryGetUser username |> Guard.MapError MissingName
         do! Check.notBlank password |> Guard.Of InvalidPassword
         return user
@@ -84,15 +83,13 @@ Use [`result {}`]({{< relref "builders-result.md" >}}) when the next step depend
 
 ## 4. Choose The Smallest Honest Boundary
 
-Use:
+Use `Flow<'env, 'error, 'value>` when the computation boundary is honest about the runtime shape:
 
-- `Flow<'env, 'error, 'value>` when the computation itself is synchronous
-- `AsyncFlow<'env, 'error, 'value>` when the computation is naturally `Async`-based
-- `TaskFlow<'env, 'error, 'value>` when the computation is naturally `.NET Task`-based
+- synchronous bodies when no async runtime is needed
+- async bodies when the computation naturally binds `Async`
+- task bodies when the computation naturally binds `.NET Task`
 
-Pick the family that matches the honest boundary of the code you are writing.
-Avoid TaskFlow just because one helper somewhere happens to use `Task`.
-Avoid Flow if the boundary is mainly async work with sync wrappers around it.
+Pick the boundary that matches the code you are writing.
 
 ## 5. Use Flow For Synchronous Boundaries
 
@@ -125,45 +122,44 @@ Choose Flow when:
 - you want the smallest representation
 - carrying a runtime `CancellationToken` would be noise
 
-## 6. Use AsyncFlow For `Async`-Based Boundaries
+## 6. Use Flow For `Async`-Based Boundaries
 
-Use AsyncFlow when the computation itself is built around F# `Async`:
+Use Flow when the computation body is built around F# `Async`:
 
 ```fsharp
 type AsyncEnv =
     { Prefix: string
       LoadName: int -> Async<string> }
 
-let greetAsync userId : AsyncFlow<AsyncEnv, ValidationError, string> =
-    asyncFlow {
-        let! loadName = AsyncFlow.read _.LoadName
+let greetAsync userId : Flow<AsyncEnv, ValidationError, string> =
+    flow {
+        let! loadName = Flow.read _.LoadName
         let! loadedName = loadName userId
         let! validName = requireName loadedName
-        let! prefix = AsyncFlow.read _.Prefix
+        let! prefix = Flow.read _.Prefix
         return $"{prefix} {validName}"
     }
 ```
 
-Run an AsyncFlow through `Async`:
+Run a Flow that binds `Async` directly:
 
 ```fsharp
 let result =
     greetAsync 42
-    |> AsyncFlow.toAsync
+    |> Flow.run
         { Prefix = "Hello"
           LoadName = fun _ -> async { return "Ada" } }
-    |> Async.RunSynchronously
 ```
 
-Choose AsyncFlow when:
+Choose Flow when:
 
 - the surrounding code already uses `Async`
 - the core package can stay free of `.NET Task` concepts
 - `Async` is the natural runtime for the computation
 
-## 7. Use TaskFlow For `.NET Task`-Based Boundaries
+## 7. Use Flow For `.NET Task`-Based Boundaries
 
-Use TaskFlow when the computation is task-oriented end to end:
+Use Flow when the computation body is task-oriented end to end:
 
 ```fsharp
 open System.Threading.Tasks
@@ -172,30 +168,27 @@ type TaskEnv =
     { Prefix: string
       LoadName: int -> Task<string> }
 
-let greetTask userId : TaskFlow<TaskEnv, ValidationError, string> =
-    taskFlow {
-        let! loadName = TaskFlow.read _.LoadName
+let greetTask userId : Flow<TaskEnv, ValidationError, string> =
+    flow {
+        let! loadName = Flow.read _.LoadName
         let! loadedName = loadName userId
         let! validName = requireName loadedName
-        let! prefix = TaskFlow.read _.Prefix
+        let! prefix = Flow.read _.Prefix
         return $"{prefix} {validName}"
     }
 ```
 
-Run a TaskFlow through `Task`:
+Run a Flow that binds `Task` directly:
 
 ```fsharp
 let result =
     greetTask 42
-    |> TaskFlow.toTask
+    |> Flow.run
         { Prefix = "Hello"
           LoadName = fun _ -> Task.FromResult "Ada" }
-        CancellationToken.None
-    |> Async.AwaitTask
-    |> Async.RunSynchronously
 ```
 
-Choose TaskFlow when:
+Choose Flow when:
 
 - the boundary is `.NET Task`
 - task interop is central to the code path
@@ -205,9 +198,8 @@ Choose TaskFlow when:
 
 Each computation family has the same environment pattern:
 
-- `Flow.read` / `Flow.env`
-- `AsyncFlow.read` / `AsyncFlow.env`
-- `TaskFlow.read` / `TaskFlow.env`
+- `Flow.read`
+- `Flow.env`
 
 Use the projected form when you only need one dependency:
 
@@ -223,32 +215,26 @@ let greetWithPrefix input : Flow<AppEnv, ValidationError, string> =
 Use the whole environment only when you genuinely need it:
 
 ```fsharp
-let describe : AsyncFlow<AsyncEnv, ValidationError, string> =
-    asyncFlow {
-        let! env = AsyncFlow.env
+let describe : Flow<AsyncEnv, ValidationError, string> =
+    flow {
+        let! env = Flow.env
         return env.Prefix
     }
 ```
 
 When task work has separate runtime services from application capabilities, use
-`RuntimeContext<'runtime, 'env>` and the `TaskFlow.readRuntime`, `TaskFlow.readEnvironment`, or `Capability`
+`RuntimeContext<'runtime, 'env>` and the `Flow.readRuntime`, `Flow.readEnvironment`, or `Capability`
 helpers from the task surface.
 
 When the application capability boundary itself deserves a name, define a cap set with
 `Needs<'dep>` and read it with `Env<'dep>` or `Env<'dep, 'value>`. Public task boundaries can
-stay flexible with shapes like `TaskFlow<#LoginCaps, _, _>` so a larger runtime still satisfies
+stay flexible with shapes like `Flow<#LoginCaps, _, _>` so a larger runtime still satisfies
 the smaller workflow contract.
 
 ## 9. Compose Upward, Not Sideways
 
-The computation families are ordered by runtime commitment, but AsyncFlow and TaskFlow are sibling async boundaries:
-
-- Flow is the sync base
-- AsyncFlow is the async-native boundary and can lift Flow
-- TaskFlow is the .NET task-native boundary and can lift Flow and AsyncFlow
-
-AsyncFlow does not depend on TaskFlow. Use it on its own when the boundary is `Async`-first or when you want the core async surface without `.NET Task` interop.
-The task surface means the TaskFlow builder plus the task-aware extension members that add `Task`, `ValueTask`, and ColdTask binding support.
+Flow is one boundary model with direct binds for sync values, `Async`, `Task`, `ValueTask`, and `ColdTask`.
+Keep the smallest honest computation at each boundary, then lift it only when the outer runtime really changes.
 
 That means small sync boundaries can stay sync and be reused inside async or task-oriented boundaries:
 
@@ -259,20 +245,19 @@ let validateGreeting input : Flow<AppEnv, ValidationError, string> =
         return name
     }
 
-let greetTaskValidated input : TaskFlow<TaskEnv, ValidationError, string> =
-    taskFlow {
+let greetTaskValidated input : Flow<TaskEnv, ValidationError, string> =
+    flow {
         let! validName = validateGreeting input
-        let! prefix = TaskFlow.read _.Prefix
+        let! prefix = Flow.read _.Prefix
         return $"{prefix} {validName}"
     }
 ```
 
-Keep the smallest honest computation at each boundary, then lift it only when the outer runtime really changes.
-Inside the computation expression, prefer direct binds like this over `TaskFlow.fromFlow`.
+Inside the computation expression, prefer direct binds like this over explicit wrapping.
 
 ## 10. Keep The Semantic Boundary Clear
 
-Check, Result, Flow, AsyncFlow, and TaskFlow are short-circuiting.
+Check, Result, and Flow are short-circuiting.
 They are for ordered workflows that stop on the first typed failure.
 
 Validation and [`validate {}`]({{< relref "builders-validate.md" >}}) are for sibling checks that should accumulate into a structured diagnostics graph.

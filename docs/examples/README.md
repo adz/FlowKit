@@ -14,7 +14,7 @@ The examples prefer the normal direct-bind style inside computation expressions,
 
 ## Request Boundary Example
 
-This example shows a request boundary that pulls a user from a database-like environment, threads a trace id through the request context, and reuses the same validation shape across Flow, AsyncFlow, and TaskFlow.
+This example shows a request boundary that pulls a user from a database-like environment, threads a trace id through the request context, and reuses the same validation shape across Flow.
 
 Run it:
 
@@ -403,9 +403,9 @@ module ContextExample =
             Authorizer: IAuthorizer
         }
 
-    let handleRequest (resource: string) : TaskFlow<AppEnv, string, string> =
-        taskFlow {
-            let! env = TaskFlow.env
+    let handleRequest (resource: string) : Flow<AppEnv, string, string> =
+        flow {
+            let! env = Flow.env
             let context = env.Context
             let requestId = RequestId.get context
             let correlationId = CorrelationId.tryGet context |> Option.defaultValue "none"
@@ -417,7 +417,7 @@ module ContextExample =
                 |> Option.defaultValue "anonymous"
 
             if not (env.Authorizer.CanAccess context resource) then
-                return! TaskFlow.fail "forbidden"
+                return! Flow.fail "forbidden"
 
             let path = RequestMetadata.tryGet "path" context.Metadata |> Option.defaultValue "/"
             env.Logger.WriteLine $"log request={requestId} correlation={correlationId} tenant={tenantId} user={userLabel} locale={locale.Name}"
@@ -458,8 +458,7 @@ module ContextExample =
 
         let outcome =
             handleRequest "orders.read"
-            |> TaskFlow.run env CancellationToken.None
-            |> fun task -> task.GetAwaiter().GetResult()
+            |> Flow.run env
 
         printfn "result=%A" outcome
         logger.Lines |> List.iter (printfn "%s")
@@ -469,7 +468,7 @@ module ContextExample =
 
 ## Playground Example
 
-This example shows the same core boundary across Flow, AsyncFlow, and TaskFlow using the normal direct-bind style inside each computation expression.
+This example shows the same core boundary across Flow using the normal direct-bind style inside each computation expression.
 
 Run it:
 
@@ -492,22 +491,22 @@ open FsFlow
 type AppEnv =
     { Prefix: string
       Name: string
-      LoadSuffix: ColdTask<string> }
+      LoadSuffix: Task<string> }
 
 let greetingFlow : Flow<AppEnv, string, string> =
     Flow.read (fun env -> $"{env.Prefix} {env.Name}") // Flow<AppEnv, string, string>
 
-let greetingAsyncFlow : AsyncFlow<AppEnv, string, string> =
-    asyncFlow {
-        let! greeting = greetingFlow // AsyncFlow<AppEnv, string, string>
+let greetingAsync : Flow<AppEnv, string, string> =
+    flow {
+        let! greeting = greetingFlow
         return greeting.ToUpperInvariant()
     }
 
-let greetingTaskFlow : TaskFlow<AppEnv, string, string> =
-    taskFlow {
-        let! env = TaskFlow.env // TaskFlow<AppEnv, string, AppEnv>
-        let! greeting = greetingFlow // TaskFlow<AppEnv, string, string>
-        let! suffix = env.LoadSuffix // TaskFlow<AppEnv, string, string>
+let greetingTask : Flow<AppEnv, string, string> =
+    flow {
+        let! env = Flow.env // Flow<AppEnv, string, AppEnv>
+        let! greeting = greetingFlow // Flow<AppEnv, string, string>
+        let! suffix = env.LoadSuffix // Flow<AppEnv, string, string>
         return $"{greeting}{suffix}"
     }
 
@@ -516,28 +515,26 @@ let main _ =
     let env =
         { Prefix = "Hello"
           Name = "Ada"
-          LoadSuffix = ColdTask(fun _ -> Task.FromResult "!") }
+          LoadSuffix = Task.FromResult "!" }
 
     let syncResult =
         greetingFlow
         |> Flow.run env
 
     let asyncResult =
-        greetingAsyncFlow
-        |> AsyncFlow.run env
-        |> Async.RunSynchronously
+        greetingAsync
+        |> Flow.run env
 
     let taskResult =
-        greetingTaskFlow
-        |> TaskFlow.run env CancellationToken.None
-        |> fun task -> task.GetAwaiter().GetResult()
+        greetingTask
+        |> Flow.run env
 
     printfn "Flow: %A" syncResult
-    printfn "AsyncFlow: %A" asyncResult
-    printfn "TaskFlow: %A" taskResult
+    printfn "Async: %A" asyncResult
+    printfn "Task: %A" taskResult
     // Flow: Ok "Hello Ada"
-    // AsyncFlow: Ok "HELLO ADA"
-    // TaskFlow: Ok "Hello Ada!"
+    // Async: Ok "HELLO ADA"
+    // Task: Ok "Hello Ada!"
     0
 
 ```
@@ -568,19 +565,17 @@ let runFlow label env workflow =
     let result = Flow.run env workflow
     printfn "%s: %A" label result
 
-let runAsyncFlow label env workflow =
+let runAsyncExample label env workflow =
     let result =
         workflow
-        |> AsyncFlow.run env
-        |> Async.RunSynchronously
+        |> Flow.run env
 
     printfn "%s: %A" label result
 
-let runTaskFlow label env workflow =
+let runTaskExample label env workflow =
     let result =
         workflow
-        |> TaskFlow.run env CancellationToken.None
-        |> fun task -> task.GetAwaiter().GetResult()
+        |> Flow.run env
 
     printfn "%s: %A" label result
 
@@ -588,27 +583,27 @@ let syncExample : Flow<int, string, int> =
     Flow.read id // Flow<int, string, int>
     |> Flow.map ((+) 1)
 
-let asyncExample : AsyncFlow<int, string, int> =
-    asyncFlow {
-        let! value = syncExample // AsyncFlow<int, string, int>
+let asyncExample : Flow<int, string, int> =
+    flow {
+        let! value = async { return 21 }
         return value * 2
     }
 
-let taskExample : TaskFlow<int, string, int> =
-    taskFlow {
-        let! env = TaskFlow.env // TaskFlow<int, string, int>
-        let! suffix = ColdTask(fun _ -> Task.FromResult 5) // TaskFlow<int, string, int>
+let taskExample : Flow<int, string, int> =
+    flow {
+        let! env = Flow.read id
+        let! suffix = Task.FromResult 5
         return env + suffix
     }
 
 [<EntryPoint>]
 let main _ =
     runFlow "Flow" 20 syncExample
-    runAsyncFlow "AsyncFlow" 20 asyncExample
-    runTaskFlow "TaskFlow" 20 taskExample
+    runAsyncExample "Async" 20 asyncExample
+    runTaskExample "Task" 20 taskExample
     // Flow: Ok 21
-    // AsyncFlow: Ok 42
-    // TaskFlow: Ok 25
+    // Async: Ok 42
+    // Task: Ok 25
     0
 
 ```

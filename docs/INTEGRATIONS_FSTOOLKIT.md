@@ -19,7 +19,7 @@ focuses on a unified execution model that carries environments and runtime polic
 FsFlow provides a single, scalable progression:
 
 ```text
-[Check]({{< relref "check.md" >}}) -> [Result]({{< relref "builders-result.md" >}}) -> [Validation]({{< relref "validation.md" >}}) -> [Flow]({{< relref "flow.md" >}}) -> [AsyncFlow]({{< relref "asyncflow.md" >}}) -> [TaskFlow]({{< relref "taskflow.md" >}})
+[Check]({{< relref "check.md" >}}) -> [Result]({{< relref "builders-result.md" >}}) -> [Validation]({{< relref "validation.md" >}}) -> [Flow]({{< relref "flow.md" >}})
 ```
 
 In FsFlow, the environment and runtime concerns are baked into the computation, allowing you to
@@ -34,8 +34,8 @@ If you use these FsToolkit patterns, here is how they correspond to FsFlow:
 | --- | --- |
 | [Result]({{< relref "builders-result.md" >}}).requireTrue | `Check.okIf condition |> Check.orError` |
 | [Result]({{< relref "builders-result.md" >}}).requireSome | `Check.okIfSome opt |> Check.orError` |
-| `asyncResult { }` | [`asyncFlow {}`]({{< relref "builders-asyncflow.md" >}}) |
-| `taskResult { }` | [`taskFlow {}`]({{< relref "taskbuilders-taskflow.md" >}}) |
+| `asyncResult { }` | `flow {}` |
+| `taskResult { }` | `flow {}` |
 | [Validation]({{< relref "validation.md" >}}) helpers | [Validation]({{< relref "validation.md" >}}) and [`validate {}`]({{< relref "builders-validate.md" >}}) |
 
 ## New Things You Get
@@ -45,8 +45,7 @@ standard result wrappers:
 
 1.  **Unified Environment**: Every flow has access to an explicit `'env`, removing the need
     to manually thread dependencies through every function.
-2.  **Runtime Policies**: Retries, timeouts, and logging are first-class citizens in the 
-    `AsyncFlow.Runtime` and `TaskFlow.Runtime` modules.
+2.  **Runtime Policies**: Retries, timeouts, and logging are first-class citizens in the `Flow.Runtime` module.
 3.  **Task Temperature**: Built-in support for ColdTask, ensuring tasks only start when 
     the flow is actually executed.
 4.  **Diagnostics Graph**: A structured, path-aware error graph for complex validation that
@@ -60,8 +59,7 @@ functions.
 
 - **Keep existing pure helpers**: If you have a library of Result transformation helpers
   from FsToolkit, keep using them! FsFlow's [`flow {}`]({{< relref "builders-flow.md" >}}) builders bind Result directly.
-- **Move orchestration**: Use TaskFlow or AsyncFlow when you need to combine those pure 
-  functions with I/O, configuration, or operational policies.
+- **Move orchestration**: Use Flow when you need to combine those pure functions with I/O, configuration, or operational policies.
 
 ## Semantic Boundary
 

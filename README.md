@@ -11,9 +11,8 @@
 
 FsFlow is a single model for Result-based programs in F#.
 Write small predicate checks with `Check`, keep fail-fast logic in standard `Result`, accumulate sibling
-validation with `Validation` and `validate {}`, then lift the same logic into `Flow`,
-`AsyncFlow`, or `TaskFlow` when the boundary needs environment access, async work, task interop,
-or runtime policy.
+validation with `Validation` and `validate {}`, then lift the same logic into `Flow`
+when the boundary needs environment access, async work, task interop, or runtime policy.
 
 [![ci](https://github.com/adz/FsFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/adz/FsFlow/actions/workflows/ci.yml)
 [![NuGet](https://img.shields.io/nuget/v/FsFlow.svg)](https://www.nuget.org/packages/FsFlow)
@@ -24,7 +23,7 @@ or runtime policy.
 FsFlow is built around one progression:
 
 ```text
-Check -> Result -> Validation -> Flow -> AsyncFlow -> TaskFlow
+Check -> Result -> Validation -> Flow
 ```
 
 The same validation vocabulary stays the same while the execution context grows.
@@ -33,8 +32,8 @@ The same validation vocabulary stays the same while the execution context grows.
 - Use standard `Result` values and `result {}` for fail-fast pure code.
 - Use `Validation` and `validate {}` when sibling failures should accumulate.
 - Use `flow {}` when the boundary needs typed failure and environment, but not async runtime.
-- Use `asyncFlow {}` when the boundary is naturally `Async`.
-- Use `taskFlow {}` when the boundary is naturally `.NET Task`.
+- Use `flow {}` when the boundary is naturally `Async`.
+- Use `flow {}` when the boundary is naturally `.NET Task`.
 - Keep expected failures typed all the way through instead of switching helper families at each runtime shape.
 
 This is the key difference from split models like `Result`, `Async<Result<_,_>>`, and `Task<Result<_,_>>`
@@ -42,7 +41,7 @@ that need separate helper modules, separate builders, and repeated adaptation at
 
 ## Install
 
-- `FsFlow` for `Flow`, `AsyncFlow`, `TaskFlow`, and the supporting validation/runtime helpers
+- `FsFlow` for `Flow` and the supporting validation/runtime helpers
 
 ## Example
 
@@ -75,10 +74,10 @@ type RegistrationEnv =
     { LoadUser: int -> Task<Result<User, RegistrationError>>
       SaveUser: User -> Task<Result<unit, RegistrationError>> }
 
-let registerUser userId : TaskFlow<RegistrationEnv, RegistrationError, unit> =
-    taskFlow {
-        let! loadUser = TaskFlow.read _.LoadUser
-        let! saveUser = TaskFlow.read _.SaveUser
+let registerUser userId : Flow<RegistrationEnv, RegistrationError, unit> =
+    flow {
+        let! loadUser = Flow.read _.LoadUser
+        let! saveUser = Flow.read _.SaveUser
 
         let! user = loadUser userId
         do! validateEmail user.Email
@@ -88,14 +87,14 @@ let registerUser userId : TaskFlow<RegistrationEnv, RegistrationError, unit> =
 ```
 
 `validateEmail` is just a plain `Result<string, RegistrationError>`.
-`taskFlow` lifts it directly with `do!`.
-The task surface ships in the main FsFlow package and the `FsFlow` namespace.
+`flow` lifts it directly with `do!`.
+The same builder also binds `Async`, `Task`, `ValueTask`, and `ColdTask` directly.
 
 ## Semantic Boundary
 
 FsFlow is for short-circuiting, ordered workflows:
 
-- `Check`, `Result`, `Flow`, `AsyncFlow`, and `TaskFlow` stop on the first typed failure.
+- `Check`, `Result`, `Validation`, and `Flow` stop on the first typed failure.
 - `Validation` and `validate {}` accumulate sibling failures in a structured diagnostics graph.
 - The flow families are for orchestration, dependency access, async or task execution, and runtime concerns.
 
@@ -107,13 +106,13 @@ trying to hide it inside a flow builder.
 FsFlow stays close to standard F# and .NET:
 
 - `flow { ... }` binds to `Result` and `Option`
-- `asyncFlow { ... }` also binds to `Async`, `Async<Option<_>>`, `Async<ValueOption<_>>`, and `Async<Result<_,_>>`
-- `taskFlow { ... }` is the .NET task sibling and binds to `Task`, `ValueTask`, `Task<_>`, `ValueTask<_>`, and `ColdTask`
+- `flow { ... }` also binds to `Async`, `Async<Option<_>>`, `Async<ValueOption<_>>`, and `Async<Result<_,_>>`
+- `flow { ... }` also binds to `Task`, `ValueTask`, `Task<_>`, `ValueTask<_>`, and `ColdTask`
 - `result {}` keeps fail-fast pure code readable
 - `validate {}` keeps sibling validation accumulation explicit
 
 Because tasks are hot, FsFlow includes `ColdTask`: a small wrapper around `CancellationToken -> Task`.
-`taskFlow` handles token passing for you and keeps reruns explicit.
+`flow` handles token passing for you and keeps reruns explicit.
 
 This is the file-oriented example shape. The full runnable example is in
 [`examples/FsFlow.ReadmeExample/Program.fs`](./examples/FsFlow.ReadmeExample/Program.fs).
@@ -128,28 +127,28 @@ Supporting types in the full example are just:
 - `FileReadError = NotFound`
 
 ```fsharp
-let readTextFile (path: string) : TaskFlow<ReadmeEnv, FileReadError, string> =
-    taskFlow {
+let readTextFile (path: string) : Flow<ReadmeEnv, FileReadError, string> =
+    flow {
         // In production, map access and path exceptions separately at the boundary.
         do! okIf (File.Exists path) |> orElse (NotFound path) // from Validate
 
         return! ColdTask(fun ct -> File.ReadAllTextAsync(path, ct)) // ColdTask<string>
     }
 
-let program : TaskFlow<ReadmeEnv, FileReadError, string * string> =
-    taskFlow {
-        let! root = TaskFlow.read _.Root                       // ReadmeEnv.Root -> string
+let program : Flow<ReadmeEnv, FileReadError, string * string> =
+    flow {
+        let! root = Flow.read _.Root                       // ReadmeEnv.Root -> string
         let settingsFile = Path.Combine(root, "settings.json")
         let featureFlagsFile = Path.Combine(root, "feature-flags.json")
 
-        let! settings = readTextFile settingsFile              // TaskFlow<ReadmeEnv, FileReadError, string>
-        let! featureFlags = readTextFile featureFlagsFile      // TaskFlow<ReadmeEnv, FileReadError, string>
+        let! settings = readTextFile settingsFile              // Flow<ReadmeEnv, FileReadError, string>
+        let! featureFlags = readTextFile featureFlagsFile      // Flow<ReadmeEnv, FileReadError, string>
 
-        return settings, featureFlags                          // TaskFlow<ReadmeEnv, FileReadError, string * string>
+        return settings, featureFlags                          // Flow<ReadmeEnv, FileReadError, string * string>
     }
 ```
 
-It reads `Root` from `'env`, performs two file reads in one `taskFlow {}`, and keeps failure typed at the boundary.
+It reads `Root` from `'env`, performs two file reads in one `flow {}`, and keeps failure typed at the boundary.
 
 ## Getting Started
 

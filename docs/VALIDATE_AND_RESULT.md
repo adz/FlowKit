@@ -9,7 +9,7 @@ description: Overview of the FsFlow validation stack, from pure checks to struct
 
 FsFlow provides a unified stack for handling failure, ranging from pure predicate checks to complex, path-aware diagnostics graphs.
 
-The core philosophy is to **check once, lift later**. You write your pure logic using simple tools and then lift them into richer execution contexts (like `Flow` or `TaskFlow`) only when needed.
+The core philosophy is to **check once, lift later**. You write your pure logic using simple tools and then lift them into richer execution contexts (like `Flow` or `Flow`) only when needed.
 
 ## The Progression
 

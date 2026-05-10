@@ -323,9 +323,9 @@
 <li>You want your workflows to read like a set of required &ldquo;Capabilities&rdquo; rather than a set of record fields.</li>
 </ul>
 <h2 id="shared-helpers-the-capability-module">Shared Helpers: The Capability Module</h2>
-<p>Regardless of which style you choose, FsFlow provides a <code>Capability</code> module that works across both. These helpers are polymorphic, meaning they work in <code>flow {}</code>, <code>asyncFlow {}</code>, and <code>taskFlow {}</code> without needing specific module prefixes.</p>
+<p>Regardless of which style you choose, FsFlow provides a <code>Capability</code> module that works across both. These helpers are polymorphic, meaning they work in <code>flow {}</code>, <code>flow {}</code>, and <code>flow {}</code> without needing specific module prefixes.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">log</span> <span style="color:#000">message</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">taskFlow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">logger</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Capability</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">service</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">Logger</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#000">logger</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Log</span> <span style="color:#000">message</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>

@@ -243,7 +243,7 @@ Summary abstraction cost is negligible for effectful code cold execution for tas
     <li><a href="#abstraction-cost">Abstraction Cost</a>
       <ul>
         <li><a href="#synchronous-flow">Synchronous (Flow)</a></li>
-        <li><a href="#task-oriented-taskflow">Task-Oriented (TaskFlow)</a></li>
+        <li><a href="#task-oriented-flow">Task-Oriented (Flow)</a></li>
         <li><a href="#implicit-token-propagation">Implicit Token Propagation</a></li>
       </ul>
     </li>
@@ -331,7 +331,7 @@ This is the &ldquo;worst case&rdquo; for FsFlow because the abstraction cost is 
       </tr>
   </tbody>
 </table>
-<h3 id="task-oriented-taskflow">Task-Oriented (TaskFlow)</h3>
+<h3 id="task-oriented-flow">Task-Oriented (Flow)</h3>
 <p>Measures the same 20-step short-circuiting shape for task-oriented computations.</p>
 <table>
   <thead>
@@ -348,14 +348,14 @@ This is the &ldquo;worst case&rdquo; for FsFlow because the abstraction cost is 
           <td>640 B</td>
       </tr>
       <tr>
-          <td>TaskFlow</td>
+          <td>Flow</td>
           <td>185.4 ns</td>
           <td>1.2 KB</td>
       </tr>
   </tbody>
 </table>
 <h3 id="implicit-token-propagation">Implicit Token Propagation</h3>
-<p>Compares TaskFlow implicit token propagation with explicit token threading in a manual <code>Task&lt;Result&lt;_,_&gt;&gt;</code> computation.</p>
+<p>Compares Flow implicit token propagation with explicit token threading in a manual <code>Task&lt;Result&lt;_,_&gt;&gt;</code> computation.</p>
 <table>
   <thead>
       <tr>
@@ -371,7 +371,7 @@ This is the &ldquo;worst case&rdquo; for FsFlow because the abstraction cost is 
           <td>720 B</td>
       </tr>
       <tr>
-          <td>TaskFlow</td>
+          <td>Flow</td>
           <td>185.4 ns</td>
           <td>1.2 KB</td>
       </tr>
@@ -400,7 +400,7 @@ In a real application where steps involve database access (1-10ms) or external A
           <td>480 B</td>
       </tr>
       <tr>
-          <td>AsyncFlow</td>
+          <td>Flow</td>
           <td>-</td>
           <td>1.4 us</td>
           <td>720 B</td>
@@ -412,7 +412,7 @@ In a real application where steps involve database access (1-10ms) or external A
           <td>320 B</td>
       </tr>
       <tr>
-          <td>AsyncFlow</td>
+          <td>Flow</td>
           <td>Step 3</td>
           <td>0.9 us</td>
           <td>480 B</td>
@@ -439,7 +439,7 @@ In a real application where steps involve database access (1-10ms) or external A
           <td>1.2 KB</td>
       </tr>
       <tr>
-          <td>TaskFlow</td>
+          <td>Flow</td>
           <td>-</td>
           <td>2.4 us</td>
           <td>1.8 KB</td>
@@ -475,7 +475,7 @@ Rerunning a computation re-executes all steps.</p>
 <p>If you need to cache a result, run the computation once and store the Result.
 The &ldquo;cold&rdquo; property is for effectful orchestration, not for caching data.</p>
 <h2 id="valuetask-tradeoffs">ValueTask Tradeoffs</h2>
-<p>TaskFlow uses <code>ValueTask</code> internally where possible, but the cold nature of the library means it cannot always avoid allocations when binding hot tasks.</p>
+<p>Flow uses <code>ValueTask</code> internally where possible, but the cold nature of the library means it cannot always avoid allocations when binding hot tasks.</p>
 <h3 id="binding-hot-task-vs-coldtask">Binding Hot Task vs ColdTask</h3>
 <table>
   <thead>
@@ -521,12 +521,12 @@ The &ldquo;cold&rdquo; property is for effectful orchestration, not for caching 
           <td>160 B</td>
       </tr>
       <tr>
-          <td><code>AsyncFlow.run</code></td>
+          <td><code>Flow.run</code></td>
           <td>152.1 ns</td>
           <td>960 B</td>
       </tr>
       <tr>
-          <td><code>TaskFlow.run</code></td>
+          <td><code>Flow.run</code></td>
           <td>185.4 ns</td>
           <td>1.2 KB</td>
       </tr>

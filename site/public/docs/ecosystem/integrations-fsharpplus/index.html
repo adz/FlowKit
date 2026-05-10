@@ -30,7 +30,7 @@
 
   <meta itemprop="name" content="FSharpPlus Integration">
   <meta itemprop="description" content="How FsFlow fits beside FSharpPlus-based codebases.">
-  <meta itemprop="wordCount" content="407">
+  <meta itemprop="wordCount" content="404">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="FSharpPlus Integration">
   <meta name="twitter:description" content="How FsFlow fits beside FSharpPlus-based codebases.">
@@ -272,7 +272,7 @@
 <ul>
 <li>keep pure transformations in <code>FSharpPlus</code></li>
 <li>use FsFlow to sequence those transformations against a runtime boundary</li>
-<li>let FsFlow own the Flow, AsyncFlow, or TaskFlow type at the edge</li>
+<li>let FsFlow own the Flow boundary at the edge</li>
 </ul>
 <p>The practical rule is: if the code is generic and reusable across many domains, <code>FSharpPlus</code> can own it. If the code is choosing the runtime shape, the environment, or the typed failure boundary, FsFlow can own it.</p>
 <h2 id="example">Example</h2>
@@ -295,10 +295,10 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
 </span></span></code></pre></div><p>If you already use <code>FSharpPlus</code> for generic mapping or chaining, keep that code in the helper layer and let FsFlow read the environment at the edge.</p>
 <p>The same helper can sit under an async boundary without changing its shape:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">greetAsync</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">AsyncFlow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">AppEnv</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">asyncFlow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">prefix</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">AsyncFlow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">Prefix</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">name</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">AsyncFlow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">Name</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">greetAsync</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">AppEnv</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">prefix</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">Prefix</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">name</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">Name</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">buildGreeting</span> <span style="color:#000">prefix</span> <span style="color:#000">name</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
 </span></span></code></pre></div><p>The generic helper remains generic, but the boundary is FsFlow.</p>

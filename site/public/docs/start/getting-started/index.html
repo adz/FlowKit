@@ -19,21 +19,21 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/FsFlow/favicons/android-192x192.png" sizes="192x192">
 
 <title>Getting Started | FsFlow</title>
-<meta name="description" content="The fastest path from Check and Result into Flow, AsyncFlow, and TaskFlow.">
+<meta name="description" content="The fastest path from Check and Result into Flow.">
 <meta property="og:url" content="http://localhost:3000/FsFlow/docs/start/getting-started/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Getting Started">
-  <meta property="og:description" content="The fastest path from Check and Result into Flow, AsyncFlow, and TaskFlow.">
+  <meta property="og:description" content="The fastest path from Check and Result into Flow.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="docs">
 
   <meta itemprop="name" content="Getting Started">
-  <meta itemprop="description" content="The fastest path from Check and Result into Flow, AsyncFlow, and TaskFlow.">
-  <meta itemprop="wordCount" content="1146">
+  <meta itemprop="description" content="The fastest path from Check and Result into Flow.">
+  <meta itemprop="wordCount" content="1032">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Getting Started">
-  <meta name="twitter:description" content="The fastest path from Check and Result into Flow, AsyncFlow, and TaskFlow.">
+  <meta name="twitter:description" content="The fastest path from Check and Result into Flow.">
 <link href="http://localhost:3000/FsFlow/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -231,8 +231,8 @@
     <li><a href="#3-add-validation-when-siblings-are-independent">3. Add Validation When Siblings Are Independent</a></li>
     <li><a href="#4-choose-the-smallest-honest-boundary">4. Choose The Smallest Honest Boundary</a></li>
     <li><a href="#5-use-flow-for-synchronous-boundaries">5. Use Flow For Synchronous Boundaries</a></li>
-    <li><a href="#6-use-asyncflow-for-async-based-boundaries">6. Use AsyncFlow For <code>Async</code>-Based Boundaries</a></li>
-    <li><a href="#7-use-taskflow-for-net-task-based-boundaries">7. Use TaskFlow For <code>.NET Task</code>-Based Boundaries</a></li>
+    <li><a href="#6-use-flow-for-async-based-boundaries">6. Use Flow For <code>Async</code>-Based Boundaries</a></li>
+    <li><a href="#7-use-flow-for-net-task-based-boundaries">7. Use Flow For <code>.NET Task</code>-Based Boundaries</a></li>
     <li><a href="#8-read-from-the-environment">8. Read From The Environment</a></li>
     <li><a href="#9-compose-upward-not-sideways">9. Compose Upward, Not Sideways</a></li>
     <li><a href="#10-keep-the-semantic-boundary-clear">10. Keep The Semantic Boundary Clear</a></li>
@@ -257,17 +257,17 @@
   </ol>
 </nav>
 <div class="td-content">
-	<div class="lead">The fastest path from Check and Result into Flow, AsyncFlow, and TaskFlow.</div>
+	<div class="lead">The fastest path from Check and Result into Flow.</div>
 	<header class="article-meta">
 		
 </header>
 	<h1 id="getting-started">Getting Started</h1>
 <p>This page shows the fastest path from plain checks into the right FsFlow family as the execution context grows.</p>
-<p>The core <code>FsFlow</code> package contains Flow, AsyncFlow, TaskFlow, Check, Result, Validation, and <code>validate {}</code>.
+<p>The core <code>FsFlow</code> package contains Flow, Check, Result, Validation, and <code>validate {}</code>.
 The task APIs now live in the <code>FsFlow</code> namespace and ship in the main package.</p>
 <h2 id="1-start-with-the-continuum">1. Start With The Continuum</h2>
 <p>FsFlow is meant to scale one Result-based style through richer boundaries:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Check -&gt; Result -&gt; Validation -&gt; Flow -&gt; AsyncFlow -&gt; TaskFlow
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Check -&gt; Result -&gt; Validation -&gt; Flow
 </span></span></code></pre></div><p>Start as small as possible, then lift only when the boundary truly needs more runtime context.</p>
 <h2 id="2-start-with-checks-and-result">2. Start With Checks And Result</h2>
 <p>Use Check for reusable predicates and Result for fail-fast domain logic:</p>
@@ -281,11 +281,10 @@ The task APIs now live in the <code>FsFlow</code> namespace and ship in the main
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">|&gt;</span> <span style="color:#000">Check</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">notBlank</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">|&gt;</span> <span style="color:#000">Check</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">orError</span> <span style="color:#000">MissingName</span>
 </span></span></code></pre></div><p>That keeps the pure validation surface small and easy to reuse.</p>
-<p>When the same source needs to cross into <code>flow {}</code>, <code>asyncFlow {}</code>, or <code>taskFlow {}</code>,
-use <code>Guard.Of</code> or <code>Guard.MapError</code>. Guard keeps the source value visible to the computation
-expression and carries the failure value alongside it:</p>
+<p>When the same source needs to cross into <code>flow {}</code>, use <code>Guard.Of</code> or <code>Guard.MapError</code>.
+Guard keeps the source value visible to the computation expression and carries the failure value alongside it:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">login</span> <span style="color:#000">username</span> <span style="color:#000">password</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">asyncFlow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">user</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">tryGetUser</span> <span style="color:#000">username</span> <span style="color:#ce5c00;font-weight:bold">|&gt;</span> <span style="color:#000">Guard</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">MapError</span> <span style="color:#000">MissingName</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">do</span><span style="color:#ce5c00;font-weight:bold">!</span> <span style="color:#000">Check</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">notBlank</span> <span style="color:#000">password</span> <span style="color:#ce5c00;font-weight:bold">|&gt;</span> <span style="color:#000">Guard</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">Of</span> <span style="color:#000">InvalidPassword</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">user</span>
@@ -314,15 +313,13 @@ expression and carries the failure value alongside it:</p>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
 </span></span></code></pre></div><p>Use <code>result {}</code> when the next step depends on the previous one and should stop immediately on failure.</p>
 <h2 id="4-choose-the-smallest-honest-boundary">4. Choose The Smallest Honest Boundary</h2>
-<p>Use:</p>
+<p>Use <code>Flow&lt;'env, 'error, 'value&gt;</code> when the computation boundary is honest about the runtime shape:</p>
 <ul>
-<li><code>Flow&lt;'env, 'error, 'value&gt;</code> when the computation itself is synchronous</li>
-<li><code>AsyncFlow&lt;'env, 'error, 'value&gt;</code> when the computation is naturally <code>Async</code>-based</li>
-<li><code>TaskFlow&lt;'env, 'error, 'value&gt;</code> when the computation is naturally <code>.NET Task</code>-based</li>
+<li>synchronous bodies when no async runtime is needed</li>
+<li>async bodies when the computation naturally binds <code>Async</code></li>
+<li>task bodies when the computation naturally binds <code>.NET Task</code></li>
 </ul>
-<p>Pick the family that matches the honest boundary of the code you are writing.
-Avoid TaskFlow just because one helper somewhere happens to use <code>Task</code>.
-Avoid Flow if the boundary is mainly async work with sync wrappers around it.</p>
+<p>Pick the boundary that matches the code you are writing.</p>
 <h2 id="5-use-flow-for-synchronous-boundaries">5. Use Flow For Synchronous Boundaries</h2>
 <p>Use Flow when the computation needs dependencies and typed failure, but no async runtime.
 The validation code stays exactly the same:</p>
@@ -345,59 +342,55 @@ The validation code stays exactly the same:</p>
 <li>you want the smallest representation</li>
 <li>carrying a runtime <code>CancellationToken</code> would be noise</li>
 </ul>
-<h2 id="6-use-asyncflow-for-async-based-boundaries">6. Use AsyncFlow For <code>Async</code>-Based Boundaries</h2>
-<p>Use AsyncFlow when the computation itself is built around F# <code>Async</code>:</p>
+<h2 id="6-use-flow-for-async-based-boundaries">6. Use Flow For <code>Async</code>-Based Boundaries</h2>
+<p>Use Flow when the computation body is built around F# <code>Async</code>:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">AsyncEnv</span> <span style="color:#ce5c00;font-weight:bold">=</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#000">Prefix</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#204a87;font-weight:bold">string</span>
 </span></span><span style="display:flex;"><span>      <span style="color:#000">LoadName</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">int</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#000">Async</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">greetAsync</span> <span style="color:#000">userId</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">AsyncFlow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">AsyncEnv</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">ValidationError</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">asyncFlow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">loadName</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">AsyncFlow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">LoadName</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">greetAsync</span> <span style="color:#000">userId</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">AsyncEnv</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">ValidationError</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">loadName</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">LoadName</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">loadedName</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">loadName</span> <span style="color:#000">userId</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">validName</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">requireName</span> <span style="color:#000">loadedName</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">prefix</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">AsyncFlow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">Prefix</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">prefix</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">Prefix</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#ce5c00;font-weight:bold">$</span><span style="color:#4e9a06">&#34;{prefix} {validName}&#34;</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span></code></pre></div><p>Run an AsyncFlow through <code>Async</code>:</p>
+</span></span></code></pre></div><p>Run a Flow that binds <code>Async</code> directly:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">result</span> <span style="color:#ce5c00;font-weight:bold">=</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">greetAsync</span> <span style="color:#000">42</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">|&gt;</span> <span style="color:#000">AsyncFlow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">toAsync</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">|&gt;</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">run</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#000">Prefix</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#4e9a06">&#34;Hello&#34;</span>
 </span></span><span style="display:flex;"><span>          <span style="color:#000">LoadName</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">fun</span> <span style="color:#ce5c00;font-weight:bold">_</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#000">async</span> <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#4e9a06">&#34;Ada&#34;</span> <span style="color:#ce5c00;font-weight:bold">}</span> <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">|&gt;</span> <span style="color:#000">Async</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">RunSynchronously</span>
-</span></span></code></pre></div><p>Choose AsyncFlow when:</p>
+</span></span></code></pre></div><p>Choose Flow when:</p>
 <ul>
 <li>the surrounding code already uses <code>Async</code></li>
 <li>the core package can stay free of <code>.NET Task</code> concepts</li>
 <li><code>Async</code> is the natural runtime for the computation</li>
 </ul>
-<h2 id="7-use-taskflow-for-net-task-based-boundaries">7. Use TaskFlow For <code>.NET Task</code>-Based Boundaries</h2>
-<p>Use TaskFlow when the computation is task-oriented end to end:</p>
+<h2 id="7-use-flow-for-net-task-based-boundaries">7. Use Flow For <code>.NET Task</code>-Based Boundaries</h2>
+<p>Use Flow when the computation body is task-oriented end to end:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">open</span> <span style="color:#000">System.Threading.Tasks</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">TaskEnv</span> <span style="color:#ce5c00;font-weight:bold">=</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#000">Prefix</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#204a87;font-weight:bold">string</span>
 </span></span><span style="display:flex;"><span>      <span style="color:#000">LoadName</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">int</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#000">Task</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">greetTask</span> <span style="color:#000">userId</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">TaskFlow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">TaskEnv</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">ValidationError</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">taskFlow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">loadName</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">TaskFlow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">LoadName</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">greetTask</span> <span style="color:#000">userId</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">TaskEnv</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">ValidationError</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">loadName</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">LoadName</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">loadedName</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">loadName</span> <span style="color:#000">userId</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">validName</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">requireName</span> <span style="color:#000">loadedName</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">prefix</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">TaskFlow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">Prefix</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">prefix</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">Prefix</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#ce5c00;font-weight:bold">$</span><span style="color:#4e9a06">&#34;{prefix} {validName}&#34;</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span></code></pre></div><p>Run a TaskFlow through <code>Task</code>:</p>
+</span></span></code></pre></div><p>Run a Flow that binds <code>Task</code> directly:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">result</span> <span style="color:#ce5c00;font-weight:bold">=</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">greetTask</span> <span style="color:#000">42</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">|&gt;</span> <span style="color:#000">TaskFlow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">toTask</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">|&gt;</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">run</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#000">Prefix</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#4e9a06">&#34;Hello&#34;</span>
 </span></span><span style="display:flex;"><span>          <span style="color:#000">LoadName</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">fun</span> <span style="color:#ce5c00;font-weight:bold">_</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#000">Task</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">FromResult</span> <span style="color:#4e9a06">&#34;Ada&#34;</span> <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#000">CancellationToken</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">None</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">|&gt;</span> <span style="color:#000">Async</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AwaitTask</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">|&gt;</span> <span style="color:#000">Async</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">RunSynchronously</span>
-</span></span></code></pre></div><p>Choose TaskFlow when:</p>
+</span></span></code></pre></div><p>Choose Flow when:</p>
 <ul>
 <li>the boundary is <code>.NET Task</code></li>
 <li>task interop is central to the code path</li>
@@ -406,9 +399,8 @@ The validation code stays exactly the same:</p>
 <h2 id="8-read-from-the-environment">8. Read From The Environment</h2>
 <p>Each computation family has the same environment pattern:</p>
 <ul>
-<li><code>Flow.read</code> / <code>Flow.env</code></li>
-<li><code>AsyncFlow.read</code> / <code>AsyncFlow.env</code></li>
-<li><code>TaskFlow.read</code> / <code>TaskFlow.env</code></li>
+<li><code>Flow.read</code></li>
+<li><code>Flow.env</code></li>
 </ul>
 <p>Use the projected form when you only need one dependency:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">greetWithPrefix</span> <span style="color:#000">input</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">AppEnv</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">ValidationError</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
@@ -418,27 +410,21 @@ The validation code stays exactly the same:</p>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#ce5c00;font-weight:bold">$</span><span style="color:#4e9a06">&#34;{prefix} {name}&#34;</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
 </span></span></code></pre></div><p>Use the whole environment only when you genuinely need it:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">describe</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">AsyncFlow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">AsyncEnv</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">ValidationError</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">asyncFlow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">env</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">AsyncFlow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">env</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">describe</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">AsyncEnv</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">ValidationError</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">env</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">env</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">env</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Prefix</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
 </span></span></code></pre></div><p>When task work has separate runtime services from application capabilities, use
-<code>RuntimeContext&lt;'runtime, 'env&gt;</code> and the <code>TaskFlow.readRuntime</code>, <code>TaskFlow.readEnvironment</code>, or <code>Capability</code>
+<code>RuntimeContext&lt;'runtime, 'env&gt;</code> and the <code>Flow.readRuntime</code>, <code>Flow.readEnvironment</code>, or <code>Capability</code>
 helpers from the task surface.</p>
 <p>When the application capability boundary itself deserves a name, define a cap set with
 <code>Needs&lt;'dep&gt;</code> and read it with <code>Env&lt;'dep&gt;</code> or <code>Env&lt;'dep, 'value&gt;</code>. Public task boundaries can
-stay flexible with shapes like <code>TaskFlow&lt;#LoginCaps, _, _&gt;</code> so a larger runtime still satisfies
+stay flexible with shapes like <code>Flow&lt;#LoginCaps, _, _&gt;</code> so a larger runtime still satisfies
 the smaller workflow contract.</p>
 <h2 id="9-compose-upward-not-sideways">9. Compose Upward, Not Sideways</h2>
-<p>The computation families are ordered by runtime commitment, but AsyncFlow and TaskFlow are sibling async boundaries:</p>
-<ul>
-<li>Flow is the sync base</li>
-<li>AsyncFlow is the async-native boundary and can lift Flow</li>
-<li>TaskFlow is the .NET task-native boundary and can lift Flow and AsyncFlow</li>
-</ul>
-<p>AsyncFlow does not depend on TaskFlow. Use it on its own when the boundary is <code>Async</code>-first or when you want the core async surface without <code>.NET Task</code> interop.
-The task surface means the TaskFlow builder plus the task-aware extension members that add <code>Task</code>, <code>ValueTask</code>, and ColdTask binding support.</p>
+<p>Flow is one boundary model with direct binds for sync values, <code>Async</code>, <code>Task</code>, <code>ValueTask</code>, and <code>ColdTask</code>.
+Keep the smallest honest computation at each boundary, then lift it only when the outer runtime really changes.</p>
 <p>That means small sync boundaries can stay sync and be reused inside async or task-oriented boundaries:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">validateGreeting</span> <span style="color:#000">input</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">AppEnv</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">ValidationError</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
@@ -446,16 +432,15 @@ The task surface means the TaskFlow builder plus the task-aware extension member
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">name</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">greetTaskValidated</span> <span style="color:#000">input</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">TaskFlow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">TaskEnv</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">ValidationError</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">taskFlow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">greetTaskValidated</span> <span style="color:#000">input</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">TaskEnv</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">ValidationError</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">validName</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">validateGreeting</span> <span style="color:#000">input</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">prefix</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">TaskFlow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">Prefix</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">prefix</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">Prefix</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#ce5c00;font-weight:bold">$</span><span style="color:#4e9a06">&#34;{prefix} {validName}&#34;</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span></code></pre></div><p>Keep the smallest honest computation at each boundary, then lift it only when the outer runtime really changes.
-Inside the computation expression, prefer direct binds like this over <code>TaskFlow.fromFlow</code>.</p>
+</span></span></code></pre></div><p>Inside the computation expression, prefer direct binds like this over explicit wrapping.</p>
 <h2 id="10-keep-the-semantic-boundary-clear">10. Keep The Semantic Boundary Clear</h2>
-<p>Check, Result, Flow, AsyncFlow, and TaskFlow are short-circuiting.
+<p>Check, Result, and Flow are short-circuiting.
 They are for ordered workflows that stop on the first typed failure.</p>
 <p>Validation and <code>validate {}</code> are for sibling checks that should accumulate into a structured diagnostics graph.
 Do not assume that a flow builder is trying to merge independent failures.</p>

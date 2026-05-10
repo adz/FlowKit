@@ -14,12 +14,12 @@ description: FsFlow technical guides, semantics, and API reference.
 # A single model for Result-based programs in F#.
 
 <div class="lede">
-Write predicate checks once. Keep fail-fast logic in <code>Result</code>, accumulate sibling failures with <code>Validation</code>, then lift the same logic into <code>Flow</code>, <code>AsyncFlow</code>, or <code>TaskFlow</code> when the boundary needs environment access, async work, task interop, cancellation, or runtime policy.
+Write predicate checks once. Keep fail-fast logic in <code>Result</code>, accumulate sibling failures with <code>Validation</code>, then lift the same logic into <code>Flow</code> when the boundary needs environment access, async work, task interop, cancellation, or runtime policy.
 </div>
 
 <div class="docs-home-meta">
 <a class="docs-chip" href="./docs/validation-results/">Check -> Result -> Validation</a>
-<a class="docs-chip" href="./docs/start/getting-started/">Flow / AsyncFlow / TaskFlow</a>
+<a class="docs-chip" href="./docs/start/getting-started/">Flow family</a>
 <a class="docs-chip" href="./docs/core-model/why-fsflow/">Typed failure</a>
 <a class="docs-chip" href="./docs/core-model/env-slicing/">Explicit environment</a>
 <a class="docs-chip" href="./docs/core-model/task-async-interop/">Runtime context</a>
@@ -62,7 +62,7 @@ type Clock =
     { UtcNow: DateTimeOffset }
 
 let readVerifiedEmail userId =
-    taskFlow {
+    flow {
         let! user = Env<Api> (_.LoadUser userId)
         let! checkedAt = Env<Clock> _.UtcNow
         let! email = validateEmail user.Email

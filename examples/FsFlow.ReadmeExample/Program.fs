@@ -9,26 +9,26 @@ type ReadmeEnv =
 type FileReadError =
     | NotFound of path: string
 
-let readTextFile (path: string) : TaskFlow<ReadmeEnv, FileReadError, string> =
-    taskFlow {
+let readTextFile (path: string) : Flow<ReadmeEnv, FileReadError, string> =
+    flow {
         // In production, map access and path exceptions separately at the boundary.
         do! Check.okIf (File.Exists path)
             |> Check.orError (NotFound path)
 
-        return! ColdTask(fun ct -> File.ReadAllTextAsync(path, ct)) // ColdTask<string>
+        return! File.ReadAllTextAsync path
     }
 
-let program : TaskFlow<ReadmeEnv, FileReadError, string * string> =
-    taskFlow {
-        let! root = TaskFlow.read _.Root // ReadmeEnv.Root -> string
+let program : Flow<ReadmeEnv, FileReadError, string * string> =
+    flow {
+        let! root = Flow.read _.Root // ReadmeEnv.Root -> string
         let settingsFile = Path.Combine(root, "settings.json")
         let featureFlagsFile = Path.Combine(root, "feature-flags.json")
 
         // The cancellation token is passed implicitly through both file reads.
-        let! settings = readTextFile settingsFile // TaskFlow<ReadmeEnv, FileReadError, string>
-        let! featureFlags = readTextFile featureFlagsFile // TaskFlow<ReadmeEnv, FileReadError, string>
+        let! settings = readTextFile settingsFile // Flow<ReadmeEnv, FileReadError, string>
+        let! featureFlags = readTextFile featureFlagsFile // Flow<ReadmeEnv, FileReadError, string>
 
-        return settings, featureFlags // TaskFlow<ReadmeEnv, FileReadError, string * string>
+        return settings, featureFlags // Flow<ReadmeEnv, FileReadError, string * string>
     }
 
 [<EntryPoint>]
@@ -46,8 +46,7 @@ let main _ =
 
     let readPairResult =
         program
-        |> TaskFlow.run { Root = root } CancellationToken.None
-        |> fun task -> task.GetAwaiter().GetResult()
+        |> Flow.run { Root = root }
 
     printfn "Config pair result: %A" readPairResult
     // Config pair result: Ok ("{\"name\":\"Ada\"}", "{\"darkMode\":true}")

@@ -72,7 +72,7 @@ EOF
 
 render_example_section \
   "Request Boundary Example" \
-  "This example shows a request boundary that pulls a user from a database-like environment, threads a trace id through the request context, and reuses the same validation shape across Flow, AsyncFlow, and TaskFlow." \
+  "This example shows a request boundary that pulls a user from a database-like environment, threads a trace id through the request context, and reuses the same validation shape across Flow." \
   "$root_dir/examples/FsFlow.Examples/FsFlow.Examples.fsproj" \
   "$root_dir/examples/FsFlow.Examples/RequestBoundaryExample.fs" \
   "https://github.com/adz/FsFlow/blob/main/examples/FsFlow.Examples/RequestBoundaryExample.fs" \
@@ -106,7 +106,7 @@ render_example_section \
 
 render_example_section \
   "Playground Example" \
-  "This example shows the same core boundary across Flow, AsyncFlow, and TaskFlow using the normal direct-bind style inside each computation expression." \
+  "This example shows the same core boundary across Flow using the normal direct-bind style inside each computation expression." \
   "$root_dir/examples/FsFlow.Playground/FsFlow.Playground.fsproj" \
   "$root_dir/examples/FsFlow.Playground/Program.fs" \
   "https://github.com/adz/FsFlow/blob/main/examples/FsFlow.Playground/Program.fs" \
