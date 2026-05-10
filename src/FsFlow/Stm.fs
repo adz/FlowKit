@@ -1,5 +1,6 @@
 namespace FsFlow
 
+#if !FABLE_COMPILER
 open System
 open System.Collections.Generic
 open System.Threading
@@ -115,3 +116,4 @@ module STM =
                 EffectFlow.ofValue result
             )
         )
+#endif

@@ -118,6 +118,18 @@ module EnvironmentVariables =
 
     /// <summary>Creates a deterministic provider from a fixed set of name/value pairs.</summary>
     let fromPairs (values: seq<string * string>) : IEnvironmentVariables =
+        #if FABLE_COMPILER
+        let lookup = Dictionary<string, string>()
+
+        for (name, value) in values do
+            lookup[name.ToLowerInvariant()] <- value
+
+        { new IEnvironmentVariables with
+            member _.TryGet name =
+                match lookup.TryGetValue(name.ToLowerInvariant()) with
+                | true, value -> Some value
+                | false, _ -> None }
+        #else
         let lookup = Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
 
         for (name, value) in values do
@@ -128,6 +140,7 @@ module EnvironmentVariables =
                 match lookup.TryGetValue name with
                 | true, value -> Some value
                 | false, _ -> None }
+        #endif
 
 /// <summary>Helpers for reading and parsing environment variables from the environment.</summary>
 [<RequireQualifiedAccess>]

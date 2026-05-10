@@ -2,6 +2,7 @@ namespace FsFlow
 
 open System.Threading.Tasks
 
+#if !FABLE_COMPILER
 module private GuardFlow =
     let inline fromAsyncFlow
         (flow: AsyncFlow<'env, 'error, 'value>)
@@ -26,6 +27,7 @@ module private GuardFlow =
                     let! exit = TaskFlow.run environment cancellationToken flow
                     return exit
                 }))
+#endif
 
 /// <summary>
 /// Constructors for turning predicate-like and error-bearing sources into bindable results,
@@ -47,6 +49,7 @@ type Guard private () =
     static member Of(error: 'error, value: 'value voption) : Result<'value, 'error> =
         OptionFlow.toResultValueOption error value
 
+#if !FABLE_COMPILER
     static member Of(error: 'error, result: Async<Result<'value, unit>>) : Async<Result<'value, 'error>> =
         async {
             let! outcome = result
@@ -126,13 +129,26 @@ type Guard private () =
                 return OptionFlow.toResultValueOption error outcome
             }
         )
+#endif
 
     static member Of(error: 'error, flow: Flow<'env, unit, 'value>) : Flow<'env, 'error, 'value> =
-        Flow(fun environment _ ->
-            match Flow.run environment flow with
+        let (Flow operation) = flow
+        Flow(fun environment cancellationToken ->
+            #if FABLE_COMPILER
+            async {
+                let! outcome = operation environment cancellationToken
+                match outcome with
+                | Exit.Success value -> return Exit.Success value
+                | Exit.Failure _ -> return Exit.Failure (Cause.Fail error)
+            }
+            #else
+            match Flow.runFull environment cancellationToken flow with
             | Exit.Success value -> EffectFlow.ofValue value
-            | Exit.Failure _ -> EffectFlow.ofError error)
+            | Exit.Failure _ -> EffectFlow.ofError error
+            #endif
+        )
 
+#if !FABLE_COMPILER
     static member internal Of(error: 'error, flow: AsyncFlow<'env, unit, 'value>) : AsyncFlow<'env, 'error, 'value> =
         flow
         |> GuardFlow.fromAsyncFlow
@@ -144,6 +160,7 @@ type Guard private () =
         |> GuardFlow.fromTaskFlow
         |> Flow.mapError (fun () -> error)
         |> TaskFlow.fromFlow
+#endif
 
     static member MapError(mapper: 'error1 -> 'error2, result: Result<'value, 'error1>) : Result<'value, 'error2> =
         Result.mapError mapper result
@@ -151,6 +168,7 @@ type Guard private () =
     static member MapError(mapper: 'error1 -> 'error2, validation: Validation<'value, 'error1>) : Validation<'value, 'error2> =
         Validation.mapError mapper validation
 
+#if !FABLE_COMPILER
     static member MapError(mapper: 'error1 -> 'error2, result: Async<Result<'value, 'error1>>) : Async<Result<'value, 'error2>> =
         async {
             let! outcome = result
@@ -170,10 +188,11 @@ type Guard private () =
                 return Result.mapError mapper outcome
             }
         )
-
     static member MapError(mapper: 'error1 -> 'error2, flow: Flow<'env, 'error1, 'value>) : Flow<'env, 'error2, 'value> =
         Flow.mapError mapper flow
+#endif
 
+#if !FABLE_COMPILER
     static member internal MapError(mapper: 'error1 -> 'error2, flow: AsyncFlow<'env, 'error1, 'value>) : AsyncFlow<'env, 'error2, 'value> =
         flow
         |> GuardFlow.fromAsyncFlow
@@ -185,7 +204,9 @@ type Guard private () =
         |> GuardFlow.fromTaskFlow
         |> Flow.mapError mapper
         |> TaskFlow.fromFlow
+#endif
 
+#if !FABLE_COMPILER
 [<AutoOpen>]
 module internal AsyncFlowBuilderExtensions =
     type AsyncFlowBuilder with
@@ -403,3 +424,4 @@ module internal AsyncFlowBuilderExtensions =
             operation
             |> this.ReturnFrom
             |> AsyncFlow.bind binder
+#endif

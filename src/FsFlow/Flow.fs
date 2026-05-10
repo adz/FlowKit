@@ -4,6 +4,8 @@ open System
 open System.Threading
 open System.Threading.Tasks
 
+open FsFlow
+
 module Flow =
     let inline internal invoke
         (flow: Flow<'env, 'error, 'value>)
@@ -21,12 +23,13 @@ module Flow =
     let internal runFullInternal = invoke
 
     /// <summary>Executes a flow with an explicit cancellation token.</summary>
-    let runFull (environment: 'env) (cancellationToken: CancellationToken) (flow: Flow<'env, 'error, 'value>) : Exit<'value, 'error> =
-        #if FABLE_COMPILER
+    #if FABLE_COMPILER
+    let runFull (environment: 'env) (cancellationToken: CancellationToken) (flow: Flow<'env, 'error, 'value>) : Effect<'value, 'error> =
         invoke flow environment cancellationToken
-        #else
+    #else
+    let runFull (environment: 'env) (cancellationToken: CancellationToken) (flow: Flow<'env, 'error, 'value>) : Exit<'value, 'error> =
         (invoke flow environment cancellationToken).GetAwaiter().GetResult()
-        #endif
+    #endif
 
     /// <summary>Executes a flow with an explicit cancellation token.</summary>
     let runWithToken = runFull
@@ -39,8 +42,13 @@ module Flow =
     /// // result = Promise that resolves to Success "Hello, World!" on Fable, or Success "Hello, World!" on .NET
     /// </code>
     /// </example>
+    #if FABLE_COMPILER
+    let run (environment: 'env) (flow: Flow<'env, 'error, 'value>) : Effect<'value, 'error> =
+        runWithToken environment CancellationToken.None flow
+    #else
     let run (environment: 'env) (flow: Flow<'env, 'error, 'value>) : Exit<'value, 'error> =
         runWithToken environment CancellationToken.None flow
+    #endif
 
     /// <summary>Creates a successful synchronous flow.</summary>
     let ok (value: 'value) : Flow<'env, 'error, 'value> =
@@ -98,16 +106,13 @@ module Flow =
         let sleep (delay: TimeSpan) : Flow<'env, 'error, unit> =
             Flow(fun _ cancellationToken ->
                 #if FABLE_COMPILER
-                JS.Constructors.Promise.Create(fun resolve reject ->
-                    let mutable handle = 0
-                    let registration = cancellationToken.Register(fun () -> 
-                        JS.Globals.clearTimeout handle
-                        resolve(Exit.Failure Cause.Interrupt))
-                    
-                    handle <- JS.Globals.setTimeout((fun () -> 
-                        registration.Dispose()
-                        resolve(Exit.Success ())), int delay.TotalMilliseconds)
-                )
+                async {
+                    try
+                        do! Async.Sleep(int delay.TotalMilliseconds)
+                        return Exit.Success ()
+                    with :? OperationCanceledException ->
+                        return Exit.Failure Cause.Interrupt
+                }
                 #else
                 ValueTask<Exit<unit, 'error>>(
                     task {
@@ -126,20 +131,18 @@ module Flow =
     let fork (flow: Flow<'env, 'error, 'value>) : Flow<'env, 'none, Fiber<'error, 'value>> =
         Flow(fun environment cancellationToken ->
             #if FABLE_COMPILER
-            // On Fable, we rely on the JS event loop. 
-            // We use a linked CTS to support interruption.
-            let cts = new CancellationTokenSource()
-            // We don't link to the outer token automatically because forking is often used for detached work,
-            // but the ZIO model usually inherits scope. For now, we follow the "explicit" link pattern.
-            
-            let operation = invoke flow environment cts.Token
-            
-            let fiber =
-                {
-                    ExitTask = Async.StartAsTask(Async.AwaitPromise(operation), cancellationToken = cts.Token)
-                    InterruptSource = cts
-                }
-            EffectFlow.ofValue fiber
+            async {
+                let cts = new CancellationTokenSource()
+                let operation = invoke flow environment cts.Token
+                
+                let! childToken = Async.StartChild(operation)
+                let fiber =
+                    {
+                        ExitTask = childToken
+                        InterruptSource = cts
+                    }
+                return Exit.Success fiber
+            }
             #else
             let cts = new CancellationTokenSource()
             let (Flow operation) = flow
@@ -160,17 +163,13 @@ module Flow =
     let join (fiber: Fiber<'error, 'value>) : Flow<'env, 'error, 'value> =
         Flow(fun _ _ ->
             #if FABLE_COMPILER
-            JS.Constructors.Promise.Create(fun resolve reject ->
-                fiber.ExitTask.ContinueWith(fun (t: Task<Exit<'value, 'error>>) ->
-                    if t.IsFaulted then reject(t.Exception)
-                    elif t.IsCanceled then resolve(Exit.Failure Cause.Interrupt)
-                    else resolve(t.Result)) |> ignore
-            )
+            fiber.ExitTask
             #else
             ValueTask<Exit<'value, 'error>>(fiber.ExitTask)
             #endif
         )
 
+    #if !FABLE_COMPILER
     /// <summary>Executes a flow and converts the final <see cref="T:FsFlow.Exit`2" /> into a standard <see cref="T:System.Result`2" />.</summary>
     /// <remarks>
     /// Interruption signals and defects are raised as exceptions in the caller's context.
@@ -178,6 +177,7 @@ module Flow =
     let toResult (environment: 'env) (flow: Flow<'env, 'error, 'value>) : Result<'value, 'error> =
         run environment flow
         |> Exit.toResult
+    #endif
 
     /// <summary>Signals a fiber to stop and waits for it to finish its cleanup.</summary>
     /// <param name="fiber">The fiber to interrupt.</param>
@@ -185,12 +185,11 @@ module Flow =
     let interrupt (fiber: Fiber<'error, 'value>) : Flow<'env, 'none, Exit<'value, 'error>> =
         Flow(fun _ _ ->
             #if FABLE_COMPILER
-            JS.Constructors.Promise.Create(fun resolve reject ->
+            async {
                 fiber.InterruptSource.Cancel()
-                fiber.ExitTask.ContinueWith(fun (t: Task<Exit<'value, 'error>>) ->
-                    if t.IsFaulted then reject(t.Exception)
-                    else resolve(Exit.Success t.Result)) |> ignore
-            )
+                let! exit = fiber.ExitTask
+                return Exit.Success exit
+            }
             #else
             ValueTask<Exit<Exit<'value, 'error>, 'none>>(
                 task {
@@ -211,16 +210,23 @@ module Flow =
         : Flow<'env, 'error, 'left * 'right> =
         Flow(fun environment cancellationToken ->
             #if FABLE_COMPILER
-            // Simple Promise.all implementation for Fable
-            let leftOp = invoke left environment cancellationToken
-            let rightOp = invoke right environment cancellationToken
-            
-            Promise.all [| leftOp; rightOp |]
-            |> Promise.map (fun results ->
-                match results[0], results[1] with
-                | Exit.Success l, Exit.Success r -> Exit.Success (l, r)
-                | Exit.Failure c, _ -> Exit.Failure c
-                | _, Exit.Failure c -> Exit.Failure c)
+            async {
+                let leftOp = async {
+                    let! x = invoke left environment cancellationToken
+                    return box x
+                }
+                let rightOp = async {
+                    let! x = invoke right environment cancellationToken
+                    return box x
+                }
+                let! results = Async.Parallel [| leftOp; rightOp |]
+                let leftRes = unbox<Exit<'left, 'error>> results[0]
+                let rightRes = unbox<Exit<'right, 'error>> results[1]
+                match leftRes, rightRes with
+                | Exit.Success l, Exit.Success r -> return Exit.Success (l, r)
+                | Exit.Failure c, _ -> return Exit.Failure c
+                | _, Exit.Failure c -> return Exit.Failure c
+            }
             #else
             ValueTask<Exit<'left * 'right, 'error>>(
                 task {
@@ -269,9 +275,21 @@ module Flow =
         : Flow<'env, 'error, 'value> =
         Flow(fun environment cancellationToken ->
             #if FABLE_COMPILER
-            let leftOp = invoke left environment cancellationToken
-            let rightOp = invoke right environment cancellationToken
-            Promise.race [| leftOp; rightOp |]
+            async {
+                let cts = new CancellationTokenSource()
+                use registration = cancellationToken.Register(fun () -> cts.Cancel())
+                
+                let wrap op = async {
+                    let! res = op
+                    return Some res
+                }
+                let leftOp = wrap (invoke left environment cts.Token)
+                let rightOp = wrap (invoke right environment cts.Token)
+                
+                let! winner = Async.Choice [| leftOp; rightOp |]
+                cts.Cancel()
+                return winner.Value
+            }
             #else
             ValueTask<Exit<'value, 'error>>(
                 task {
@@ -469,12 +487,16 @@ module Flow =
         : Flow<'env, 'error, 'value> =
         Flow(fun environment cancellationToken ->
             #if FABLE_COMPILER
-            invoke flow environment cancellationToken
-            |> Promise.catch (handler >> Exit.Failure >> Cause.Fail >> EffectFlow.ofExit)
+            async {
+                try
+                    return! (invoke flow environment cancellationToken)
+                with error ->
+                    return Exit.Failure (Cause.Fail (handler error))
+            }
             #else
             task {
                 try
-                    return! invoke flow environment cancellationToken
+                    return! (invoke flow environment cancellationToken)
                 with error ->
                     return Exit.Failure (Cause.Fail (handler error))
             } |> ValueTask<Exit<'value, 'error>>
@@ -604,6 +626,7 @@ module Flow =
 open System
 open System.Threading.Tasks
 
+#if !FABLE_COMPILER
 module internal AsyncFlow =
     /// <summary>Executes an async flow with the provided environment.</summary>
     let run
@@ -1235,7 +1258,7 @@ module internal AsyncFlow =
                     })
 
             loop 1
-
+#endif
 /// <summary>
 /// Computation expression builder for synchronous <see cref="T:FsFlow.Flow`3" /> workflows.
 /// </summary>
@@ -1243,8 +1266,15 @@ module internal AsyncFlow =
 open System
 open System.Threading
 open System.Threading.Tasks
+
+#if FABLE_COMPILER
+open Fable.Core
+open Fable.Core.JS
+#endif
+
 open FsFlow
 
+#if !FABLE_COMPILER
 /// <summary>
 /// Represents delayed task work that can observe a runtime cancellation token when it is started.
 /// </summary>
@@ -2078,6 +2108,18 @@ module Capability =
         : Flow<RuntimeContext<'runtime, 'env>, 'error, 'service> =
         Flow.read (fun context -> projection context.Environment)
 
+#if FABLE_COMPILER
+    /// <summary>Reads a service from <see cref="IServiceProvider" /> and fails when it is not registered.</summary>
+    let inline serviceFromProvider<'service> : Flow<IServiceProvider, MissingCapability, 'service> =
+        Flow(fun provider _ ->
+            match provider.GetService typeof<'service> with
+            | null ->
+                EffectFlow.ofError
+                    {
+                        CapabilityType = typeof<'service>
+                    }
+            | value -> EffectFlow.ofValue (unbox<'service> value))
+#else
     /// <summary>Reads a service from <see cref="IServiceProvider" /> and fails when it is not registered.</summary>
     let serviceFromProvider<'service> : Flow<IServiceProvider, MissingCapability, 'service> =
         Flow(fun provider _ ->
@@ -2088,6 +2130,7 @@ module Capability =
                         CapabilityType = typeof<'service>
                     }
             | value -> EffectFlow.ofValue (unbox<'service> value))
+#endif
 
 /// <summary>Helpers for deriving an environment in one flow and consuming it in another.</summary>
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
@@ -2721,3 +2764,4 @@ module internal TaskBuilders =
     /// ```
     /// </example>
     let internal taskFlow = TaskFlowBuilder()
+#endif

@@ -21,8 +21,10 @@ module Console =
     let writeLine (message: string) : Flow<'env, 'e, unit> when 'env :> Needs<IConsole> =
         Flow.read (fun (env: 'env) -> env.Dep.WriteLine(message))
 
+#if !FABLE_COMPILER
     /// <summary>Creates a live console backed by <see cref="T:System.Console" />.</summary>
     let live : IConsole =
         { new IConsole with
             member _.ReadLine() = Console.ReadLine()
             member _.WriteLine(message) = Console.WriteLine(message) }
+#endif

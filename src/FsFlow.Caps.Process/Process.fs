@@ -31,6 +31,7 @@ module Process =
             return! env.Dep.Execute(fileName, arguments)
         }
 
+#if !FABLE_COMPILER
     /// <summary>Creates a live process runner backed by <see cref="T:System.Diagnostics.Process" />.</summary>
     let live : IProcess =
         { new IProcess with
@@ -56,3 +57,4 @@ module Process =
                     
                     return { ExitCode = p.ExitCode; StdOut = stdOut; StdErr = stdErr }
                 } }
+#endif

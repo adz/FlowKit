@@ -20,7 +20,9 @@ module Http =
             return! env.Dep.GetString(url)
         }
 
+#if !FABLE_COMPILER
     /// <summary>Creates a live HTTP client backed by <see cref="T:System.Net.Http.HttpClient" />.</summary>
     let live (client: HttpClient) : IHttp =
         { new IHttp with
             member _.GetString(url) = client.GetStringAsync(url) }
+#endif

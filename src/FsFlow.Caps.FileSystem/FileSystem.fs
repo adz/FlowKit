@@ -27,9 +27,11 @@ module FileSystem =
     let exists (path: string) : Flow<'env, 'e, bool> when 'env :> Needs<IFileSystem> =
         Flow.read (fun (env: 'env) -> env.Dep.Exists(path))
 
+#if !FABLE_COMPILER
     /// <summary>Creates a live file system backed by <see cref="T:System.IO.File" />.</summary>
     let live : IFileSystem =
         { new IFileSystem with
             member _.ReadAllText(path) = File.ReadAllText(path)
             member _.WriteAllText(path, contents) = File.WriteAllText(path, contents)
             member _.Exists(path) = File.Exists(path) }
+#endif

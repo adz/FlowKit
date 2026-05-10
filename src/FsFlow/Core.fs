@@ -4,6 +4,10 @@ open System
 open System.Threading
 open System.Threading.Tasks
 
+#if FABLE_COMPILER
+open Fable.Core
+#endif
+
 /// <summary>
 /// Represents the cause of a failed workflow.
 /// </summary>
@@ -74,7 +78,11 @@ module Exit =
 type Fiber<'error, 'value> =
     {
         /// <summary>The task that completes when the workflow finishes execution.</summary>
+#if FABLE_COMPILER
+        ExitTask: Async<Exit<'value, 'error>>
+#else
         ExitTask: Task<Exit<'value, 'error>>
+#endif
         /// <summary>The source used to signal interruption to the running workflow.</summary>
         InterruptSource: CancellationTokenSource
     }
@@ -83,7 +91,7 @@ type Fiber<'error, 'value> =
 /// Represents the portable execution shape used by the unified <see cref="T:FsFlow.Flow`3" />.
 /// </summary>
 #if FABLE_COMPILER
-type Effect<'value, 'error> = JS.Promise<Exit<'value, 'error>>
+type Effect<'value, 'error> = Async<Exit<'value, 'error>>
 #else
 type Effect<'value, 'error> = ValueTask<Exit<'value, 'error>>
 #endif
@@ -280,10 +288,11 @@ module internal OptionFlow =
         | ValueSome innerValue -> Ok innerValue
         | ValueNone -> Error error
 
-module internal EffectFlow =
+[<System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)>]
+module EffectFlow =
     let ofExit (exit: Exit<'value, 'error>) : Effect<'value, 'error> =
 #if FABLE_COMPILER
-        JS.Constructors.Promise.resolve exit
+        async.Return exit
 #else
         ValueTask<Exit<'value, 'error>>(exit)
 #endif
@@ -314,11 +323,12 @@ module internal EffectFlow =
         (effect: Effect<'value, 'error>)
         : Effect<'next, 'nextError> =
 #if FABLE_COMPILER
-        Promise.bind
-            (function
-             | Exit.Success value -> onSuccess value
-             | Exit.Failure cause -> onFailure cause)
-            effect
+        async {
+            let! exit = effect
+            match exit with
+            | Exit.Success value -> return! onSuccess value
+            | Exit.Failure cause -> return! onFailure cause
+        }
 #else
         ValueTask<Exit<'next, 'nextError>>(
             task {
@@ -396,11 +406,31 @@ type MissingCapability =
     }
 
 type Flow<'env, 'error, 'value> with
+#if FABLE_COMPILER
+    static member inline CapabilityService
+        (projection: 'env -> 'service)
+        : Flow<'env, 'error, 'service> =
+        Flow(fun environment _ -> EffectFlow.ofValue (projection environment))
+
+    /// <summary>Reads a service from <see cref="IServiceProvider" /> and fails when it is not registered.</summary>
+    static member inline ServiceFromProvider
+        ()
+        : Flow<IServiceProvider, MissingCapability, 'service> =
+        Flow(fun provider _ ->
+            match provider.GetService typeof<'service> with
+            | null ->
+                EffectFlow.ofError
+                    {
+                        CapabilityType = typeof<'service>
+                    }
+            | value -> EffectFlow.ofValue (unbox<'service> value))
+#else
     static member CapabilityService
         (projection: 'env -> 'service)
         : Flow<'env, 'error, 'service> =
         Flow(fun environment _ -> EffectFlow.ofValue (projection environment))
 
+    /// <summary>Reads a service from <see cref="IServiceProvider" /> and fails when it is not registered.</summary>
     static member ServiceFromProvider
         ()
         : Flow<IServiceProvider, MissingCapability, 'service> =
@@ -412,6 +442,7 @@ type Flow<'env, 'error, 'value> with
                         CapabilityType = typeof<'service>
                     }
             | value -> EffectFlow.ofValue (unbox<'service> value))
+#endif
 
     static member ProvideLayer
         (
@@ -422,10 +453,21 @@ type Flow<'env, 'error, 'value> with
         let (Flow flowOperation) = flow
 
         Flow(fun environment ct ->
+            #if FABLE_COMPILER
+            async {
+                let! exit = layerOperation environment ct
+                match exit with
+                | Exit.Success environment -> return! flowOperation environment ct
+                | Exit.Failure cause -> return Exit.Failure cause
+            }
+            #else
             match (layerOperation environment ct).GetAwaiter().GetResult() with
             | Exit.Success environment -> flowOperation environment ct
-            | Exit.Failure cause -> EffectFlow.ofCause cause)
+            | Exit.Failure cause -> EffectFlow.ofCause cause
+            #endif
+        )
 
+#if !FABLE_COMPILER
 type internal AsyncFlow<'env, 'error, 'value> with
     static member CapabilityService
         (projection: 'env -> 'service)
@@ -463,3 +505,4 @@ type internal AsyncFlow<'env, 'error, 'value> with
                 | Exit.Success environment -> return! flowOperation environment
                 | Exit.Failure cause -> return Exit.Failure cause
             })
+#endif

@@ -1,5 +1,6 @@
 namespace FsFlow
 
+#if !FABLE_COMPILER
 open System
 open System.Collections.Generic
 open System.Threading
@@ -82,3 +83,4 @@ module FlowStream =
                         member _.MoveNextAsync() = enumerator.MoveNextAsync()
                         member _.DisposeAsync() = enumerator.DisposeAsync() }
             })
+#endif

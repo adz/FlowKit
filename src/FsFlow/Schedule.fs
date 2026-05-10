@@ -1,5 +1,6 @@
 namespace FsFlow
 
+#if !FABLE_COMPILER
 open System
 open System.Threading
 open System.Threading.Tasks
@@ -99,3 +100,4 @@ module FlowScheduleExtensions =
                         | None -> EffectFlow.ofValue lastValue) 
                         (EffectFlow.mapError (fun () -> Unchecked.defaultof<'error>) (scheduleOp env ct)))
             flow |> Flow.bind (loop 0)
+#endif

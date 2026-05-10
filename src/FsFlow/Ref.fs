@@ -1,5 +1,6 @@
 namespace FsFlow
 
+#if !FABLE_COMPILER
 open System
 open System.Threading
 open System.Threading.Tasks
@@ -38,3 +39,4 @@ module Ref =
                 let next, result = f cell.Value
                 cell.Value <- next
                 result))
+#endif

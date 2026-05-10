@@ -14,7 +14,10 @@ module private FlowBuilderRuntime =
     let inline fromAsync<'env, 'error, 'value> (operation: Async<'value>) : Flow<'env, 'error, 'value> =
         Flow(fun _ cancellationToken ->
             #if FABLE_COMPILER
-            Promise.map Exit.Success (Async.StartAsPromise(operation, cancellationToken = cancellationToken))
+            async {
+                let! value = operation
+                return Exit.Success value
+            }
             #else
             ValueTask<Exit<'value, 'error>>(
                 task {
@@ -29,7 +32,10 @@ module private FlowBuilderRuntime =
         : Flow<'env, 'error, 'value> =
         Flow(fun _ cancellationToken ->
             #if FABLE_COMPILER
-            Promise.map Exit.fromResult (Async.StartAsPromise(operation, cancellationToken = cancellationToken))
+            async {
+                let! result = operation
+                return Exit.fromResult result
+            }
             #else
             ValueTask<Exit<'value, 'error>>(
                 task {
@@ -42,11 +48,10 @@ module private FlowBuilderRuntime =
     let inline fromTask<'env, 'error, 'value> (operation: Task<'value>) : Flow<'env, 'error, 'value> =
         Flow(fun _ cancellationToken ->
             #if FABLE_COMPILER
-            Promise.map Exit.Success (JS.Constructors.Promise.Create(fun resolve reject ->
-                operation.ContinueWith(fun (t: Task<'value>) ->
-                    if t.IsCanceled then reject(OperationCanceledException(cancellationToken))
-                    elif t.IsFaulted then reject(t.Exception)
-                    else resolve(t.Result)) |> ignore))
+            async {
+                let! value = operation |> Async.AwaitTask
+                return Exit.Success value
+            }
             #else
             ValueTask<Exit<'value, 'error>>(
                 task {
@@ -64,11 +69,10 @@ module private FlowBuilderRuntime =
         : Flow<'env, 'error, 'value> =
         Flow(fun _ cancellationToken ->
             #if FABLE_COMPILER
-            Promise.map Exit.fromResult (JS.Constructors.Promise.Create(fun resolve reject ->
-                operation.ContinueWith(fun (t: Task<Result<'value, 'error>>) ->
-                    if t.IsCanceled then reject(OperationCanceledException(cancellationToken))
-                    elif t.IsFaulted then reject(t.Exception)
-                    else resolve(t.Result)) |> ignore))
+            async {
+                let! result = operation |> Async.AwaitTask
+                return Exit.fromResult result
+            }
             #else
             ValueTask<Exit<'value, 'error>>(
                 task {
@@ -84,11 +88,10 @@ module private FlowBuilderRuntime =
     let inline fromTaskUnit<'env, 'error> (operation: Task) : Flow<'env, 'error, unit> =
         Flow(fun _ cancellationToken ->
             #if FABLE_COMPILER
-            Promise.map (fun () -> Exit.Success ()) (JS.Constructors.Promise.Create(fun resolve reject ->
-                operation.ContinueWith(fun (t: Task) ->
-                    if t.IsCanceled then reject(OperationCanceledException(cancellationToken))
-                    elif t.IsFaulted then reject(t.Exception)
-                    else resolve()) |> ignore))
+            async {
+                do! operation |> Async.AwaitTask
+                return Exit.Success ()
+            }
             #else
             ValueTask<Exit<unit, 'error>>(
                 task {
@@ -480,6 +483,7 @@ type FlowBuilder() =
             fun enumerator -> this.While(enumerator.MoveNext, this.Delay(fun () -> binder enumerator.Current))
         )
 
+#if !FABLE_COMPILER
 /// <summary>
 /// Computation expression builder for internal async compatibility helpers.
 /// </summary>
@@ -838,6 +842,7 @@ type internal AsyncFlowBuilder() =
             sequence.GetEnumerator(),
             fun enumerator -> this.While(enumerator.MoveNext, this.Delay(fun () -> binder enumerator.Current))
         )
+#endif
 
 [<AutoOpen>]
 module Builders =
@@ -897,7 +902,9 @@ module Builders =
     /// </example>
     let flow = FlowBuilder()
 
+#if !FABLE_COMPILER
     let internal asyncFlow = AsyncFlowBuilder()
+#endif
 
     /// <summary>
     /// The accumulating <c>validate { }</c> computation expression.
