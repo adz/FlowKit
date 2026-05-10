@@ -64,6 +64,78 @@ const pageSpecs = [
       { section: 'Layers', ids: ['M:FsFlow.Layer.provideLayer'] },
     ],
   },
+  {
+    outPath: ['caps-core', 'core.md'],
+    title: 'CAPS Core',
+    description: 'Source-documented synchronous capability primitives for FsFlow.Caps.Core.',
+    intro:
+      '`FsFlow.Caps.Core` is the smallest shared capability package in the FsFlow CAPS story. It keeps the surface synchronous and explicit: clock, random, GUID, and environment-variable capabilities.',
+    symbols: [
+      { section: 'Capability types', ids: ['T:FsFlow.Caps.Core.IClock', 'T:FsFlow.Caps.Core.IRandom', 'T:FsFlow.Caps.Core.IGuid', 'T:FsFlow.Caps.Core.IEnvironmentVariables', 'T:FsFlow.Caps.Core.EnvironmentVariableError'] },
+      { section: 'Clock', ids: ['M:FsFlow.Caps.Core.Clock.now', 'M:FsFlow.Caps.Core.Clock.live', 'M:FsFlow.Caps.Core.Clock.fromValue'] },
+      { section: 'Random', ids: ['M:FsFlow.Caps.Core.Random.nextInt', 'M:FsFlow.Caps.Core.Random.live', 'M:FsFlow.Caps.Core.Random.fromValue'] },
+      { section: 'GUID', ids: ['M:FsFlow.Caps.Core.Guid.newGuid', 'M:FsFlow.Caps.Core.Guid.live', 'M:FsFlow.Caps.Core.Guid.fromValue'] },
+      { section: 'Environment variables', ids: ['M:FsFlow.Caps.Core.EnvironmentVariables.tryGet', 'M:FsFlow.Caps.Core.EnvironmentVariables.live', 'M:FsFlow.Caps.Core.EnvironmentVariables.fromPairs', 'M:FsFlow.Caps.Core.EnvironmentVariable.tryGet', 'M:FsFlow.Caps.Core.EnvironmentVariable.get', 'M:FsFlow.Caps.Core.EnvironmentVariable.getInt', 'M:FsFlow.Caps.Core.EnvironmentVariable.getGuid', 'M:FsFlow.Caps.Core.EnvironmentVariable.getBool', 'M:FsFlow.Caps.Core.EnvironmentVariableErrors.describe'] },
+    ],
+  },
+  {
+    outPath: ['caps-console', 'console.md'],
+    title: 'CAPS Console',
+    description: 'Source-documented console I/O capability for FsFlow.Caps.Console.',
+    intro: 'This page shows the source-documented `FsFlow.Caps.Console` surface: the console interface and its helpers.',
+    symbols: [
+      { section: 'Capability', ids: ['T:FsFlow.Caps.Console.IConsole'] },
+      { section: 'Helpers', ids: ['M:FsFlow.Caps.Console.Console.readLine', 'M:FsFlow.Caps.Console.Console.writeLine', 'M:FsFlow.Caps.Console.Console.live'] },
+    ],
+  },
+  {
+    outPath: ['caps-filesystem', 'filesystem.md'],
+    title: 'CAPS FileSystem',
+    description: 'Source-documented file system capability for FsFlow.Caps.FileSystem.',
+    intro: 'This page shows the source-documented `FsFlow.Caps.FileSystem` surface: the file system interface and its helpers.',
+    symbols: [
+      { section: 'Capability', ids: ['T:FsFlow.Caps.FileSystem.IFileSystem'] },
+      { section: 'Helpers', ids: ['M:FsFlow.Caps.FileSystem.FileSystem.readAllText', 'M:FsFlow.Caps.FileSystem.FileSystem.writeAllText', 'M:FsFlow.Caps.FileSystem.FileSystem.exists', 'M:FsFlow.Caps.FileSystem.FileSystem.live'] },
+    ],
+  },
+  {
+    outPath: ['caps-http', 'http.md'],
+    title: 'CAPS Http',
+    description: 'Source-documented HTTP client capability for FsFlow.Caps.Http.',
+    intro: 'This page shows the source-documented `FsFlow.Caps.Http` surface: the HTTP interface and its helpers.',
+    symbols: [
+      { section: 'Capability', ids: ['T:FsFlow.Caps.Http.IHttp'] },
+      { section: 'Helpers', ids: ['M:FsFlow.Caps.Http.Http.getString', 'M:FsFlow.Caps.Http.Http.live'] },
+    ],
+  },
+  {
+    outPath: ['caps-process', 'process.md'],
+    title: 'CAPS Process',
+    description: 'Source-documented external process capability for FsFlow.Caps.Process.',
+    intro: 'This page shows the source-documented `FsFlow.Caps.Process` surface: the process runner interface and its helpers.',
+    symbols: [
+      { section: 'Capability', ids: ['T:FsFlow.Caps.Process.IProcess', 'T:FsFlow.Caps.Process.ProcessResult'] },
+      { section: 'Helpers', ids: ['M:FsFlow.Caps.Process.Process.execute', 'M:FsFlow.Caps.Process.Process.live'] },
+    ],
+  },
+  {
+    outPath: ['hosting', 'hosting.md'],
+    title: 'Hosting',
+    description: 'Source-documented .NET host integration for FsFlow.Hosting.',
+    intro: 'This page shows the source-documented `FsFlow.Hosting` surface: the IServiceProvider adapters and startup validation.',
+    symbols: [
+      { section: 'Startup', ids: ['M:FsFlow.Hosting.Startup.validateEnvironment'] },
+    ],
+  },
+  {
+    outPath: ['telemetry', 'telemetry.md'],
+    title: 'Telemetry',
+    description: 'Source-documented observability integration for FsFlow.Runtime.Telemetry.',
+    intro: 'This page shows the source-documented `FsFlow.Runtime.Telemetry` surface: Activity.trace integration.',
+    symbols: [
+      { section: 'Tracing', ids: ['M:FsFlow.Runtime.Telemetry.Activity.trace'] },
+    ],
+  },
 ];
 
 function cleanXmlDocText(text) {
@@ -141,7 +213,8 @@ function getShortName(id) {
 function getQualifiedName(id) {
   let name = id.replace(/^[A-Z]:/, '').split('(')[0];
   if (name.includes('.get_')) name = name.replace('.get_', '.');
-  return name.replace(/`[0-9]+/g, '');
+  // Remove backticks and type parameter counts (e.g. `1, ``2)
+  return name.replace(/`+[0-9]*/g, '');
 }
 
 function getPageName(id) {
@@ -153,8 +226,8 @@ function renderSymbolPage(id, doc) {
   const qualifiedName = getQualifiedName(id);
   
   let content = `---
-title: ${qualifiedName}
-linkTitle: ${shortName}
+title: "${qualifiedName}"
+linkTitle: "${shortName}"
 ---
 
 ${doc.summary || ''}
@@ -194,7 +267,7 @@ function generate() {
       fs.mkdirSync(path.dirname(outPath), { recursive: true });
       
       let pageContent = `---
-title: ${spec.title}
+title: "${spec.title}"
 ---
 
 ${spec.intro}
@@ -206,15 +279,29 @@ ${spec.intro}
         for (const id of section.ids) {
           // Exact match or prefix match (for overloaded methods)
           let matchId = null;
-          const candidates = [
-            id,
-            id.replace(/^([TMFP]):FsFlow\.([^\.]+)\./, '$1:FsFlow.$2Module.'),
-            id.replace(/^([TMFP]):FsFlow\.([^\.]+)\./, '$1:FsFlow.$2Builders.'),
-            id.replace(/^([TMFP]):FsFlow\.([^\.]+)\./, '$1:FsFlow.$2Extensions.'),
-            id.replace(/^([TMFP]):FsFlow\.([^\.]+)\./, '$1:FsFlow.Flow$2Extensions.'),
-            id.replace(/^P:FsFlow\.([^\.]+)\./, 'M:FsFlow.$1.get_'), // Getter check
-            id.replace(/^P:FsFlow\.([^\.]+)\./, 'M:FsFlow.$1Module.get_'),
-          ];
+          
+          // Try various candidate names (handling F# Module/Extensions suffixes automatically)
+          const typePrefix = id.split(':')[0];
+          const namePart = id.split(':')[1];
+          const parts = namePart.split('.');
+          
+          const prefixes = [typePrefix];
+          if (typePrefix === 'M') prefixes.push('P');
+          if (typePrefix === 'P') prefixes.push('M');
+
+          const candidates = [];
+          for (const pref of prefixes) {
+            candidates.push(`${pref}:${namePart}`);
+            if (parts.length >= 2) {
+               const base = parts.slice(0, -1).join('.');
+               const last = parts[parts.length - 1];
+               candidates.push(`${pref}:${base}Module.${last}`);
+               candidates.push(`${pref}:${base}Extensions.${last}`);
+               candidates.push(`${pref}:${base}Builders.${last}`);
+               candidates.push(`${pref}:${base}.get_${last}`);
+               candidates.push(`${pref}:${base}Module.get_${last}`);
+            }
+          }
 
           for (const cand of candidates) {
             if (allDocs.has(cand)) {

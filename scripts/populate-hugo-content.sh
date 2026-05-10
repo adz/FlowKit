@@ -76,6 +76,13 @@ create_ref_section "validation" "Validation" 60 "validation.md"
 create_ref_section "result" "Result" 70 "builders-result.md"
 create_ref_section "diagnostics" "Diagnostics" 80 "diagnostics.md"
 create_ref_section "caps" "CAPS" 130 "capability.md"
+create_ref_section "caps-core" "CAPS Core" 131 "core.md" "caps-core"
+create_ref_section "caps-console" "CAPS Console" 132 "console.md" "caps-console"
+create_ref_section "caps-filesystem" "CAPS FileSystem" 133 "filesystem.md" "caps-filesystem"
+create_ref_section "caps-http" "CAPS Http" 134 "http.md" "caps-http"
+create_ref_section "caps-process" "CAPS Process" 135 "process.md" "caps-process"
+create_ref_section "hosting" "Hosting" 140 "hosting.md" "hosting"
+create_ref_section "telemetry" "Telemetry" 150 "telemetry.md" "telemetry"
 
 # Helper to copy patterns
 copy_group() {
@@ -84,39 +91,32 @@ copy_group() {
   local patterns=("$@")
   
   for pattern in "${patterns[@]}"; do
-    find "$src_dir" -maxdepth 1 -name "$pattern" -exec cp {} "$ref_dir/$target/" \;
+    find "$root_dir/docs/reference/$target" -maxdepth 1 -name "$pattern" -exec cp {} "$ref_dir/$target/" \; 2>/dev/null || true
   done
 }
 
-copy_group "flow" "builders-flow.md" "flow-*.md"
-copy_group "check" "check-*.md"
-copy_group "guard" "guard.md"
-copy_group "result" "builders-result.md"
-copy_group "validation" "builders-validate.md" "validation-*.md"
-copy_group "diagnostics" "diagnostics-*.md" "path.md" "pathsegment.md" "diagnostic.md"
-copy_group "asyncflow-runtime" "retrypolicy*.md" "asyncflow-runtime-*.md" "loglevel.md" "logentry.md" "log*.md"
-copy_group "taskflow-runtime" "runtimecontext*.md" "taskflow-runtime-*.md"
-copy_group "taskflow-spec" "taskflowspec-*.md"
-copy_group "coldtask" "coldtask-*.md"
-copy_group "caps" "needs.md" "env.md" "capability-*.md" "layer-providelayer.md" "missingcapability.md"
-copy_group "interop" "interop.md"
-copy_group_from() {
-  local source_subdir="$1"
-  local target="$2"
-  shift 2
-  local patterns=("$@")
+# The create_ref_section already handled the main file for each section as _index.md.
+# Now we just need to copy the supporting symbol pages.
 
-  mkdir -p "$ref_dir/$target"
-
-  for pattern in "${patterns[@]}"; do
-    find "$root_dir/docs/reference/$source_subdir" -maxdepth 1 -name "$pattern" -exec cp {} "$ref_dir/$target/" \;
-  done
+copy_symbol_pages() {
+  local subdir="$1"
+  mkdir -p "$ref_dir/$subdir"
+  # Copy all .md files except the main spec files and manually managed indices
+  find "$root_dir/docs/reference/$subdir" -maxdepth 1 -name "*.md" ! -name "_index.md" \
+    ! -name "flow.md" ! -name "check.md" ! -name "validation.md" ! -name "capability.md" \
+    ! -name "core.md" ! -name "console.md" ! -name "filesystem.md" ! -name "http.md" \
+    ! -name "process.md" ! -name "hosting.md" ! -name "telemetry.md" ! -name "builders-result.md" \
+    ! -name "diagnostics.md" -exec cp {} "$ref_dir/$subdir/" \;
 }
 
-create_ref_section "caps-core" "CAPS Core" 131 "_index.md" "caps-core"
-create_ref_section "caps-context" "CAPS Context" 132 "_index.md" "caps-context"
-copy_group_from "caps-core" "caps-core" "core.md"
-copy_group_from "caps-context" "caps-context" "context.md"
+copy_symbol_pages "fsflow"
+copy_symbol_pages "caps-core"
+copy_symbol_pages "caps-console"
+copy_symbol_pages "caps-filesystem"
+copy_symbol_pages "caps-http"
+copy_symbol_pages "caps-process"
+copy_symbol_pages "hosting"
+copy_symbol_pages "telemetry"
 
 find "$ref_dir" -type f -name "*.md" ! -name "_index.md" -print0 |
   while IFS= read -r -d '' page; do
