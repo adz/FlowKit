@@ -16,7 +16,6 @@ type Check<'value> = Result<'value, unit>
 /// the source value; others are gates and return <c>unit</c> on success.
 /// </summary>
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-[<RequireQualifiedAccess>]
 module Check =
     /// <summary>Builds a check from a predicate while preserving the successful value.</summary>
     /// <param name="predicate">A function of type <c>'value -> bool</c> to test the value.</param>
