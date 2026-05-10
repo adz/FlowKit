@@ -18,6 +18,10 @@
   <Folder Name="/src/">
     <Project Path="src/FsFlow/FsFlow.fsproj" />
     <Project Path="src/FsFlow.Caps.Core/FsFlow.Caps.Core.fsproj" />
+    <Project Path="src/FsFlow.Caps.Console/FsFlow.Caps.Console.fsproj" />
+    <Project Path="src/FsFlow.Caps.FileSystem/FsFlow.Caps.FileSystem.fsproj" />
+    <Project Path="src/FsFlow.Caps.Http/FsFlow.Caps.Http.fsproj" />
+    <Project Path="src/FsFlow.Caps.Process/FsFlow.Caps.Process.fsproj" />
     <Project Path="src/FsFlow.Hosting/FsFlow.Hosting.fsproj" />
     <Project Path="src/FsFlow.Runtime.Telemetry/FsFlow.Runtime.Telemetry.fsproj" />
   </Folder>
