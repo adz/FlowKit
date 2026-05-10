@@ -32,7 +32,7 @@ See [EXIT_CAUSE_PLAN.md](EXIT_CAUSE_PLAN.md) for the design.
 
 ## Phase 3: ZIO Core Features (The Runtime)
 
-15. [ ] Implement the `Fiber` abstraction for light-weight concurrency; provide `Flow.fork`, `Flow.join`, and `Flow.interrupt` using the `Exit.Interrupt` signal.
+15. [x] Implement the `Fiber` abstraction for light-weight concurrency; provide `Flow.fork`, `Flow.join`, and `Flow.interrupt` using the `Exit.Interrupt` signal.
 16. [ ] Implement `Flow.zipPar` and `Flow.race` using the Fiber runtime to enable high-performance parallel orchestration with structured interruption.
 17. [ ] Implement Software Transactional Memory (STM) core: provide `Ref<'T>`, `TRef<'T>`, and the `stm { }` builder for atomic state updates.
 18. [ ] Implement the `FlowStream<'env, 'e, 'v>` type: provide environment-aware, error-typed streaming with backpressure support (using `IAsyncEnumerable` for Fable 5 parity).

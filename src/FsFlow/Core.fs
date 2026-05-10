@@ -67,6 +67,19 @@ module Exit =
         | Exit.Failure Cause.Interrupt -> raise (OperationCanceledException("Workflow was interrupted"))
 
 /// <summary>
+/// Represents a handle to a running workflow.
+/// </summary>
+/// <typeparam name="error">The failure type of the running workflow.</typeparam>
+/// <typeparam name="value">The success type of the running workflow.</typeparam>
+type Fiber<'error, 'value> =
+    {
+        /// <summary>The task that completes when the workflow finishes execution.</summary>
+        ExitTask: Task<Exit<'value, 'error>>
+        /// <summary>The source used to signal interruption to the running workflow.</summary>
+        InterruptSource: CancellationTokenSource
+    }
+
+/// <summary>
 /// Represents the portable execution shape used by the unified <see cref="T:FsFlow.Flow`3" />.
 /// </summary>
 #if FABLE_COMPILER

@@ -84,6 +84,86 @@ module Flow =
     let fromResult (result: Result<'value, 'error>) : Flow<'env, 'error, 'value> =
         Flow(fun _ _ -> EffectFlow.ofResult result)
 
+    /// <summary>Runtime helpers for operational concerns like logging, timeout, retry, and cleanup.</summary>
+    [<RequireQualifiedAccess>]
+    module Runtime =
+        /// <summary>Suspends the flow for the specified duration, observing cancellation.</summary>
+        let sleep (delay: TimeSpan) : Flow<'env, 'error, unit> =
+            Flow(fun _ cancellationToken ->
+                #if FABLE_COMPILER
+                JS.Constructors.Promise.Create(fun resolve reject ->
+                    let mutable handle = 0
+                    let registration = cancellationToken.Register(fun () -> 
+                        JS.Globals.clearTimeout handle
+                        resolve(Exit.Failure Cause.Interrupt))
+                    
+                    handle <- JS.Globals.setTimeout((fun () -> 
+                        registration.Dispose()
+                        resolve(Exit.Success ())), int delay.TotalMilliseconds)
+                )
+                #else
+                ValueTask<Exit<unit, 'error>>(
+                    task {
+                        try
+                            do! Task.Delay(delay, cancellationToken)
+                            return Exit.Success ()
+                        with :? OperationCanceledException ->
+                            return Exit.Failure Cause.Interrupt
+                    })
+                #endif
+            )
+
+    /// <summary>Starts a flow in a new fiber without waiting for it to complete.</summary>
+    /// <param name="flow">The flow to fork.</param>
+    /// <returns>A flow that produces a <see cref="T:FsFlow.Fiber`2" /> handle.</returns>
+    let fork (flow: Flow<'env, 'error, 'value>) : Flow<'env, 'none, Fiber<'error, 'value>> =
+        Flow(fun environment cancellationToken ->
+            #if FABLE_COMPILER
+            // On Fable, we rely on the JS event loop. 
+            // We use a linked CTS to support interruption.
+            let cts = new CancellationTokenSource()
+            // We don't link to the outer token automatically because forking is often used for detached work,
+            // but the ZIO model usually inherits scope. For now, we follow the "explicit" link pattern.
+            
+            let operation = invoke flow environment cts.Token
+            
+            let fiber =
+                {
+                    ExitTask = Async.StartAsTask(Async.AwaitPromise(operation), cancellationToken = cts.Token)
+                    InterruptSource = cts
+                }
+            EffectFlow.ofValue fiber
+            #else
+            let cts = new CancellationTokenSource()
+            let (Flow operation) = flow
+            let effect = operation environment cts.Token
+            
+            let fiber =
+                {
+                    ExitTask = effect.AsTask()
+                    InterruptSource = cts
+                }
+            EffectFlow.ofValue fiber
+            #endif
+        )
+
+    /// <summary>Waits for a fiber to complete and returns its final outcome.</summary>
+    /// <param name="fiber">The fiber to join.</param>
+    /// <returns>A flow that completes with the fiber's outcome.</returns>
+    let join (fiber: Fiber<'error, 'value>) : Flow<'env, 'error, 'value> =
+        Flow(fun _ _ ->
+            #if FABLE_COMPILER
+            JS.Constructors.Promise.Create(fun resolve reject ->
+                fiber.ExitTask.ContinueWith(fun (t: Task<Exit<'value, 'error>>) ->
+                    if t.IsFaulted then reject(t.Exception)
+                    elif t.IsCanceled then resolve(Exit.Failure Cause.Interrupt)
+                    else resolve(t.Result)) |> ignore
+            )
+            #else
+            ValueTask<Exit<'value, 'error>>(fiber.ExitTask)
+            #endif
+        )
+
     /// <summary>Executes a flow and converts the final <see cref="T:FsFlow.Exit`2" /> into a standard <see cref="T:System.Result`2" />.</summary>
     /// <remarks>
     /// Interruption signals and defects are raised as exceptions in the caller's context.
@@ -91,6 +171,28 @@ module Flow =
     let toResult (environment: 'env) (flow: Flow<'env, 'error, 'value>) : Result<'value, 'error> =
         run environment flow
         |> Exit.toResult
+
+    /// <summary>Signals a fiber to stop and waits for it to finish its cleanup.</summary>
+    /// <param name="fiber">The fiber to interrupt.</param>
+    /// <returns>A flow that completes with the fiber's final outcome after interruption.</returns>
+    let interrupt (fiber: Fiber<'error, 'value>) : Flow<'env, 'none, Exit<'value, 'error>> =
+        Flow(fun _ _ ->
+            #if FABLE_COMPILER
+            JS.Constructors.Promise.Create(fun resolve reject ->
+                fiber.InterruptSource.Cancel()
+                fiber.ExitTask.ContinueWith(fun (t: Task<Exit<'value, 'error>>) ->
+                    if t.IsFaulted then reject(t.Exception)
+                    else resolve(Exit.Success t.Result)) |> ignore
+            )
+            #else
+            ValueTask<Exit<Exit<'value, 'error>, 'none>>(
+                task {
+                    fiber.InterruptSource.Cancel()
+                    let! exit = fiber.ExitTask
+                    return Exit.Success exit
+                })
+            #endif
+        )
 
     /// <summary>Lifts an option into a synchronous flow with the supplied error.</summary>
     /// <example>
