@@ -254,6 +254,36 @@ const pageSpecs = [
     ],
   },
   {
+    outPath: ['caps-context', 'context.md'],
+    title: 'CAPS Context',
+    description: 'Source-documented request and execution-context primitives for FsFlow.Caps.Context.',
+    intro:
+      "This page shows the source-documented `FsFlow.Caps.Context` surface: the current-user model, request context record, request identifiers, locale, metadata, and request-scoped flags.",
+    sourceFiles: ['src/FsFlow.Caps.Context/Context.fs'],
+    sections: [
+      {
+        title: 'Context types',
+        symbols: ['type:UserContext', 'type:RequestContext'],
+      },
+      {
+        title: 'Current user',
+        symbols: ['module:CurrentUser', 'CurrentUser.create', 'CurrentUser.fromClaimsPrincipal', 'CurrentUser.live', 'CurrentUser.hasRole', 'CurrentUser.claim'],
+      },
+      {
+        title: 'Request context',
+        symbols: ['module:RequestContext', 'RequestContext.create', 'RequestContext.live', 'RequestContext.withRequestId', 'RequestContext.withCorrelationId', 'RequestContext.withTenantId', 'RequestContext.withCurrentUser', 'RequestContext.withCulture', 'RequestContext.withMetadata', 'RequestContext.withFlags'],
+      },
+      {
+        title: 'Request identity',
+        symbols: ['module:RequestId', 'RequestId.get', 'RequestId.live', 'module:CorrelationId', 'CorrelationId.tryGet', 'CorrelationId.live', 'module:TenantId', 'TenantId.tryGet', 'TenantId.live', 'module:Locale', 'Locale.get', 'Locale.live'],
+      },
+      {
+        title: 'Metadata and flags',
+        symbols: ['module:RequestMetadata', 'RequestMetadata.empty', 'RequestMetadata.fromPairs', 'RequestMetadata.tryGet', 'RequestMetadata.contains', 'module:RequestFlags', 'RequestFlags.empty', 'RequestFlags.fromPairs', 'RequestFlags.tryGet', 'RequestFlags.isEnabled'],
+      },
+    ],
+  },
+  {
     outPath: ['fsflow', 'coldtask.md'],
     title: 'ColdTask',
     description: 'Source-documented delayed task helpers used by FsFlow.',

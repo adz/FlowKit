@@ -123,7 +123,9 @@ copy_group_from() {
 }
 
 create_ref_section "caps-core" "CAPS Core" 131 "_index.md" "caps-core"
+create_ref_section "caps-context" "CAPS Context" 132 "_index.md" "caps-context"
 copy_group_from "caps-core" "caps-core" "core.md"
+copy_group_from "caps-context" "caps-context" "context.md"
 
 find "$ref_dir" -type f -name "*.md" ! -name "_index.md" -print0 |
   while IFS= read -r -d '' page; do

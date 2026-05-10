@@ -84,6 +84,10 @@
   </url><url>
     <loc>//localhost:3000/reference/caps/</loc>
   </url><url>
+    <loc>//localhost:3000/reference/caps-core/</loc>
+  </url><url>
+    <loc>//localhost:3000/reference/caps-context/</loc>
+  </url><url>
     <loc>//localhost:3000/reference/interop/</loc>
   </url><url>
     <loc>//localhost:3000/reference/check/check-all/</loc>
@@ -119,6 +123,10 @@
     <loc>//localhost:3000/reference/taskflow-runtime/runtimecontext-cancellationtoken/</loc>
   </url><url>
     <loc>//localhost:3000/reference/taskflow-runtime/taskflow-runtime-cancellationtoken/</loc>
+  </url><url>
+    <loc>//localhost:3000/reference/caps-context/context/</loc>
+  </url><url>
+    <loc>//localhost:3000/reference/caps-core/core/</loc>
   </url><url>
     <loc>//localhost:3000/reference/asyncflow/asyncflow-catch/</loc>
   </url><url>

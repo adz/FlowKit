@@ -23,7 +23,7 @@ Shared conventions for the package work:
    random, GUID, and environment-variable capabilities with live and test implementations, typed
    errors for meaningful absence or invalid values, and docs/examples showing the sync-first surface
    shape.
-2. [ ] Implement `FsFlow.Caps.Context` as the execution-context package: provide request id,
+2. [x] Implement `FsFlow.Caps.Context` as the execution-context package: provide request id,
    correlation id, tenant id, current user, locale/culture, request metadata, and any request-scoped
    flags needed by app code, with simple live/test context providers and docs/examples that show the
    context flowing into logging, auditing, and authorization.
