@@ -159,6 +159,52 @@ module WorkflowTests =
             test <@ result = Exit.Success () @>
             test <@ sum = 30 @>
 
+        [<Fact>]
+        let ``Scheduling: retry failing flow`` () =
+            let mutable attempts = 0
+            let workflow =
+                flow {
+                    attempts <- attempts + 1
+                    if attempts < 3 then
+                        return! Flow.fail "try again"
+                    else
+                        return "success"
+                }
+
+            let retried = Flow.Retry(workflow, Schedule.recurs 5)
+            let result = Flow.run () retried
+            
+            test <@ result = Exit.Success "success" @>
+            test <@ attempts = 3 @>
+
+        [<Fact>]
+        let ``Scheduling: repeat successful flow`` () =
+            let mutable count = 0
+            let workflow =
+                flow {
+                    count <- count + 1
+                    return count
+                }
+
+            let repeated = Flow.Repeat(workflow, Schedule.recurs 3)
+            let result = Flow.run () repeated
+            
+            // Should run initial + 3 repeats = 4 times.
+            // Wait, Schedule.recurs 3 means 3 total attempts?
+            // In my implementation:
+            // let rec loop attempt lastValue =
+            //     op lastValue attempt
+            //     |> Flow.bind (fun (decision, delay) -> ... loop (attempt + 1))
+            // recurs 3: attempt 0 (Some), attempt 1 (Some), attempt 2 (Some), attempt 3 (None).
+            // So loop runs with attempt 0, 1, 2.
+            // attempt 0: runs flow (count=2)
+            // attempt 1: runs flow (count=3)
+            // attempt 2: runs flow (count=4)
+            // attempt 3: stops.
+            
+            test <@ result = Exit.Success 4 @>
+            test <@ count = 4 @>
+
         type private DeviceClient(name: string) =
             interface IDeviceClient with
                 member _.Name = name

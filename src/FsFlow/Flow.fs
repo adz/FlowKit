@@ -13,6 +13,13 @@ module Flow =
         let (Flow operation) = flow
         operation environment cancellationToken
 
+    /// <summary>Creates a flow from an execution outcome.</summary>
+    let ofExit (exit: Exit<'value, 'error>) : Flow<'env, 'error, 'value> =
+        Flow(fun _ _ -> EffectFlow.ofExit exit)
+
+    /// <summary>Internal alias for invoke used by orchestration helpers.</summary>
+    let internal runFullInternal = invoke
+
     /// <summary>Executes a flow with an explicit cancellation token.</summary>
     let runFull (environment: 'env) (cancellationToken: CancellationToken) (flow: Flow<'env, 'error, 'value>) : Exit<'value, 'error> =
         #if FABLE_COMPILER
