@@ -11,7 +11,7 @@ Keep live product and architecture direction in `dev-docs/PLAN.md`.
 2. [x] Implement the core `Flow` module primitives (`ok`, `error`, `read`, `map`, `bind`, `tap`, `fromResult`) using the new unified signature.
 3. [x] Implement the universal `flow { }` builder in `FsFlow/Builders.fs` using method overloading to support `Async`, `Task`, `Result`, and environment requests; ensure full `CancellationToken` propagation.
 4. [x] Implement `Flow.run` and `Flow.runFull` (and `runWithToken`) for the unified type, supporting both synchronous and asynchronous execution paths on .NET and native Promise execution on Fable.
-5. [ ] Add unit tests for the unified `flow { }` builder covering mixed effect orchestration (Sync, Async, Task, Result) and verify against the Fable 5 transpilation mapping.
+5. [x] Add unit tests for the unified `flow { }` builder covering mixed effect orchestration (Sync, Async, Task, Result) and verify against the Fable 5 transpilation mapping.
 
 ## Phase 2: Migration & Cleanup
 

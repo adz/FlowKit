@@ -1305,6 +1305,32 @@ let probe : {workflowTypeName}<WrongEnv, string, string> =
             test <@ taskWorkflow |> TaskFlow.run 21 CancellationToken.None |> fun task -> task.GetAwaiter().GetResult() = Ok 42 @>
 
         [<Fact>]
+        let ``flow computation expression mixes sync async task and result effects in one workflow`` () =
+            let workflow : Flow<string, string, string> =
+                flow {
+                    let! prefix = Flow.read id
+                    let! asyncSuffix = async { return "-async" }
+                    do! Task.CompletedTask
+                    let! taskSuffix = Task.FromResult "-task"
+                    let! resultSuffix = Ok "-result"
+                    return prefix + asyncSuffix + taskSuffix + resultSuffix
+                }
+
+            test <@ Flow.run "flow" workflow = Ok "flow-async-task-result" @>
+
+        [<Fact>]
+        let ``flow builder overloads stay aligned with the Fable 5 mapping`` () =
+            let publicMethods = publicInstanceMethodNames typeof<FlowBuilder>
+            let argumentTypeNames = flowBuilderBindAndReturnFromArgumentNames ()
+
+            test <@ publicMethods |> Array.contains "Bind" @>
+            test <@ publicMethods |> Array.contains "ReturnFrom" @>
+            test <@ publicMethods |> Array.contains "YieldFrom" @>
+            test <@ publicMethods |> Array.contains "Yield" @>
+            test <@ publicMethods |> Array.contains "Run" @>
+            test <@ argumentTypeNames = [| "Env`1"; "Env`2"; "FSharpAsync`1"; "FSharpFunc`2"; "FSharpOption`1"; "FSharpResult`2"; "FSharpValueOption`1"; "Flow`3"; "Task"; "Task`1" |] @>
+
+        [<Fact>]
         let ``reader-style yield projects from the environment across builders`` () =
             let environment : ReaderEnv =
                 { Prefix = "flow"
