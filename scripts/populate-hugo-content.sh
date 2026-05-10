@@ -5,7 +5,6 @@ set -euo pipefail
 root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 ref_dir="$root_dir/site/content/reference"
 docs_dir="$root_dir/site/content/docs"
-src_dir="$root_dir/docs/reference/fsflow"
 
 # Rebuild the generated reference subtree from scratch so removed API pages do
 # not linger as stale site content.
@@ -46,84 +45,36 @@ upsert_frontmatter() {
   mv "$tmp" "$file"
 }
 
-create_ref_section() {
-  local name="$1"
-  local title="$2"
-  local weight="$3"
-  local main_file="$4"
-  local source_subdir="${5:-fsflow}"
-  mkdir -p "$ref_dir/$name"
-  
-  if [ -f "$root_dir/docs/reference/$source_subdir/$main_file" ]; then
-    cp "$root_dir/docs/reference/$source_subdir/$main_file" "$ref_dir/$name/_index.md"
-    upsert_frontmatter "$ref_dir/$name/_index.md" "title" "\"$title\""
-    upsert_frontmatter "$ref_dir/$name/_index.md" "type" "docs"
-    upsert_frontmatter "$ref_dir/$name/_index.md" "weight" "$weight"
-  else
-    echo "---
-title: \"$title\"
-type: docs
-weight: $weight
----" > "$ref_dir/$name/_index.md"
-  fi
-}
+# The generator now creates a directory structure in docs/reference/ that
+# matches our desired site structure. We just copy it over.
 
-# API Reference Sections
-create_ref_section "flow" "Flow" 10 "flow.md"
-create_ref_section "check" "Check" 40 "check.md"
-create_ref_section "guard" "Guard" 50 "guard.md"
-create_ref_section "validation" "Validation" 60 "validation.md"
-create_ref_section "result" "Result" 70 "builders-result.md"
-create_ref_section "diagnostics" "Diagnostics" 80 "diagnostics.md"
-create_ref_section "caps" "CAPS" 130 "capability.md"
-create_ref_section "caps-core" "CAPS Core" 131 "core.md" "caps-core"
-create_ref_section "caps-console" "CAPS Console" 132 "console.md" "caps-console"
-create_ref_section "caps-filesystem" "CAPS FileSystem" 133 "filesystem.md" "caps-filesystem"
-create_ref_section "caps-http" "CAPS Http" 134 "http.md" "caps-http"
-create_ref_section "caps-process" "CAPS Process" 135 "process.md" "caps-process"
-create_ref_section "hosting" "Hosting" 140 "hosting.md" "hosting"
-create_ref_section "telemetry" "Telemetry" 150 "telemetry.md" "telemetry"
+cp -r "$root_dir/docs/reference/"* "$ref_dir/"
 
-# Helper to copy patterns
-copy_group() {
-  local target="$1"
-  shift
-  local patterns=("$@")
-  
-  for pattern in "${patterns[@]}"; do
-    find "$root_dir/docs/reference/$target" -maxdepth 1 -name "$pattern" -exec cp {} "$ref_dir/$target/" \; 2>/dev/null || true
-  done
-}
+# Fix index files: remove body titles to avoid double headings in Hugo
+find "$ref_dir" -name "_index.md" -type f -exec sed -i '/^# /d' {} \;
 
-# The create_ref_section already handled the main file for each section as _index.md.
-# Now we just need to copy the supporting symbol pages.
+# Set weights for main sections
+upsert_frontmatter "$ref_dir/flow/_index.md" "weight" "10"
+upsert_frontmatter "$ref_dir/check/_index.md" "weight" "40"
+upsert_frontmatter "$ref_dir/validation/_index.md" "weight" "60"
+upsert_frontmatter "$ref_dir/result/_index.md" "weight" "70"
+upsert_frontmatter "$ref_dir/diagnostics/_index.md" "weight" "80"
+upsert_frontmatter "$ref_dir/capability/_index.md" "weight" "130"
+upsert_frontmatter "$ref_dir/caps-core/_index.md" "weight" "131"
+upsert_frontmatter "$ref_dir/caps-console/_index.md" "weight" "132"
+upsert_frontmatter "$ref_dir/caps-filesystem/_index.md" "weight" "133"
+upsert_frontmatter "$ref_dir/caps-http/_index.md" "weight" "134"
+upsert_frontmatter "$ref_dir/caps-process/_index.md" "weight" "135"
+upsert_frontmatter "$ref_dir/hosting/_index.md" "weight" "140"
+upsert_frontmatter "$ref_dir/telemetry/_index.md" "weight" "150"
 
-copy_symbol_pages() {
-  local subdir="$1"
-  mkdir -p "$ref_dir/$subdir"
-  # Copy all .md files except the main spec files and manually managed indices
-  find "$root_dir/docs/reference/$subdir" -maxdepth 1 -name "*.md" ! -name "_index.md" \
-    ! -name "flow.md" ! -name "check.md" ! -name "validation.md" ! -name "capability.md" \
-    ! -name "core.md" ! -name "console.md" ! -name "filesystem.md" ! -name "http.md" \
-    ! -name "process.md" ! -name "hosting.md" ! -name "telemetry.md" ! -name "builders-result.md" \
-    ! -name "diagnostics.md" -exec cp {} "$ref_dir/$subdir/" \;
-}
-
-copy_symbol_pages "fsflow"
-copy_symbol_pages "caps-core"
-copy_symbol_pages "caps-console"
-copy_symbol_pages "caps-filesystem"
-copy_symbol_pages "caps-http"
-copy_symbol_pages "caps-process"
-copy_symbol_pages "hosting"
-copy_symbol_pages "telemetry"
-
-find "$ref_dir" -type f -name "*.md" ! -name "_index.md" -print0 |
+# Ensure all reference pages are marked as docs type
+find "$ref_dir" -type f -name "*.md" -print0 |
   while IFS= read -r -d '' page; do
     upsert_frontmatter "$page" "type" "docs"
   done
 
-# Copy the root Reference index
+# Copy root Reference index (manually maintained)
 cp "$root_dir/docs/reference/_index.md" "$ref_dir/_index.md"
 upsert_frontmatter "$ref_dir/_index.md" "type" "docs"
 upsert_frontmatter "$ref_dir/_index.md" "weight" "30"

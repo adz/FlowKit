@@ -14,14 +14,13 @@ const targets = [
 
 const pageSpecs = [
   {
-    outPath: ['fsflow', 'flow.md'],
+    outPath: ['flow', '_index.md'],
     title: 'Flow',
     description: 'Source-documented workflow surface in FsFlow.',
     intro:
-      "This page shows the source-documented `Flow` surface: the core type, module functions, and computation expressions.",
+      "This page shows the source-documented `Flow` surface: the core type and module functions.",
     symbols: [
       { section: 'Core type', ids: ['T:FsFlow.Flow`3'] },
-      { section: 'Builder', ids: ['P:FsFlow.Builders.flow'] },
       { section: 'Module functions', ids: ['M:FsFlow.Flow.run', 'M:FsFlow.Flow.ok', 'M:FsFlow.Flow.error', 'M:FsFlow.Flow.succeed', 'M:FsFlow.Flow.value', 'M:FsFlow.Flow.fail', 'M:FsFlow.Flow.fromResult', 'M:FsFlow.Flow.fromOption', 'M:FsFlow.Flow.fromValueOption', 'M:FsFlow.Flow.orElseFlow', 'M:FsFlow.Flow.env', 'M:FsFlow.Flow.read', 'M:FsFlow.Flow.map', 'M:FsFlow.Flow.bind', 'M:FsFlow.Flow.tap', 'M:FsFlow.Flow.tapError', 'M:FsFlow.Flow.mapError', 'M:FsFlow.Flow.catch', 'M:FsFlow.Flow.orElseWith', 'M:FsFlow.Flow.orElse', 'M:FsFlow.Flow.zip', 'M:FsFlow.Flow.map2', 'M:FsFlow.Flow.map3', 'M:FsFlow.Flow.apply', 'M:FsFlow.Flow.ignore', 'M:FsFlow.Flow.localEnv', 'M:FsFlow.Flow.provideLayer', 'M:FsFlow.Flow.delay', 'M:FsFlow.Flow.traverse', 'M:FsFlow.Flow.sequence'] },
       { section: 'Concurrency', ids: ['T:FsFlow.Fiber`2', 'M:FsFlow.Flow.fork', 'M:FsFlow.Flow.join', 'M:FsFlow.Flow.interrupt'] },
       { section: 'Parallel orchestration', ids: ['M:FsFlow.Flow.zipPar', 'M:FsFlow.Flow.race'] },
@@ -29,7 +28,16 @@ const pageSpecs = [
     ],
   },
   {
-    outPath: ['fsflow', 'check.md'],
+    outPath: ['flow', 'builders-flow.md'],
+    title: 'flow { }',
+    description: 'Documentation for the flow { } computation expression.',
+    intro: 'The `flow { }` builder is the primary entry point for orchestrating synchronous, async, and task-based work.',
+    symbols: [
+      { section: 'Builder', ids: ['P:FsFlow.Builders.flow'] },
+    ]
+  },
+  {
+    outPath: ['check', '_index.md'],
     title: 'Check',
     description: 'Source-documented pure predicate helpers for FsFlow.',
     intro:
@@ -40,20 +48,49 @@ const pageSpecs = [
     ],
   },
   {
-    outPath: ['fsflow', 'validation.md'],
+    outPath: ['validation', '_index.md'],
     title: 'Validation',
     description: 'Source-documented accumulating validation for FsFlow.',
     intro:
-      'This page shows the source-documented `Validation` surface: the accumulating result type, module functions, path-scoping helpers, and the `validate { }` builder.',
+      'This page shows the source-documented `Validation` surface: the accumulating result type, module functions, and path-scoping helpers.',
     symbols: [
       { section: 'Core type', ids: ['T:FsFlow.Validation`2'] },
-      { section: 'Builder', ids: ['P:FsFlow.Builders.validate'] },
       { section: 'Module functions', ids: ['M:FsFlow.Validation.toResult', 'M:FsFlow.Validation.ok', 'M:FsFlow.Validation.error', 'M:FsFlow.Validation.succeed', 'M:FsFlow.Validation.fail', 'M:FsFlow.Validation.fromResult', 'M:FsFlow.Validation.map', 'M:FsFlow.Validation.bind', 'M:FsFlow.Validation.mapError', 'M:FsFlow.Validation.map2', 'M:FsFlow.Validation.map3', 'M:FsFlow.Validation.apply', 'M:FsFlow.Validation.ignore', 'M:FsFlow.Validation.orElse', 'M:FsFlow.Validation.orElseWith', 'M:FsFlow.Validation.collect', 'M:FsFlow.Validation.sequence', 'M:FsFlow.Validation.traverseIndexed', 'M:FsFlow.Validation.merge'] },
       { section: 'Path scoping', ids: ['M:FsFlow.Validation.at', 'M:FsFlow.Validation.key', 'M:FsFlow.Validation.index', 'M:FsFlow.Validation.name'] },
     ],
   },
   {
-    outPath: ['fsflow', 'capability.md'],
+    outPath: ['validation', 'builders-validate.md'],
+    title: 'validate { }',
+    description: 'Documentation for the validate { } computation expression.',
+    intro: 'The `validate { }` builder is used for accumulating sibling failures into a structured diagnostics graph.',
+    symbols: [
+      { section: 'Builder', ids: ['P:FsFlow.Builders.validate'] },
+    ]
+  },
+  {
+    outPath: ['result', '_index.md'],
+    title: 'Result Builder',
+    description: 'Documentation for the result { } computation expression.',
+    intro: 'The `result { }` builder provides a fail-fast computation expression for standard F# Result values.',
+    symbols: [
+      { section: 'Builder', ids: ['P:FsFlow.Builders.result'] },
+    ],
+    // Add compatibility alias for old guides
+    alias: 'builders-result.md'
+  },
+  {
+    outPath: ['diagnostics', '_index.md'],
+    title: 'Diagnostics',
+    description: 'Source-documented validation diagnostics graph for FsFlow.',
+    intro: 'The `Diagnostics` type represents a structured graph of validation failures.',
+    symbols: [
+      { section: 'Graph types', ids: ['T:FsFlow.PathSegment', 'T:FsFlow.Path', 'T:FsFlow.Diagnostic`1', 'T:FsFlow.Diagnostics`1'] },
+      { section: 'Module functions', ids: ['M:FsFlow.Diagnostics.empty', 'M:FsFlow.Diagnostics.singleton', 'M:FsFlow.Diagnostics.merge', 'M:FsFlow.Diagnostics.toString', 'M:FsFlow.Diagnostics.flatten'] },
+    ],
+  },
+  {
+    outPath: ['capability', '_index.md'],
     title: 'Capability',
     description: 'Source-documented capabilities and layers for FsFlow.',
     intro:
@@ -65,7 +102,7 @@ const pageSpecs = [
     ],
   },
   {
-    outPath: ['caps-core', 'core.md'],
+    outPath: ['caps-core', '_index.md'],
     title: 'CAPS Core',
     description: 'Source-documented synchronous capability primitives for FsFlow.Caps.Core.',
     intro:
@@ -79,7 +116,7 @@ const pageSpecs = [
     ],
   },
   {
-    outPath: ['caps-console', 'console.md'],
+    outPath: ['caps-console', '_index.md'],
     title: 'CAPS Console',
     description: 'Source-documented console I/O capability for FsFlow.Caps.Console.',
     intro: 'This page shows the source-documented `FsFlow.Caps.Console` surface: the console interface and its helpers.',
@@ -89,7 +126,7 @@ const pageSpecs = [
     ],
   },
   {
-    outPath: ['caps-filesystem', 'filesystem.md'],
+    outPath: ['caps-filesystem', '_index.md'],
     title: 'CAPS FileSystem',
     description: 'Source-documented file system capability for FsFlow.Caps.FileSystem.',
     intro: 'This page shows the source-documented `FsFlow.Caps.FileSystem` surface: the file system interface and its helpers.',
@@ -99,7 +136,7 @@ const pageSpecs = [
     ],
   },
   {
-    outPath: ['caps-http', 'http.md'],
+    outPath: ['caps-http', '_index.md'],
     title: 'CAPS Http',
     description: 'Source-documented HTTP client capability for FsFlow.Caps.Http.',
     intro: 'This page shows the source-documented `FsFlow.Caps.Http` surface: the HTTP interface and its helpers.',
@@ -109,7 +146,7 @@ const pageSpecs = [
     ],
   },
   {
-    outPath: ['caps-process', 'process.md'],
+    outPath: ['caps-process', '_index.md'],
     title: 'CAPS Process',
     description: 'Source-documented external process capability for FsFlow.Caps.Process.',
     intro: 'This page shows the source-documented `FsFlow.Caps.Process` surface: the process runner interface and its helpers.',
@@ -119,7 +156,7 @@ const pageSpecs = [
     ],
   },
   {
-    outPath: ['hosting', 'hosting.md'],
+    outPath: ['hosting', '_index.md'],
     title: 'Hosting',
     description: 'Source-documented .NET host integration for FsFlow.Hosting.',
     intro: 'This page shows the source-documented `FsFlow.Hosting` surface: the IServiceProvider adapters and startup validation.',
@@ -128,7 +165,7 @@ const pageSpecs = [
     ],
   },
   {
-    outPath: ['telemetry', 'telemetry.md'],
+    outPath: ['telemetry', '_index.md'],
     title: 'Telemetry',
     description: 'Source-documented observability integration for FsFlow.Runtime.Telemetry.',
     intro: 'This page shows the source-documented `FsFlow.Runtime.Telemetry` surface: Activity.trace integration.',
@@ -214,11 +251,18 @@ function getQualifiedName(id) {
   let name = id.replace(/^[A-Z]:/, '').split('(')[0];
   if (name.includes('.get_')) name = name.replace('.get_', '.');
   // Remove backticks and type parameter counts (e.g. `1, ``2)
-  return name.replace(/`+[0-9]*/g, '');
+  name = name.replace(/`+[0-9]*/g, '');
+  // Fix F# Module/Extensions suffixes in the display name
+  name = name.replace(/Module$/, '');
+  name = name.replace(/Extensions$/, '');
+  return name;
 }
 
 function getPageName(id) {
-  return `${getQualifiedName(id).toLowerCase().split('.').join('-')}.md`;
+  let name = getQualifiedName(id);
+  // Strip common namespace prefixes for cleaner filenames
+  name = name.replace(/^FsFlow\.(Caps\.)?/, '');
+  return `${name.toLowerCase().split('.').join('-')}.md`;
 }
 
 function renderSymbolPage(id, doc) {
@@ -280,7 +324,6 @@ ${spec.intro}
           // Exact match or prefix match (for overloaded methods)
           let matchId = null;
           
-          // Try various candidate names (handling F# Module/Extensions suffixes automatically)
           const typePrefix = id.split(':')[0];
           const namePart = id.split(':')[1];
           const parts = namePart.split('.');
@@ -321,6 +364,7 @@ ${spec.intro}
           if (doc) {
             const pageName = getPageName(matchId);
             const qualifiedName = getQualifiedName(matchId);
+            // Links are relative to the current outPath
             pageContent += `- [\`${qualifiedName}\`](./${pageName}): ${doc.summary || ''}\n`;
             
             const symbolPagePath = path.join(path.dirname(outPath), pageName);
@@ -334,6 +378,12 @@ ${spec.intro}
       }
       
       fs.writeFileSync(outPath, pageContent, 'utf8');
+      
+      // Handle alias if defined (for relref compatibility)
+      if (spec.alias) {
+          const aliasPath = path.join(path.dirname(outPath), spec.alias);
+          fs.writeFileSync(aliasPath, pageContent, 'utf8');
+      }
     }
   }
 }
