@@ -108,7 +108,6 @@ let probe : {workflowTypeName}<WrongEnv, string, string> =
         let asyncRun1 = Flow.run asyncCaps asyncWorkflow
         let asyncRun2 = Flow.run asyncCaps asyncWorkflow
         let taskRun1 = Flow.run taskCaps taskWorkflow
-
         let taskRun2 = Flow.run taskCaps taskWorkflow
 
         test <@ flowRun1 = Exit.Success "dep-2" @>
@@ -126,15 +125,7 @@ let probe : {workflowTypeName}<WrongEnv, string, string> =
         assertEnvRequestDoesNotCompile "Flow" "flow"
 
     [<Fact>]
-    let ``whole dependency Env requests fail without Needs on asyncFlow`` () =
-        assertEnvRequestDoesNotCompile "AsyncFlow" "asyncFlow"
-
-    [<Fact>]
-    let ``whole dependency Env requests fail without Needs on taskFlow`` () =
-        assertEnvRequestDoesNotCompile "TaskFlow" "taskFlow"
-
-    [<Fact>]
-    let ``projected Env requests bind through flow and asyncFlow core shapes`` () =
+    let ``projected Env requests bind through flow core shapes`` () =
         let environment = ProjectionCaps()
         let plainRequest : Env<ProjectionService, int> = Env (fun service -> service.Number)
         let resultUnitRequest : Env<ProjectionService, Result<int, unit>> = Env (fun service -> Ok service.Number)
@@ -430,25 +421,7 @@ let probe : {workflowTypeName}<WrongEnv, string, string> =
                 return doubled
             }
 
-        let asyncWorkflow : Flow<int, string, int> =
-            flow {
-                let! env = Flow.env
-                let! doubled = Ok(env * 2)
-                do! Ok ()
-                return doubled
-            }
-
-        let taskWorkflow : Flow<int, string, int> =
-            flow {
-                let! env = Flow.env
-                let! doubled = Ok(env * 2)
-                do! Ok ()
-                return doubled
-            }
-
         test <@ Flow.run 21 syncWorkflow = Exit.Success 42 @>
-        test <@ Flow.run 21 asyncWorkflow = Exit.Success 42 @>
-        test <@ Flow.run 21 taskWorkflow = Exit.Success 42 @>
 
     [<Fact>]
     let ``flow computation expression mixes sync async task and result effects in one workflow`` () =
@@ -485,33 +458,9 @@ let probe : {workflowTypeName}<WrongEnv, string, string> =
                 yield! Flow.read _.Prefix
             }
 
-        let asyncProjection : Flow<ReaderEnv, string, string> =
-            flow {
-                yield _.Prefix
-            }
-
-        let asyncYieldFrom : Flow<ReaderEnv, string, string> =
-            flow {
-                yield! Flow.read _.Prefix
-            }
-
-        let taskProjection : Flow<ReaderEnv, string, string> =
-            flow {
-                yield _.Prefix
-            }
-
-        let taskYieldFrom : Flow<ReaderEnv, string, string> =
-            flow {
-                yield! Flow.read _.Prefix
-            }
-
         test <@ Flow.run environment syncValue = Exit.Success 42 @>
         test <@ Flow.run environment syncProjection = Exit.Success "flow" @>
         test <@ Flow.run environment syncYieldFrom = Exit.Success "flow" @>
-        test <@ Flow.run environment asyncProjection = Exit.Success "flow" @>
-        test <@ Flow.run environment asyncYieldFrom = Exit.Success "flow" @>
-        test <@ Flow.run environment taskProjection = Exit.Success "flow" @>
-        test <@ Flow.run environment taskYieldFrom = Exit.Success "flow" @>
 
     [<Fact>]
     let ``flow directly binds and returns Async and Async Result values`` () =
@@ -587,176 +536,6 @@ let probe : {workflowTypeName}<WrongEnv, string, string> =
         test <@ taskReturnFromUnitResult = Exit.Success() @>
         test <@ taskReturnFromResultResult = Exit.Success 42 @>
         test <@ hasAsyncResultReturnFromOverload typeof<FlowBuilder> @>
-
-    [<Fact>]
-    let ``taskFlow directly binds and returns ValueTask and result-bearing ValueTask values`` () =
-        let resultValueTask (value: int) : ValueTask<Result<int, string>> = ValueTask<Result<int, string>>(Ok value)
-
-        let workflow : TaskFlow<int, string, int> =
-            taskFlow {
-                let! env = TaskFlow.env
-                do! ValueTask()
-                let! baseValue = ValueTask<int>(env + 1)
-                let! (adjustedValue : int) = resultValueTask (baseValue * 2)
-                return adjustedValue + 2
-            }
-
-        let valueTaskReturnFrom : TaskFlow<unit, string, unit> =
-            taskFlow { return! ValueTask() }
-
-        let valueTaskReturnFromValue : TaskFlow<unit, string, int> =
-            taskFlow { return! ValueTask<int>(42) }
-
-        let valueTaskReturnFromResult : TaskFlow<unit, string, int> =
-            taskFlow { return! resultValueTask 42 }
-
-        let run flow environment =
-            flow
-            |> TaskFlow.run environment CancellationToken.None
-            |> fun task -> task.GetAwaiter().GetResult()
-
-        let workflowResult = run workflow 19
-        let valueTaskReturnFromUnitResult = run valueTaskReturnFrom ()
-        let valueTaskReturnFromValueResult = run valueTaskReturnFromValue ()
-        let valueTaskReturnFromResultResult = run valueTaskReturnFromResult ()
-
-        test <@ workflowResult = Exit.Success 42 @>
-        test <@ valueTaskReturnFromUnitResult = Exit.Success() @>
-        test <@ valueTaskReturnFromValueResult = Exit.Success 42 @>
-        test <@ valueTaskReturnFromResultResult = Exit.Success 42 @>
-
-    [<Fact>]
-    let ``TaskFlow keeps a Task-backed execution backbone even when lifting ValueTask inputs`` () =
-        let workflow : TaskFlow<int, string, int> =
-            taskFlow {
-                let! env = TaskFlow.env
-                let! value = ValueTask<int>(env + 1)
-                return value * 2
-            }
-
-        let runningTask = TaskFlow.run 20 CancellationToken.None workflow
-        let result = runningTask.GetAwaiter().GetResult()
-
-        test <@ runningTask.GetType() = typeof<Task<Exit<int, string>>> @>
-        test <@ result = Exit.Success 42 @>
-
-    [<Fact>]
-    let ``taskFlow directly binds and returns ColdTask values`` () =
-        let seen = ref CancellationToken.None
-        use cts = new CancellationTokenSource()
-
-        let resultColdTask (value: int) : ColdTask<Result<int, string>> =
-            ColdTask(fun cancellationToken ->
-                seen.Value <- cancellationToken
-                Task.FromResult(Ok value))
-
-        let workflow : TaskFlow<int, string, int> =
-            taskFlow {
-                let! env = TaskFlow.env
-                let! baseValue =
-                    ColdTask(fun cancellationToken ->
-                        seen.Value <- cancellationToken
-                        Task.FromResult(env + 1))
-
-                let! (adjustedValue : int) = resultColdTask (baseValue * 2)
-                return adjustedValue + 2
-            }
-
-        let coldTaskReturnFromValue : TaskFlow<unit, string, int> =
-            taskFlow { return! ColdTask(fun _ -> Task.FromResult 42) }
-
-        let coldTaskReturnFromResult : TaskFlow<unit, string, int> =
-            taskFlow { return! resultColdTask 42 }
-
-        let run flow environment cancellationToken =
-            flow
-            |> TaskFlow.run environment cancellationToken
-            |> fun task -> task.GetAwaiter().GetResult()
-
-        let workflowResult = run workflow 19 cts.Token
-        let coldTaskReturnFromValueResult = run coldTaskReturnFromValue () cts.Token
-        let coldTaskReturnFromResultResult = run coldTaskReturnFromResult () cts.Token
-
-        test <@ workflowResult = Exit.Success 42 @>
-        test <@ coldTaskReturnFromValueResult = Exit.Success 42 @>
-        test <@ coldTaskReturnFromResultResult = Exit.Success 42 @>
-        test <@ seen.Value = cts.Token @>
-
-    [<Fact>]
-    let ``asyncFlow directly binds and returns Task values when task helpers are imported`` () =
-        let resultTask (value: int) : Task<Result<int, string>> = Task.FromResult(Ok value)
-
-        let workflow : AsyncFlow<int, string, int> =
-            asyncFlow {
-                let! env = AsyncFlow.env
-                do! Task.CompletedTask
-                let! baseValue = Task.FromResult(env + 1)
-                let! (adjustedValue : int) = resultTask (baseValue * 2)
-                return adjustedValue + 2
-            }
-
-        let taskReturnFrom : AsyncFlow<unit, string, unit> =
-            asyncFlow { return! Task.CompletedTask }
-
-        let taskReturnFromResult : AsyncFlow<unit, string, int> =
-            asyncFlow {
-                let! (value : int) = resultTask 42
-                return value
-            }
-
-        let workflowResult =
-            workflow
-            |> AsyncFlow.run 19
-            |> Async.RunSynchronously
-
-        let taskReturnFromUnitResult =
-            taskReturnFrom
-            |> AsyncFlow.run ()
-            |> Async.RunSynchronously
-
-        let taskReturnFromResultResult =
-            taskReturnFromResult
-            |> AsyncFlow.run ()
-            |> Async.RunSynchronously
-
-        test <@ workflowResult = Exit.Success 42 @>
-        test <@ taskReturnFromUnitResult = Exit.Success() @>
-        test <@ taskReturnFromResultResult = Exit.Success 42 @>
-
-    [<Fact>]
-    let ``taskFlow directly binds and returns ValueTask values when task helpers are imported`` () =
-        let resultValueTask (value: int) : ValueTask<Result<int, string>> = ValueTask<Result<int, string>>(Ok value)
-
-        let workflow : TaskFlow<int, string, int> =
-            taskFlow {
-                let! env = TaskFlow.env
-                do! ValueTask()
-                let! baseValue = ValueTask<int>(env + 1)
-                let! (adjustedValue : int) = resultValueTask (baseValue * 2)
-                return adjustedValue + 2
-            }
-
-        let valueTaskReturnFrom : TaskFlow<unit, string, unit> =
-            taskFlow { return! ValueTask() }
-
-        let valueTaskReturnFromValue : TaskFlow<unit, string, int> =
-            taskFlow { return! ValueTask<int>(42) }
-
-        let valueTaskReturnFromResult : TaskFlow<unit, string, int> =
-            taskFlow {
-                let! (value : int) = resultValueTask 42
-                return value
-            }
-
-        let workflowResult = TaskFlow.run 19 CancellationToken.None workflow |> fun task -> task.GetAwaiter().GetResult()
-        let valueTaskReturnFromUnitResult = TaskFlow.run () CancellationToken.None valueTaskReturnFrom |> fun task -> task.GetAwaiter().GetResult()
-        let valueTaskReturnFromValueResult = TaskFlow.run () CancellationToken.None valueTaskReturnFromValue |> fun task -> task.GetAwaiter().GetResult()
-        let valueTaskReturnFromResultResult = TaskFlow.run () CancellationToken.None valueTaskReturnFromResult |> fun task -> task.GetAwaiter().GetResult()
-
-        test <@ workflowResult = Exit.Success 42 @>
-        test <@ valueTaskReturnFromUnitResult = Exit.Success() @>
-        test <@ valueTaskReturnFromValueResult = Exit.Success 42 @>
-        test <@ valueTaskReturnFromResultResult = Exit.Success 42 @>
 
     [<Fact>]
     let ``asyncFlow directly binds async values when task helpers are imported`` () =

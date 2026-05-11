@@ -61,28 +61,6 @@ module TestSupport =
         |> Array.distinct
         |> Array.sort
 
-    let asyncFlowBuilderBindAndReturnFromArgumentNames () =
-        typeof<AsyncFlowBuilder>.GetMethods()
-        |> Array.filter (fun methodInfo ->
-            methodInfo.IsPublic
-            && not methodInfo.IsSpecialName
-            && (methodInfo.Name = "Bind" || methodInfo.Name = "ReturnFrom"))
-        |> Array.collect (fun methodInfo -> methodInfo.GetParameters())
-        |> Array.map (fun parameterInfo -> parameterInfo.ParameterType.Name)
-        |> Array.distinct
-        |> Array.sort
-
-    let taskFlowBuilderBindAndReturnFromArgumentNames () =
-        typeof<TaskFlowBuilder>.GetMethods()
-        |> Array.filter (fun methodInfo ->
-            methodInfo.IsPublic
-            && not methodInfo.IsSpecialName
-            && (methodInfo.Name = "Bind" || methodInfo.Name = "ReturnFrom"))
-        |> Array.collect (fun methodInfo -> methodInfo.GetParameters())
-        |> Array.map (fun parameterInfo -> parameterInfo.ParameterType.Name)
-        |> Array.distinct
-        |> Array.sort
-
     let hasAsyncResultReturnFromOverload (builderType: Type) =
         builderType.GetMethods()
         |> Array.exists (fun methodInfo ->

@@ -7,45 +7,6 @@ open System.Threading
 open System.Threading.Tasks
 
 /// <summary>
-/// Represents delayed task work that can observe a runtime cancellation token when it is started.
-/// </summary>
-/// <typeparam name="value">The type of the produced task value.</typeparam>
-type internal ColdTask<'value> =
-    | ColdTask of (CancellationToken -> Task<'value>)
-
-/// <summary>
-/// Core functions for creating and executing cold tasks.
-/// </summary>
-[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-[<RequireQualifiedAccess>]
-module internal ColdTask =
-    let create (operation: CancellationToken -> Task<'value>) : ColdTask<'value> =
-        ColdTask operation
-
-    let fromTaskFactory (factory: unit -> Task<'value>) : ColdTask<'value> =
-        create (fun _ -> factory ())
-
-    let fromTask (startedTask: Task<'value>) : ColdTask<'value> =
-        fromTaskFactory (fun () -> startedTask)
-
-    let fromValueTaskFactory
-        (factory: CancellationToken -> ValueTask<'value>)
-        : ColdTask<'value> =
-        create (fun cancellationToken -> factory cancellationToken |> _.AsTask())
-
-    let fromValueTaskFactoryWithoutCancellation
-        (factory: unit -> ValueTask<'value>)
-        : ColdTask<'value> =
-        create (fun _ -> factory () |> _.AsTask())
-
-    let fromValueTask (startedValueTask: ValueTask<'value>) : ColdTask<'value> =
-        let startedTask = startedValueTask.AsTask()
-        fromTask startedTask
-
-    let run (cancellationToken: CancellationToken) (ColdTask operation: ColdTask<'value>) : Task<'value> =
-        operation cancellationToken
-
-/// <summary>
 /// Core functions for creating, composing, executing, and adapting task flows.
 /// </summary>
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]

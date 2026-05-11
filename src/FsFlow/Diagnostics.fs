@@ -96,7 +96,7 @@ module Diagnostics =
     /// <param name="graph">The diagnostics graph to render.</param>
     /// <returns>A formatted string representation of the graph.</returns>
     let toString (graph: Diagnostics<'error>) : string =
-        let indent level = System.String.replicate (level * 2) " "
+        let indent level = String.replicate (level * 2) " "
 
         let segmentText = function
             | PathSegment.Key key -> key
@@ -123,7 +123,7 @@ module Diagnostics =
             if lines.Count = 0 then
                 $"{indent level}[]"
             else
-                System.String.concat System.Environment.NewLine lines
+                String.concat System.Environment.NewLine lines
 
         renderNode 0 graph
 

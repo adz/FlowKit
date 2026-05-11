@@ -51,27 +51,12 @@ module WorkflowBasicTests =
         let syncWorkflow : Flow<string, int, int> =
             Flow.localEnv String.length syncBase
 
-        let asyncBase : AsyncFlow<int, int, int> =
-            AsyncFlow.read (fun env -> env + 1)
-            |> AsyncFlow.map ((*) 2)
-            |> AsyncFlow.bind (fun value -> AsyncFlow.succeed(value + 3))
-            |> AsyncFlow.mapError String.length
-
-        let asyncWorkflow : AsyncFlow<string, int, int> =
-            AsyncFlow.localEnv String.length asyncBase
-
         let syncResult = Flow.run "flowkit" syncWorkflow
 
-        let asyncResult =
-            asyncWorkflow
-            |> AsyncFlow.run "flowkit"
-            |> Async.RunSynchronously
-
         test <@ syncResult = Exit.Success 19 @>
-        test <@ asyncResult = Exit.Success 19 @>
 
     [<Fact>]
-    let ``flow families expose normalized constructors operators and fallback helpers`` () =
+    let ``flow family exposes normalized constructors operators and fallback helpers`` () =
         let syncOk = Flow.ok 41
         let syncAlias = Flow.succeed 41
         let syncError = Flow.error "missing"
@@ -101,81 +86,6 @@ module WorkflowBasicTests =
             Flow.orElseWith (fun (error: string) -> Flow.ok error.Length) syncError
             |> Flow.run ()
 
-        let asyncOk = AsyncFlow.ok 41
-        let asyncAlias = AsyncFlow.succeed 41
-        let asyncError = AsyncFlow.error "missing"
-        let asyncErrorAlias = AsyncFlow.fail "missing"
-
-        let asyncMapped =
-            AsyncFlow.(<!>) ((+) 1) asyncOk
-            |> AsyncFlow.run ()
-            |> Async.RunSynchronously
-
-        let asyncApplied =
-            AsyncFlow.(<*>) (AsyncFlow.ok ((+) 1)) asyncOk
-            |> AsyncFlow.run ()
-            |> Async.RunSynchronously
-
-        let asyncMapped3 =
-            AsyncFlow.map3 (fun left middle right -> left + middle + right) (AsyncFlow.ok 1) (AsyncFlow.ok 2) (AsyncFlow.ok 3)
-            |> AsyncFlow.run ()
-            |> Async.RunSynchronously
-
-        let asyncIgnored =
-            AsyncFlow.ignore asyncOk
-            |> AsyncFlow.run ()
-            |> Async.RunSynchronously
-
-        let asyncBound =
-            AsyncFlow.(>>=) asyncOk (fun value -> AsyncFlow.ok (value + 1))
-            |> AsyncFlow.run ()
-            |> Async.RunSynchronously
-
-        let asyncRecovered =
-            AsyncFlow.orElseWith (fun (error: string) -> AsyncFlow.ok error.Length) asyncError
-            |> AsyncFlow.run ()
-            |> Async.RunSynchronously
-
-        let asyncOkResult = AsyncFlow.run () asyncOk |> Async.RunSynchronously
-        let asyncAliasResult = AsyncFlow.run () asyncAlias |> Async.RunSynchronously
-        let asyncErrorResult = AsyncFlow.run () asyncError |> Async.RunSynchronously
-        let asyncErrorAliasResult = AsyncFlow.run () asyncErrorAlias |> Async.RunSynchronously
-
-        let taskOk = TaskFlow.ok 41
-        let taskAlias = TaskFlow.succeed 41
-        let taskError = TaskFlow.error "missing"
-        let taskErrorAlias = TaskFlow.fail "missing"
-
-        let taskMapped =
-            TaskFlow.(<!>) ((+) 1) taskOk
-            |> TaskFlow.run () CancellationToken.None
-            |> fun task -> task.GetAwaiter().GetResult()
-
-        let taskApplied =
-            TaskFlow.(<*>) (TaskFlow.ok ((+) 1)) taskOk
-            |> TaskFlow.run () CancellationToken.None
-            |> fun task -> task.GetAwaiter().GetResult()
-
-        let taskMapped3 =
-            TaskFlow.map3 (fun left middle right -> left + middle + right) (TaskFlow.ok 1) (TaskFlow.ok 2) (TaskFlow.ok 3)
-            |> TaskFlow.run () CancellationToken.None
-            |> fun task -> task.GetAwaiter().GetResult()
-
-        let taskIgnored =
-            TaskFlow.ignore taskOk
-            |> TaskFlow.run () CancellationToken.None
-            |> fun task -> task.GetAwaiter().GetResult()
-
-        let taskBound =
-            TaskFlow.(>>=) taskOk (fun value -> TaskFlow.ok (value + 1))
-            |> TaskFlow.run () CancellationToken.None
-            |> fun task -> task.GetAwaiter().GetResult()
-
-        let taskRecovered =
-            TaskFlow.orElseWith (fun (error: string) -> TaskFlow.ok error.Length) taskError
-            |> TaskFlow.run () CancellationToken.None
-            |> fun task -> task.GetAwaiter().GetResult()
-
         test <@ Flow.run () syncOk = Flow.run () syncAlias @>
         test <@ Flow.run () syncError = Flow.run () syncErrorAlias @>
         test <@ syncMapped = Exit.Success 42 @>
@@ -184,22 +94,6 @@ module WorkflowBasicTests =
         test <@ syncIgnored = Exit.Success () @>
         test <@ syncBound = Exit.Success 42 @>
         test <@ syncRecovered = Exit.Success 7 @>
-        test <@ asyncOkResult = asyncAliasResult @>
-        test <@ asyncErrorResult = asyncErrorAliasResult @>
-        test <@ asyncMapped = Exit.Success 42 @>
-        test <@ asyncApplied = Exit.Success 42 @>
-        test <@ asyncMapped3 = Exit.Success 6 @>
-        test <@ asyncIgnored = Exit.Success () @>
-        test <@ asyncBound = Exit.Success 42 @>
-        test <@ asyncRecovered = Exit.Success 7 @>
-        test <@ (TaskFlow.run () CancellationToken.None taskOk |> fun task -> task.GetAwaiter().GetResult()) = (TaskFlow.run () CancellationToken.None taskAlias |> fun task -> task.GetAwaiter().GetResult()) @>
-        test <@ (TaskFlow.run () CancellationToken.None taskError |> fun task -> task.GetAwaiter().GetResult()) = (TaskFlow.run () CancellationToken.None taskErrorAlias |> fun task -> task.GetAwaiter().GetResult()) @>
-        test <@ taskMapped = Exit.Success 42 @>
-        test <@ taskApplied = Exit.Success 42 @>
-        test <@ taskMapped3 = Exit.Success 6 @>
-        test <@ taskIgnored = Exit.Success () @>
-        test <@ taskBound = Exit.Success 42 @>
-        test <@ taskRecovered = Exit.Success 7 @>
 
     [<Fact>]
     let ``Runnable example docs are generated from executable example projects`` () =
@@ -221,42 +115,40 @@ module WorkflowBasicTests =
                 File.Delete generatedPath
 
     [<Fact>]
-    let ``TaskFlow delay reruns from scratch`` () =
+    let ``Flow delay reruns from scratch even for async work`` () =
         let runs = ref 0
 
-        let workflow : TaskFlow<unit, string, int> =
-            TaskFlow.delay(fun () ->
+        let workflow : Flow<unit, string, int> =
+            Flow.delay(fun () ->
                 runs.Value <- runs.Value + 1
-                TaskFlow.succeed runs.Value)
+                Flow.succeed runs.Value)
 
         let runOnce () =
             workflow
-            |> TaskFlow.run () CancellationToken.None
-            |> fun task -> task.GetAwaiter().GetResult()
+            |> Flow.run ()
 
         test <@ runOnce () = Exit.Success 1 @>
         test <@ runOnce () = Exit.Success 2 @>
 
     [<Fact>]
-    let ``shared combinators preserve task environment and error semantics`` () =
-        let baseWorkflow : TaskFlow<int, int, int> =
-            TaskFlow.read (fun env -> env + 1)
-            |> TaskFlow.map ((*) 2)
-            |> TaskFlow.bind (fun value -> TaskFlow.succeed(value + 3))
-            |> TaskFlow.mapError String.length
+    let ``shared combinators preserve environment and error semantics`` () =
+        let baseWorkflow : Flow<int, int, int> =
+            Flow.read (fun env -> env + 1)
+            |> Flow.map ((*) 2)
+            |> Flow.bind (fun value -> Flow.succeed(value + 3))
+            |> Flow.mapError String.length
 
-        let workflow : TaskFlow<string, int, int> =
-            TaskFlow.localEnv String.length baseWorkflow
+        let workflow : Flow<string, int, int> =
+            Flow.localEnv String.length baseWorkflow
 
         let result =
             workflow
-            |> TaskFlow.run "flowkit" CancellationToken.None
-            |> fun task -> task.GetAwaiter().GetResult()
+            |> Flow.run "flowkit"
 
         test <@ result = Exit.Success 19 @>
 
     [<Fact>]
-    let ``TaskFlow runtime context splits runtime services from app dependencies`` () =
+    let ``Flow runtime context splits runtime services from app dependencies`` () =
         let runtime = { RuntimePrefix = "rt:"; Seen = ResizeArray() }
 
         let app =
@@ -267,7 +159,7 @@ module WorkflowBasicTests =
 
         let context = RuntimeContext.create runtime app CancellationToken.None
 
-        let workflow : TaskFlow<RuntimeContext<RuntimeServices, AppDependencies>, string, string> =
+        let workflow : Flow<RuntimeContext<RuntimeServices, AppDependencies>, string, string> =
             flow {
                 let! context = Flow.env
                 let prefix = context.Runtime.RuntimePrefix
@@ -275,40 +167,13 @@ module WorkflowBasicTests =
                 runtime.Seen.Add $"value={value}"
                 return $"{prefix}{value}"
             }
-            |> TaskFlow.fromFlow
 
         let result =
             workflow
-            |> TaskFlow.runContext context
-            |> fun task -> task.GetAwaiter().GetResult()
+            |> Flow.run context
 
         test <@ result = Exit.Success "rt:41" @>
         test <@ List.ofSeq runtime.Seen = [ "value=41" ] @>
-
-    [<Fact>]
-    let ``TaskFlowSpec runs a built workflow against the combined runtime context`` () =
-        let runtime = { RuntimePrefix = "spec:"; Seen = ResizeArray() }
-
-        let app =
-            { DeviceClient =
-                  { new IDeviceClient with
-                      member _.Name = "spec-client" }
-              Value = 7 }
-
-        let spec =
-            TaskFlowSpec.create runtime app (fun () ->
-                flow {
-                    let! context = Flow.env
-                    return $"{context.Runtime.RuntimePrefix}{context.Environment.Value}"
-                }
-                |> TaskFlow.fromFlow)
-
-        let result =
-            spec
-            |> TaskFlowSpec.run CancellationToken.None
-            |> fun task -> task.GetAwaiter().GetResult()
-
-        test <@ result = Exit.Success "spec:7" @>
 
     [<Fact>]
     let ``TaskFlow layers and capability helpers compose`` () =
@@ -352,12 +217,12 @@ module WorkflowBasicTests =
             Capability.serviceFromProvider<IDeviceClient>
             |> Flow.run (RecordingServiceProvider(typeof<string>, "nope") :> IServiceProvider)
 
-        let flowCapability : Flow<AppDependencies, string, IDeviceClient> =
+        let flowCapability : Flow<RuntimeContext<RuntimeServices, AppDependencies>, string, IDeviceClient> =
             Capability.service _.DeviceClient
 
         let flowCapabilityResult =
             flowCapability
-            |> Flow.run app
+            |> Flow.run (RuntimeContext.create runtime app CancellationToken.None)
 
         let flowLayerWorkflow : Flow<AppDependencies, string, string> =
             flow {
@@ -392,28 +257,6 @@ module WorkflowBasicTests =
         test <@ Flow.run () failWorkflow = Exit.Failure (Cause.Fail "error") @>
 
     [<Fact>]
-    let ``AsyncFlow traverse and sequence work as expected`` () =
-        let values = [ 1; 2; 3 ]
-        let workflow = values |> AsyncFlow.traverse (fun v -> AsyncFlow.succeed (v * 2))
-        let result = AsyncFlow.run () workflow |> Async.RunSynchronously
-        test <@ result = Exit.Success [ 2; 4; 6 ] @>
-
-        let flows = [ AsyncFlow.succeed 1; AsyncFlow.succeed 2 ]
-        let sequenceResult = AsyncFlow.run () (AsyncFlow.sequence flows) |> Async.RunSynchronously
-        test <@ sequenceResult = Exit.Success [ 1; 2 ] @>
-
-    [<Fact>]
-    let ``TaskFlow traverse and sequence work as expected`` () =
-        let values = [ 1; 2; 3 ]
-        let workflow = values |> TaskFlow.traverse (fun v -> TaskFlow.succeed (v * 2))
-        let result = TaskFlow.run () CancellationToken.None workflow |> fun t -> t.GetAwaiter().GetResult()
-        test <@ result = Exit.Success [ 2; 4; 6 ] @>
-
-        let flows = [ TaskFlow.succeed 1; TaskFlow.succeed 2 ]
-        let sequenceResult = TaskFlow.run () CancellationToken.None (TaskFlow.sequence flows) |> fun t -> t.GetAwaiter().GetResult()
-        test <@ sequenceResult = Exit.Success [ 1; 2 ] @>
-
-    [<Fact>]
     let ``flow builder overloads stay aligned with the Fable 5 mapping`` () =
         let publicMethods = publicInstanceMethodNames typeof<FlowBuilder>
         let argumentTypeNames = flowBuilderBindAndReturnFromArgumentNames ()
@@ -427,22 +270,6 @@ module WorkflowBasicTests =
 
     [<Fact>]
     let ``flow lives in FsFlow and composes sync flows`` () =
-        let workflow : Flow<int, string, int> =
-            flow {
-                let! env = Flow.env
-                let! baseValue = Flow.succeed(env + 1)
-                return baseValue * 2
-            }
-
-        let result =
-            workflow
-            |> Flow.run 20
-
-        test <@ typeof<FlowBuilder>.Namespace = "FsFlow" @>
-        test <@ result = Exit.Success 42 @>
-
-    [<Fact>]
-    let ``flow lives in FsFlow and composes async flows`` () =
         let workflow : Flow<int, string, int> =
             flow {
                 let! env = Flow.env

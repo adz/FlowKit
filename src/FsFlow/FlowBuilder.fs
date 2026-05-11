@@ -104,6 +104,65 @@ module private FlowBuilderRuntime =
             #endif
         )
 
+    let inline fromValueTask<'env, 'error, 'value> (operation: ValueTask<'value>) : Flow<'env, 'error, 'value> =
+        Flow(fun _ cancellationToken ->
+            #if FABLE_COMPILER
+            async {
+                let! value = operation.AsTask() |> Async.AwaitTask
+                return Exit.Success value
+            }
+            #else
+            ValueTask<Exit<'value, 'error>>(
+                task {
+                    if cancellationToken.IsCancellationRequested then
+                        return Exit.Failure Cause.Interrupt
+                    else
+                        let! value = operation
+                        return Exit.Success value
+                })
+            #endif
+        )
+
+    let inline fromValueTaskResult<'env, 'error, 'value>
+        (operation: ValueTask<Result<'value, 'error>>)
+        : Flow<'env, 'error, 'value> =
+        Flow(fun _ cancellationToken ->
+            #if FABLE_COMPILER
+            async {
+                let! result = operation.AsTask() |> Async.AwaitTask
+                return Exit.fromResult result
+            }
+            #else
+            ValueTask<Exit<'value, 'error>>(
+                task {
+                    if cancellationToken.IsCancellationRequested then
+                        return Exit.Failure Cause.Interrupt
+                    else
+                        let! result = operation
+                        return Exit.fromResult result
+                })
+            #endif
+        )
+
+    let inline fromValueTaskUnit<'env, 'error> (operation: ValueTask) : Flow<'env, 'error, unit> =
+        Flow(fun _ cancellationToken ->
+            #if FABLE_COMPILER
+            async {
+                do! operation.AsTask() |> Async.AwaitTask
+                return Exit.Success ()
+            }
+            #else
+            ValueTask<Exit<unit, 'error>>(
+                task {
+                    if cancellationToken.IsCancellationRequested then
+                        return Exit.Failure Cause.Interrupt
+                    else
+                        do! operation
+                        return Exit.Success ()
+                })
+            #endif
+        )
+
 type FlowBuilder() =
     member _.Return(value: 'value) : Flow<'env, 'error, 'value> =
         Flow.ok value
@@ -132,6 +191,15 @@ type FlowBuilder() =
     member _.YieldFrom(operation: Task) : Flow<'env, 'error, unit> =
         FlowBuilderRuntime.fromTaskUnit operation
 
+    member _.YieldFrom(operation: ValueTask<'value>) : Flow<'env, 'error, 'value> =
+        FlowBuilderRuntime.fromValueTask operation
+
+    member _.YieldFrom(operation: ValueTask<Result<'value, 'error>>) : Flow<'env, 'error, 'value> =
+        FlowBuilderRuntime.fromValueTaskResult operation
+
+    member _.YieldFrom(operation: ValueTask) : Flow<'env, 'error, unit> =
+        FlowBuilderRuntime.fromValueTaskUnit operation
+
     member _.ReturnFrom(flow: Flow<'env, 'error, 'value>) : Flow<'env, 'error, 'value> =
         flow
 
@@ -149,6 +217,15 @@ type FlowBuilder() =
 
     member _.ReturnFrom(operation: Task) : Flow<'env, 'error, unit> =
         FlowBuilderRuntime.fromTaskUnit operation
+
+    member _.ReturnFrom(operation: ValueTask<'value>) : Flow<'env, 'error, 'value> =
+        FlowBuilderRuntime.fromValueTask operation
+
+    member _.ReturnFrom(operation: ValueTask<Result<'value, 'error>>) : Flow<'env, 'error, 'value> =
+        FlowBuilderRuntime.fromValueTaskResult operation
+
+    member _.ReturnFrom(operation: ValueTask) : Flow<'env, 'error, unit> =
+        FlowBuilderRuntime.fromValueTaskUnit operation
 
     member _.ReturnFrom(result: Result<'value, 'error>) : Flow<'env, 'error, 'value> =
         FlowBuilderRuntime.fromResult result
@@ -216,6 +293,33 @@ type FlowBuilder() =
         ) : Flow<'env, 'error, 'next> =
         operation
         |> FlowBuilderRuntime.fromTaskUnit
+        |> Flow.bind binder
+
+    member _.Bind
+        (
+            operation: ValueTask<'value>,
+            binder: 'value -> Flow<'env, 'error, 'next>
+        ) : Flow<'env, 'error, 'next> =
+        operation
+        |> FlowBuilderRuntime.fromValueTask
+        |> Flow.bind binder
+
+    member _.Bind
+        (
+            operation: ValueTask<Result<'value, 'error>>,
+            binder: 'value -> Flow<'env, 'error, 'next>
+        ) : Flow<'env, 'error, 'next> =
+        operation
+        |> FlowBuilderRuntime.fromValueTaskResult
+        |> Flow.bind binder
+
+    member _.Bind
+        (
+            operation: ValueTask,
+            binder: unit -> Flow<'env, 'error, 'next>
+        ) : Flow<'env, 'error, 'next> =
+        operation
+        |> FlowBuilderRuntime.fromValueTaskUnit
         |> Flow.bind binder
 
     member _.Bind
@@ -341,6 +445,52 @@ type FlowBuilder() =
             |> FlowBuilderRuntime.fromTaskUnit
             |> Flow.bind binder
             |> FlowBuilderRuntime.run environment cancellationToken)
+
+    member _.Bind
+        (
+            request: Env<'dep, ValueTask<'value>>,
+            binder: 'value -> Flow<'env, 'error, 'next>
+        ) : Flow<'env, 'error, 'next>
+        when 'env :> Needs<'dep> =
+        Flow(fun environment cancellationToken ->
+            let dependency = (environment :> Needs<'dep>).Dep
+            let (Env project) = request
+
+            project dependency
+            |> FlowBuilderRuntime.fromValueTask
+            |> Flow.bind binder
+            |> FlowBuilderRuntime.run environment cancellationToken)
+
+    member _.Bind
+        (
+            request: Env<'dep, ValueTask<Result<'value, 'error>>>,
+            binder: 'value -> Flow<'env, 'error, 'next>
+        ) : Flow<'env, 'error, 'next>
+        when 'env :> Needs<'dep> =
+        Flow(fun environment cancellationToken ->
+            let dependency = (environment :> Needs<'dep>).Dep
+            let (Env project) = request
+
+            project dependency
+            |> FlowBuilderRuntime.fromValueTaskResult
+            |> Flow.bind binder
+            |> FlowBuilderRuntime.run environment cancellationToken)
+
+    member _.Bind
+        (
+            request: Env<'dep, ValueTask>,
+            binder: unit -> Flow<'env, 'error, 'next>
+        ) : Flow<'env, 'error, 'next>
+        when 'env :> Needs<'dep> =
+        Flow(fun environment cancellationToken ->
+            let dependency = (environment :> Needs<'dep>).Dep
+            let (Env project) = request
+
+            project dependency
+            |> FlowBuilderRuntime.fromValueTaskUnit
+            |> Flow.bind binder
+            |> FlowBuilderRuntime.run environment cancellationToken)
+
 
     member _.Bind
         (
