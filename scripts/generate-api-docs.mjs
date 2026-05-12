@@ -24,8 +24,49 @@ const pageSpecs = [
       { section: 'Module functions', ids: ['M:FsFlow.Flow.run', 'M:FsFlow.Flow.ok', 'M:FsFlow.Flow.error', 'M:FsFlow.Flow.succeed', 'M:FsFlow.Flow.value', 'M:FsFlow.Flow.fail', 'M:FsFlow.Flow.fromResult', 'M:FsFlow.Flow.fromOption', 'M:FsFlow.Flow.fromValueOption', 'M:FsFlow.Flow.orElseFlow', 'M:FsFlow.Flow.env', 'M:FsFlow.Flow.read', 'M:FsFlow.Flow.map', 'M:FsFlow.Flow.bind', 'M:FsFlow.Flow.tap', 'M:FsFlow.Flow.tapError', 'M:FsFlow.Flow.mapError', 'M:FsFlow.Flow.catch', 'M:FsFlow.Flow.orElseWith', 'M:FsFlow.Flow.orElse', 'M:FsFlow.Flow.zip', 'M:FsFlow.Flow.map2', 'M:FsFlow.Flow.map3', 'M:FsFlow.Flow.apply', 'M:FsFlow.Flow.ignore', 'M:FsFlow.Flow.localEnv', 'M:FsFlow.Flow.provideLayer', 'M:FsFlow.Flow.delay', 'M:FsFlow.Flow.traverse', 'M:FsFlow.Flow.sequence'] },
       { section: 'Concurrency', ids: ['T:FsFlow.Fiber`2', 'M:FsFlow.Flow.fork', 'M:FsFlow.Flow.join', 'M:FsFlow.Flow.interrupt'] },
       { section: 'Parallel orchestration', ids: ['M:FsFlow.Flow.zipPar', 'M:FsFlow.Flow.race'] },
-      { section: 'Scheduling', ids: ['T:FsFlow.Schedule`3', 'M:FsFlow.Schedule.recurs', 'M:FsFlow.Schedule.spaced', 'M:FsFlow.Schedule.exponential', 'M:FsFlow.Schedule.jittered', 'M:FsFlow.FlowScheduleExtensions.Flow`3.Retry.Static', 'M:FsFlow.FlowScheduleExtensions.Flow`3.Repeat.Static'] },
     ],
+  },
+  {
+    outPath: ['schedule', '_index.md'],
+    title: 'Schedule',
+    description: 'Source-documented retry and repeat logic for FsFlow.',
+    intro: 'The `Schedule` module provides a DSL for describing execution policies.',
+    symbols: [
+      { section: 'Core type', ids: ['T:FsFlow.Schedule`3'] },
+      { section: 'Module functions', ids: ['M:FsFlow.Schedule.recurs', 'M:FsFlow.Schedule.spaced', 'M:FsFlow.Schedule.exponential', 'M:FsFlow.Schedule.jittered'] },
+      { section: 'Flow extensions', ids: ['M:FsFlow.FlowScheduleExtensions.Flow`3.Retry.Static', 'M:FsFlow.FlowScheduleExtensions.Flow`3.Repeat.Static'] },
+    ]
+  },
+  {
+    outPath: ['ref', '_index.md'],
+    title: 'Ref',
+    description: 'Source-documented atomic mutable references for FsFlow.',
+    intro: 'The `Ref` module provides thread-safe mutable state handles.',
+    symbols: [
+      { section: 'Core type', ids: ['T:FsFlow.Ref`1'] },
+      { section: 'Module functions', ids: ['M:FsFlow.Ref.make', 'M:FsFlow.Ref.get', 'M:FsFlow.Ref.set', 'M:FsFlow.Ref.update', 'M:FsFlow.Ref.modify'] },
+    ]
+  },
+  {
+    outPath: ['stm', '_index.md'],
+    title: 'STM',
+    description: 'Source-documented Software Transactional Memory for FsFlow.',
+    intro: 'The `STM` module provides composable atomic transactions.',
+    symbols: [
+      { section: 'Core types', ids: ['T:FsFlow.TRef`1', 'T:FsFlow.STM`1'] },
+      { section: 'Module functions', ids: ['M:FsFlow.TRef.make', 'M:FsFlow.TRef.get', 'M:FsFlow.TRef.set', 'M:FsFlow.TRef.update', 'M:FsFlow.STM.atomically'] },
+      { section: 'Builder', ids: ['P:FsFlow.StmBuilders.stm'] },
+    ]
+  },
+  {
+    outPath: ['stream', '_index.md'],
+    title: 'Stream',
+    description: 'Source-documented effectful streams for FsFlow.',
+    intro: 'The `FlowStream` module provides asynchronous, pull-based streams.',
+    symbols: [
+      { section: 'Core type', ids: ['T:FsFlow.FlowStream`3'] },
+      { section: 'Module functions', ids: ['M:FsFlow.FlowStream.fromSeq', 'M:FsFlow.FlowStream.map', 'M:FsFlow.FlowStream.runForEach'] },
+    ]
   },
   {
     outPath: ['flow', 'builders-flow.md'],

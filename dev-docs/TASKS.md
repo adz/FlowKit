@@ -13,5 +13,5 @@ Keep live product and architecture direction in `dev-docs/PLAN.md`.
 6. [x] Create documentation for `Schedule` (retry and repeat logic) with examples and API details.
 7. [x] Create documentation for `STM` (Software Transactional Memory) with examples and API details.
 8. [x] Create documentation for `Stream` (FlowStream) with examples and API details.
-9. [ ] Complete API Reference: Ensure every module has a page, examples, and function descriptions.
+9. [x] Complete API Reference: Ensure every module has a page, examples, and function descriptions.
 10. [ ] Review and update `BASIC_EXAMPLES.md` and all other `.md` files to ensure API consistency and no old patterns.
