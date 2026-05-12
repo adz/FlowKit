@@ -4,229 +4,120 @@ title: Task and Async Interop
 description: Direct binding rules for async and task work in FsFlow.
 ---
 
-
 # Task and Async Interop
 
-This page shows the direct binding surface for async work and helps you choose the right FsFlow family.
+FsFlow provides a single, unified computation expression—**`flow {}`**—that handles synchronous code, F# `Async`, and .NET `Task` interop natively. You don't have to choose between different builders; the same flow can orchestrate all these effect types.
 
-Task-oriented APIs on this page belong to the main `FsFlow` package.
-The core package includes sync, async, and task concepts together.
+## Direct Binds
 
-## The Main Rule
+Inside a `flow {}` block, you can use `let!` to bind many common F# and .NET types directly. FsFlow handles the conversion to its internal execution model automatically.
 
-Choose the boundary shape that matches the runtime shape of the code itself:
+| Type | Outcome |
+| :--- | :--- |
+| `Flow<'env, 'error, 'value>` | Continues with the flow's value. |
+| `Result<'value, 'error>` | Continues on `Ok`, short-circuits on `Error`. |
+| `Async<'value>` | Awaits the async and continues with the value. |
+| `Async<Result<'value, 'error>>` | Awaits the async and handles the Result outcome. |
+| `Task<'value>` | Awaits the task and continues with the value. |
+| `Task<Result<'value, 'error>>` | Awaits the task and handles the Result outcome. |
+| `ValueTask<'value>` | Awaits the value task and continues with the value. |
+| `ValueTask<Result<'value, 'error>>` | Awaits and handles the Result outcome. |
 
-- Flow for synchronous boundaries
-- direct `Async` binding when the computation already uses F#
-- direct `.NET Task` binding when the computation is task-oriented
-
-Use interop to cross boundaries.
-Avoid keeping a task-oriented boundary in Flow just because a helper can be adapted.
-
-Use [`Check`]({{< relref "/reference/check/" >}}) for reusable predicates, [`Check.orError`]({{< relref "/reference/check/m-checkmodule-orerror.md" >}}) for pure failure-to-error bridging,
-[**Guard**]({{< relref "/docs/guard.md" >}}) when the source is already effect-shaped and you want the CE to
-bind the source while preserving its attached error,
-`Result` for fail-fast validation, and [`Validation`]({{< relref "/reference/validation/" >}}) plus [`validate {}`]({{< relref "/reference/validation/builders-validate.md" >}}) when multiple independent failures should accumulate.
-
-## Preferred Style Inside Computation Expressions
-
-Inside [`flow {}`]({{< relref "/reference/flow/builders-flow.md" >}}), prefer direct binding:
+### Example: Mixed Orchestration
 
 ```fsharp
-flow {
-    let! user = loadUser
-    do! validateUser user
-    let! suffix = coldSuffix
-    return user.Name + suffix
-}
-```
+let fetchUser (id: int) : Task<User> = ...
+let validate (user: User) : Result<User, string> = ...
+let saveUser (user: User) : Async<unit> = ...
 
-The builder already binds Result, Flow, `Async`, `Task`, `ValueTask`, and `ColdTask` where supported.
-That means normal docs examples should prefer direct `let!` binding over explicit bridge helpers unless the point of the example is the bridge API itself.
-
-## Direct Binds At A Glance
-
-These are the values you can usually drop directly into `let!` in each builder.
-The option and value-option cases bind directly only when the computation error type is `unit`.
-
-| Builder | Binds directly |
-| --- | --- |
-| `flow {}` | `Flow<'env, 'error, 'value>`, `Result<'value, 'error>`, `option<'value>` when `error = unit`, `voption<'value>` when `error = unit`, `Async<'value>`, `Async<Result<'value, 'error>>`, `Task<'value>`, `Task<Result<'value, 'error>>`, `ValueTask<'value>`, `ValueTask<Result<'value, 'error>>`, `ColdTask<'value>`, `ColdTask<Result<'value, 'error>>` |
-
-### `flow {}`
-
-The builder binds:
-
-- `Flow<'env, 'error, 'value>`
-- `Result<'value, 'error>`
-- `Option<'value>` when the error type is `unit`
-- `ValueOption<'value>` when the error type is `unit`
-
-Use [`flow {}`]({{< relref "/reference/flow/builders-flow.md" >}}) when the body is synchronous.
-Use `<!>` for mapping a pure function over a Result or flow value.
-Use `<*>` only when the function is already inside the same Result or flow shape.
-
-Example:
-
-```fsharp
-let computation : Flow<unit, string, string> =
+let processUser id =
     flow {
-        let! a = async { return "a" }
-        let! b = Task.FromResult "b"
-        return a + b
+        // Bind a .NET Task
+        let! user = fetchUser id
+        
+        // Bind a Result
+        let! validUser = validate user
+        
+        // Bind an F# Async
+        do! saveUser validUser
+        
+        return "Done"
     }
 ```
 
-## When Explicit Lifting Still Matters
+## Option and ValueOption
 
-For some types you only get the direct bind when the computation error type can stay `unit`.
-Use an explicit lift when you want to choose the error value yourself.
-
-For example, `option<'value>` can bind directly in a `unit`-error computation:
+`Option<'value>` and `ValueOption<'value>` can also be bound directly, but only if the flow's error type is `unit`.
 
 ```fsharp
-let maybeName : string option = None
+let maybeValue = Some 42
 
-let autoLifted : Flow<unit, unit, string> =
+let workflow : Flow<unit, unit, int> =
     flow {
-        let! name = maybeName
-        return name
+        let! x = maybeValue // Binds directly because error is unit
+        return x
     }
 ```
 
-If you want a typed error such as `"name is required"`, use [`Flow.fromOption`]({{< relref "/reference/flow/m-flow-fromoption.md" >}}) instead:
+If you need a specific error when an option is `None`, use `Flow.fromOption`:
 
 ```fsharp
-let maybeName : string option = None
-
-let typedError : Flow<unit, string, string> =
+let workflow : Flow<unit, string, int> =
     flow {
-        let! name = maybeName |> Flow.fromOption "name is required"
-        return name
+        let! x = maybeValue |> Flow.fromOption "Value was missing"
+        return x
     }
 ```
 
-Another approach to the same shape is to use `Check.orError` directly:
+## Hot vs. Cold Work
+
+Understanding the difference between "Hot" and "Cold" work is crucial for correct execution and cancellation behavior.
+
+### Hot Work (Started Tasks)
+Types like `Task<'T>` and `ValueTask<'T>` are **Hot**. The work might already be running before you bind it. 
+- Rerunning the flow re-awaits the same underlying work.
+- You cannot pass the flow's runtime `CancellationToken` into work that has already started.
+
+### Cold Work (Flows and ColdTask)
+`Flow` itself and the `ColdTask<'T>` type are **Cold**. The work only starts when the flow is executed by `Flow.run`.
+- Rerunning the flow repeats the work from scratch.
+- The runtime `CancellationToken` is automatically passed into the work.
+
+### Using `ColdTask<'T>`
+`ColdTask<'T>` is a simple wrapper: `CancellationToken -> Task<'T>`. It allows you to define task-based work that remains lazy and cancellation-aware.
 
 ```fsharp
-let typedError : Flow<unit, string, string> =
+let loadData path = 
+    ColdTask(fun ct -> File.ReadAllTextAsync(path, ct))
+
+let myFlow =
     flow {
-        let! name = maybeName |> Check.okIfSome |> Check.orError "name is required"
-        return name
-    }
-```
-
-For applicative code, keep the distinction clear: `<!>` lifts a pure function into the same shape as the value, and `<*>` applies a function that has already been lifted.
-
-## When To Choose Flow For Async
-
-Prefer Flow when:
-
-- the outer application code already uses `Async`
-- you want to stay in core `FsFlow`
-- `Async` is the execution model for the computation
-
-## When To Choose Flow For Task
-
-Prefer Flow when:
-
-- the public boundary is `.NET Task`
-- task interop is central to the computation
-- runtime cancellation belongs in execution
-- `Task` is the execution model for the computation.
-
-Use `Flow.Runtime` for shared operational helpers like `sleep`, `timeout`, `retry`, and `useWithAcquireRelease`.
-
-Use `FsFlow.Check` for pure `Result<'value, unit>` validation.
-Use `Check.orError` when you want to turn a unit failure into a domain error.
-Use Validation and [`validate {}`]({{< relref "/reference/validation/builders-validate.md" >}}) when the checks should accumulate.
-
-The builder binds Result directly, so extra bridge calls are only needed when the error value itself needs a different conversion shape.
-When the source itself should bind directly in `flow`, wrap it with [**Guard**]({{< relref "/docs/guard.md" >}}). The source stays visible to the CE; Guard only packages the failure value.
-
-## `ColdTask<'value>`
-
-`ColdTask<'value>` is the delayed task shape used by the task surface:
-
-```fsharp
-CancellationToken -> Task<'value>
-```
-
-Use it when a helper can stay task-based but delayed until the boundary runs.
-
-Example:
-
-```fsharp
-let readAll path : ColdTask<string> =
-    ColdTask(fun ct -> System.IO.File.ReadAllTextAsync(path, ct))
-
-let computation : Flow<unit, string, string> =
-    flow {
-        let! text = readAll "config.json"
+        let! text = loadData "info.txt"
         return text
     }
 ```
 
-## Hot `Task` And `ValueTask` Versus ColdTask
+## Guard: Bridging with Error Packaging
 
-Binding a started `Task<'value>` or `ValueTask<'value>` is not the same as binding a `ColdTask<'value>`.
-
-Started task inputs are hot:
-
-- the work may already be running before the boundary starts
-- rerunning the boundary re-awaits the same started work
-- the current cancellation token cannot be pushed into that work after the fact
-
-ColdTask inputs are cold:
-
-- the work starts when the boundary runs
-- rerunning the boundary starts the work again from scratch
-- the current cancellation token is passed into the ColdTask factory
-
-Use a direct `Task` or `ValueTask` bind when you intentionally want to reuse existing started work.
-
-Use ColdTask when the task helper is part of the boundary effect and can stay delayed, restartable, and cancellation-aware.
-
-Example with a started task:
+When you have a source that already contains an error (like `Async<Result<_,_>>` or `Task<Option<_>>`), and you want to bind it while providing or mapping the error, use **`Guard`**.
 
 ```fsharp
-let started = Task.FromResult 42
+let guardedTask = Guard.Of("missing", Task.FromResult(None))
 
-let computation : Flow<unit, string, int> =
+let myFlow =
     flow {
-        let! value = started
+        let! value = guardedTask // Binds and fails with "missing" if None
         return value
     }
 ```
 
-Example with delayed task work:
+## Summary
 
-```fsharp
-let loadValue : ColdTask<int> =
-    ColdTask(fun cancellationToken ->
-        Task.FromResult 42)
-
-let computation : Flow<unit, string, int> =
-    flow {
-        let! value = loadValue
-        return value
-    }
-```
-
-Read [`docs/SEMANTICS.md`](./SEMANTICS.md) when you need the exact rerun and cancellation behavior.
-
-## Choosing Quickly
-
-Use:
-
-- `Flow` for all execution boundaries. The unified type supports sync, `Async`, and `Task` orchestration.
-- `ColdTask<'value>` when a task helper can stay delayed, rerunnable, and cancellable at run time.
+- Use **`flow {}`** for all application orchestration.
+- Prefer **direct binding** for `Async`, `Task`, and `Result`.
+- Use **`ColdTask`** for task-based logic that should respect flow cancellation, retry, and repetition.
+- Use **`Guard`** to bridge existing error-bearing sources with custom error mapping.
 
 ## Next
 
-Read [`docs/GETTING_STARTED.md`](./GETTING_STARTED.md) for the family overview,
-[`docs/TROUBLESHOOTING_TYPES.md`](./TROUBLESHOOTING_TYPES.md) when the compiler complains,
-and [`docs/SEMANTICS.md`](./SEMANTICS.md) for the exact runtime behavior.
-OTING_TYPES.md`](./TROUBLESHOOTING_TYPES.md) when the compiler complains,
-and [`docs/SEMANTICS.md`](./SEMANTICS.md) for the exact runtime behavior.
-md) for the exact runtime behavior.
+Read [Execution Semantics]({{< relref "/docs/core-model/semantics.md" >}}) for the exact runtime behavior, or [Managing Dependencies]({{< relref "/docs/managing-dependencies/" >}}) for structuring your environment.

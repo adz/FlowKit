@@ -8,7 +8,7 @@ Keep live product and architecture direction in `dev-docs/PLAN.md`.
 1. [x] Fix broken tests in `FsFlow.Tests` (`WorkflowBasicTests` and `WorkflowErrorTests`).
 2. [x] Reorganize documentation structure: Create "Managing Dependencies" section and move Environment Slicing, Capabilities, and Layering there.
 3. [x] Update `Getting Started` to be pedagogical, building up slowly, and show how to 'run' a flow.
-4. [ ] Overhaul `Task and Async Interop` to focus on direct binding and the unified model, removing old patterns.
+4. [x] Overhaul `Task and Async Interop` to focus on direct binding and the unified model, removing old patterns.
 5. [ ] Create documentation for `Ref` (atomic mutable references) with examples and API details.
 6. [ ] Create documentation for `Schedule` (retry and repeat logic) with examples and API details.
 7. [ ] Create documentation for `STM` (Software Transactional Memory) with examples and API details.
