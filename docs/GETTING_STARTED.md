@@ -113,4 +113,4 @@ Flow is one boundary model. Small sync boundaries can be reused inside async or 
 
 - **[Validation & Results]({{< relref "/docs/validation-results/" >}})**: Learn how to collect multiple errors.
 - **[Straightforward Examples]({{< relref "/docs/start/basic-examples/" >}})**: Practical snippets for common tasks.
-- **[Managing Dependencies]({{< relref "/docs/core-model/managing-dependencies/" >}})**: Design environment and capability boundaries.
+- **[Managing Dependencies]({{< relref "/docs/managing-dependencies/" >}})**: Design environment and capability boundaries.

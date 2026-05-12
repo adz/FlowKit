@@ -66,7 +66,7 @@ defaultContentLanguage = "en"
 
   [[module.mounts]]
     source = "../docs/WHY_FSFLOW.md"
-    target = "content/docs/core-model/why-fsflow.md"
+    target = "content/docs/core-model/_index.md"
   [[module.mounts]]
     source = "../docs/SEMANTICS.md"
     target = "content/docs/core-model/semantics.md"
@@ -74,17 +74,18 @@ defaultContentLanguage = "en"
     source = "../docs/TASK_ASYNC_INTEROP.md"
     target = "content/docs/core-model/task-async-interop.md"
   [[module.mounts]]
-    source = "../docs/CAPS.md"
-    target = "content/docs/core-model/managing-dependencies.md"
-  [[module.mounts]]
-    source = "../docs/ENV_SLICING.md"
-    target = "content/docs/core-model/env-slicing.md"
-  [[module.mounts]]
-    source = "../docs/CAPABILITIES.md"
-    target = "content/docs/core-model/capabilities.md"
-  [[module.mounts]]
     source = "../docs/ARCHITECTURAL_STYLES.md"
     target = "content/docs/core-model/architectural-styles.md"
+
+  [[module.mounts]]
+    source = "../docs/CAPS.md"
+    target = "content/docs/managing-dependencies/_index.md"
+  [[module.mounts]]
+    source = "../docs/ENV_SLICING.md"
+    target = "content/docs/managing-dependencies/env-slicing.md"
+  [[module.mounts]]
+    source = "../docs/CAPABILITIES.md"
+    target = "content/docs/managing-dependencies/capabilities.md"
 
   [[module.mounts]]
     source = "../docs/examples/README.md"

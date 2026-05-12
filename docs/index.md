@@ -18,8 +18,8 @@ Write predicate checks once. Keep fail-fast logic in <code>Result</code>, accumu
 <div class="docs-home-meta">
 <a class="docs-chip" href="{{< relref "/docs/validation-results/" >}}">Pure Checks -> Result & Validation</a>
 <a class="docs-chip" href="{{< relref "/docs/start/getting-started.md" >}}">Flow</a>
-<a class="docs-chip" href="{{< relref "/docs/core-model/why-fsflow.md" >}}">Typed failure</a>
-<a class="docs-chip" href="{{< relref "/docs/core-model/env-slicing.md" >}}">Explicit environment</a>
+<a class="docs-chip" href="{{< relref "/docs/core-model/" >}}">Typed failure</a>
+<a class="docs-chip" href="{{< relref "/docs/managing-dependencies/env-slicing.md" >}}">Explicit environment</a>
 <a class="docs-chip" href="{{< relref "/docs/core-model/task-async-interop.md" >}}">Runtime context</a>
 <a class="docs-chip" href="{{< relref "/docs/core-model/semantics.md" >}}">Cold execution semantics</a>
 </div>
