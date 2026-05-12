@@ -6,111 +6,144 @@ description: The fastest path from Check and Result into Flow.
 
 # Getting Started
 
-This page shows the fastest path from plain checks into the right FsFlow family as the execution context grows.
+FsFlow is a toolkit for building robust, Result-based programs in F#. It allows you to scale from simple validation logic to complex, effectful application boundaries using a single, unified mental model.
 
-The core `FsFlow` package contains [`Flow`]({{< relref "/reference/flow/t-flow.md" >}}), [`Check`]({{< relref "/reference/check/t-check.md" >}}), `Result`, [`Validation`]({{< relref "/reference/validation/t-validation.md" >}}), and [`validate {}`]({{< relref "/reference/validation/builders-validate.md" >}}).
-The entire task and async surface is unified in the main package.
+## 1. The Continuum of Logic
 
-## 1. Start With The Continuum
-
-FsFlow is meant to scale one Result-based style through richer boundaries:
+FsFlow is designed around a continuum. You should always use the simplest tool that satisfies your current requirement:
 
 ```text
 Pure Checks -> Result & Validation -> Flow
 ```
 
-Start as small as possible, then lift only when the boundary truly needs more runtime context.
-- **Pure Checks**: Reusable predicates using [`Check`]({{< relref "/reference/check/" >}}) that return unit or a value.
-- **Result & Validation**: Domain logic that either fails fast (`Result`) or collects multiple errors ([`Validation`]({{< relref "/reference/validation/" >}})).
-- **Flow**: The application boundary ([`Flow`]({{< relref "/reference/flow/" >}})) where you need dependencies, async work, or interop.
+- **Pure Checks**: Reusable predicates for basic validation.
+- **Result & Validation**: Domain logic that handles success or failure (either fail-fast or error-accumulating).
+- **Flow**: The application boundary where you need dependencies, async/task interop, logging, or cancellation.
 
-## 2. Start With Checks And Result
+## 2. Start with Checks and Results
 
-Use **Check** for reusable predicates and **Result** for fail-fast domain logic. Open the `FsFlow.Check` module to use helpers like [`notBlank`]({{< relref "/reference/check/m-checkmodule-notblank.md" >}}) directly:
+Most logic starts pure. Use `Check` for reusable predicates and `Result` for domain logic.
 
 ```fsharp
 open FsFlow
 open FsFlow.Check
 
-type ValidationError =
-    | MissingName
+type UserError = | NameTooShort
 
-let requireName (name: string) : Result<string, ValidationError> =
-    name
-    |> notBlank
-    |> orError MissingName
+let validateName (name: string) : Result<string, UserError> =
+    name 
+    |> minLength 3 
+    |> orError NameTooShort
 
-let result = requireName "  "
-// result = Error MissingName
+// This is just a standard F# Result. No magic yet.
+let result = validateName "Ad" // Error NameTooShort
 ```
 
-That keeps the pure validation surface small and easy to reuse.
+## 3. Moving to Flow
 
-## 3. One Flow to Rule Them All
+When your logic needs to interact with the outside world—by calling a database, reading an environment variable, or performing an async task—you move to `Flow`.
 
-[`Flow<'env, 'error, 'value>`]({{< relref "/reference/flow/t-flow.md" >}}) is a **data type** that describes a computation. It isn't tied to a specific async runtime during definition. Instead, it is interpreted by the platform when run:
-
-- On **.NET**, it is interpreted using `ValueTask` for maximum performance.
-- On **Fable**, it is interpreted using `Async` for JavaScript compatibility.
-
-You never have to change your code when moving between these platforms.
-
-## 4. Handling Effects
-
-You can seamlessly lift and bind different kinds of effects inside a [`flow {}`]({{< relref "/reference/flow/builders-flow.md" >}}) block:
+A **`Flow<'env, 'error, 'value>`** is a **description of a computation**. It doesn't do anything until you run it.
 
 ```fsharp
-let compositeFlow =
+let greetUser (id: int) : Flow<unit, UserError, string> =
     flow {
-        // Lift a standard F# Async
-        let! res1 = async { return 42 }
+        // You can bind a Result directly!
+        let! name = validateName "Adam"
         
-        // Lift a .NET Task
-        let! res2 = System.Threading.Tasks.Task.FromResult("Hello")
+        // You can perform Async or Task work directly!
+        let! (data: string) = async { return $"Hello {name}" }
         
-        // Bind another Flow
-        let! res3 = otherFlow
-        
-        return $"{res2} {res1}"
+        return data
     }
 ```
 
-FsFlow handles the conversion to its internal execution model automatically.
+## 4. Execution: Turning Description into Action
 
-## 6. The Execution Boundary: `Effect` and `Exit`
+Because a `Flow` is just a description, you must explicitly **run** it. This is the boundary where your platform-independent logic meets the real world.
 
-When you call `Flow.run`, you get back an **`Effect<'value, 'error>`**.
-An `Effect` is the cross-platform execution handle.
+When you call `Flow.run`, you provide the required **environment** (which can be `()` if none is needed) and a cancellation token is handled for you (defaulting to `CancellationToken.None`).
 
-The **`Exit<'value, 'error>`** type represents the final outcome:
-- `Exit.Success value`
-- `Exit.Failure (Cause.Fail error)`
-- `Exit.Failure Cause.Interrupt` (Canceled)
-- `Exit.Failure (Cause.Die exception)` (Defect)
+### The `Effect` Handle
 
-## 7. Read From The Environment
+`Flow.run` returns an **`Effect<'value, 'error>`**. Think of an `Effect` as the platform-specific execution handle:
 
-Use [`Flow.read`]({{< relref "/reference/flow/m-flow-read.md" >}}) for projections or [`Flow.env`]({{< relref "/reference/flow/m-flow-env.md" >}}) for the whole environment:
+- On **.NET**: An `Effect` is a `ValueTask<Exit<'value, 'error>>`.
+- On **Fable (JS)**: An `Effect` is an `Async<Exit<'value, 'error>>`.
+
+This means on .NET you can `await` it, and on Fable you can `let!` it inside an `async` block.
+
+### The `Exit` Outcome
+
+When the `Effect` completes, it yields an **`Exit<'value, 'error>`**. This type represents every possible outcome of a workflow:
 
 ```fsharp
-type AppEnv = { Prefix: string }
+match exitValue with
+| Exit.Success value -> 
+    printfn "Success: %A" value
 
-let greetWithPrefix input : Flow<AppEnv, ValidationError, string> =
-    flow {
-        let! name = requireName input
-        let! prefix = Flow.read _.Prefix
-        return $"{prefix} {name}"
-    }
+| Exit.Failure (Cause.Fail error) -> 
+    printfn "Expected domain error: %A" error
+
+| Exit.Failure (Cause.Die ex) -> 
+    printfn "Unexpected defect: %s" ex.Message
+
+| Exit.Failure Cause.Interrupt -> 
+    printfn "The workflow was cancelled."
 ```
 
-When application capabilities deserve a name, define a trait set with `Needs<'dep>` and read it with `Env<'dep>`.
+## 5. Running Your First Flow
 
-## 8. Compose Upward, Not Sideways
+Here is how you actually execute a flow in a real application:
 
-Flow is one boundary model. Small sync boundaries can be reused inside async or task-oriented boundaries without any wrapping code.
+```fsharp
+let myFlow = Flow.succeed "Hello World"
 
-## 9. What To Read Next
+// On .NET (in an async context):
+let runOnDotNet () = task {
+    let! exit = Flow.run () myFlow
+    match exit with
+    | Exit.Success s -> printfn "%s" s
+    | _ -> ()
+}
 
-- **[Validation & Results]({{< relref "/docs/validation-results/" >}})**: Learn how to collect multiple errors.
-- **[Straightforward Examples]({{< relref "/docs/start/basic-examples/" >}})**: Practical snippets for common tasks.
-- **[Managing Dependencies]({{< relref "/docs/managing-dependencies/" >}})**: Design environment and capability boundaries.
+// On Fable:
+let runOnFable () = async {
+    let! exit = Flow.run () myFlow
+    match exit with
+    | Exit.Success s -> printfn "%s" s
+    | _ -> ()
+}
+```
+
+## 6. Reading from the Environment
+
+One of Flow's greatest strengths is managing dependencies without manual parameter passing.
+
+```fsharp
+type AppConfig = { ApiUrl: string }
+
+let fetchFromApi : Flow<AppConfig, unit, string> =
+    flow {
+        // Read just the ApiUrl from the environment record
+        let! url = Flow.read _.ApiUrl
+        return $"Fetching from {url}..."
+    }
+
+// Running with an environment
+let config = { ApiUrl = "https://api.example.com" }
+let effect = Flow.run config fetchFromApi
+```
+
+## Summary: The Flow Lifecycle
+
+1.  **Define**: Use `flow {}` to describe your logic and its requirements.
+2.  **Compose**: Combine smaller flows, Results, Tasks, and Asyncs into larger ones.
+3.  **Run**: Call `Flow.run env` at your application's entry point (e.g., a Controller or Main function).
+4.  **Handle**: Match on the `Exit` value to handle success, failure, or defects.
+
+## Next Steps
+
+- **[Managing Dependencies]({{< relref "/docs/managing-dependencies/" >}})**: Learn how to structure your environments using the Record or CAPS patterns.
+- **[Execution Semantics]({{< relref "/docs/core-model/semantics.md" >}})**: Understand short-circuiting, "cold" vs "hot" tasks, and interruption.
+- **[Task and Async Interop]({{< relref "/docs/core-model/task-async-interop.md" >}})**: A deep dive into binding different effect types.
