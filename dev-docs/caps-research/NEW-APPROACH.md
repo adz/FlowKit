@@ -1,7 +1,7 @@
 # New Capability Approach
 
 This document is the current proposed direction after the research in `CAPS_SUMMARY.md` and the older
-structural-accessor plan in `CAPS_PLAN.md`.
+structural-accessor plan.
 
 Short version:
 
@@ -886,4 +886,4 @@ FsFlow forces every app dependency into a capability framework.
 7. Prototype `ConsoleCaps` or `FileSystemCaps` because they prove testability and typed errors quickly.
 8. Prototype `ServiceProviderCaps` because it proves AppHost ergonomics.
 9. Update `CAPS_SUMMARY.md` after the prototype so it reflects cap families as the primary direction.
-10. Keep `CAPS_PLAN.md` and structural-accessor docs as historical research.
+10. Keep the structural-accessor docs as historical research.

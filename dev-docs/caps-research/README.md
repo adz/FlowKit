@@ -13,7 +13,7 @@ research path that led here.
 - `CAPS_RECOMMENDED_MODEL.md` — compressed description of the chosen model and how the parts fit.
 - `CAPS_RECOMMENDED_WALKTHROUGH.md` — step-by-step explanation for a new user.
 - `CAPS_SUMMARY.md` — comparison, recommendation, and 1.0 advice.
-- `CAPS_PLAN.md` — earlier corrected plan based on structural accessors; now historical.
+- Earlier capability-plan draft based on structural accessors; now historical.
 - `CAPS-BOILERPLATE.md` — explicit record/slice baseline.
 - `CAPS-ISERVICEPROVIDER.md` — pragmatic `IServiceProvider` model.
 - `CAPS-SIMPLE-RECORD-SRTP.md` — conservative strict SRTP record model.

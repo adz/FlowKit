@@ -10,7 +10,7 @@ You only need to change the parts that claim **“Trait Aliases solve SRTP verbo
 
 👉 This is the **primary fix** (it currently proposes something F# can’t really do)
 
-### 2. CAPS_PLAN.md
+### 2. Earlier capability-plan draft
 
 👉 Small clarification in “How to add capabilities” and internal explanation
 
@@ -97,7 +97,7 @@ let inline processOrder orderId = taskFlow {
 
 ---
 
-## ✅ 2. CAPS_PLAN.md (small correction)
+## ✅ 2. Earlier capability-plan draft (small correction)
 
 ### Replace this section:
 
