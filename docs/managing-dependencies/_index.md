@@ -60,7 +60,7 @@ Move to the **CAPS Pattern** when:
 
 ## Shared Helpers: The Capability Module
 
-Regardless of which style you choose, FsFlow provides a `Capability` module that works across both. These helpers are polymorphic, meaning they work in `flow {}`, `flow {}`, and `flow {}` without needing specific module prefixes.
+Regardless of which style you choose, FsFlow provides a `Capability` module that works across both. These helpers let you read from the main `Flow` surface and from `RuntimeContext` without needing specific module prefixes.
 
 ```fsharp
 let log message =

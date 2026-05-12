@@ -76,7 +76,7 @@ let workflow : Flow<RuntimeContext<RuntimeServices, AppEnv>, unit, unit> =
 
 ## The Capability Module
 
-The `Capability` module provides helpers that work across all flow types (`Flow`, `Flow`, `Flow`) using a single API.
+The `Capability` module provides helpers for the main `Flow` surface and the `RuntimeContext` split using a single API.
 
 - `Capability.service`: Polymorphic version of `read`.
 - `Capability.runtime`: Polymorphic version of `readRuntime`.

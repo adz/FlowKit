@@ -30,7 +30,7 @@
 
   <meta itemprop="name" content="Execution Semantics">
   <meta itemprop="description" content="Exact execution rules for Flow.">
-  <meta itemprop="wordCount" content="353">
+  <meta itemprop="wordCount" content="767">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Execution Semantics">
   <meta name="twitter:description" content="Exact execution rules for Flow.">
@@ -240,9 +240,17 @@
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#execution-shape">Execution Shape</a></li>
     <li><a href="#success-and-typed-failure">Success and Typed Failure</a></li>
     <li><a href="#short-circuiting-vs-accumulated-validation">Short-Circuiting vs. Accumulated Validation</a></li>
     <li><a href="#execution-is-explicit">Execution Is Explicit</a></li>
+    <li><a href="#why-exit-has-three-failure-causes">Why Exit Has Three Failure Causes</a>
+      <ul>
+        <li><a href="#why-not-just-use-cancellationtoken">Why Not Just Use <code>CancellationToken</code>?</a></li>
+        <li><a href="#how-each-cause-gets-produced">How Each Cause Gets Produced</a></li>
+        <li><a href="#where-the-runtime-helps">Where The Runtime Helps</a></li>
+      </ul>
+    </li>
     <li><a href="#interruption-and-cancellation">Interruption and Cancellation</a></li>
     <li><a href="#environments">Environments</a></li>
     <li><a href="#task-temperature">Task Temperature</a></li>
@@ -273,7 +281,17 @@
 		
 </header>
 	<h1 id="execution-semantics">Execution Semantics</h1>
+<p>This page shows the exact execution rules for <code>Flow</code>, including how a cold program becomes an <code>Effect</code> and resolves to an <code>Exit</code>.</p>
 <p>FsFlow uses a unified <strong><code>Flow&lt;'env, 'error, 'value&gt;</code></strong> model that handles synchronous code, F# <code>Async</code>, and .NET <code>Task</code> interop natively.</p>
+<h2 id="execution-shape">Execution Shape</h2>
+<p>Conceptually, execution is:</p>
+<p><code>Flow -&gt; Effect -&gt; Exit</code></p>
+<p>More precisely:</p>
+<ul>
+<li><code>Flow</code> is the cold program you define.</li>
+<li><code>Effect</code> is the deferred runnable carrier.</li>
+<li><code>Exit</code> is the terminal outcome after execution.</li>
+</ul>
 <h2 id="success-and-typed-failure">Success and Typed Failure</h2>
 <p>Every Flow execution results in an <strong><code>Exit&lt;'value, 'error&gt;</code></strong>:</p>
 <ul>
@@ -291,12 +309,47 @@
 <p>Use the short-circuiting model when later steps depend on earlier values. Use the validation model when independent checks should all run and report back together.</p>
 <h2 id="execution-is-explicit">Execution Is Explicit</h2>
 <p>You run a Flow by calling <code>Flow.run</code>.</p>
+<p><code>Flow.run</code> returns an <strong><code>Effect&lt;'value, 'error&gt;</code></strong>. The platform-specific carrier is defined by the target:</p>
 <ul>
-<li>On <strong>.NET</strong>: <code>Flow.run</code> returns an <strong><code>Effect&lt;'value, 'error&gt;</code></strong> (a <code>ValueTask&lt;Exit&lt;'value, 'error&gt;&gt;</code>).</li>
-<li>On <strong>Fable</strong>: <code>Flow.run</code> returns an <strong><code>Effect&lt;'value, 'error&gt;</code></strong> (an <code>Async&lt;Exit&lt;'value, 'error&gt;&gt;</code>).</li>
+<li>On <strong>.NET</strong>: <code>Effect&lt;'value, 'error&gt;</code> is a <code>ValueTask&lt;Exit&lt;'value, 'error&gt;&gt;</code>.</li>
+<li>On <strong>Fable</strong>: <code>Effect&lt;'value, 'error&gt;</code> is an <code>Async&lt;Exit&lt;'value, 'error&gt;&gt;</code>.</li>
 </ul>
-<p>This design allows FsFlow to remain portable while respecting the execution models of different platforms. The <code>Effect</code> type is the cross-platform execution handle.</p>
+<p>This design allows FsFlow to remain portable while respecting the execution models of different platforms. <code>Effect</code> is the cross-platform execution handle.</p>
 <p>A flow is <strong>cold</strong>: building a flow does not run it. Each call to <code>run</code> executes the logic from scratch.</p>
+<h2 id="why-exit-has-three-failure-causes">Why Exit Has Three Failure Causes</h2>
+<p><code>Exit.Failure</code> carries a <code>Cause&lt;'error&gt;</code> instead of a plain error because not all failures mean the same thing.</p>
+<ul>
+<li><code>Cause.Fail error</code>: An expected domain failure. This is the normal typed error path.</li>
+<li><code>Cause.Interrupt</code>: A cancellation or interruption signal. The runtime uses this when a workflow stops because it was asked to stop.</li>
+<li><code>Cause.Die exception</code>: An unexpected defect or crash. This is for bugs, panic-like failures, and exceptions that were not intentionally translated into a typed error.</li>
+</ul>
+<p>This split matters because one generic failure type cannot answer three different questions:</p>
+<ul>
+<li>Was this a business-rule failure that should participate in normal control flow?</li>
+<li>Was this a cancellation signal that should stop work immediately and usually not be retried?</li>
+<li>Was this a defect that should usually surface as a crash or be logged as an unexpected exception?</li>
+</ul>
+<h3 id="why-not-just-use-cancellationtoken">Why Not Just Use <code>CancellationToken</code>?</h3>
+<p><code>CancellationToken</code> only models interruption. It does not model:</p>
+<ul>
+<li>a typed domain error like <code>Cause.Fail</code></li>
+<li>a defect like <code>Cause.Die</code></li>
+<li>the fact that a flow can fail for reasons other than cancellation</li>
+</ul>
+<p>FsFlow still uses <code>CancellationToken</code> internally and for interoperability, but it converts cancellation into <code>Cause.Interrupt</code> at the edges where the runtime can observe it. That keeps cancellation as a first-class execution outcome instead of burying it inside the ambient .NET token API.</p>
+<h3 id="how-each-cause-gets-produced">How Each Cause Gets Produced</h3>
+<ul>
+<li><code>Cause.Fail</code> is produced by explicit domain failures such as <code>Flow.error</code>, <code>Flow.fail</code>, <code>Flow.fromResult</code>, and validation branches that intentionally turn a rejected condition into a typed error.</li>
+<li><code>Cause.Interrupt</code> is produced when the runtime observes cancellation or interruption, such as <code>Flow.interrupt</code> or a cancellation-aware helper like <code>Flow.Runtime.sleep</code>.</li>
+<li><code>Cause.Die</code> is produced by defects that escape normal typed handling, such as unexpected exceptions. The runtime generally does not invent this value for you; it preserves the defect unless you intentionally catch and translate it.</li>
+</ul>
+<h3 id="where-the-runtime-helps">Where The Runtime Helps</h3>
+<p>The runtime already does some of the translation work:</p>
+<ul>
+<li>cancellation-aware helpers convert <code>OperationCanceledException</code> into <code>Cause.Interrupt</code></li>
+<li>exception-catching helpers like <code>Flow.catch</code> translate exceptions into <code>Cause.Fail</code> when you want them treated as domain errors</li>
+<li><code>Exit.toResult</code> re-raises <code>Cause.Die</code> and <code>Cause.Interrupt</code> when you collapse back into a plain <code>Result</code>, because those are not normal success-path errors</li>
+</ul>
 <h2 id="interruption-and-cancellation">Interruption and Cancellation</h2>
 <p>FsFlow supports algebraic interruption. When a fiber is interrupted (e.g., via <code>Flow.interrupt</code> or a <code>CancellationToken</code> trigger), the flow stops executing and returns <code>Exit.Failure Cause.Interrupt</code>.</p>
 <h2 id="environments">Environments</h2>

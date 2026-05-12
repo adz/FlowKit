@@ -30,7 +30,7 @@
 
   <meta itemprop="name" content="Getting Started">
   <meta itemprop="description" content="The fastest path from Check and Result into Flow.">
-  <meta itemprop="wordCount" content="638">
+  <meta itemprop="wordCount" content="647">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Getting Started">
   <meta name="twitter:description" content="The fastest path from Check and Result into Flow.">
@@ -319,9 +319,10 @@
 <p>When you call <code>Flow.run</code>, you provide the required <strong>environment</strong> (which can be <code>()</code> if none is needed) and a cancellation token is handled for you (defaulting to <code>CancellationToken.None</code>).</p>
 <h3 id="execution-handle-vs-outcome">Execution Handle vs. Outcome</h3>
 <p>Because a <code>Flow</code> is just a description, you must explicitly <strong>run</strong> it. FsFlow handles the platform differences for you:</p>
+<p><code>Flow.run</code> returns an <strong><code>Effect&lt;'value, 'error&gt;</code></strong>. The platform-specific carrier is defined by the target:</p>
 <ul>
-<li>On <strong>.NET</strong>: <code>Flow.run</code> returns an <strong><code>Effect&lt;'value, 'error&gt;</code></strong> (a <code>ValueTask&lt;Exit&lt;'value, 'error&gt;&gt;</code>).</li>
-<li>On <strong>Fable</strong>: <code>Flow.run</code> returns an <strong><code>Effect&lt;'value, 'error&gt;</code></strong> (an <code>Async&lt;Exit&lt;'value, 'error&gt;&gt;</code>).</li>
+<li>On <strong>.NET</strong>: <code>Effect&lt;'value, 'error&gt;</code> is a <code>ValueTask&lt;Exit&lt;'value, 'error&gt;&gt;</code>.</li>
+<li>On <strong>Fable</strong>: <code>Effect&lt;'value, 'error&gt;</code> is an <code>Async&lt;Exit&lt;'value, 'error&gt;&gt;</code>.</li>
 </ul>
 <h3 id="the-exit-outcome">The <code>Exit</code> Outcome</h3>
 <p>The final result of any flow is an <strong><code>Exit&lt;'value, 'error&gt;</code></strong>. This type represents every possible outcome:</p>
