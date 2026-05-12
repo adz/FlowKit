@@ -5,7 +5,7 @@ Keep completed work out of this file.
 Keep settled design decisions in `dev-docs/decisions/`.
 Keep live product and architecture direction in `dev-docs/PLAN.md`.
 
-1. [ ] Fix broken tests in `FsFlow.Tests` (`WorkflowBasicTests` and `WorkflowErrorTests`).
+1. [x] Fix broken tests in `FsFlow.Tests` (`WorkflowBasicTests` and `WorkflowErrorTests`).
 2. [ ] Reorganize documentation structure: Create "Managing Dependencies" section and move Environment Slicing, Capabilities, and Layering there.
 3. [ ] Update `Getting Started` to be pedagogical, building up slowly, and show how to 'run' a flow.
 4. [ ] Overhaul `Task and Async Interop` to focus on direct binding and the unified model, removing old patterns.

@@ -266,7 +266,7 @@ module WorkflowBasicTests =
         test <@ publicMethods |> Array.contains "YieldFrom" @>
         test <@ publicMethods |> Array.contains "Yield" @>
         test <@ publicMethods |> Array.contains "Run" @>
-        test <@ argumentTypeNames = [| "Env`1"; "Env`2"; "FSharpAsync`1"; "FSharpFunc`2"; "FSharpOption`1"; "FSharpResult`2"; "FSharpValueOption`1"; "Flow`3"; "Task"; "Task`1" |] @>
+        test <@ argumentTypeNames = [| "Env`1"; "Env`2"; "FSharpAsync`1"; "FSharpFunc`2"; "FSharpOption`1"; "FSharpResult`2"; "FSharpValueOption`1"; "Flow`3"; "Task"; "Task`1"; "ValueTask"; "ValueTask`1" |] @>
 
     [<Fact>]
     let ``flow lives in FsFlow and composes sync flows`` () =
