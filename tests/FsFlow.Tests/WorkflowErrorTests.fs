@@ -118,6 +118,72 @@ module WorkflowErrorTests =
         test <@ taskCanceled = Exit.Failure Cause.Interrupt @>
 
     [<Fact>]
+    let ``Defects survive combinators adapters and retry`` () =
+        let defect = InvalidOperationException "boom"
+
+        let mapErrorResult =
+            Flow.die defect
+            |> Flow.mapError String.length
+            |> Flow.runSync ()
+
+        let orElseResult =
+            Flow.die defect
+            |> Flow.orElse (Flow.succeed 99)
+            |> Flow.runSync ()
+
+        let zipResult =
+            Flow.zip (Flow.die defect) (Flow.succeed 42)
+            |> Flow.runSync ()
+
+        let asyncAdapterResult =
+            Flow.die defect
+            |> AsyncFlow.fromFlow
+            |> AsyncFlow.run ()
+            |> Async.RunSynchronously
+
+        let taskAdapterResult =
+            Flow.die defect
+            |> TaskFlow.fromFlow
+            |> TaskFlow.run () CancellationToken.None
+            |> fun task -> task.GetAwaiter().GetResult()
+
+        let retryAttempts = ref 0
+
+        let retryResult =
+            Flow.Retry(
+                Flow.delay (fun () ->
+                retryAttempts.Value <- retryAttempts.Value + 1
+                raise defect),
+                Schedule.recurs 5)
+            |> Flow.runSync ()
+
+        match mapErrorResult with
+        | Exit.Failure (Cause.Die ex) -> test <@ obj.ReferenceEquals(ex, defect) @>
+        | other -> failwithf "Expected defect cause, got %A" other
+
+        match orElseResult with
+        | Exit.Failure (Cause.Die ex) -> test <@ obj.ReferenceEquals(ex, defect) @>
+        | other -> failwithf "Expected defect cause, got %A" other
+
+        match zipResult with
+        | Exit.Failure (Cause.Die ex) -> test <@ obj.ReferenceEquals(ex, defect) @>
+        | other -> failwithf "Expected defect cause, got %A" other
+
+        match asyncAdapterResult with
+        | Exit.Failure (Cause.Die ex) -> test <@ obj.ReferenceEquals(ex, defect) @>
+        | other -> failwithf "Expected defect cause, got %A" other
+
+        match taskAdapterResult with
+        | Exit.Failure (Cause.Die ex) -> test <@ obj.ReferenceEquals(ex, defect) @>
+        | other -> failwithf "Expected defect cause, got %A" other
+
+        match retryResult with
+        | Exit.Failure (Cause.Die ex) -> test <@ obj.ReferenceEquals(ex, defect) @>
+        | other -> failwithf "Expected defect cause, got %A" other
+
+        test <@ retryAttempts.Value = 1 @>
+
+    [<Fact>]
     let ``Check bridges into flow shapes`` () =
         let flowBridge =
             Check.okIf false
