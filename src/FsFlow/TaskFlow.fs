@@ -22,7 +22,13 @@ module internal TaskFlow =
         (cancellationToken: CancellationToken)
         (TaskFlow operation: TaskFlow<'env, 'error, 'value>)
         : Task<Exit<'value, 'error>> =
-        operation environment cancellationToken
+        task {
+            try
+                let! exit = operation environment cancellationToken
+                return exit
+            with error ->
+                return Exit.Failure (EffectFlow.causeOfException error)
+        }
 
     /// <summary>Runs a task flow against a <see cref="T:FsFlow.RuntimeContext`2" /> and its internal cancellation token.</summary>
     /// <param name="context">The <see cref="T:FsFlow.RuntimeContext`2" /> providing services and cancellation.</param>

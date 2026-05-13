@@ -12,7 +12,13 @@ module internal AsyncFlow =
         (environment: 'env)
         (AsyncFlow operation: AsyncFlow<'env, 'error, 'value>)
         : Async<Exit<'value, 'error>> =
-        operation environment
+        async {
+            try
+                let! exit = operation environment
+                return exit
+            with error ->
+                return Exit.Failure (EffectFlow.causeOfException error)
+        }
 
     /// <summary>Converts an async flow into its raw async result shape.</summary>
     let toAsync (environment: 'env) (flow: AsyncFlow<'env, 'error, 'value>) : Async<Exit<'value, 'error>> =

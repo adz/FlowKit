@@ -67,6 +67,57 @@ module WorkflowErrorTests =
         | other -> failwithf "Expected defect cause, got %A" other
 
     [<Fact>]
+    let ``Runtime boundaries classify defects and cancellation`` () =
+        let defect = InvalidOperationException "boom"
+        let canceled = OperationCanceledException "stop"
+
+        let flowDefect =
+            Flow.delay (fun () -> raise defect)
+            |> Flow.runSync ()
+
+        let flowCanceled =
+            Flow.delay (fun () -> raise canceled)
+            |> Flow.runSync ()
+
+        let asyncDefect =
+            AsyncFlow.delay (fun () -> raise defect)
+            |> AsyncFlow.run ()
+            |> Async.RunSynchronously
+
+        let asyncCanceled =
+            AsyncFlow.delay (fun () -> raise canceled)
+            |> AsyncFlow.run ()
+            |> Async.RunSynchronously
+
+        let taskDefect =
+            TaskFlow.delay (fun () -> raise defect)
+            |> TaskFlow.run () CancellationToken.None
+            |> fun task -> task.GetAwaiter().GetResult()
+
+        let taskCanceled =
+            TaskFlow.delay (fun () -> raise canceled)
+            |> TaskFlow.run () CancellationToken.None
+            |> fun task -> task.GetAwaiter().GetResult()
+
+        match flowDefect with
+        | Exit.Failure (Cause.Die ex) -> test <@ obj.ReferenceEquals(ex, defect) @>
+        | other -> failwithf "Expected defect cause, got %A" other
+
+        test <@ flowCanceled = Exit.Failure Cause.Interrupt @>
+
+        match asyncDefect with
+        | Exit.Failure (Cause.Die ex) -> test <@ obj.ReferenceEquals(ex, defect) @>
+        | other -> failwithf "Expected defect cause, got %A" other
+
+        test <@ asyncCanceled = Exit.Failure Cause.Interrupt @>
+
+        match taskDefect with
+        | Exit.Failure (Cause.Die ex) -> test <@ obj.ReferenceEquals(ex, defect) @>
+        | other -> failwithf "Expected defect cause, got %A" other
+
+        test <@ taskCanceled = Exit.Failure Cause.Interrupt @>
+
+    [<Fact>]
     let ``Check bridges into flow shapes`` () =
         let flowBridge =
             Check.okIf false

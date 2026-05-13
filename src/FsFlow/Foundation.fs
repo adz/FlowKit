@@ -46,6 +46,12 @@ module internal OptionFlow =
 
 [<System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)>]
 module EffectFlow =
+    let causeOfException (exn: exn) : Cause<'error> =
+        if exn :? OperationCanceledException then
+            Cause.Interrupt
+        else
+            Cause.Die exn
+
     let ofExit (exit: Exit<'value, 'error>) : Effect<'value, 'error> =
 #if FABLE_COMPILER
         async.Return exit
@@ -64,6 +70,9 @@ module EffectFlow =
 
     let ofDie (exn: exn) : Effect<'value, 'error> =
         ofCause (Cause.Die exn)
+
+    let ofException (exn: exn) : Effect<'value, 'error> =
+        ofCause (causeOfException exn)
 
     let ofInterrupt () : Effect<'value, 'error> =
         ofCause Cause.Interrupt

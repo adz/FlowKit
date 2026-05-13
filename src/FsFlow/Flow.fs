@@ -12,6 +12,29 @@ module Flow =
         : Effect<'value, 'error> =
         FlowInternal.invoke flow environment cancellationToken
 
+    let inline private runEffect
+        (environment: 'env)
+        (cancellationToken: CancellationToken)
+        (flow: Flow<'env, 'error, 'value>)
+        : Effect<'value, 'error> =
+        #if FABLE_COMPILER
+        async {
+            try
+                return! invoke flow environment cancellationToken
+            with error ->
+                return Exit.Failure (EffectFlow.causeOfException error)
+        }
+        #else
+        ValueTask<Exit<'value, 'error>>(
+            task {
+                try
+                    let! exit = invoke flow environment cancellationToken
+                    return exit
+                with error ->
+                    return Exit.Failure (EffectFlow.causeOfException error)
+            })
+        #endif
+
     /// <summary>Creates a flow from an execution outcome.</summary>
     let ofExit (exit: Exit<'value, 'error>) : Flow<'env, 'error, 'value> =
         Flow(fun _ _ -> EffectFlow.ofExit exit)
@@ -21,7 +44,7 @@ module Flow =
 
     /// <summary>Executes a flow with an explicit cancellation token.</summary>
     let runFull (environment: 'env) (cancellationToken: CancellationToken) (flow: Flow<'env, 'error, 'value>) : Effect<'value, 'error> =
-        invoke flow environment cancellationToken
+        runEffect environment cancellationToken flow
 
     /// <summary>Executes a flow with an explicit cancellation token.</summary>
     let runWithToken = runFull
@@ -35,7 +58,7 @@ module Flow =
     /// </code>
     /// </example>
     let run (environment: 'env) (flow: Flow<'env, 'error, 'value>) : Effect<'value, 'error> =
-        invoke flow environment CancellationToken.None
+        runEffect environment CancellationToken.None flow
 
     /// <summary>Creates a successful synchronous flow.</summary>
     let ok (value: 'value) : Flow<'env, 'error, 'value> =
