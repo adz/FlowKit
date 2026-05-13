@@ -41,43 +41,43 @@ module CapsRuntimePatternTests =
         interface ITodoStore with
             member _.Todos = todos
 
-    type ClockCaps =
+    type ClockCapabilities =
         interface
-            inherit Needs<IClock>
+            inherit Requires<IClock>
             abstract Clock : IClock
         end
 
-    type LoggerCaps =
+    type LoggerCapabilities =
         interface
-            inherit Needs<ILogger>
+            inherit Requires<ILogger>
             abstract Logger : ILogger
         end
 
-    type RandomCaps =
+    type RandomCapabilities =
         interface
-            inherit Needs<IRandom>
+            inherit Requires<IRandom>
             abstract Random : IRandom
         end
 
-    type TodoStoreCaps =
+    type TodoStoreCapabilities =
         interface
-            inherit Needs<ITodoStore>
+            inherit Requires<ITodoStore>
             abstract TodoStore : ITodoStore
         end
 
-    type ChooseTodoCaps =
+    type ChooseTodoCapabilities =
         interface
-            inherit Needs<IRandom>
-            inherit Needs<ITodoStore>
+            inherit Requires<IRandom>
+            inherit Requires<ITodoStore>
             abstract Random : IRandom
             abstract TodoStore : ITodoStore
         end
 
-    type AppCaps =
+    type AppCapabilities =
         interface
-            inherit ChooseTodoCaps
-            inherit Needs<IClock>
-            inherit Needs<ILogger>
+            inherit ChooseTodoCapabilities
+            inherit Requires<IClock>
+            inherit Requires<ILogger>
             abstract Clock : IClock
             abstract Logger : ILogger
         end
@@ -86,14 +86,14 @@ module CapsRuntimePatternTests =
         { RandomService: IRandom
           TodoStoreService: ITodoStore }
         with
-            interface ChooseTodoCaps with
+            interface ChooseTodoCapabilities with
                 member x.Random = x.RandomService
                 member x.TodoStore = x.TodoStoreService
 
-            interface Needs<IRandom> with
+            interface Requires<IRandom> with
                 member x.Dep = x.RandomService
 
-            interface Needs<ITodoStore> with
+            interface Requires<ITodoStore> with
                 member x.Dep = x.TodoStoreService
 
     type AppRuntime =
@@ -102,29 +102,29 @@ module CapsRuntimePatternTests =
           RandomService: IRandom
           TodoStoreService: ITodoStore }
         with
-            interface AppCaps with
+            interface AppCapabilities with
                 member x.Clock = x.ClockService
                 member x.Logger = x.LoggerService
                 member x.Random = x.RandomService
                 member x.TodoStore = x.TodoStoreService
 
-            interface Needs<IClock> with
+            interface Requires<IClock> with
                 member x.Dep = x.ClockService
 
-            interface Needs<ILogger> with
+            interface Requires<ILogger> with
                 member x.Dep = x.LoggerService
 
-            interface Needs<IRandom> with
+            interface Requires<IRandom> with
                 member x.Dep = x.RandomService
 
-            interface Needs<ITodoStore> with
+            interface Requires<ITodoStore> with
                 member x.Dep = x.TodoStoreService
 
     type TodoError =
         | EmptyTodoList
 
     [<Fact>]
-    let ``fine-grained caps expose their dependencies through Needs`` () =
+    let ``fine-grained capabilities expose their dependencies through Requires`` () =
         let clock = FixedClock(DateTimeOffset(2026, 5, 9, 12, 30, 0, TimeSpan.Zero))
         let logger = RecordingLogger()
         let random = FixedRandom 1
@@ -140,12 +140,12 @@ module CapsRuntimePatternTests =
             { RandomService = random :> IRandom
               TodoStoreService = todoStore :> ITodoStore }
 
-        let clockNeeds = appRuntime :> Needs<IClock>
-        let loggerNeeds = appRuntime :> Needs<ILogger>
-        let randomNeeds = appRuntime :> Needs<IRandom>
-        let todoStoreNeeds = appRuntime :> Needs<ITodoStore>
-        let testRandomNeeds = chooseTodoRuntime :> Needs<IRandom>
-        let testTodoStoreNeeds = chooseTodoRuntime :> Needs<ITodoStore>
+        let clockNeeds = appRuntime :> Requires<IClock>
+        let loggerNeeds = appRuntime :> Requires<ILogger>
+        let randomNeeds = appRuntime :> Requires<IRandom>
+        let todoStoreNeeds = appRuntime :> Requires<ITodoStore>
+        let testRandomNeeds = chooseTodoRuntime :> Requires<IRandom>
+        let testTodoStoreNeeds = chooseTodoRuntime :> Requires<ITodoStore>
 
         test <@ obj.ReferenceEquals(box clockNeeds.Dep, box clock) @>
         test <@ obj.ReferenceEquals(box loggerNeeds.Dep, box logger) @>
@@ -173,23 +173,23 @@ module CapsRuntimePatternTests =
 
         let chooseTodoFlowForApp : TaskFlow<AppRuntime, TodoError, string option> =
             Flow.read (fun (runtime: AppRuntime) ->
-                let todos = (runtime :> Needs<ITodoStore>).Dep.Todos
+                let todos = (runtime :> Requires<ITodoStore>).Dep.Todos
 
                 match todos with
                 | [] -> None
                 | _ ->
-                    let index = (runtime :> Needs<IRandom>).Dep.NextInt 0 todos.Length
+                    let index = (runtime :> Requires<IRandom>).Dep.NextInt 0 todos.Length
                     Some todos[index])
             |> TaskFlow.fromFlow
 
         let chooseTodoFlowForTest : TaskFlow<ChooseTodoTestRuntime, TodoError, string option> =
             Flow.read (fun (runtime: ChooseTodoTestRuntime) ->
-                let todos = (runtime :> Needs<ITodoStore>).Dep.Todos
+                let todos = (runtime :> Requires<ITodoStore>).Dep.Todos
 
                 match todos with
                 | [] -> None
                 | _ ->
-                    let index = (runtime :> Needs<IRandom>).Dep.NextInt 0 todos.Length
+                    let index = (runtime :> Requires<IRandom>).Dep.NextInt 0 todos.Length
                     Some todos[index])
             |> TaskFlow.fromFlow
 
@@ -219,17 +219,17 @@ module CapsRuntimePatternTests =
 
         let chooseTodoFlow : TaskFlow<AppRuntime, TodoError, string option> =
             Flow.read (fun (runtime: AppRuntime) ->
-                let todos = (runtime :> Needs<ITodoStore>).Dep.Todos
+                let todos = (runtime :> Requires<ITodoStore>).Dep.Todos
 
                 match todos with
                 | [] -> None
                 | _ ->
-                    let index = (runtime :> Needs<IRandom>).Dep.NextInt 0 todos.Length
+                    let index = (runtime :> Requires<IRandom>).Dep.NextInt 0 todos.Length
                     Some todos[index])
             |> TaskFlow.fromFlow
 
-        let _chooseTodoBoundary : TaskFlow<#ChooseTodoCaps, TodoError, string option> = chooseTodoFlow
-        let _appBoundary : TaskFlow<#AppCaps, TodoError, string option> = chooseTodoFlow
+        let _chooseTodoBoundary : TaskFlow<#ChooseTodoCapabilities, TodoError, string option> = chooseTodoFlow
+        let _appBoundary : TaskFlow<#AppCapabilities, TodoError, string option> = chooseTodoFlow
 
         let chooseTodoResult =
             TaskFlow.run appRuntime CancellationToken.None chooseTodoFlow

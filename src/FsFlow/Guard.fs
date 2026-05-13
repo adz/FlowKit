@@ -265,14 +265,14 @@ module internal AsyncFlowBuilderExtensions =
 
         member this.Bind
             (
-                request: Env<'dep, Task>,
+                request: Resolve<'dep, Task>,
                 binder: unit -> AsyncFlow<'env, 'error, 'next>
             ) : AsyncFlow<'env, 'error, 'next>
-            when 'env :> Needs<'dep> =
+            when 'env :> Requires<'dep> =
             AsyncFlow(fun environment ->
                 async {
-                    let dependency = (environment :> Needs<'dep>).Dep
-                    let (Env project) = request
+                    let dependency = (environment :> Requires<'dep>).Dep
+                    let (Resolve project) = request
 
                     return!
                         AsyncFlow.run environment (
@@ -281,14 +281,14 @@ module internal AsyncFlowBuilderExtensions =
 
         member this.Bind
             (
-                request: Env<'dep, Task<'value>>,
+                request: Resolve<'dep, Task<'value>>,
                 binder: 'value -> AsyncFlow<'env, 'error, 'next>
             ) : AsyncFlow<'env, 'error, 'next>
-            when 'env :> Needs<'dep> =
+            when 'env :> Requires<'dep> =
             AsyncFlow(fun environment ->
                 async {
-                    let dependency = (environment :> Needs<'dep>).Dep
-                    let (Env project) = request
+                    let dependency = (environment :> Requires<'dep>).Dep
+                    let (Resolve project) = request
 
                     return!
                         AsyncFlow.run environment (
@@ -297,14 +297,14 @@ module internal AsyncFlowBuilderExtensions =
 
         member this.Bind
             (
-                request: Env<'dep, ValueTask>,
+                request: Resolve<'dep, ValueTask>,
                 binder: unit -> AsyncFlow<'env, 'error, 'next>
             ) : AsyncFlow<'env, 'error, 'next>
-            when 'env :> Needs<'dep> =
+            when 'env :> Requires<'dep> =
             AsyncFlow(fun environment ->
                 async {
-                    let dependency = (environment :> Needs<'dep>).Dep
-                    let (Env project) = request
+                    let dependency = (environment :> Requires<'dep>).Dep
+                    let (Resolve project) = request
 
                     return!
                         AsyncFlow.run environment (
@@ -313,14 +313,14 @@ module internal AsyncFlowBuilderExtensions =
 
         member this.Bind
             (
-                request: Env<'dep, ValueTask<'value>>,
+                request: Resolve<'dep, ValueTask<'value>>,
                 binder: 'value -> AsyncFlow<'env, 'error, 'next>
             ) : AsyncFlow<'env, 'error, 'next>
-            when 'env :> Needs<'dep> =
+            when 'env :> Requires<'dep> =
             AsyncFlow(fun environment ->
                 async {
-                    let dependency = (environment :> Needs<'dep>).Dep
-                    let (Env project) = request
+                    let dependency = (environment :> Requires<'dep>).Dep
+                    let (Resolve project) = request
 
                     return!
                         AsyncFlow.run environment (
@@ -329,14 +329,14 @@ module internal AsyncFlowBuilderExtensions =
 
         member this.Bind
             (
-                request: Env<'dep, Task<Result<'value, 'error>>>,
+                request: Resolve<'dep, Task<Result<'value, 'error>>>,
                 binder: 'value -> AsyncFlow<'env, 'error, 'next>
             ) : AsyncFlow<'env, 'error, 'next>
-            when 'env :> Needs<'dep> =
+            when 'env :> Requires<'dep> =
             AsyncFlow(fun environment ->
                 async {
-                    let dependency = (environment :> Needs<'dep>).Dep
-                    let (Env project) = request
+                    let dependency = (environment :> Requires<'dep>).Dep
+                    let (Resolve project) = request
 
                     return!
                         AsyncFlow.run environment (
@@ -345,14 +345,14 @@ module internal AsyncFlowBuilderExtensions =
 
         member this.Bind
             (
-                request: Env<'dep, ValueTask<Result<'value, 'error>>>,
+                request: Resolve<'dep, ValueTask<Result<'value, 'error>>>,
                 binder: 'value -> AsyncFlow<'env, 'error, 'next>
             ) : AsyncFlow<'env, 'error, 'next>
-            when 'env :> Needs<'dep> =
+            when 'env :> Requires<'dep> =
             AsyncFlow(fun environment ->
                 async {
-                    let dependency = (environment :> Needs<'dep>).Dep
-                    let (Env project) = request
+                    let dependency = (environment :> Requires<'dep>).Dep
+                    let (Resolve project) = request
 
                     return!
                         AsyncFlow.run environment (
@@ -378,14 +378,14 @@ module internal AsyncFlowBuilderExtensions =
 
         member this.Bind
             (
-                request: Env<'dep, ColdTask<'value>>,
+                request: Resolve<'dep, ColdTask<'value>>,
                 binder: 'value -> AsyncFlow<'env, 'error, 'next>
             ) : AsyncFlow<'env, 'error, 'next>
-            when 'env :> Needs<'dep> =
+            when 'env :> Requires<'dep> =
             AsyncFlow(fun environment ->
                 async {
-                    let dependency = (environment :> Needs<'dep>).Dep
-                    let (Env project) = request
+                    let dependency = (environment :> Requires<'dep>).Dep
+                    let (Resolve project) = request
 
                     return!
                         AsyncFlow.run environment (
@@ -394,14 +394,14 @@ module internal AsyncFlowBuilderExtensions =
 
         member this.Bind
             (
-                request: Env<'dep, ColdTask<Result<'value, 'error>>>,
+                request: Resolve<'dep, ColdTask<Result<'value, 'error>>>,
                 binder: 'value -> AsyncFlow<'env, 'error, 'next>
             ) : AsyncFlow<'env, 'error, 'next>
-            when 'env :> Needs<'dep> =
+            when 'env :> Requires<'dep> =
             AsyncFlow(fun environment ->
                 async {
-                    let dependency = (environment :> Needs<'dep>).Dep
-                    let (Env project) = request
+                    let dependency = (environment :> Requires<'dep>).Dep
+                    let (Resolve project) = request
 
                     return!
                         AsyncFlow.run environment (

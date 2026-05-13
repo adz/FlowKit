@@ -1,104 +1,134 @@
 ---
 weight: 20
-title: Environment Slicing
-description: Deep dive into the Record Pattern for dependency management.
+title: "Level 1: Area-Scoped Records"
+description: The first and simplest dependency shape in FsFlow.
 type: docs
 ---
 
 
-The Record Pattern is the most common way to manage dependencies in FsFlow. It uses standard F# records to define the "world" a workflow lives in.
+The first dependency shape in FsFlow is a record scoped to a boundary, not one global application bag.
 
-## Projecting from the Environment
+That boundary is usually one of these:
 
-When a workflow needs a dependency, it "reads" it from the environment record.
+- an ASP.NET controller
+- a background job
+- an integration adapter
+- a feature module with a stable internal surface
+
+The point is not to avoid records. The point is to avoid one record that owns every concern in the system.
+
+## Why This Is The Right Default
+
+Area-scoped records keep ownership local.
+
+- Controllers can depend on controller-shaped records.
+- Jobs can depend on job-shaped records.
+- Integrations can depend on adapter-shaped records.
+
+That gives you a concrete boundary to map at the edge and a smaller surface to test.
+
+## The Shape
 
 ```fsharp
-type AppEnv = 
-    { Gateway: IPingGateway
-      Logger: ILogger }
+type SubmitOrderDeps =
+    { Orders : IOrderRepository
+      Email : IEmailSender
+      Log : LogEntry -> unit }
 
-let ping =
+type BillingJobDeps =
+    { Invoices : IInvoiceRepository
+      Clock : IClock
+      Log : LogEntry -> unit }
+
+type InventorySyncDeps =
+    { Api : IInventoryApi
+      Store : IInventoryStore }
+```
+
+Each record is for one area. Each area owns its own mapper.
+
+## Boundary Mapping
+
+The important move is to map from a bigger composition-root shape into the area record at the boundary.
+
+```fsharp
+type AppDeps =
+    { Orders : IOrderRepository
+      Email : IEmailSender
+      Invoices : IInvoiceRepository
+      Clock : IClock
+      Log : LogEntry -> unit
+      Api : IInventoryApi
+      Store : IInventoryStore }
+
+let mapSubmitOrderDeps (app: AppDeps) =
+    { Orders = app.Orders
+      Email = app.Email
+      Log = app.Log }
+
+let mapBillingJobDeps (app: AppDeps) =
+    { Invoices = app.Invoices
+      Clock = app.Clock
+      Log = app.Log }
+```
+
+That mapping is the architectural win. It keeps the feature boundary visible and avoids handing a giant record to every workflow.
+
+## Reading Fields
+
+The `Flow.read` helper projects what a workflow needs.
+
+```fsharp
+let submitOrder : Flow<SubmitOrderDeps, string, Guid> =
     flow {
-        // 'env' is the full AppEnv record
-        let! gateway = Flow.read (fun env -> env.Gateway)
-        return! gateway.Ping()
+        let! deps = Flow.env
+        let! order = deps.Orders.Create()
+        do! deps.Email.SendConfirmation order
+        return order.Id
     }
 ```
 
-### The Shorthand: `_.Field`
-
-F# provides a nice shorthand for these simple projections. Instead of `(fun env -> env.Gateway)`, you can write `_.Gateway`. This makes the code much cleaner and easier to read.
+For simple projections, `Flow.read _.Field` stays the cleanest option.
 
 ```fsharp
-let ping =
+let billingPing : Flow<BillingJobDeps, string, unit> =
     flow {
-        let! gateway = Flow.read _.Gateway
-        let! logger = Flow.read _.Logger
-        
-        logger.Info "Starting ping"
-        return! gateway.Ping()
+        let! clock = Flow.read _.Clock
+        let! logger = Flow.read _.Log
+
+        logger { Level = LogLevel.Information; Message = $"Tick {clock.UtcNow()}" ; TimestampUtc = clock.UtcNow() }
     }
 ```
 
-## Slicing with `localEnv`
+## Narrowing A Larger Record
 
-"Slicing" is the process of taking a large environment and projecting it down to a smaller one required by a sub-flow. This keeps your workflows "honest"—they only see the dependencies they actually use.
+`Flow.localEnv` is for projecting a bigger boundary down to a smaller one.
 
 ```fsharp
-type SmallEnv = { Logger: ILogger }
+type SmallDeps = { Log : LogEntry -> unit }
 
-let smallWorkflow : Flow<SmallEnv, unit, unit> = ...
+let smallWorkflow : Flow<SmallDeps, string, unit> = flow { let! _ = Flow.read _.Log in return () }
 
-let bigWorkflow : Flow<AppEnv, unit, unit> =
+let biggerWorkflow : Flow<AppDeps, string, unit> =
     smallWorkflow
-    |> Flow.localEnv (fun env -> { Logger = env.Logger })
+    |> Flow.localEnv mapSubmitOrderDeps
 ```
 
-## Splitting Runtime Services from App Dependencies
+Use this when a sub-workflow genuinely needs a smaller view and you already have the larger record in hand.
 
-In complex apps, you often want to separate **Operational Services** (logging, metrics, cancellation) from **Application Services** (gateways, repositories). FsFlow provides `RuntimeContext<'runtime, 'env>` for this.
+## Where Layers Fit
+
+`Flow.provideLayer` is still a bridge, but it is not the main level 1 story.
+
+Use it when one flow builds the environment for another:
 
 ```fsharp
-type RuntimeServices = { Log: string -> unit }
-type AppEnv = { Gateway: IPingGateway }
+let buildDeps : Flow<HostInput, string, AppDeps> = ...
+let runJob : Flow<AppDeps, string, unit> = ...
 
-let workflow : Flow<RuntimeContext<RuntimeServices, AppEnv>, unit, unit> =
-    flow {
-        // Read from the 'runtime' half
-        let! log = Flow.readRuntime _.Log
-        // Read from the 'env' half
-        let! gateway = Flow.readEnvironment _.Gateway
-
-        log "starting"
-        return! gateway.Ping()
-    }
+let executable = runJob |> Flow.provideLayer buildDeps
 ```
 
-## The Capability Module
+That keeps level 1 about boundary-scoped records and lets layers stay a composition tool.
 
-The `Capability` module provides helpers for the main `Flow` surface and the `RuntimeContext` split using a single API.
-
-- `Capability.service`: Polymorphic version of `read`.
-- `Capability.runtime`: Polymorphic version of `readRuntime`.
-- `Capability.environment`: Polymorphic version of `readEnvironment`.
-
-```fsharp
-let log message =
-    flow {
-        let! logger = Capability.service _.Logger
-        logger.Log message
-    }
-```
-
-## Layering and Composition
-
-Layers are flows that produce a derived environment. Use `Flow.provideLayer` to "connect" a layer to a downstream workflow.
-
-```fsharp
-let appLayer : Flow<RuntimeServices, AppError, AppDependencies> = ...
-let workflow : Flow<AppDependencies, AppError, Response> = ...
-
-let runnable = workflow |> Flow.provideLayer appLayer
-```
-
-The downstream workflow stays typed against the smaller environment, while the final runnable workflow accepts the outer environment needed to build it.
+See the [Flow reference](../../reference/flow/) for the record-level projection helpers and layer bridge APIs.

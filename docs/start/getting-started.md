@@ -142,7 +142,7 @@ let effect = Flow.run config fetchFromApi
 
 ## Next Steps
 
-- **[Managing Dependencies]({{< relref "/docs/managing-dependencies/" >}})**: Learn how to structure your environments using the Record or CAPS patterns.
+- **[Managing Dependencies]({{< relref "/docs/managing-dependencies/" >}})**: Start with area-scoped records, then move to `RuntimeContext`, provider lookup, or nominal capability helpers only when the boundary calls for it.
 - **[Execution Semantics]({{< relref "/docs/core-model/semantics.md" >}})**: Understand short-circuiting, "cold" vs "hot" tasks, and interruption.
 - **[Defects and Exceptions]({{< relref "/docs/core-model/defects.md" >}})**: Understand why `Die` is separate from typed failures and how to use it.
 - **[Task and Async Interop]({{< relref "/docs/core-model/task-async-interop.md" >}})**: A deep dive into binding different effect types.

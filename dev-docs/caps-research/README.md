@@ -1,8 +1,8 @@
-# FsFlow CAPS Design Bundle
+# FsFlow Capability Design Bundle
 
 This bundle contains capability-design research documents for FsFlow.
 
-Start with `NEW-APPROACH.md`. It is the current proposed direction: optional cap families for
+Start with `NEW-APPROACH.md`. It is the current proposed direction: optional capability families for
 explicit, typed, testable .NET/system effects, while user domain dependencies stay plain by default.
 `CAPS_SUMMARY.md`, `CAPS_RECOMMENDED_MODEL.md`, and `CAPS_RECOMMENDED_WALKTHROUGH.md` keep the
 research path that led here.
@@ -27,9 +27,9 @@ research path that led here.
 The recommended 1.0 direction is:
 
 ```text
-Capify FsFlow-provided runtime/system effects.
+Make FsFlow-provided runtime/system effects explicit and typed.
 Keep user domain dependencies as records/provider/env by default.
-Ship optional cap-family NuGets for Core, Context, Observability, FileSystem, Console, Http, Process, ServiceProvider.
+Ship optional capability-family NuGets for Core, Context, Observability, FileSystem, Console, Http, Process, ServiceProvider.
 Preserve fine-grained requirements for FsFlow-provided operations.
 ```
 

@@ -5,44 +5,44 @@ open System.Threading
 open System.Threading.Tasks
 
 [<AutoOpen>]
-module CapabilityExtensions =
+module ResolverExtensions =
     type Flow<'env, 'error, 'value> with
 #if FABLE_COMPILER
-        static member inline CapabilityService
-            (projection: 'env -> 'service)
-            : Flow<'env, 'error, 'service> =
+        static member inline ResolveService
+            (projection: 'env -> 'resolve)
+            : Flow<'env, 'error, 'resolve> =
             Flow(fun environment _ -> EffectFlow.ofValue (projection environment))
 
-        /// <summary>Reads a service from <see cref="IServiceProvider" /> and fails when it is not registered.</summary>
-        static member inline ServiceFromProvider
+        /// <summary>Reads a dependency from <see cref="IServiceProvider" /> and fails when it is not registered.</summary>
+        static member inline ResolveFromProvider
             ()
-            : Flow<IServiceProvider, MissingCapability, 'service> =
+            : Flow<IServiceProvider, MissingCapability, 'resolve> =
             Flow(fun provider _ ->
-                match provider.GetService typeof<'service> with
+                match provider.GetService typeof<'resolve> with
                 | null ->
                     EffectFlow.ofError
                         {
-                            CapabilityType = typeof<'service>
+                            CapabilityType = typeof<'resolve>
                         }
-                | value -> EffectFlow.ofValue (unbox<'service> value))
+                | value -> EffectFlow.ofValue (unbox<'resolve> value))
 #else
-        static member CapabilityService
-            (projection: 'env -> 'service)
-            : Flow<'env, 'error, 'service> =
+        static member ResolveService
+            (projection: 'env -> 'resolve)
+            : Flow<'env, 'error, 'resolve> =
             Flow(fun environment _ -> EffectFlow.ofValue (projection environment))
 
-        /// <summary>Reads a service from <see cref="IServiceProvider" /> and fails when it is not registered.</summary>
-        static member ServiceFromProvider
+        /// <summary>Reads a dependency from <see cref="IServiceProvider" /> and fails when it is not registered.</summary>
+        static member ResolveFromProvider
             ()
-            : Flow<IServiceProvider, MissingCapability, 'service> =
+            : Flow<IServiceProvider, MissingCapability, 'resolve> =
             Flow(fun provider _ ->
-                match provider.GetService typeof<'service> with
+                match provider.GetService typeof<'resolve> with
                 | null ->
                     EffectFlow.ofError
                         {
-                            CapabilityType = typeof<'service>
+                            CapabilityType = typeof<'resolve>
                         }
-                | value -> EffectFlow.ofValue (unbox<'service> value))
+                | value -> EffectFlow.ofValue (unbox<'resolve> value))
 #endif
 
         static member ProvideLayer
@@ -71,11 +71,11 @@ module CapabilityExtensions =
 /// <summary>Helpers for working with capabilities in task workflows.</summary>
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 [<RequireQualifiedAccess>]
-module Capability =
-    /// <summary>Reads a service from the environment using the provided projection.</summary>
-    let service
-        (projection: 'env -> 'service)
-        : Flow<RuntimeContext<'runtime, 'env>, 'error, 'service> =
+module Resolver =
+    /// <summary>Reads a dependency from the environment using the provided projection.</summary>
+    let resolve
+        (projection: 'env -> 'resolve)
+        : Flow<RuntimeContext<'runtime, 'env>, 'error, 'resolve> =
         Flow.read (fun context -> projection context.Environment)
 
     /// <summary>Reads the current runtime from the environment.</summary>
@@ -86,13 +86,13 @@ module Capability =
     let environment<'runtime, 'env, 'error> () : Flow<RuntimeContext<'runtime, 'env>, 'error, 'env> =
         Flow.read (fun context -> context.Environment)
 
-    /// <summary>Reads a service from <see cref="IServiceProvider" /> and fails when it is not registered.</summary>
+    /// <summary>Reads a dependency from <see cref="IServiceProvider" /> and fails when it is not registered.</summary>
     #if FABLE_COMPILER
-    let inline serviceFromProvider<'service> : Flow<IServiceProvider, MissingCapability, 'service> =
-        Flow.ServiceFromProvider()
+    let inline fromProvider<'resolve> : Flow<IServiceProvider, MissingCapability, 'resolve> =
+        Flow.ResolveFromProvider()
     #else
-    let serviceFromProvider<'service> : Flow<IServiceProvider, MissingCapability, 'service> =
-        Flow.ServiceFromProvider()
+    let fromProvider<'resolve> : Flow<IServiceProvider, MissingCapability, 'resolve> =
+        Flow.ResolveFromProvider()
     #endif
 
 /// <summary>Helpers for deriving an environment in one flow and consuming it in another.</summary>

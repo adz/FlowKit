@@ -5,7 +5,7 @@ open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Logging
 open FsFlow
 open FsFlow.Hosting
-open FsFlow.Caps.Core
+open FsFlow.Capabilities.Core
 open Swensen.Unquote
 open Xunit
 
@@ -25,7 +25,7 @@ type RecordingLoggerFactory(logger: RecordingLogger) =
 
 type private MockEnv =
     { EnvVars: IEnvironmentVariables }
-    interface Needs<IEnvironmentVariables> with member this.Dep = this.EnvVars
+    interface Requires<IEnvironmentVariables> with member this.Dep = this.EnvVars
 
 module HostingTests =
     [<Fact>]
@@ -39,7 +39,7 @@ module HostingTests =
 
     [<Fact>]
     let ``Startup: validateEnvironment detects missing variables`` () =
-        let flow : Flow<#Needs<IEnvironmentVariables>, EnvironmentVariableError, string> = 
+        let flow : Flow<#Requires<IEnvironmentVariables>, EnvironmentVariableError, string> =
             EnvironmentVariable.get "FSFLOW_HOSTING_MISSING"
         let result = Startup.validateEnvironment flow
         

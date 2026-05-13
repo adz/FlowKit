@@ -228,71 +228,82 @@ let pageSpecs = [
     }
     {
         OutPath = ["capability"; "_index.md"]
-        Title = "Capability"
-        Description = "Source-documented capabilities and layers for FsFlow."
-        Intro = "This page shows the source-documented capability and layer surface, including CAPS request tokens and environment management helpers."
+        Title = "Resolver"
+        Description = "Source-documented dependency resolution and layers for FsFlow."
+        Intro = "This page shows the source-documented resolver and layer surface, including Resolve request tokens, environment management helpers, and the runtime/application split used by RuntimeContext."
         SymbolIds = [
-            "CAPS tokens", ["T:FsFlow.Needs`1"; "T:FsFlow.Env`1"; "T:FsFlow.Env`2"]
-            "Capabilities", ["T:FsFlow.MissingCapability"; "M:FsFlow.Capability.service"; "M:FsFlow.Capability.runtime"; "M:FsFlow.Capability.environment"; "M:FsFlow.Capability.serviceFromProvider"]
+            "Resolve tokens", ["T:FsFlow.Requires`1"; "T:FsFlow.Resolve`1"; "T:FsFlow.Resolve`2"]
+            "Dependencies", ["T:FsFlow.MissingCapability"; "M:FsFlow.Resolver.resolve"; "M:FsFlow.Resolver.runtime"; "M:FsFlow.Resolver.environment"; "M:FsFlow.Resolver.fromProvider"]
             "Layers", ["M:FsFlow.Layer.provideLayer"]
         ]
         Alias = None
     }
     {
-        OutPath = ["caps-core"; "_index.md"]
-        Title = "CAPS Core"
-        Description = "Source-documented synchronous capability primitives for FsFlow.Caps.Core."
-        Intro = "`FsFlow.Caps.Core` is the smallest shared capability package in the FsFlow CAPS story. It keeps the surface synchronous and explicit: clock, random, GUID, and environment-variable capabilities."
+        OutPath = ["runtime"; "_index.md"]
+        Title = "RuntimeContext"
+        Description = "Source-documented runtime/application split for FsFlow."
+        Intro = "The `RuntimeContext` type and module split host services from application dependencies and carry the cancellation token for task-based execution."
         SymbolIds = [
-            "Capability types", ["T:FsFlow.Caps.Core.IClock"; "T:FsFlow.Caps.Core.IRandom"; "T:FsFlow.Caps.Core.IGuid"; "T:FsFlow.Caps.Core.IEnvironmentVariables"; "T:FsFlow.Caps.Core.EnvironmentVariableError"]
-            "Clock", ["M:FsFlow.Caps.Core.Clock.now"; "M:FsFlow.Caps.Core.Clock.live"; "M:FsFlow.Caps.Core.Clock.fromValue"]
-            "Random", ["M:FsFlow.Caps.Core.Random.nextInt"; "M:FsFlow.Caps.Core.Random.live"; "M:FsFlow.Caps.Core.Random.fromValue"]
-            "GUID", ["M:FsFlow.Caps.Core.Guid.newGuid"; "M:FsFlow.Caps.Core.Guid.live"; "M:FsFlow.Caps.Core.Guid.fromValue"]
-            "Environment variables", ["M:FsFlow.Caps.Core.EnvironmentVariables.tryGet"; "M:FsFlow.Caps.Core.EnvironmentVariables.live"; "M:FsFlow.Caps.Core.EnvironmentVariables.fromPairs"; "M:FsFlow.Caps.Core.EnvironmentVariable.tryGet"; "M:FsFlow.Caps.Core.EnvironmentVariable.get"; "M:FsFlow.Caps.Core.EnvironmentVariable.getInt"; "M:FsFlow.Caps.Core.EnvironmentVariable.getGuid"; "M:FsFlow.Caps.Core.EnvironmentVariable.getBool"; "M:FsFlow.Caps.Core.EnvironmentVariableErrors.describe"]
+            "Core type", ["T:FsFlow.RuntimeContext`2"]
+            "Module functions", ["M:FsFlow.RuntimeContext.create"; "M:FsFlow.RuntimeContext.runtime"; "M:FsFlow.RuntimeContext.environment"; "M:FsFlow.RuntimeContext.cancellationToken"; "M:FsFlow.RuntimeContext.mapRuntime"; "M:FsFlow.RuntimeContext.mapEnvironment"; "M:FsFlow.RuntimeContext.withRuntime"; "M:FsFlow.RuntimeContext.withEnvironment"]
+        ]
+        Alias = None
+    }
+    {
+        OutPath = ["caps-core"; "_index.md"]
+        Title = "Capabilities Core"
+        Description = "Source-documented synchronous capability primitives for FsFlow.Capabilities.Core."
+        Intro = "`FsFlow.Capabilities.Core` is the smallest shared capability package in the FsFlow capabilities story. It keeps the surface synchronous and explicit: clock, random, GUID, and environment-variable capabilities."
+        SymbolIds = [
+            "Capability types", ["T:FsFlow.Capabilities.Core.IClock"; "T:FsFlow.Capabilities.Core.IRandom"; "T:FsFlow.Capabilities.Core.IGuid"; "T:FsFlow.Capabilities.Core.IEnvironmentVariables"; "T:FsFlow.Capabilities.Core.EnvironmentVariableError"]
+            "Clock", ["M:FsFlow.Capabilities.Core.Clock.now"; "M:FsFlow.Capabilities.Core.Clock.live"; "M:FsFlow.Capabilities.Core.Clock.fromValue"]
+            "Random", ["M:FsFlow.Capabilities.Core.Random.nextInt"; "M:FsFlow.Capabilities.Core.Random.live"; "M:FsFlow.Capabilities.Core.Random.fromValue"]
+            "GUID", ["M:FsFlow.Capabilities.Core.Guid.newGuid"; "M:FsFlow.Capabilities.Core.Guid.live"; "M:FsFlow.Capabilities.Core.Guid.fromValue"]
+            "Environment variables", ["M:FsFlow.Capabilities.Core.EnvironmentVariables.tryGet"; "M:FsFlow.Capabilities.Core.EnvironmentVariables.live"; "M:FsFlow.Capabilities.Core.EnvironmentVariables.fromPairs"; "M:FsFlow.Capabilities.Core.EnvironmentVariable.tryGet"; "M:FsFlow.Capabilities.Core.EnvironmentVariable.get"; "M:FsFlow.Capabilities.Core.EnvironmentVariable.getInt"; "M:FsFlow.Capabilities.Core.EnvironmentVariable.getGuid"; "M:FsFlow.Capabilities.Core.EnvironmentVariable.getBool"; "M:FsFlow.Capabilities.Core.EnvironmentVariableErrors.describe"]
         ]
         Alias = None
     }
     {
         OutPath = ["caps-console"; "_index.md"]
-        Title = "CAPS Console"
-        Description = "Source-documented console I/O capability for FsFlow.Caps.Console."
-        Intro = "This page shows the source-documented `FsFlow.Caps.Console` surface: the console interface and its helpers."
+        Title = "Capabilities Console"
+        Description = "Source-documented console I/O capability for FsFlow.Capabilities.Console."
+        Intro = "This page shows the source-documented `FsFlow.Capabilities.Console` surface: the console interface and its helpers."
         SymbolIds = [
-            "Capability", ["T:FsFlow.Caps.Console.IConsole"]
-            "Helpers", ["M:FsFlow.Caps.Console.Console.readLine"; "M:FsFlow.Caps.Console.Console.writeLine"; "M:FsFlow.Caps.Console.Console.live"]
+            "Capability", ["T:FsFlow.Capabilities.Console.IConsole"]
+            "Helpers", ["M:FsFlow.Capabilities.Console.Console.readLine"; "M:FsFlow.Capabilities.Console.Console.writeLine"; "M:FsFlow.Capabilities.Console.Console.live"]
         ]
         Alias = None
     }
     {
         OutPath = ["caps-filesystem"; "_index.md"]
-        Title = "CAPS FileSystem"
-        Description = "Source-documented file system capability for FsFlow.Caps.FileSystem."
-        Intro = "This page shows the source-documented `FsFlow.Caps.FileSystem` surface: the file system interface and its helpers."
+        Title = "Capabilities FileSystem"
+        Description = "Source-documented file system capability for FsFlow.Capabilities.FileSystem."
+        Intro = "This page shows the source-documented `FsFlow.Capabilities.FileSystem` surface: the file system interface and its helpers."
         SymbolIds = [
-            "Capability", ["T:FsFlow.Caps.FileSystem.IFileSystem"]
-            "Helpers", ["M:FsFlow.Caps.FileSystem.FileSystem.readAllText"; "M:FsFlow.Caps.FileSystem.FileSystem.writeAllText"; "M:FsFlow.Caps.FileSystem.FileSystem.exists"; "M:FsFlow.Caps.FileSystem.FileSystem.live"]
+            "Capability", ["T:FsFlow.Capabilities.FileSystem.IFileSystem"]
+            "Helpers", ["M:FsFlow.Capabilities.FileSystem.FileSystem.readAllText"; "M:FsFlow.Capabilities.FileSystem.FileSystem.writeAllText"; "M:FsFlow.Capabilities.FileSystem.FileSystem.exists"; "M:FsFlow.Capabilities.FileSystem.FileSystem.live"]
         ]
         Alias = None
     }
     {
         OutPath = ["caps-http"; "_index.md"]
-        Title = "CAPS Http"
-        Description = "Source-documented HTTP client capability for FsFlow.Caps.Http."
-        Intro = "This page shows the source-documented `FsFlow.Caps.Http` surface: the HTTP interface and its helpers."
+        Title = "Capabilities Http"
+        Description = "Source-documented HTTP client capability for FsFlow.Capabilities.Http."
+        Intro = "This page shows the source-documented `FsFlow.Capabilities.Http` surface: the HTTP interface and its helpers."
         SymbolIds = [
-            "Capability", ["T:FsFlow.Caps.Http.IHttp"]
-            "Helpers", ["M:FsFlow.Caps.Http.Http.getString"; "M:FsFlow.Caps.Http.Http.live"]
+            "Capability", ["T:FsFlow.Capabilities.Http.IHttp"]
+            "Helpers", ["M:FsFlow.Capabilities.Http.Http.getString"; "M:FsFlow.Capabilities.Http.Http.live"]
         ]
         Alias = None
     }
     {
         OutPath = ["caps-process"; "_index.md"]
-        Title = "CAPS Process"
-        Description = "Source-documented external process capability for FsFlow.Caps.Process."
-        Intro = "This page shows the source-documented `FsFlow.Caps.Process` surface: the process runner interface and its helpers."
+        Title = "Capabilities Process"
+        Description = "Source-documented external process capability for FsFlow.Capabilities.Process."
+        Intro = "This page shows the source-documented `FsFlow.Capabilities.Process` surface: the process runner interface and its helpers."
         SymbolIds = [
-            "Capability", ["T:FsFlow.Caps.Process.IProcess"; "T:FsFlow.Caps.Process.ProcessResult"]
-            "Helpers", ["M:FsFlow.Caps.Process.Process.execute"; "M:FsFlow.Caps.Process.Process.live"]
+            "Capability", ["T:FsFlow.Capabilities.Process.IProcess"; "T:FsFlow.Capabilities.Process.ProcessResult"]
+            "Helpers", ["M:FsFlow.Capabilities.Process.Process.execute"; "M:FsFlow.Capabilities.Process.Process.live"]
         ]
         Alias = None
     }
@@ -343,13 +354,13 @@ let main argv =
 
     let dllPaths = [
         Path.Combine(artifactsDir, "FsFlow/debug_netstandard2.1/FsFlow.dll")
-        Path.Combine(artifactsDir, "FsFlow.Caps.Core/debug_netstandard2.1/FsFlow.Caps.Core.dll")
+        Path.Combine(artifactsDir, "FsFlow.Capabilities.Core/debug_netstandard2.1/FsFlow.Capabilities.Core.dll")
         Path.Combine(artifactsDir, "FsFlow.Hosting/debug_netstandard2.1/FsFlow.Hosting.dll")
         Path.Combine(artifactsDir, "FsFlow.Runtime.Telemetry/debug_netstandard2.1/FsFlow.Runtime.Telemetry.dll")
-        Path.Combine(artifactsDir, "FsFlow.Caps.Console/debug_netstandard2.1/FsFlow.Caps.Console.dll")
-        Path.Combine(artifactsDir, "FsFlow.Caps.FileSystem/debug_netstandard2.1/FsFlow.Caps.FileSystem.dll")
-        Path.Combine(artifactsDir, "FsFlow.Caps.Http/debug_netstandard2.1/FsFlow.Caps.Http.dll")
-        Path.Combine(artifactsDir, "FsFlow.Caps.Process/debug_netstandard2.1/FsFlow.Caps.Process.dll")
+        Path.Combine(artifactsDir, "FsFlow.Capabilities.Console/debug_netstandard2.1/FsFlow.Capabilities.Console.dll")
+        Path.Combine(artifactsDir, "FsFlow.Capabilities.FileSystem/debug_netstandard2.1/FsFlow.Capabilities.FileSystem.dll")
+        Path.Combine(artifactsDir, "FsFlow.Capabilities.Http/debug_netstandard2.1/FsFlow.Capabilities.Http.dll")
+        Path.Combine(artifactsDir, "FsFlow.Capabilities.Process/debug_netstandard2.1/FsFlow.Capabilities.Process.dll")
     ]
 
     let apiDocInputs = [

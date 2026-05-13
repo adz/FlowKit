@@ -13,10 +13,11 @@ they match this file and the current docs at `https://adz.github.io/FsFlow/`.
 Data flows from left to right. Later stages can bind earlier stages directly.
 `Check` (unit error) -> `Result` (typed error) -> `Flow` (sync + env) -> `AsyncFlow` (async + env) -> `TaskFlow` (task + env)
 
-## CAPS / Capability Boundaries
-- Use `Needs<'dep>` to name a capability contract for a single dependency.
-- Use `Env<'dep>` to bind the dependency itself, and `Env<'dep, 'value>` to project from it.
-- Prefer named cap sets such as `TaskFlow<#LoginCaps, 'error, 'value>` when a larger runtime should satisfy a smaller workflow boundary.
+## Capability Boundaries
+- Use `Requires<'dep>` to name a capability contract for a single dependency.
+- Use `Resolve<'dep>` to bind the dependency itself, and `Resolve<'dep, 'value>` to project from it.
+- Prefer named capability sets such as `TaskFlow<#LoginCapabilities, 'error, 'value>` when a larger runtime should satisfy a smaller workflow boundary.
+- Use `Resolver.resolve` and `Resolver.fromProvider` at the lookup edge, not as the primary model for every workflow.
 - Keep `IServiceProvider` interop and runtime adapters at the edge; do not make them the primary public API.
 
 ## Core Patterns (Idiomatic Way)

@@ -1,16 +1,16 @@
 ---
-title: "CAPS Console"
+title: "Capabilities Console"
 ---
 
-This page shows the source-documented `FsFlow.Caps.Console` surface: the console interface and its helpers.
+This page shows the source-documented `FsFlow.Capabilities.Console` surface: the console interface and its helpers.
 
 ## Capability
 
-- [`Console.IConsole`](./t-console-iconsole.md): Provides synchronous access to standard console I/O.
+- [`Capabilities.Console.IConsole`](./t-capabilities-console-iconsole.md): Provides synchronous access to standard console I/O.
 
 ## Helpers
 
-- [`Console.Console.readLine`](./m-console-console-readline.md): Reads a line from the console environment.
-- [`Console.Console.writeLine`](./m-console-console-writeline.md): Writes a line to the console environment.
-- [`Console.Console.live`](./m-console-console-live.md): Creates a live console backed by <a href="https://learn.microsoft.com/dotnet/api/system.console">Console</a>.
+- [`Capabilities.Console.Console.readLine`](./m-capabilities-console-console-readline.md): Reads a line from the console environment.
+- [`Capabilities.Console.Console.writeLine`](./m-capabilities-console-console-writeline.md): Writes a line to the console environment.
+- [`Capabilities.Console.Console.live`](./m-capabilities-console-console-live.md): Creates a live console backed by <a href="https://learn.microsoft.com/dotnet/api/system.console">Console</a>.
 

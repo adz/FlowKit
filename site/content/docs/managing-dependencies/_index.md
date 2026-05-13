@@ -1,71 +1,61 @@
 ---
 weight: 40
 title: Managing Dependencies
-description: Introduction to dependency management in FsFlow.
+description: A staged guide to dependency management in FsFlow.
 type: docs
 ---
 
 
-In FsFlow, a workflow is not just a function; it is a description of work that needs an **environment** to run. 
+FsFlow does not force one dependency style on every workflow. It gives you a ladder:
 
-As your application grows, you might be tempted to create a single "God Object" (like `AppEnv`) that contains every service in your system: Database, Logger, API Gateways, and more. However, if every small workflow depends on this massive record, your code becomes hard to test and tightly coupled. You'd have to mock the entire universe just to test a simple calculation.
+1. area-scoped records at the boundary
+2. `RuntimeContext<'runtime, 'env>` when the host and app should be separate
+3. `IServiceProvider` at the outer edge when the host container is the source of truth
+4. nominal `Requires<'dep>` helpers when reuse beats plain record passing
 
-FsFlow provides two primary architectural styles to help you "slice" your dependencies so that each workflow only asks for what it actually needs.
+Start with the shallowest level that fits the boundary you are designing. Move deeper only when you can name the pressure that makes the simpler shape awkward.
 
-## The Two Styles
+## Read In Order
 
-### 1. The Record Pattern (Environment Slicing)
-This is the simplest way to start. You define your environment as a standard F# record. Workflows "read" or "project" the fields they need from this record. It is perfect for local helpers, internal logic, and smaller applications where record types are stable.
+| Level | Shape | Best fit | Main APIs | Page |
+| :--- | :--- | :--- | :--- | :--- |
+| 1 | Area-scoped records | Controllers, jobs, integrations, feature boundaries | `Flow.read`, `Flow.localEnv`, `Flow.provideLayer` | [Level 1: Area-Scoped Records](./env-slicing/) |
+| 2 | `RuntimeContext<'runtime, 'env>` | Host services and app dependencies need separate ownership | `RuntimeContext.create`, `Resolver.runtime`, `Resolver.environment`, `TaskFlow.readRuntime`, `TaskFlow.readEnvironment` | [Level 2: RuntimeContext](./runtime-context/) |
+| 3 | `IServiceProvider` edge | ASP.NET, hosted services, DI-heavy hosts | `Resolver.fromProvider`, `MissingCapability` | [Level 3: Provider Edge](./provider-edge/) |
+| 4 | Nominal capability helpers | Reusable helpers that need a named contract | `Requires<'dep>`, `Resolver.resolve` | [Level 4: Nominal Capability Helpers](./capability-contracts/) |
 
-**Read the Deep Dive:** [Environment Slicing](./env-slicing/)
+## The Pedagogical Order
 
-### 2. RuntimeContext for Host Services
-When you need to split operational services from application dependencies, use `RuntimeContext<'runtime, 'env>`. This keeps logging, metrics, and similar host concerns separate from the app record.
+1. Start with records that are scoped to a controller, job, or integration boundary.
+2. Split runtime services from application dependencies only when that separation is real.
+3. Use provider lookup only when the host container must remain the root of truth.
+4. Reach for nominal helpers only when a shared contract is clearly paying rent.
 
----
+## What `RuntimeContext` Is Doing Here
 
-## Relationship to Architecture
+`RuntimeContext<'runtime, 'env>` is not a replacement for level 1. It is a different split:
 
-These two patterns support different **Architectural Styles**:
+- `Runtime` holds operational concerns such as logging, metrics, tracing, and clocks.
+- `Environment` holds the application dependencies.
+- `CancellationToken` belongs to the current task run.
 
-- **Style 1: The Booted App**: Usually uses a single large record (Record Pattern) for simplicity.
-- **Style 2: Parameters + Context**: Uses parameters for core logic and a thin record (Record Pattern) for request context.
-- **Style 3: .NET DI**: Often uses `RuntimeContext<'runtime, 'env>` and the Record Pattern to bridge .NET services into the FsFlow execution model.
+That split matters when one host should feed many areas, or when the app record should stay focused while the runtime keeps expanding.
 
-For more details on these structures, see [Architectural Styles](./architectural-styles/).
+## Bridges, Not A Fifth Level
 
----
+`Flow.localEnv` and `Flow.provideLayer` are bridges between shapes, not another dependency model.
 
-## Comparison at a Glance
-
-| Feature | Record Pattern | RuntimeContext |
-| :--- | :--- | :--- |
-| **Typical Use** | Local helpers, small apps | Host services plus app dependencies |
-| **Coupling** | Bound to a specific record type | Bound to two explicit scopes |
-| **Simplicity** | High (Standard F#) | Medium |
-| **Flexibility** | Moderate | High |
-
----
-
-## Which style should I use?
-
-**Start with the Record Pattern.** It is the most idiomatic way to write F# and requires the least amount of boilerplate. 
-
-Move to `RuntimeContext<'runtime, 'env>` when:
-- You need to keep operational services separate from application dependencies.
-- You want a thin host/service split without pushing every concern into one record.
-- You are bridging a conventional `.NET` app host into FsFlow workflows.
-
-## Shared Helpers: The Capability Module
-
-Regardless of which style you choose, FsFlow provides a `Capability` module that works across both. These helpers let you read from the main `Flow` surface and from `RuntimeContext` without needing specific module prefixes.
+- Use `localEnv` when a larger record can be projected to a smaller record.
+- Use `provideLayer` when one flow builds the environment needed by another.
+- Use `Resolver.resolve` when the workflow should read a dependency through the same vocabulary regardless of which level you are on.
 
 ```fsharp
-let log message =
+let controllerWorkflow : Flow<ControllerDeps, Error, string> =
     flow {
-        let! logger = Capability.service _.Logger
-        logger.Log message
+        let! logger = Flow.read _.Logger
+        logger.Info "starting"
+        return "ok"
     }
 ```
 
-Learn more about these polymorphic helpers in the [Environment Slicing](./env-slicing/#the-capability-module) guide.
+The deeper levels exist to keep the boundary honest. They are not a license to make every workflow look the same.

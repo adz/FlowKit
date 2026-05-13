@@ -203,7 +203,7 @@ Shape:
 
 ```fsharp
 type NoCaps = NoCaps
-type Needs<'cap, 'rest> = Needs
+type Requires<'cap, 'rest> = Requires
 
 type LogCap = LogCap
 type ClockCap = ClockCap
@@ -218,11 +218,11 @@ Capability operations carry exact requirement indexes:
 module Log =
     val info :
       string ->
-        TaskFlow<Needs<LogCap, NoCaps>, 'env, 'error, unit>
+        TaskFlow<Requires<LogCap, NoCaps>, 'env, 'error, unit>
 
 module Device =
     val client :
-        TaskFlow<Needs<DeviceClientCap, NoCaps>, 'env, 'error, IDeviceClient>
+        TaskFlow<Requires<DeviceClientCap, NoCaps>, 'env, 'error, IDeviceClient>
 ```
 
 Composition needs a type-level union:
@@ -238,7 +238,7 @@ taskFlow {
 Conceptual result:
 
 ```fsharp
-TaskFlow<Needs<LogCap, Needs<DeviceClientCap, NoCaps>>, 'env, AppError, DeviceStatus>
+TaskFlow<Requires<LogCap, Requires<DeviceClientCap, NoCaps>>, 'env, AppError, DeviceStatus>
 ```
 
 To run:

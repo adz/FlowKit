@@ -1,15 +1,15 @@
 ---
-title: "CAPS Http"
+title: "Capabilities Http"
 ---
 
-This page shows the source-documented `FsFlow.Caps.Http` surface: the HTTP interface and its helpers.
+This page shows the source-documented `FsFlow.Capabilities.Http` surface: the HTTP interface and its helpers.
 
 ## Capability
 
-- [`Http.IHttp`](./t-http-ihttp.md): Provides asynchronous access to HTTP client operations.
+- [`Capabilities.Http.IHttp`](./t-capabilities-http-ihttp.md): Provides asynchronous access to HTTP client operations.
 
 ## Helpers
 
-- [`Http.Http.getString`](./m-http-http-getstring.md): Sends a GET request using the HTTP environment and returns the response body.
-- [`Http.Http.live`](./m-http-http-live.md): Creates a live HTTP client backed by <a href="https://learn.microsoft.com/dotnet/api/system.net.http.httpclient">HttpClient</a>.
+- [`Capabilities.Http.Http.getString`](./m-capabilities-http-http-getstring.md): Sends a GET request using the HTTP environment and returns the response body.
+- [`Capabilities.Http.Http.live`](./m-capabilities-http-http-live.md): Creates a live HTTP client backed by <a href="https://learn.microsoft.com/dotnet/api/system.net.http.httpclient">HttpClient</a>.
 

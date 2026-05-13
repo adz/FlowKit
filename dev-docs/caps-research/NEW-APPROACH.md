@@ -72,9 +72,9 @@ Package them as opt-in NuGets.
 Examples:
 
 ```fsharp
-open FsFlow.Caps.Core
-open FsFlow.Caps.FileSystem
-open FsFlow.Caps.Console
+open FsFlow.Capabilities.Core
+open FsFlow.Capabilities.FileSystem
+open FsFlow.Capabilities.Console
 
 let readAndPrint path =
     taskFlow {
@@ -143,7 +143,7 @@ NuGet reference controls whether the concept exists.
 For example:
 
 ```fsharp
-open FsFlow.Caps.FileSystem
+open FsFlow.Capabilities.FileSystem
 ```
 
 brings `File.readAllText`, `Directory.enumerateFiles`, etc. into scope.
@@ -151,7 +151,7 @@ brings `File.readAllText`, `Directory.enumerateFiles`, etc. into scope.
 It does not magically provide a file system. The workflow must still run with a runtime that satisfies the file
 system requirements.
 
-If the user does not reference `FsFlow.Caps.FileSystem`, that API and dependency model do not exist in their world.
+If the user does not reference `FsFlow.Capabilities.FileSystem`, that API and dependency model do not exist in their world.
 
 ## Capability Families
 
@@ -171,7 +171,7 @@ Capability families are optional modules/packages. Each family exposes:
 Package:
 
 ```text
-FsFlow.Caps.Core
+FsFlow.Capabilities.Core
 ```
 
 Dependencies:
@@ -251,7 +251,7 @@ Provisioning can be grouped.
 Package:
 
 ```text
-FsFlow.Caps.Context
+FsFlow.Capabilities.Context
 ```
 
 Purpose:
@@ -275,7 +275,7 @@ feature flags if they are request-scoped
 Example:
 
 ```fsharp
-open FsFlow.Caps.Context
+open FsFlow.Capabilities.Context
 
 taskFlow {
     let! user = CurrentUser.get
@@ -321,9 +321,9 @@ type IHasCurrentUser =
 Packages:
 
 ```text
-FsFlow.Caps.Observability
-FsFlow.Caps.Observability.MicrosoftLogging
-FsFlow.Caps.Observability.OpenTelemetry
+FsFlow.Capabilities.Observability
+FsFlow.Capabilities.Observability.MicrosoftLogging
+FsFlow.Capabilities.Observability.OpenTelemetry
 ```
 
 Base package defines FsFlow-owned abstractions:
@@ -345,7 +345,7 @@ OpenTelemetry adapter    -> ActivitySource / Meter / TracerProvider / MeterProvi
 Core workflow code depends on FsFlow abstractions:
 
 ```fsharp
-open FsFlow.Caps.Observability
+open FsFlow.Capabilities.Observability
 
 taskFlow {
     do! Log.info "Submitting order"
@@ -357,8 +357,8 @@ taskFlow {
 Host code chooses adapters:
 
 ```fsharp
-open FsFlow.Caps.Observability.MicrosoftLogging
-open FsFlow.Caps.Observability.OpenTelemetry
+open FsFlow.Capabilities.Observability.MicrosoftLogging
+open FsFlow.Capabilities.Observability.OpenTelemetry
 
 let runtime =
     Runtime.empty
@@ -374,7 +374,7 @@ This keeps `FsFlow` core dependency-light while giving rich host integration.
 Package:
 
 ```text
-FsFlow.Caps.Console
+FsFlow.Capabilities.Console
 ```
 
 Operations:
@@ -400,7 +400,7 @@ scripted input
 Package:
 
 ```text
-FsFlow.Caps.FileSystem
+FsFlow.Capabilities.FileSystem
 ```
 
 Operations:
@@ -451,8 +451,8 @@ inconsistent around cancellation
 Packages:
 
 ```text
-FsFlow.Caps.Http
-FsFlow.Caps.Network
+FsFlow.Capabilities.Http
+FsFlow.Capabilities.Network
 ```
 
 Start with HTTP before lower-level networking.
@@ -498,7 +498,7 @@ resilience handlers
 Package:
 
 ```text
-FsFlow.Caps.Process
+FsFlow.Capabilities.Process
 ```
 
 Operations:
@@ -527,7 +527,7 @@ This is also high-value because process APIs are exception-heavy and awkward to 
 Package:
 
 ```text
-FsFlow.Caps.ServiceProvider
+FsFlow.Capabilities.ServiceProvider
 ```
 
 Dependency:
@@ -571,7 +571,7 @@ If the package is not referenced, `Service.get<'T>` does not exist.
 Package:
 
 ```text
-FsFlow.Caps.Aspire
+FsFlow.Capabilities.Aspire
 ```
 
 Dependency:
@@ -789,17 +789,17 @@ FsFlow
 Optional packages:
 
 ```text
-FsFlow.Caps.Core
-FsFlow.Caps.Context
-FsFlow.Caps.Observability
-FsFlow.Caps.Observability.MicrosoftLogging
-FsFlow.Caps.Observability.OpenTelemetry
-FsFlow.Caps.Console
-FsFlow.Caps.FileSystem
-FsFlow.Caps.Http
-FsFlow.Caps.Process
-FsFlow.Caps.ServiceProvider
-FsFlow.Caps.Aspire
+FsFlow.Capabilities.Core
+FsFlow.Capabilities.Context
+FsFlow.Capabilities.Observability
+FsFlow.Capabilities.Observability.MicrosoftLogging
+FsFlow.Capabilities.Observability.OpenTelemetry
+FsFlow.Capabilities.Console
+FsFlow.Capabilities.FileSystem
+FsFlow.Capabilities.Http
+FsFlow.Capabilities.Process
+FsFlow.Capabilities.ServiceProvider
+FsFlow.Capabilities.Aspire
 ```
 
 Reason:

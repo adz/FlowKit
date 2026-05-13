@@ -2,10 +2,10 @@ namespace FsFlow.Tests
 
 open System.Threading.Tasks
 open FsFlow
-open FsFlow.Caps.Console
-open FsFlow.Caps.FileSystem
-open FsFlow.Caps.Http
-open FsFlow.Caps.Process
+open FsFlow.Capabilities.Console
+open FsFlow.Capabilities.FileSystem
+open FsFlow.Capabilities.Http
+open FsFlow.Capabilities.Process
 open Swensen.Unquote
 open Xunit
 
@@ -16,10 +16,10 @@ type UnifiedCaps =
         Http: IHttp
         Process: IProcess
     }
-    interface Needs<IConsole> with member this.Dep = this.Console
-    interface Needs<IFileSystem> with member this.Dep = this.FS
-    interface Needs<IHttp> with member this.Dep = this.Http
-    interface Needs<IProcess> with member this.Dep = this.Process
+    interface Requires<IConsole> with member this.Dep = this.Console
+    interface Requires<IFileSystem> with member this.Dep = this.FS
+    interface Requires<IHttp> with member this.Dep = this.Http
+    interface Requires<IProcess> with member this.Dep = this.Process
 
 module CapsUnifiedTests =
     [<Fact>]

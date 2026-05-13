@@ -35,7 +35,7 @@ module WorkflowInteropTests =
 
         member _.AccessCount = accessCount.Value
 
-        interface Needs<IDeviceClient> with
+        interface Requires<IDeviceClient> with
             member _.Dep =
                 accessCount.Value <- accessCount.Value + 1
                 DeviceClient($"dep-{accessCount.Value}") :> IDeviceClient
@@ -43,10 +43,10 @@ module WorkflowInteropTests =
     type private ProjectionCaps() =
         let service = ProjectionService()
 
-        interface Needs<ProjectionService> with
+        interface Requires<ProjectionService> with
             member _.Dep = service
 
-    let private assertEnvRequestDoesNotCompile
+    let private assertResolveRequestDoesNotCompile
         (workflowTypeName: string)
         (builderName: string) =
         let assemblyPath = typeof<FlowBuilder>.Assembly.Location
@@ -59,7 +59,7 @@ open FsFlow
 type WrongEnv =
     {{ DeviceClient: string }}
 
-let request : Env<string> = Unchecked.defaultof<_>
+let request : Resolve<string> = Unchecked.defaultof<_>
 
 let probe : {workflowTypeName}<WrongEnv, string, string> =
 
@@ -76,11 +76,11 @@ let probe : {workflowTypeName}<WrongEnv, string, string> =
         test <@ not (String.IsNullOrWhiteSpace output) @>
 
     [<Fact>]
-    let ``whole dependency Env requests stay cold across flow families`` () =
+    let ``whole dependency Resolve requests stay cold across flow families`` () =
         let flowCaps = CountingCaps()
         let asyncCaps = CountingCaps()
         let taskCaps = CountingCaps()
-        let request : Env<IDeviceClient> = Unchecked.defaultof<_>
+        let request : Resolve<IDeviceClient> = Unchecked.defaultof<_>
 
         let flowWorkflow : Flow<CountingCaps, string, string> =
             flow {
@@ -121,16 +121,16 @@ let probe : {workflowTypeName}<WrongEnv, string, string> =
         test <@ taskCaps.AccessCount = 4 @>
 
     [<Fact>]
-    let ``whole dependency Env requests fail without Needs on flow`` () =
-        assertEnvRequestDoesNotCompile "Flow" "flow"
+    let ``whole dependency Resolve requests fail without Requires on flow`` () =
+        assertResolveRequestDoesNotCompile "Flow" "flow"
 
     [<Fact>]
-    let ``projected Env requests bind through flow core shapes`` () =
+    let ``projected Resolve requests bind through flow core shapes`` () =
         let environment = ProjectionCaps()
-        let plainRequest : Env<ProjectionService, int> = Env (fun service -> service.Number)
-        let resultUnitRequest : Env<ProjectionService, Result<int, unit>> = Env (fun service -> Ok service.Number)
-        let maybeRequest : Env<ProjectionService, int option> = Env (fun service -> service.MaybeNumber)
-        let maybeValueRequest : Env<ProjectionService, int voption> = Env (fun service -> service.MaybeValueNumber)
+        let plainRequest : Resolve<ProjectionService, int> = Resolve (fun service -> service.Number)
+        let resultUnitRequest : Resolve<ProjectionService, Result<int, unit>> = Resolve (fun service -> Ok service.Number)
+        let maybeRequest : Resolve<ProjectionService, int option> = Resolve (fun service -> service.MaybeNumber)
+        let maybeValueRequest : Resolve<ProjectionService, int voption> = Resolve (fun service -> service.MaybeValueNumber)
 
         let flowWorkflow : Flow<ProjectionCaps, unit, int> =
             flow {
@@ -144,10 +144,10 @@ let probe : {workflowTypeName}<WrongEnv, string, string> =
         test <@ Flow.runSync environment flowWorkflow = Exit.Success 84 @>
 
     [<Fact>]
-    let ``projected Env requests bind async result shapes`` () =
+    let ``projected Resolve requests bind async result shapes`` () =
         let environment = ProjectionCaps()
-        let asyncResultRequest : Env<ProjectionService, Async<Result<int, string>>> =
-            Env (fun service -> service.AsyncResultNumber)
+        let asyncResultRequest : Resolve<ProjectionService, Async<Result<int, string>>> =
+            Resolve (fun service -> service.AsyncResultNumber)
 
         let asyncWorkflow : Flow<ProjectionCaps, string, int> =
             flow {
@@ -158,25 +158,25 @@ let probe : {workflowTypeName}<WrongEnv, string, string> =
         test <@ Flow.runSync environment asyncWorkflow = Exit.Success 21 @>
 
     [<Fact>]
-    let ``projected Env requests bind task surfaces across flow`` () =
+    let ``projected Resolve requests bind task surfaces across flow`` () =
         let environment = ProjectionCaps()
-        let plainRequest : Env<ProjectionService, int> = Env (fun service -> service.Number)
-        let taskRequest : Env<ProjectionService, Task<int>> = Env (fun service -> service.TaskNumber)
-        let taskResultRequest : Env<ProjectionService, Task<Result<int, string>>> =
-            Env (fun service -> service.TaskResultNumber)
-        let valueTaskRequest : Env<ProjectionService, ValueTask<int>> =
-            Env (fun service -> service.ValueTaskNumber)
-        let valueTaskResultRequest : Env<ProjectionService, ValueTask<Result<int, string>>> =
-            Env (fun service -> service.ValueTaskResultNumber)
-        let coldTaskRequest : Env<ProjectionService, ColdTask<int>> = Env (fun service -> service.ColdTaskNumber)
-        let coldTaskResultRequest : Env<ProjectionService, ColdTask<Result<int, string>>> =
-            Env (fun service -> service.ColdTaskResultNumber)
+        let plainRequest : Resolve<ProjectionService, int> = Resolve (fun service -> service.Number)
+        let taskRequest : Resolve<ProjectionService, Task<int>> = Resolve (fun service -> service.TaskNumber)
+        let taskResultRequest : Resolve<ProjectionService, Task<Result<int, string>>> =
+            Resolve (fun service -> service.TaskResultNumber)
+        let valueTaskRequest : Resolve<ProjectionService, ValueTask<int>> =
+            Resolve (fun service -> service.ValueTaskNumber)
+        let valueTaskResultRequest : Resolve<ProjectionService, ValueTask<Result<int, string>>> =
+            Resolve (fun service -> service.ValueTaskResultNumber)
+        let coldTaskRequest : Resolve<ProjectionService, ColdTask<int>> = Resolve (fun service -> service.ColdTaskNumber)
+        let coldTaskResultRequest : Resolve<ProjectionService, ColdTask<Result<int, string>>> =
+            Resolve (fun service -> service.ColdTaskResultNumber)
         let taskUnitValue : System.Threading.Tasks.Task = Task.CompletedTask
         let valueTaskUnitValue : System.Threading.Tasks.ValueTask = ValueTask()
-        let taskUnitRequest : Env<ProjectionService, System.Threading.Tasks.Task> = Env (fun _ -> taskUnitValue)
-        let valueTaskUnitRequest : Env<ProjectionService, System.Threading.Tasks.ValueTask> =
-            Env (fun _ -> valueTaskUnitValue)
-        let coldTaskUnitRequest : Env<ProjectionService, ColdTask<unit>> = Env (fun service -> service.ColdTaskUnit)
+        let taskUnitRequest : Resolve<ProjectionService, System.Threading.Tasks.Task> = Resolve (fun _ -> taskUnitValue)
+        let valueTaskUnitRequest : Resolve<ProjectionService, System.Threading.Tasks.ValueTask> =
+            Resolve (fun _ -> valueTaskUnitValue)
+        let coldTaskUnitRequest : Resolve<ProjectionService, ColdTask<unit>> = Resolve (fun service -> service.ColdTaskUnit)
 
         let asyncWorkflow : Flow<ProjectionCaps, string, int> =
             flow {
@@ -376,15 +376,15 @@ let probe : {workflowTypeName}<WrongEnv, string, string> =
     [<Fact>]
     let ``flow computation expression mixes sync, async, task, result, and env requests`` () =
         let service = ProjectionService()
-        let request : Env<ProjectionService> = Unchecked.defaultof<_>
-        let asyncNumberRequest : Env<ProjectionService, Async<int>> = Env(fun value -> value.AsyncNumber)
-        let asyncResultNumberRequest : Env<ProjectionService, Async<Result<int, string>>> =
-            Env(fun value -> value.AsyncResultNumber)
-        let taskNumberRequest : Env<ProjectionService, Task<int>> = Env(fun value -> value.TaskNumber)
-        let taskResultNumberRequest : Env<ProjectionService, Task<Result<int, string>>> =
-            Env(fun value -> value.TaskResultNumber)
-        let resultNumberRequest : Env<ProjectionService, Result<int, string>> =
-            Env(fun value -> value.NumberResult)
+        let request : Resolve<ProjectionService> = Unchecked.defaultof<_>
+        let asyncNumberRequest : Resolve<ProjectionService, Async<int>> = Resolve(fun value -> value.AsyncNumber)
+        let asyncResultNumberRequest : Resolve<ProjectionService, Async<Result<int, string>>> =
+            Resolve(fun value -> value.AsyncResultNumber)
+        let taskNumberRequest : Resolve<ProjectionService, Task<int>> = Resolve(fun value -> value.TaskNumber)
+        let taskResultNumberRequest : Resolve<ProjectionService, Task<Result<int, string>>> =
+            Resolve(fun value -> value.TaskResultNumber)
+        let resultNumberRequest : Resolve<ProjectionService, Result<int, string>> =
+            Resolve(fun value -> value.NumberResult)
 
         let workflow : Flow<ProjectionCaps, string, int> =
             flow {

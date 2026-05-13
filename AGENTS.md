@@ -24,7 +24,7 @@ Refer to [`dev-docs/PLAN.md`](dev-docs/PLAN.md) for architectural direction and 
 
 - **Before 1.0:** Bravely iterate. Remove old APIs and "old ways" immediately when a better alternative is established. Do not maintain compatibility aliases or stale patterns.
 - **Post 1.0:** Standard semantic versioning applies. Maintain compatibility and use deprecation cycles for breaking changes.
-- `FsFlow` core and `FsFlow.Caps.*` packages are versioned independently. Do not force the core release line to wait for the least mature CAPS package.
+- `FsFlow` core and `FsFlow.Capabilities.*` packages are versioned independently. Do not force the core release line to wait for the least mature capabilities package.
 - Treat CAPS packages as optional add-ons until each package has its own stable release story.
 
 ## Documentation Integrity

@@ -8,10 +8,10 @@ open Xunit
 
 module CapsPrimitiveTests =
     [<Fact>]
-    let ``CAPS primitives are public and nominally shaped`` () =
-        let needsType = typeof<Needs<IDeviceClient>>
-        let tokenType = typeof<Env<IDeviceClient>>
-        let projectedType = typeof<Env<IDeviceClient, int>>
+    let ``capability primitives are public and nominally shaped`` () =
+        let needsType = typeof<Requires<IDeviceClient>>
+        let tokenType = typeof<Resolve<IDeviceClient>>
+        let projectedType = typeof<Resolve<IDeviceClient, int>>
 
         let tokenInterfaceReference =
             { new IDeviceClient with
@@ -29,8 +29,8 @@ module CapsPrimitiveTests =
         let tokenCase: UnionCaseInfo = FSharpType.GetUnionCases tokenType |> Array.exactlyOne
         let projectedCase: UnionCaseInfo = FSharpType.GetUnionCases projectedType |> Array.exactlyOne
 
-        test <@ tokenCase.Name = "Env" @>
-        test <@ projectedCase.Name = "Env" @>
+        test <@ tokenCase.Name = "Resolve" @>
+        test <@ projectedCase.Name = "Resolve" @>
         let tokenFields = tokenCase.GetFields()
         let projectedFieldsInfo = projectedCase.GetFields()
 
@@ -64,8 +64,8 @@ module CapsPrimitiveTests =
 
         test <@ projected tokenInterfaceReference = 3 @>
 
-        let _ : Needs<IDeviceClient> option = None
-        let _ : Env<IDeviceClient> option = None
-        let _ : Env<IDeviceClient, int> option = None
+        let _ : Requires<IDeviceClient> option = None
+        let _ : Resolve<IDeviceClient> option = None
+        let _ : Resolve<IDeviceClient, int> option = None
 
         ()

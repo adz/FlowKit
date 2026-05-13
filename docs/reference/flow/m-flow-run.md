@@ -9,6 +9,10 @@ linkTitle: "run"
 
 Executes a flow with the provided environment and the default cancellation token.
 
+## Remarks
+
+Uncaught exceptions become <code>Cause.Die</code>; cancellation becomes <code>Cause.Interrupt</code>.
+
 ## Parameters
 
 - `environment`: <code>'env</code>

@@ -1,22 +1,22 @@
 ---
-title: "Capability"
+title: "Resolver"
 ---
 
-This page shows the source-documented capability and layer surface, including CAPS request tokens and environment management helpers.
+This page shows the source-documented resolver and layer surface, including Resolve request tokens, environment management helpers, and the runtime/application split used by RuntimeContext.
 
-## CAPS tokens
+## Resolve tokens
 
-- [`Needs`](./t-needs-1.md): Describes the capability contract for a single dependency.
-- [`Env`](./t-env-1.md): Request token for binding a whole dependency inside a workflow.
-- [`Env`](./t-env-2.md): Request token for projecting a value from a dependency.
+- [`Requires`](./t-requires-1.md): Describes the capability contract for a single dependency.
+- [`Resolve`](./t-resolve-1.md): Request token for binding a whole dependency inside a workflow.
+- [`Resolve`](./t-resolve-2.md): Request token for projecting a value from a dependency.
 
-## Capabilities
+## Dependencies
 
 - [`MissingCapability`](./t-missingcapability.md): Describes a missing service-provider capability.
-- [`Capability.service`](./m-capability-service.md): Reads a service from the environment using the provided projection.
-- [`Capability.runtime`](./m-capability-runtime.md): Reads the current runtime from the environment.
-- [`Capability.environment`](./m-capability-environment.md): Reads the application environment from the environment.
-- [`Capability.serviceFromProvider`](./m-capability-servicefromprovider.md): Reads a service from <a href="https://learn.microsoft.com/dotnet/api/iserviceprovider">IServiceProvider</a> and fails when it is not registered.
+- [`Resolver.resolve`](./m-resolver-resolve.md): Reads a dependency from the environment using the provided projection.
+- [`Resolver.runtime`](./m-resolver-runtime.md): Reads the current runtime from the environment.
+- [`Resolver.environment`](./m-resolver-environment.md): Reads the application environment from the environment.
+- [`Resolver.fromProvider`](./m-resolver-fromprovider.md): Reads a dependency from <a href="https://learn.microsoft.com/dotnet/api/iserviceprovider">IServiceProvider</a> and fails when it is not registered.
 
 ## Layers
 

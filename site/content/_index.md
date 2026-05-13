@@ -62,8 +62,8 @@ type Clock =
 
 let readVerifiedEmail userId =
     flow {
-        let! user = Env<Api> (_.LoadUser userId)
-        let! checkedAt = Env<Clock> _.UtcNow
+        let! user = Resolve<Api> (_.LoadUser userId)
+        let! checkedAt = Resolve<Clock> _.UtcNow
         let! email = validateEmail user.Email
 
         return email, checkedAt

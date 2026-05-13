@@ -14,17 +14,17 @@ Recorded: 2026-04-29.
 
 ## Decision
 
-This direction was superseded by the explicit `Flow.read` API and the `Env` request token.
+This direction was superseded by the explicit `Flow.read` API and the `Resolve` request token.
 
 ## Shape
 
 - `Flow.read project` remains the canonical reader projection.
-- `Env<'dep>` and `Env<'dep, 'value>` remain the request tokens for capability-style reads.
+- `Resolve<'dep>` and `Resolve<'dep, 'value>` remain the request tokens for capability-style reads.
 
 ## Why
 
 - The `yield` shorthand duplicated `Flow.read` without adding enough clarity.
-- `Env` already covers the capability-request story with less ambiguity.
+- `Resolve` already covers the capability-request story with less ambiguity.
 
 ## Caveats
 
@@ -33,5 +33,5 @@ This direction was superseded by the explicit `Flow.read` API and the `Env` requ
 
 ## Consequences
 
-- Keep the builder surface centered on `return`, `return!`, `let!`, and `Env`.
+- Keep the builder surface centered on `return`, `return!`, `let!`, and `Resolve`.
 - Keep `Flow.read` as the canonical explicit entry point.

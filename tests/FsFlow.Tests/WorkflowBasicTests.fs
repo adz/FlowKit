@@ -210,15 +210,15 @@ module WorkflowBasicTests =
         let provider = RecordingServiceProvider(typeof<IDeviceClient>, app.DeviceClient :> obj) :> IServiceProvider
 
         let providerResult =
-            Capability.serviceFromProvider<IDeviceClient>
+            Resolver.fromProvider<IDeviceClient>
             |> Flow.runSync provider
 
         let missingProviderResult =
-            Capability.serviceFromProvider<IDeviceClient>
+            Resolver.fromProvider<IDeviceClient>
             |> Flow.runSync (RecordingServiceProvider(typeof<string>, "nope") :> IServiceProvider)
 
         let flowCapability : Flow<RuntimeContext<RuntimeServices, AppDependencies>, string, IDeviceClient> =
-            Capability.service _.DeviceClient
+            Resolver.resolve _.DeviceClient
 
         let flowCapabilityResult =
             flowCapability
@@ -265,7 +265,7 @@ module WorkflowBasicTests =
         test <@ publicMethods |> Array.contains "ReturnFrom" @>
         test <@ publicMethods |> Array.exists (fun name -> name.StartsWith("Yield")) |> not @>
         test <@ publicMethods |> Array.contains "Run" @>
-        test <@ argumentTypeNames = [| "Env`1"; "Env`2"; "FSharpAsync`1"; "FSharpFunc`2"; "FSharpOption`1"; "FSharpResult`2"; "FSharpValueOption`1"; "Flow`3"; "Task"; "Task`1"; "ValueTask"; "ValueTask`1" |] @>
+        test <@ argumentTypeNames = [| "Resolve`1"; "Resolve`2"; "FSharpAsync`1"; "FSharpFunc`2"; "FSharpOption`1"; "FSharpResult`2"; "FSharpValueOption`1"; "Flow`3"; "Task"; "Task`1"; "ValueTask"; "ValueTask`1" |] @>
 
     [<Fact>]
     let ``flow lives in FsFlow and composes sync flows`` () =

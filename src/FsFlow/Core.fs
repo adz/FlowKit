@@ -214,9 +214,9 @@ module RetryPolicy =
 
 /// <summary>Describes the capability contract for a single dependency.</summary>
 /// <remarks>
-/// Named cap-set interfaces inherit this contract once and then expose the dependency through a
+/// Named capability interfaces inherit this contract once and then expose the dependency through a
 /// member such as <c>Clock</c> or <c>Logger</c>. Workflow builders can accept any environment
-/// that implements <c>Needs&lt;'dep&gt;</c>, which lets larger runtimes satisfy smaller
+/// that implements <c>Requires&lt;'dep&gt;</c>, which lets larger runtimes satisfy smaller
 /// boundaries.
 /// </remarks>
 /// <typeparam name="dep">The dependency type exposed by the environment.</typeparam>
@@ -225,19 +225,19 @@ module RetryPolicy =
 /// type IClock =
 ///     abstract UtcNow : unit -&gt; DateTimeOffset
 ///
-/// type ClockCaps =
-///     inherit Needs&lt;IClock&gt;
+/// type ClockRequires =
+///     inherit Requires&lt;IClock&gt;
 ///     abstract Clock : IClock
 /// </code>
 /// </example>
-type Needs<'dep> =
+type Requires<'dep> =
     abstract Dep : 'dep
 
 /// <summary>Request token for binding a whole dependency inside a workflow.</summary>
 /// <remarks>
 /// Use this token when a workflow needs the dependency itself rather than a value projected from
 /// that dependency. The <c>flow {}</c> builder and its internal compatibility helpers
-/// read it from any environment that implements <c>Needs&lt;'dep&gt;</c>.
+/// read it from any environment that implements <c>Requires&lt;'dep&gt;</c>.
 /// </remarks>
 /// <typeparam name="dep">The dependency type to read from the environment.</typeparam>
 /// <example>
@@ -245,20 +245,20 @@ type Needs<'dep> =
 /// type IClock =
 ///     abstract UtcNow : unit -&gt; DateTimeOffset
 ///
-/// type ClockCaps =
-///     inherit Needs&lt;IClock&gt;
+/// type ClockRequires =
+///     inherit Requires&lt;IClock&gt;
 ///     abstract Clock : IClock
 ///
-/// let readClock : Flow&lt;#ClockCaps, unit, IClock&gt; =
+/// let readClock : Flow&lt;#ClockRequires, unit, IClock&gt; =
 ///     flow {
-///         let! clock = Env&lt;IClock&gt;
+///         let! clock = Resolve&lt;IClock&gt;
 ///         return clock
 ///     }
 /// </code>
 /// </example>
 [<Struct>]
-type Env<'dep> =
-    | Env
+type Resolve<'dep> =
+    | Resolve
 
 /// <summary>Request token for projecting a value from a dependency.</summary>
 /// <remarks>
@@ -274,20 +274,20 @@ type Env<'dep> =
 /// type IClock =
 ///     abstract UtcNow : unit -&gt; DateTimeOffset
 ///
-/// type ClockCaps =
-///     inherit Needs&lt;IClock&gt;
+/// type ClockRequires =
+///     inherit Requires&lt;IClock&gt;
 ///     abstract Clock : IClock
 ///
-/// let readClockNow : Flow&lt;#ClockCaps, unit, DateTimeOffset&gt; =
+/// let readClockNow : Flow&lt;#ClockRequires, unit, DateTimeOffset&gt; =
 ///     flow {
-///         let! now = Env&lt;IClock&gt; _.UtcNow
+///         let! now = Resolve&lt;IClock&gt; _.UtcNow
 ///         return now
 ///     }
 /// </code>
 /// </example>
 [<Struct>]
-type Env<'dep, 'value> =
-    | Env of ('dep -> 'value)
+type Resolve<'dep, 'value> =
+    | Resolve of ('dep -> 'value)
 
 /// <summary>Describes a missing service-provider capability.</summary>
 type MissingCapability =

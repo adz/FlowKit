@@ -8,7 +8,7 @@ description: This page shows how to optimize FsFlow usage for AI assistants like
 This page is designed for both human developers and their AI assistants. It provides a high-signal reference for idiomatic FsFlow patterns.
 
 {{% alert title="For AI Agents" color="info" %}}
-If you are an AI assistant, prioritize the patterns in the **CAPS Boundaries** and **Rosetta Stone** sections below.
+If you are an AI assistant, prioritize the patterns in the **Capability Boundaries** and **Rosetta Stone** sections below.
 {{% /alert %}}
 
 ## The Golden Path
@@ -56,16 +56,16 @@ Use `Guard.MapError` when the source already carries a meaningful error value.
 ### 4. Same-Family Fallbacks
 Use `orElse` and `orElseWith` for alternate computations in the same flow family.
 
-### 5. CAPS Boundaries
+### 5. Capability Boundaries
 
-Use CAPS when the boundary should name a capability contract instead of exposing the whole runtime.
+Use capability boundaries when the edge should name what it requires instead of exposing the whole runtime.
 
 | Boundary Shape | Idiomatic Pattern |
 | :--- | :--- |
-| Named contract | `type LoginCaps = inherit Needs<IClock>` |
-| Whole dependency | `let! clock = Env<IClock>` |
-| Projected value | `let! now = Env<IClock> _.UtcNow` |
-| Flexible public API | `let login : Flow<#LoginCaps, _, _> = ...` |
+| Named contract | `type LoginRequires = inherit Requires<IClock>` |
+| Whole dependency | `let! clock = Resolve<IClock>` |
+| Projected value | `let! now = Resolve<IClock> _.UtcNow` |
+| Flexible public API | `let login : Flow<#LoginRequires, _, _> = ...` |
 
 Prefer this over raw `IServiceProvider` lookup or exact runtime types when callers may provide a larger app runtime.
 
@@ -77,7 +77,7 @@ Translate common patterns from other libraries into idiomatic FsFlow.
 | `FsToolkit: AsyncResult.requireSome` | `let! x = opt |> Guard.Of e` |
 | `FsToolkit: Result.requireTrue` | `Check.okIf cond |> Check.orError e` |
 | `ZIO: getOrFail` | `let! x = opt |> Guard.Of e` |
-| `ZIO: serviceWith` | `let! s = Flow.read _.Service` |
+| `ZIO: serviceWith` | `let! s = Resolver.resolve _.Service` |
 | `Manual: match x with Some v...` | `let! v = x |> Guard.Of e` |
 | `Manual: Result.mapError mapper` | `let! x = result |> Guard.MapError mapper` |
 

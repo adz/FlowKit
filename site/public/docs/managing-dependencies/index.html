@@ -20,20 +20,20 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Managing Dependencies | FsFlow</title>
-<meta name="description" content="Introduction to dependency management in FsFlow.">
+<meta name="description" content="A staged guide to dependency management in FsFlow.">
 <meta property="og:url" content="http://localhost:3000/docs/managing-dependencies/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Managing Dependencies">
-  <meta property="og:description" content="Introduction to dependency management in FsFlow.">
+  <meta property="og:description" content="A staged guide to dependency management in FsFlow.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="website">
 
   <meta itemprop="name" content="Managing Dependencies">
-  <meta itemprop="description" content="Introduction to dependency management in FsFlow.">
-  <meta itemprop="wordCount" content="435">
+  <meta itemprop="description" content="A staged guide to dependency management in FsFlow.">
+  <meta itemprop="wordCount" content="376">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Managing Dependencies">
-  <meta name="twitter:description" content="Introduction to dependency management in FsFlow.">
+  <meta name="twitter:description" content="A staged guide to dependency management in FsFlow.">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -175,7 +175,13 @@
     <a href="http://localhost:3000/docs/managing-dependencies/" class="align-left ps-0 active td-sidebar-link td-sidebar-link__section" id="m-docsmanaging-dependencies"><span class="td-sidebar-nav-active-item">Managing Dependencies</span></a>
     <ul class="ul-2 foldable">
       <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsmanaging-dependenciesenv-slicing-li">
-    <a href="http://localhost:3000/docs/managing-dependencies/env-slicing/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciesenv-slicing"><span class="">Environment Slicing</span></a>
+    <a href="http://localhost:3000/docs/managing-dependencies/env-slicing/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciesenv-slicing"><span class="">Level 1: Area-Scoped Records</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsmanaging-dependenciesruntime-context-li">
+    <a href="http://localhost:3000/docs/managing-dependencies/runtime-context/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciesruntime-context"><span class="">Level 2: RuntimeContext</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsmanaging-dependenciesprovider-edge-li">
+    <a href="http://localhost:3000/docs/managing-dependencies/provider-edge/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciesprovider-edge"><span class="">Level 3: Provider Edge</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsmanaging-dependenciescapability-contracts-li">
+    <a href="http://localhost:3000/docs/managing-dependencies/capability-contracts/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciescapability-contracts"><span class="">Level 4: Nominal Capability Helpers</span></a>
   </li>
     </ul>
   </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docsstate-concurrency-li">
@@ -238,16 +244,10 @@
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#the-two-styles">The Two Styles</a>
-      <ul>
-        <li><a href="#1-the-record-pattern-environment-slicing">1. The Record Pattern (Environment Slicing)</a></li>
-        <li><a href="#2-runtimecontext-for-host-services">2. RuntimeContext for Host Services</a></li>
-      </ul>
-    </li>
-    <li><a href="#relationship-to-architecture">Relationship to Architecture</a></li>
-    <li><a href="#comparison-at-a-glance">Comparison at a Glance</a></li>
-    <li><a href="#which-style-should-i-use">Which style should I use?</a></li>
-    <li><a href="#shared-helpers-the-capability-module">Shared Helpers: The Capability Module</a></li>
+    <li><a href="#read-in-order">Read In Order</a></li>
+    <li><a href="#the-pedagogical-order">The Pedagogical Order</a></li>
+    <li><a href="#what-runtimecontext-is-doing-here">What <code>RuntimeContext</code> Is Doing Here</a></li>
+    <li><a href="#bridges-not-a-fifth-level">Bridges, Not A Fifth Level</a></li>
   </ul>
 </nav>
   </div>
@@ -267,78 +267,89 @@
 </nav>
 <div class="td-content">
 	<h1>Managing Dependencies</h1>
-  <div class="lead">Introduction to dependency management in FsFlow.</div>
+  <div class="lead">A staged guide to dependency management in FsFlow.</div>
 	<header class="article-meta">
 		
 </header>
-	<p>In FsFlow, a workflow is not just a function; it is a description of work that needs an <strong>environment</strong> to run.</p>
-<p>As your application grows, you might be tempted to create a single &ldquo;God Object&rdquo; (like <code>AppEnv</code>) that contains every service in your system: Database, Logger, API Gateways, and more. However, if every small workflow depends on this massive record, your code becomes hard to test and tightly coupled. You&rsquo;d have to mock the entire universe just to test a simple calculation.</p>
-<p>FsFlow provides two primary architectural styles to help you &ldquo;slice&rdquo; your dependencies so that each workflow only asks for what it actually needs.</p>
-<h2 id="the-two-styles">The Two Styles</h2>
-<h3 id="1-the-record-pattern-environment-slicing">1. The Record Pattern (Environment Slicing)</h3>
-<p>This is the simplest way to start. You define your environment as a standard F# record. Workflows &ldquo;read&rdquo; or &ldquo;project&rdquo; the fields they need from this record. It is perfect for local helpers, internal logic, and smaller applications where record types are stable.</p>
-<p><strong>Read the Deep Dive:</strong> <a href="http://localhost:3000/docs/managing-dependencies/env-slicing/">Environment Slicing</a></p>
-<h3 id="2-runtimecontext-for-host-services">2. RuntimeContext for Host Services</h3>
-<p>When you need to split operational services from application dependencies, use <code>RuntimeContext&lt;'runtime, 'env&gt;</code>. This keeps logging, metrics, and similar host concerns separate from the app record.</p>
-<hr>
-<h2 id="relationship-to-architecture">Relationship to Architecture</h2>
-<p>These two patterns support different <strong>Architectural Styles</strong>:</p>
-<ul>
-<li><strong>Style 1: The Booted App</strong>: Usually uses a single large record (Record Pattern) for simplicity.</li>
-<li><strong>Style 2: Parameters + Context</strong>: Uses parameters for core logic and a thin record (Record Pattern) for request context.</li>
-<li><strong>Style 3: .NET DI</strong>: Often uses <code>RuntimeContext&lt;'runtime, 'env&gt;</code> and the Record Pattern to bridge .NET services into the FsFlow execution model.</li>
-</ul>
-<p>For more details on these structures, see <a href="http://localhost:3000/docs/core-model/architectural-styles/">Architectural Styles</a>.</p>
-<hr>
-<h2 id="comparison-at-a-glance">Comparison at a Glance</h2>
+	<p>FsFlow does not force one dependency style on every workflow. It gives you a ladder:</p>
+<ol>
+<li>area-scoped records at the boundary</li>
+<li><code>RuntimeContext&lt;'runtime, 'env&gt;</code> when the host and app should be separate</li>
+<li><code>IServiceProvider</code> at the outer edge when the host container is the source of truth</li>
+<li>nominal <code>Requires&lt;'dep&gt;</code> helpers when reuse beats plain record passing</li>
+</ol>
+<p>Start with the shallowest level that fits the boundary you are designing. Move deeper only when you can name the pressure that makes the simpler shape awkward.</p>
+<h2 id="read-in-order">Read In Order</h2>
 <table>
   <thead>
       <tr>
-          <th style="text-align: left">Feature</th>
-          <th style="text-align: left">Record Pattern</th>
-          <th style="text-align: left">RuntimeContext</th>
+          <th style="text-align: left">Level</th>
+          <th style="text-align: left">Shape</th>
+          <th style="text-align: left">Best fit</th>
+          <th style="text-align: left">Main APIs</th>
+          <th style="text-align: left">Page</th>
       </tr>
   </thead>
   <tbody>
       <tr>
-          <td style="text-align: left"><strong>Typical Use</strong></td>
-          <td style="text-align: left">Local helpers, small apps</td>
-          <td style="text-align: left">Host services plus app dependencies</td>
+          <td style="text-align: left">1</td>
+          <td style="text-align: left">Area-scoped records</td>
+          <td style="text-align: left">Controllers, jobs, integrations, feature boundaries</td>
+          <td style="text-align: left"><code>Flow.read</code>, <code>Flow.localEnv</code>, <code>Flow.provideLayer</code></td>
+          <td style="text-align: left"><a href="http://localhost:3000/docs/managing-dependencies/env-slicing/">Level 1: Area-Scoped Records</a></td>
       </tr>
       <tr>
-          <td style="text-align: left"><strong>Coupling</strong></td>
-          <td style="text-align: left">Bound to a specific record type</td>
-          <td style="text-align: left">Bound to two explicit scopes</td>
+          <td style="text-align: left">2</td>
+          <td style="text-align: left"><code>RuntimeContext&lt;'runtime, 'env&gt;</code></td>
+          <td style="text-align: left">Host services and app dependencies need separate ownership</td>
+          <td style="text-align: left"><code>RuntimeContext.create</code>, <code>Resolver.runtime</code>, <code>Resolver.environment</code>, <code>TaskFlow.readRuntime</code>, <code>TaskFlow.readEnvironment</code></td>
+          <td style="text-align: left"><a href="http://localhost:3000/docs/managing-dependencies/runtime-context/">Level 2: RuntimeContext</a></td>
       </tr>
       <tr>
-          <td style="text-align: left"><strong>Simplicity</strong></td>
-          <td style="text-align: left">High (Standard F#)</td>
-          <td style="text-align: left">Medium</td>
+          <td style="text-align: left">3</td>
+          <td style="text-align: left"><code>IServiceProvider</code> edge</td>
+          <td style="text-align: left">ASP.NET, hosted services, DI-heavy hosts</td>
+          <td style="text-align: left"><code>Resolver.fromProvider</code>, <code>MissingCapability</code></td>
+          <td style="text-align: left"><a href="http://localhost:3000/docs/managing-dependencies/provider-edge/">Level 3: Provider Edge</a></td>
       </tr>
       <tr>
-          <td style="text-align: left"><strong>Flexibility</strong></td>
-          <td style="text-align: left">Moderate</td>
-          <td style="text-align: left">High</td>
+          <td style="text-align: left">4</td>
+          <td style="text-align: left">Nominal capability helpers</td>
+          <td style="text-align: left">Reusable helpers that need a named contract</td>
+          <td style="text-align: left"><code>Requires&lt;'dep&gt;</code>, <code>Resolver.resolve</code></td>
+          <td style="text-align: left"><a href="http://localhost:3000/docs/managing-dependencies/capability-contracts/">Level 4: Nominal Capability Helpers</a></td>
       </tr>
   </tbody>
 </table>
-<hr>
-<h2 id="which-style-should-i-use">Which style should I use?</h2>
-<p><strong>Start with the Record Pattern.</strong> It is the most idiomatic way to write F# and requires the least amount of boilerplate.</p>
-<p>Move to <code>RuntimeContext&lt;'runtime, 'env&gt;</code> when:</p>
+<h2 id="the-pedagogical-order">The Pedagogical Order</h2>
+<ol>
+<li>Start with records that are scoped to a controller, job, or integration boundary.</li>
+<li>Split runtime services from application dependencies only when that separation is real.</li>
+<li>Use provider lookup only when the host container must remain the root of truth.</li>
+<li>Reach for nominal helpers only when a shared contract is clearly paying rent.</li>
+</ol>
+<h2 id="what-runtimecontext-is-doing-here">What <code>RuntimeContext</code> Is Doing Here</h2>
+<p><code>RuntimeContext&lt;'runtime, 'env&gt;</code> is not a replacement for level 1. It is a different split:</p>
 <ul>
-<li>You need to keep operational services separate from application dependencies.</li>
-<li>You want a thin host/service split without pushing every concern into one record.</li>
-<li>You are bridging a conventional <code>.NET</code> app host into FsFlow workflows.</li>
+<li><code>Runtime</code> holds operational concerns such as logging, metrics, tracing, and clocks.</li>
+<li><code>Environment</code> holds the application dependencies.</li>
+<li><code>CancellationToken</code> belongs to the current task run.</li>
 </ul>
-<h2 id="shared-helpers-the-capability-module">Shared Helpers: The Capability Module</h2>
-<p>Regardless of which style you choose, FsFlow provides a <code>Capability</code> module that works across both. These helpers let you read from the main <code>Flow</code> surface and from <code>RuntimeContext</code> without needing specific module prefixes.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">log</span> <span style="color:#000">message</span> <span style="color:#ce5c00;font-weight:bold">=</span>
+<p>That split matters when one host should feed many areas, or when the app record should stay focused while the runtime keeps expanding.</p>
+<h2 id="bridges-not-a-fifth-level">Bridges, Not A Fifth Level</h2>
+<p><code>Flow.localEnv</code> and <code>Flow.provideLayer</code> are bridges between shapes, not another dependency model.</p>
+<ul>
+<li>Use <code>localEnv</code> when a larger record can be projected to a smaller record.</li>
+<li>Use <code>provideLayer</code> when one flow builds the environment needed by another.</li>
+<li>Use <code>Resolver.resolve</code> when the workflow should read a dependency through the same vocabulary regardless of which level you are on.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">controllerWorkflow</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">ControllerDeps</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">Error</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">logger</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Capability</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">service</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">Logger</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#000">logger</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Log</span> <span style="color:#000">message</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">logger</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">Logger</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">logger</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Info</span> <span style="color:#4e9a06">&#34;starting&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#4e9a06">&#34;ok&#34;</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span></code></pre></div><p>Learn more about these polymorphic helpers in the <a href="http://localhost:3000/docs/managing-dependencies/env-slicing/#the-capability-module">Environment Slicing</a> guide.</p>
+</span></span></code></pre></div><p>The deeper levels exist to keep the boundary honest. They are not a license to make every workflow look the same.</p>
 
 	<div class="section-index">
     
@@ -346,9 +357,27 @@
     <hr class="panel-line">
         <div class="entry">
                 <h5>
-                    <a href="http://localhost:3000/docs/managing-dependencies/env-slicing/">Environment Slicing</a>
+                    <a href="http://localhost:3000/docs/managing-dependencies/env-slicing/">Level 1: Area-Scoped Records</a>
                 </h5>
-                <p>Deep dive into the Record Pattern for dependency management.</p>
+                <p>The first and simplest dependency shape in FsFlow.</p>
+            </div>
+        <div class="entry">
+                <h5>
+                    <a href="http://localhost:3000/docs/managing-dependencies/runtime-context/">Level 2: RuntimeContext</a>
+                </h5>
+                <p>Splitting runtime services from application dependencies.</p>
+            </div>
+        <div class="entry">
+                <h5>
+                    <a href="http://localhost:3000/docs/managing-dependencies/provider-edge/">Level 3: Provider Edge</a>
+                </h5>
+                <p>Using IServiceProvider only at the host boundary.</p>
+            </div>
+        <div class="entry">
+                <h5>
+                    <a href="http://localhost:3000/docs/managing-dependencies/capability-contracts/">Level 4: Nominal Capability Helpers</a>
+                </h5>
+                <p>Small named contracts for reusable helpers.</p>
             </div>
         </div>
 </div>
