@@ -315,6 +315,42 @@ samp,
   margin: 1.5rem 0 !important;
 }
 
+.td-content pre.fssnip,
+.td-content pre.fssnip code {
+  color: #1f2937;
+}
+
+.td-content pre.fssnip .k {
+  color: #7c3aed;
+  font-weight: 650;
+}
+
+.td-content pre.fssnip .s {
+  color: #047857;
+}
+
+.td-content pre.fssnip .c {
+  color: #64748b;
+  font-style: italic;
+}
+
+.td-content pre.fssnip .n {
+  color: #b45309;
+}
+
+.td-content pre.fssnip .o,
+.td-content pre.fssnip .pn {
+  color: #475569;
+}
+
+.td-content pre.fssnip .id,
+.td-content pre.fssnip .fn,
+.td-content pre.fssnip .uc,
+.td-content pre.fssnip .ty,
+.td-content pre.fssnip .if {
+  color: #0b55d9;
+}
+
 .docs-home-container .highlight {
   margin: 2rem 0;
   padding: 0;
