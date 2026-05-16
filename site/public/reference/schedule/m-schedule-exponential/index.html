@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Schedule.exponential | FsFlow</title>
-<meta name="description" content="Schedule.exponential baseDelay Creates a schedule that recurs with exponential backoff.
-Parameters baseDelay: TimeSpan">
+<meta name="description" content="Creates a schedule that recurs with exponential backoff.
+Signature Schedule.exponential baseDelay Parameters Name Type Description baseDelay TimeSpan The initial delay for the first retry. Returns Type Description Schedule&lt;‘env, ‘input, TimeSpan&gt; A schedule that recurs indefinitely, doubling the delay each time (baseDelay * 2^attempt). Examples let schedule = Schedule.exponential (TimeSpan.FromMilliseconds 100.0) // Delays: 100ms, 200ms, 400ms, 800ms... val schedule: obj">
 <meta property="og:url" content="http://localhost:3000/reference/schedule/m-schedule-exponential/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Schedule.exponential">
-  <meta property="og:description" content="Schedule.exponential baseDelay Creates a schedule that recurs with exponential backoff.
-Parameters baseDelay: TimeSpan">
+  <meta property="og:description" content="Creates a schedule that recurs with exponential backoff.
+Signature Schedule.exponential baseDelay Parameters Name Type Description baseDelay TimeSpan The initial delay for the first retry. Returns Type Description Schedule&lt;‘env, ‘input, TimeSpan&gt; A schedule that recurs indefinitely, doubling the delay each time (baseDelay * 2^attempt). Examples let schedule = Schedule.exponential (TimeSpan.FromMilliseconds 100.0) // Delays: 100ms, 200ms, 400ms, 800ms... val schedule: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Schedule.exponential">
-  <meta itemprop="description" content="Schedule.exponential baseDelay Creates a schedule that recurs with exponential backoff.
-Parameters baseDelay: TimeSpan">
-  <meta itemprop="wordCount" content="12">
+  <meta itemprop="description" content="Creates a schedule that recurs with exponential backoff.
+Signature Schedule.exponential baseDelay Parameters Name Type Description baseDelay TimeSpan The initial delay for the first retry. Returns Type Description Schedule&lt;‘env, ‘input, TimeSpan&gt; A schedule that recurs indefinitely, doubling the delay each time (baseDelay * 2^attempt). Examples let schedule = Schedule.exponential (TimeSpan.FromMilliseconds 100.0) // Delays: 100ms, 200ms, 400ms, 800ms... val schedule: obj">
+  <meta itemprop="wordCount" content="58">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Schedule.exponential">
-  <meta name="twitter:description" content="Schedule.exponential baseDelay Creates a schedule that recurs with exponential backoff.
-Parameters baseDelay: TimeSpan">
+  <meta name="twitter:description" content="Creates a schedule that recurs with exponential backoff.
+Signature Schedule.exponential baseDelay Parameters Name Type Description baseDelay TimeSpan The initial delay for the first retry. Returns Type Description Schedule&lt;‘env, ‘input, TimeSpan&gt; A schedule that recurs indefinitely, doubling the delay each time (baseDelay * 2^attempt). Examples let schedule = Schedule.exponential (TimeSpan.FromMilliseconds 100.0) // Delays: 100ms, 200ms, 400ms, 800ms... val schedule: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +517,10 @@ Parameters baseDelay: TimeSpan">
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -543,14 +546,48 @@ Parameters baseDelay: TimeSpan">
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Creates a schedule that recurs with exponential backoff.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>Schedule.exponential&#32;<span>baseDelay</span></span></code>
 </div>
-<p>Creates a schedule that recurs with exponential backoff.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>baseDelay</code>: <code><a href="https://learn.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>baseDelay</code></td>
+          <td><code><a href="https://learn.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></code></td>
+          <td>The initial delay for the first retry.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-schedule-3.html">Schedule</a>&lt;<span>&lsquo;env, &lsquo;input, <a href="https://learn.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></span>&gt;</span></code></td>
+          <td>A schedule that recurs indefinitely, doubling the delay each time (baseDelay * 2^attempt).</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">schedule</span> <span class="o">=</span> <span class="id">Schedule</span><span class="pn">.</span><span class="id">exponential</span> <span class="pn">(</span><span class="id">TimeSpan</span><span class="pn">.</span><span class="id">FromMilliseconds</span> <span class="n">100.0</span><span class="pn">)</span>
+ <span class="c">// Delays: 100ms, 200ms, 400ms, 800ms...</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val schedule: obj</div>
 
 	<nav class="docs-page-nav docs-page-nav--next-only"><a class="docs-home-cta docs-page-nav__link docs-page-nav__next" href="http://localhost:3000/reference/schedule/m-schedule-jittered/" aria-label="Next - Schedule.jittered">
     <span>Next</span>

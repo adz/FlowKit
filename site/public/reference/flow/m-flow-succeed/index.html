@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.succeed | FsFlow</title>
-<meta name="description" content="succeed value Alias for ok that reads well in some call sites.
-Parameters value: ‘value Examples let flow = Flow.succeed 42 let result = Flow.run () flow // result = Success 42 val flow: obj val result: obj">
+<meta name="description" content="Alias for ok that reads well in some call sites.
+Signature Flow.succeed value Parameters Name Type Description value ‘value The value to wrap in a successful flow. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that always succeeds with the provided value. Examples let flow = Flow.succeed 42 let result = Flow.run () flow // result = Success 42 val flow: obj val result: obj">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-succeed/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.succeed">
-  <meta property="og:description" content="succeed value Alias for ok that reads well in some call sites.
-Parameters value: ‘value Examples let flow = Flow.succeed 42 let result = Flow.run () flow // result = Success 42 val flow: obj val result: obj">
+  <meta property="og:description" content="Alias for ok that reads well in some call sites.
+Signature Flow.succeed value Parameters Name Type Description value ‘value The value to wrap in a successful flow. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that always succeeds with the provided value. Examples let flow = Flow.succeed 42 let result = Flow.run () flow // result = Success 42 val flow: obj val result: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.succeed">
-  <meta itemprop="description" content="succeed value Alias for ok that reads well in some call sites.
-Parameters value: ‘value Examples let flow = Flow.succeed 42 let result = Flow.run () flow // result = Success 42 val flow: obj val result: obj">
-  <meta itemprop="wordCount" content="37">
+  <meta itemprop="description" content="Alias for ok that reads well in some call sites.
+Signature Flow.succeed value Parameters Name Type Description value ‘value The value to wrap in a successful flow. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that always succeeds with the provided value. Examples let flow = Flow.succeed 42 let result = Flow.run () flow // result = Success 42 val flow: obj val result: obj">
+  <meta itemprop="wordCount" content="64">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.succeed">
-  <meta name="twitter:description" content="succeed value Alias for ok that reads well in some call sites.
-Parameters value: ‘value Examples let flow = Flow.succeed 42 let result = Flow.run () flow // result = Success 42 val flow: obj val result: obj">
+  <meta name="twitter:description" content="Alias for ok that reads well in some call sites.
+Signature Flow.succeed value Parameters Name Type Description value ‘value The value to wrap in a successful flow. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that always succeeds with the provided value. Examples let flow = Flow.succeed 42 let result = Flow.run () flow // result = Success 42 val flow: obj val result: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +517,9 @@ Parameters value: ‘value Examples let flow = Flow.succeed 42 let result = Flow
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
     <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
@@ -544,14 +546,43 @@ Parameters value: ‘value Examples let flow = Flow.succeed 42 let result = Flow
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>succeed&#32;<span>value</span></span></code>
+	<p>Alias for <code>ok</code> that reads well in some call sites.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.succeed&#32;<span>value</span></span></code>
 </div>
-<p>Alias for <code>ok</code> that reads well in some call sites.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>value</code>: <code>&lsquo;value</code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>value</code></td>
+          <td><code>&lsquo;value</code></td>
+          <td>The value to wrap in a successful flow.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>A flow that always succeeds with the provided value.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="examples">Examples</h2>
 <pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">flow</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">succeed</span> <span class="n">42</span>
  <span class="k">let</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="id">result</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">run</span> <span class="pn">(</span><span class="pn">)</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="3" class="id">flow</span>

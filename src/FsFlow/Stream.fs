@@ -19,7 +19,14 @@ type FlowStream<'env, 'error, 'value> =
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 [<RequireQualifiedAccess>]
 module FlowStream =
-    /// <summary>Creates a stream from a sequence of values.</summary>
+    /// <summary>Creates a stream from a synchronous sequence of values.</summary>
+    /// <param name="values">The sequence of values to be emitted by the stream.</param>
+    /// <returns>A <see cref="T:FsFlow.FlowStream`3"/> that yields each value from the sequence.</returns>
+    /// <example>
+    /// <code>
+    /// let stream = FlowStream.fromSeq [1..10]
+    /// </code>
+    /// </example>
     let fromSeq (values: seq<'value>) : FlowStream<'env, 'error, 'value> =
         FlowStream(fun _ _ ->
             { new IAsyncEnumerable<Exit<'value, 'error>> with
@@ -37,7 +44,17 @@ module FlowStream =
                             ValueTask() }
             })
 
-    /// <summary>Executes the stream and performs an action for each value.</summary>
+    /// <summary>Executes the stream and performs a synchronous action for each successful value.</summary>
+    /// <param name="environment">The environment required to execute the stream.</param>
+    /// <param name="action">The function to execute for each value emitted by the stream.</param>
+    /// <param name="stream">The stream to execute.</param>
+    /// <returns>A flow that represents the execution of the stream. If the stream fails, the flow fails with the same cause.</returns>
+    /// <example>
+    /// <code>
+    /// let stream = FlowStream.fromSeq ["a"; "b"; "c"]
+    /// let flow = FlowStream.runForEach () (printfn "%s") stream
+    /// </code>
+    /// </example>
     let runForEach 
         (environment: 'env) 
         (action: 'value -> unit) 
@@ -68,7 +85,15 @@ module FlowStream =
                     | None -> return Exit.Success ()
                 }))
 
-    /// <summary>Maps the successful values of a stream.</summary>
+    /// <summary>Transforms the successful values of a stream using the provided function.</summary>
+    /// <param name="f">The function to transform each value.</param>
+    /// <param name="stream">The stream whose values should be transformed.</param>
+    /// <returns>A new stream that yields transformed values.</returns>
+    /// <example>
+    /// <code>
+    /// let stream = FlowStream.fromSeq [1; 2; 3] |> FlowStream.map (fun n -> n * 2)
+    /// </code>
+    /// </example>
     let map (f: 'v -> 'w) (FlowStream op) : FlowStream<'env, 'error, 'w> =
         FlowStream(fun env ct ->
             let enumerable = op env ct

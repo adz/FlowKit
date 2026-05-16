@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>FlowStream.fromSeq | FsFlow</title>
-<meta name="description" content="FlowStream.fromSeq values Creates a stream from a sequence of values.
-Parameters values: ‘value seq">
+<meta name="description" content="Creates a stream from a synchronous sequence of values.
+Signature FlowStream.fromSeq values Parameters Name Type Description values ‘value seq The sequence of values to be emitted by the stream. Returns Type Description FlowStream&lt;‘env, ’error, ‘value&gt; A FlowStream that yields each value from the sequence. Examples let stream = FlowStream.fromSeq [1..10] val stream: obj">
 <meta property="og:url" content="http://localhost:3000/reference/stream/m-flowstream-fromseq/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="FlowStream.fromSeq">
-  <meta property="og:description" content="FlowStream.fromSeq values Creates a stream from a sequence of values.
-Parameters values: ‘value seq">
+  <meta property="og:description" content="Creates a stream from a synchronous sequence of values.
+Signature FlowStream.fromSeq values Parameters Name Type Description values ‘value seq The sequence of values to be emitted by the stream. Returns Type Description FlowStream&lt;‘env, ’error, ‘value&gt; A FlowStream that yields each value from the sequence. Examples let stream = FlowStream.fromSeq [1..10] val stream: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="FlowStream.fromSeq">
-  <meta itemprop="description" content="FlowStream.fromSeq values Creates a stream from a sequence of values.
-Parameters values: ‘value seq">
-  <meta itemprop="wordCount" content="13">
+  <meta itemprop="description" content="Creates a stream from a synchronous sequence of values.
+Signature FlowStream.fromSeq values Parameters Name Type Description values ‘value seq The sequence of values to be emitted by the stream. Returns Type Description FlowStream&lt;‘env, ’error, ‘value&gt; A FlowStream that yields each value from the sequence. Examples let stream = FlowStream.fromSeq [1..10] val stream: obj">
+  <meta itemprop="wordCount" content="52">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="FlowStream.fromSeq">
-  <meta name="twitter:description" content="FlowStream.fromSeq values Creates a stream from a sequence of values.
-Parameters values: ‘value seq">
+  <meta name="twitter:description" content="Creates a stream from a synchronous sequence of values.
+Signature FlowStream.fromSeq values Parameters Name Type Description values ‘value seq The sequence of values to be emitted by the stream. Returns Type Description FlowStream&lt;‘env, ’error, ‘value&gt; A FlowStream that yields each value from the sequence. Examples let stream = FlowStream.fromSeq [1..10] val stream: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +517,10 @@ Parameters values: ‘value seq">
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -543,14 +546,47 @@ Parameters values: ‘value seq">
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Creates a stream from a synchronous sequence of values.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>FlowStream.fromSeq&#32;<span>values</span></span></code>
 </div>
-<p>Creates a stream from a sequence of values.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>values</code>: <code><span>&lsquo;value seq</span></code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>values</code></td>
+          <td><code><span>&lsquo;value seq</span></code></td>
+          <td>The sequence of values to be emitted by the stream.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flowstream-3.html">FlowStream</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flowstream-3.html">FlowStream</a> that yields each value from the sequence.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">stream</span> <span class="o">=</span> <span class="id">FlowStream</span><span class="pn">.</span><span class="id">fromSeq</span> <span class="pn">[</span><span class="n">1..</span><span class="n">10</span><span class="pn">]</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val stream: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/stream/t-flowstream-3/" aria-label="Previous - FlowStream">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

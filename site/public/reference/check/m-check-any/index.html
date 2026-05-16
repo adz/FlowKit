@@ -19,29 +19,29 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Check.any | FsFlow</title>
-<meta name="description" content="any checks Returns success when at least one check in the sequence succeeds.
-Remarks Sequentially evaluates each check in the checks sequence. Stops at the first success.
-Parameters checks: Check&lt;‘value&gt; seq A sequence of checks. Returns A Check that succeeds if any input succeeds.">
+<meta name="description" content="Returns success when at least one check in the sequence succeeds.
+Signature Check.any checks Parameters Name Type Description checks Check&lt;‘value&gt; seq A sequence of checks. Returns Type Description Check&lt;unit&gt; A Check that succeeds if any input succeeds. Remarks Sequentially evaluates each check in the checks sequence. Stops at the first success.
+Examples [ Check.okIf false; Check.okIf true ] |&gt; Check.any // Ok () [ Check.okIf false; Check.okIf false ] |&gt; Check.any // Error ()">
 <meta property="og:url" content="http://localhost:3000/reference/check/m-check-any/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Check.any">
-  <meta property="og:description" content="any checks Returns success when at least one check in the sequence succeeds.
-Remarks Sequentially evaluates each check in the checks sequence. Stops at the first success.
-Parameters checks: Check&lt;‘value&gt; seq A sequence of checks. Returns A Check that succeeds if any input succeeds.">
+  <meta property="og:description" content="Returns success when at least one check in the sequence succeeds.
+Signature Check.any checks Parameters Name Type Description checks Check&lt;‘value&gt; seq A sequence of checks. Returns Type Description Check&lt;unit&gt; A Check that succeeds if any input succeeds. Remarks Sequentially evaluates each check in the checks sequence. Stops at the first success.
+Examples [ Check.okIf false; Check.okIf true ] |&gt; Check.any // Ok () [ Check.okIf false; Check.okIf false ] |&gt; Check.any // Error ()">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Check.any">
-  <meta itemprop="description" content="any checks Returns success when at least one check in the sequence succeeds.
-Remarks Sequentially evaluates each check in the checks sequence. Stops at the first success.
-Parameters checks: Check&lt;‘value&gt; seq A sequence of checks. Returns A Check that succeeds if any input succeeds.">
-  <meta itemprop="wordCount" content="43">
+  <meta itemprop="description" content="Returns success when at least one check in the sequence succeeds.
+Signature Check.any checks Parameters Name Type Description checks Check&lt;‘value&gt; seq A sequence of checks. Returns Type Description Check&lt;unit&gt; A Check that succeeds if any input succeeds. Remarks Sequentially evaluates each check in the checks sequence. Stops at the first success.
+Examples [ Check.okIf false; Check.okIf true ] |&gt; Check.any // Ok () [ Check.okIf false; Check.okIf false ] |&gt; Check.any // Error ()">
+  <meta itemprop="wordCount" content="73">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Check.any">
-  <meta name="twitter:description" content="any checks Returns success when at least one check in the sequence succeeds.
-Remarks Sequentially evaluates each check in the checks sequence. Stops at the first success.
-Parameters checks: Check&lt;‘value&gt; seq A sequence of checks. Returns A Check that succeeds if any input succeeds.">
+  <meta name="twitter:description" content="Returns success when at least one check in the sequence succeeds.
+Signature Check.any checks Parameters Name Type Description checks Check&lt;‘value&gt; seq A sequence of checks. Returns Type Description Check&lt;unit&gt; A Check that succeeds if any input succeeds. Remarks Sequentially evaluates each check in the checks sequence. Stops at the first success.
+Examples [ Check.okIf false; Check.okIf true ] |&gt; Check.any // Ok () [ Check.okIf false; Check.okIf false ] |&gt; Check.any // Error ()">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -521,9 +521,11 @@ Parameters checks: Check&lt;‘value&gt; seq A sequence of checks. Returns A Che
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -549,20 +551,50 @@ Parameters checks: Check&lt;‘value&gt; seq A sequence of checks. Returns A Che
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>any&#32;<span>checks</span></span></code>
+	<p>Returns success when at least one check in the sequence succeeds.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Check.any&#32;<span>checks</span></span></code>
 </div>
-<p>Returns success when at least one check in the sequence succeeds.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>checks</code></td>
+          <td><code><span><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;&lsquo;value&gt;</span> seq</span></code></td>
+          <td>A sequence of checks.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;unit&gt;</span></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> that succeeds if any input succeeds.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p>Sequentially evaluates each check in the <span class="fsdocs-param-name">checks</span> sequence.
 Stops at the first success.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>checks</code>: <code><span><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;&lsquo;value&gt;</span> seq</span></code>
-A sequence of checks.</li>
-</ul>
-<h2 id="returns">Returns</h2>
-<p>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> that succeeds if any input succeeds.</p>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="pn">[</span> <span class="id">Check</span><span class="pn">.</span><span class="id">okIf</span> <span class="k">false</span><span class="pn">;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">okIf</span> <span class="k">true</span> <span class="pn">]</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">any</span> <span class="c">// Ok ()</span>
+ <span class="pn">[</span> <span class="id">Check</span><span class="pn">.</span><span class="id">okIf</span> <span class="k">false</span><span class="pn">;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">okIf</span> <span class="k">false</span> <span class="pn">]</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">any</span> <span class="c">// Error ()</span>
+</code></pre>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/check/m-check-all/" aria-label="Previous - Check.all">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

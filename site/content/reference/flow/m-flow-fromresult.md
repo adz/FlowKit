@@ -4,15 +4,25 @@ linkTitle: "fromResult"
 type: docs
 ---
 
-<div class="fsdocs-usage">
-<code><span>fromResult&#32;<span>result</span></span></code>
-</div>
-
 Lifts a <a href="https://learn.microsoft.com/dotnet/api/system.result-2">Result</a> into a synchronous flow.
+
+## Signature
+
+<div class="fsdocs-usage">
+<code><span>Flow.fromResult&#32;<span>result</span></span></code>
+</div>
 
 ## Parameters
 
-- `result`: <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpresult-2">Result</a>&lt;<span>'value,&#32;'error</span>&gt;</span></code>
+| Name | Type | Description |
+| --- | --- | --- |
+| `result` | <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpresult-2">Result</a>&lt;<span>'value,&#32;'error</span>&gt;</span></code> | The result value to lift. |
+
+## Returns
+
+| Type | Description |
+| --- | --- |
+| <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>'env,&#32;'error,&#32;'value</span>&gt;</span></code> | A flow that succeeds or fails based on the result. |
 
 ## Examples
 

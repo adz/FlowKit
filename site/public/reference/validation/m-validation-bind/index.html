@@ -19,29 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Validation.bind | FsFlow</title>
-<meta name="description" content="Validation.bind binder validation Sequences a validation-producing continuation.
-Remarks This is the monadic &#34;bind&#34; for validation. Note that this operation short-circuits and does not accumulate errors from the binder if the source has already failed. For accumulation, use map2 or the applicative and! syntax.
-Parameters binder: ‘value -&gt; Validation&lt;‘next, ’error&gt; A function of type &#39;value -&gt; Validation&lt;&#39;next, &#39;error&gt;. validation: Validation&lt;‘value, ’error&gt; The source validation. Returns The result of the binder or the original diagnostics.">
+<meta name="description" content="Sequences a validation-producing continuation.
+Signature Validation.bind binder validation Parameters Name Type Description binder ‘value -&gt; Validation&lt;‘next, ’error&gt; A function of type &#39;value -&gt; Validation&lt;&#39;next, &#39;error&gt;. validation Validation&lt;‘value, ’error&gt; The source validation. Returns Type Description Validation&lt;‘next, ’error&gt; The result of the binder or the original diagnostics. Remarks This is the monadic &#34;bind&#34; for validation. Note that this operation short-circuits and does not accumulate errors from the binder if the source has already failed. For accumulation, use map2 or the applicative and! syntax.">
 <meta property="og:url" content="http://localhost:3000/reference/validation/m-validation-bind/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Validation.bind">
-  <meta property="og:description" content="Validation.bind binder validation Sequences a validation-producing continuation.
-Remarks This is the monadic &#34;bind&#34; for validation. Note that this operation short-circuits and does not accumulate errors from the binder if the source has already failed. For accumulation, use map2 or the applicative and! syntax.
-Parameters binder: ‘value -&gt; Validation&lt;‘next, ’error&gt; A function of type &#39;value -&gt; Validation&lt;&#39;next, &#39;error&gt;. validation: Validation&lt;‘value, ’error&gt; The source validation. Returns The result of the binder or the original diagnostics.">
+  <meta property="og:description" content="Sequences a validation-producing continuation.
+Signature Validation.bind binder validation Parameters Name Type Description binder ‘value -&gt; Validation&lt;‘next, ’error&gt; A function of type &#39;value -&gt; Validation&lt;&#39;next, &#39;error&gt;. validation Validation&lt;‘value, ’error&gt; The source validation. Returns Type Description Validation&lt;‘next, ’error&gt; The result of the binder or the original diagnostics. Remarks This is the monadic &#34;bind&#34; for validation. Note that this operation short-circuits and does not accumulate errors from the binder if the source has already failed. For accumulation, use map2 or the applicative and! syntax.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Validation.bind">
-  <meta itemprop="description" content="Validation.bind binder validation Sequences a validation-producing continuation.
-Remarks This is the monadic &#34;bind&#34; for validation. Note that this operation short-circuits and does not accumulate errors from the binder if the source has already failed. For accumulation, use map2 or the applicative and! syntax.
-Parameters binder: ‘value -&gt; Validation&lt;‘next, ’error&gt; A function of type &#39;value -&gt; Validation&lt;&#39;next, &#39;error&gt;. validation: Validation&lt;‘value, ’error&gt; The source validation. Returns The result of the binder or the original diagnostics.">
-  <meta itemprop="wordCount" content="71">
+  <meta itemprop="description" content="Sequences a validation-producing continuation.
+Signature Validation.bind binder validation Parameters Name Type Description binder ‘value -&gt; Validation&lt;‘next, ’error&gt; A function of type &#39;value -&gt; Validation&lt;&#39;next, &#39;error&gt;. validation Validation&lt;‘value, ’error&gt; The source validation. Returns Type Description Validation&lt;‘next, ’error&gt; The result of the binder or the original diagnostics. Remarks This is the monadic &#34;bind&#34; for validation. Note that this operation short-circuits and does not accumulate errors from the binder if the source has already failed. For accumulation, use map2 or the applicative and! syntax.">
+  <meta itemprop="wordCount" content="95">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Validation.bind">
-  <meta name="twitter:description" content="Validation.bind binder validation Sequences a validation-producing continuation.
-Remarks This is the monadic &#34;bind&#34; for validation. Note that this operation short-circuits and does not accumulate errors from the binder if the source has already failed. For accumulation, use map2 or the applicative and! syntax.
-Parameters binder: ‘value -&gt; Validation&lt;‘next, ’error&gt; A function of type &#39;value -&gt; Validation&lt;&#39;next, &#39;error&gt;. validation: Validation&lt;‘value, ’error&gt; The source validation. Returns The result of the binder or the original diagnostics.">
+  <meta name="twitter:description" content="Sequences a validation-producing continuation.
+Signature Validation.bind binder validation Parameters Name Type Description binder ‘value -&gt; Validation&lt;‘next, ’error&gt; A function of type &#39;value -&gt; Validation&lt;&#39;next, &#39;error&gt;. validation Validation&lt;‘value, ’error&gt; The source validation. Returns Type Description Validation&lt;‘next, ’error&gt; The result of the binder or the original diagnostics. Remarks This is the monadic &#34;bind&#34; for validation. Note that this operation short-circuits and does not accumulate errors from the binder if the source has already failed. For accumulation, use map2 or the applicative and! syntax.">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -521,9 +517,11 @@ Parameters binder: ‘value -&gt; Validation&lt;‘next, ’error&gt; A function
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -549,23 +547,55 @@ Parameters binder: ‘value -&gt; Validation&lt;‘next, ’error&gt; A function
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Sequences a validation-producing continuation.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>Validation.bind&#32;<span>binder&#32;validation</span></span></code>
 </div>
-<p>Sequences a validation-producing continuation.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>binder</code></td>
+          <td><code><span>&lsquo;value -&gt; <span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;next, &rsquo;error</span>&gt;</span></span></code></td>
+          <td>A function of type <code>'value -&gt; Validation&lt;'next, 'error&gt;</code>.</td>
+      </tr>
+      <tr>
+          <td><code>validation</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code></td>
+          <td>The source validation.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;next, &rsquo;error</span>&gt;</span></code></td>
+          <td>The result of the binder or the original diagnostics.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p>This is the monadic &quot;bind&quot; for validation. Note that this operation short-circuits
 and does not accumulate errors from the binder if the source has already failed.
 For accumulation, use <a href="https://learn.microsoft.com/dotnet/api/map2">map2</a> or the applicative <code>and!</code> syntax.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>binder</code>: <code><span>&lsquo;value -&gt; <span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;next, &rsquo;error</span>&gt;</span></span></code>
-A function of type <code>'value -&gt; Validation&lt;'next, 'error&gt;</code>.</li>
-<li><code>validation</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code>
-The source validation.</li>
-</ul>
-<h2 id="returns">Returns</h2>
-<p>The result of the binder or the original diagnostics.</p>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="id">Validation</span><span class="pn">.</span><span class="id">ok</span> <span class="n">5</span> <span class="o">|&gt;</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">bind</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">x</span> <span class="k">-&gt;</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">ok</span> <span class="pn">(</span><span class="id">x</span> <span class="o">+</span> <span class="n">1</span><span class="pn">)</span><span class="pn">)</span> <span class="c">// Validation (Ok 6)</span>
+</code></pre>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/validation/m-validation-at/" aria-label="Previous - Validation.at">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

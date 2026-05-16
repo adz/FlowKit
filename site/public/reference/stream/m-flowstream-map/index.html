@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>FlowStream.map | FsFlow</title>
-<meta name="description" content="FlowStream.map f arg2 Maps the successful values of a stream.
-Parameters f: ‘v -&gt; ‘w arg1: FlowStream&lt;‘env, ’error, ‘v&gt;">
+<meta name="description" content="Transforms the successful values of a stream using the provided function.
+Signature FlowStream.map f arg2 Parameters Name Type Description f ‘v -&gt; ‘w The function to transform each value. arg1 FlowStream&lt;‘env, ’error, ‘v&gt; Returns Type Description FlowStream&lt;‘env, ’error, ‘w&gt; A new stream that yields transformed values. Examples let stream = FlowStream.fromSeq [1; 2; 3] |&gt; FlowStream.map (fun n -&gt; n * 2) val stream: obj">
 <meta property="og:url" content="http://localhost:3000/reference/stream/m-flowstream-map/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="FlowStream.map">
-  <meta property="og:description" content="FlowStream.map f arg2 Maps the successful values of a stream.
-Parameters f: ‘v -&gt; ‘w arg1: FlowStream&lt;‘env, ’error, ‘v&gt;">
+  <meta property="og:description" content="Transforms the successful values of a stream using the provided function.
+Signature FlowStream.map f arg2 Parameters Name Type Description f ‘v -&gt; ‘w The function to transform each value. arg1 FlowStream&lt;‘env, ’error, ‘v&gt; Returns Type Description FlowStream&lt;‘env, ’error, ‘w&gt; A new stream that yields transformed values. Examples let stream = FlowStream.fromSeq [1; 2; 3] |&gt; FlowStream.map (fun n -&gt; n * 2) val stream: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="FlowStream.map">
-  <meta itemprop="description" content="FlowStream.map f arg2 Maps the successful values of a stream.
-Parameters f: ‘v -&gt; ‘w arg1: FlowStream&lt;‘env, ’error, ‘v&gt;">
-  <meta itemprop="wordCount" content="17">
+  <meta itemprop="description" content="Transforms the successful values of a stream using the provided function.
+Signature FlowStream.map f arg2 Parameters Name Type Description f ‘v -&gt; ‘w The function to transform each value. arg1 FlowStream&lt;‘env, ’error, ‘v&gt; Returns Type Description FlowStream&lt;‘env, ’error, ‘w&gt; A new stream that yields transformed values. Examples let stream = FlowStream.fromSeq [1; 2; 3] |&gt; FlowStream.map (fun n -&gt; n * 2) val stream: obj">
+  <meta itemprop="wordCount" content="63">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="FlowStream.map">
-  <meta name="twitter:description" content="FlowStream.map f arg2 Maps the successful values of a stream.
-Parameters f: ‘v -&gt; ‘w arg1: FlowStream&lt;‘env, ’error, ‘v&gt;">
+  <meta name="twitter:description" content="Transforms the successful values of a stream using the provided function.
+Signature FlowStream.map f arg2 Parameters Name Type Description f ‘v -&gt; ‘w The function to transform each value. arg1 FlowStream&lt;‘env, ’error, ‘v&gt; Returns Type Description FlowStream&lt;‘env, ’error, ‘w&gt; A new stream that yields transformed values. Examples let stream = FlowStream.fromSeq [1; 2; 3] |&gt; FlowStream.map (fun n -&gt; n * 2) val stream: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +517,10 @@ Parameters f: ‘v -&gt; ‘w arg1: FlowStream&lt;‘env, ’error, ‘v&gt;">
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -543,15 +546,52 @@ Parameters f: ‘v -&gt; ‘w arg1: FlowStream&lt;‘env, ’error, ‘v&gt;">
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Transforms the successful values of a stream using the provided function.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>FlowStream.map&#32;<span>f&#32;arg2</span></span></code>
 </div>
-<p>Maps the successful values of a stream.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>f</code>: <code><span>&lsquo;v -&gt; &lsquo;w</span></code></li>
-<li><code>arg1</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flowstream-3.html">FlowStream</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;v</span>&gt;</span></code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>f</code></td>
+          <td><code><span>&lsquo;v -&gt; &lsquo;w</span></code></td>
+          <td>The function to transform each value.</td>
+      </tr>
+      <tr>
+          <td><code>arg1</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flowstream-3.html">FlowStream</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;v</span>&gt;</span></code></td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flowstream-3.html">FlowStream</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;w</span>&gt;</span></code></td>
+          <td>A new stream that yields transformed values.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">stream</span> <span class="o">=</span> <span class="id">FlowStream</span><span class="pn">.</span><span class="id">fromSeq</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span> <span class="n">2</span><span class="pn">;</span> <span class="n">3</span><span class="pn">]</span> <span class="o">|&gt;</span> <span class="id">FlowStream</span><span class="pn">.</span><span class="id">map</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">n</span> <span class="k">-&gt;</span> <span class="id">n</span> <span class="pn">*</span> <span class="n">2</span><span class="pn">)</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val stream: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/stream/m-flowstream-fromseq/" aria-label="Previous - FlowStream.fromSeq">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

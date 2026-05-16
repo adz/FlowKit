@@ -19,29 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.read | FsFlow</title>
-<meta name="description" content="read projection Projects one value from the current environment.
-Remarks This is the primary way to access app dependencies, configuration, or request metadata stored in env. The projection runs only when the flow is executed, so constructing the flow is still pure and side-effect free. Prefer small projections over passing a large environment deeper into reusable helpers.
-Parameters projection: ‘env -&gt; ‘value A function that extracts a value from the environment. Returns A Flow containing the projected value.">
+<meta name="description" content="Projects one value from the current environment.
+Signature Flow.read projection Parameters Name Type Description projection ‘env -&gt; ‘value A function that extracts a value from the environment. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A Flow containing the projected value. Remarks This is the primary way to access app dependencies, configuration, or request metadata stored in env. The projection runs only when the flow is executed, so constructing the flow is still pure and side-effect free. Prefer small projections over passing a large environment deeper into reusable helpers.">
 <meta property="og:url" content="http://localhost:3000/reference/capability/m-flow-read/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.read">
-  <meta property="og:description" content="read projection Projects one value from the current environment.
-Remarks This is the primary way to access app dependencies, configuration, or request metadata stored in env. The projection runs only when the flow is executed, so constructing the flow is still pure and side-effect free. Prefer small projections over passing a large environment deeper into reusable helpers.
-Parameters projection: ‘env -&gt; ‘value A function that extracts a value from the environment. Returns A Flow containing the projected value.">
+  <meta property="og:description" content="Projects one value from the current environment.
+Signature Flow.read projection Parameters Name Type Description projection ‘env -&gt; ‘value A function that extracts a value from the environment. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A Flow containing the projected value. Remarks This is the primary way to access app dependencies, configuration, or request metadata stored in env. The projection runs only when the flow is executed, so constructing the flow is still pure and side-effect free. Prefer small projections over passing a large environment deeper into reusable helpers.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.read">
-  <meta itemprop="description" content="read projection Projects one value from the current environment.
-Remarks This is the primary way to access app dependencies, configuration, or request metadata stored in env. The projection runs only when the flow is executed, so constructing the flow is still pure and side-effect free. Prefer small projections over passing a large environment deeper into reusable helpers.
-Parameters projection: ‘env -&gt; ‘value A function that extracts a value from the environment. Returns A Flow containing the projected value.">
-  <meta itemprop="wordCount" content="77">
+  <meta itemprop="description" content="Projects one value from the current environment.
+Signature Flow.read projection Parameters Name Type Description projection ‘env -&gt; ‘value A function that extracts a value from the environment. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A Flow containing the projected value. Remarks This is the primary way to access app dependencies, configuration, or request metadata stored in env. The projection runs only when the flow is executed, so constructing the flow is still pure and side-effect free. Prefer small projections over passing a large environment deeper into reusable helpers.">
+  <meta itemprop="wordCount" content="98">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.read">
-  <meta name="twitter:description" content="read projection Projects one value from the current environment.
-Remarks This is the primary way to access app dependencies, configuration, or request metadata stored in env. The projection runs only when the flow is executed, so constructing the flow is still pure and side-effect free. Prefer small projections over passing a large environment deeper into reusable helpers.
-Parameters projection: ‘env -&gt; ‘value A function that extracts a value from the environment. Returns A Flow containing the projected value.">
+  <meta name="twitter:description" content="Projects one value from the current environment.
+Signature Flow.read projection Parameters Name Type Description projection ‘env -&gt; ‘value A function that extracts a value from the environment. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A Flow containing the projected value. Remarks This is the primary way to access app dependencies, configuration, or request metadata stored in env. The projection runs only when the flow is executed, so constructing the flow is still pure and side-effect free. Prefer small projections over passing a large environment deeper into reusable helpers.">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -521,9 +517,11 @@ Parameters projection: ‘env -&gt; ‘value A function that extracts a value fr
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -549,22 +547,52 @@ Parameters projection: ‘env -&gt; ‘value A function that extracts a value fr
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>read&#32;<span>projection</span></span></code>
+	<p>Projects one value from the current environment.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.read&#32;<span>projection</span></span></code>
 </div>
-<p>Projects one value from the current environment.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>projection</code></td>
+          <td><code><span>&lsquo;env -&gt; &lsquo;value</span></code></td>
+          <td>A function that extracts a value from the environment.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a> containing the projected value.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p>This is the primary way to access app dependencies, configuration, or request metadata stored
 in <code>env</code>. The projection runs only when the flow is executed, so constructing the flow is
 still pure and side-effect free. Prefer small projections over passing a large environment
 deeper into reusable helpers.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>projection</code>: <code><span>&lsquo;env -&gt; &lsquo;value</span></code>
-A function that extracts a value from the environment.</li>
-</ul>
-<h2 id="returns">Returns</h2>
-<p>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a> containing the projected value.</p>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">myFlow</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">read</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">env</span> <span class="k">-&gt;</span> <span class="id">env</span><span class="pn">)</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val myFlow: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/capability/t-missingcapability/" aria-label="Previous - MissingCapability">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

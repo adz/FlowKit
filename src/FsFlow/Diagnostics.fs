@@ -1,6 +1,13 @@
 namespace FsFlow
 
 /// <summary>Location markers used to describe where a diagnostic belongs in a validation graph.</summary>
+/// <example>
+/// <code>
+/// let s1 = PathSegment.Key "user-123"
+/// let s2 = PathSegment.Index 0
+/// let s3 = PathSegment.Name "Email"
+/// </code>
+/// </example>
 [<RequireQualifiedAccess>]
 type PathSegment =
     /// <summary>A string-based key, usually for map or record fields.</summary>
@@ -11,9 +18,19 @@ type PathSegment =
     | Name of string
 
 /// <summary>A path through a validation graph, represented as a list of <see cref="T:FsFlow.PathSegment" />.</summary>
+/// <example>
+/// <code>
+/// let path: Path = [ PathSegment.Name "User"; PathSegment.Index 0; PathSegment.Name "Email" ]
+/// </code>
+/// </example>
 type Path = PathSegment list
 
 /// <summary>A single failure item attached to a path in a validation graph.</summary>
+/// <example>
+/// <code>
+/// let d = { Path = [ PathSegment.Name "Email" ]; Error = "Invalid format" }
+/// </code>
+/// </example>
 type Diagnostic<'error> =
     {
         /// <summary>The path to the source of the error.</summary>
@@ -35,6 +52,11 @@ type Diagnostic<'error> =
 /// Use <see cref="T:FsFlow.Diagnostics.flatten" /> to convert it into a linear list.
 /// </para>
 /// </remarks>
+/// <example>
+/// <code>
+/// let diag = { Errors = ["Root error"]; Children = Map.empty }
+/// </code>
+/// </example>
 type Diagnostics<'error> =
     {
         /// <summary>Errors that occurred exactly at this node in the graph.</summary>
@@ -51,6 +73,11 @@ type Diagnostics<'error> =
 module Diagnostics =
     /// <summary>Creates an empty diagnostics graph with no errors.</summary>
     /// <returns>An empty <see cref="T:FsFlow.Diagnostics`1" />.</returns>
+    /// <example>
+    /// <code>
+    /// let d = Diagnostics.empty&lt;string&gt;
+    /// </code>
+    /// </example>
     let empty<'error> : Diagnostics<'error> =
         {
             Errors = []
@@ -60,6 +87,11 @@ module Diagnostics =
     /// <summary>Creates a diagnostics graph containing exactly one error at the root.</summary>
     /// <param name="error">The application error to store at the root.</param>
     /// <returns>A <see cref="T:FsFlow.Diagnostics`1" /> with a single error.</returns>
+    /// <example>
+    /// <code>
+    /// let d = Diagnostics.singleton "Something failed"
+    /// </code>
+    /// </example>
     let singleton (error: 'error) : Diagnostics<'error> =
         {
             Errors = [ error ]
@@ -74,6 +106,13 @@ module Diagnostics =
     /// <param name="left">The first graph of type <see cref="T:FsFlow.Diagnostics`1" />.</param>
     /// <param name="right">The second graph of type <see cref="T:FsFlow.Diagnostics`1" />.</param>
     /// <returns>A new <see cref="T:FsFlow.Diagnostics`1" /> containing the union of both inputs.</returns>
+    /// <example>
+    /// <code>
+    /// let d1 = Diagnostics.singleton "Error 1"
+    /// let d2 = Diagnostics.singleton "Error 2"
+    /// let combined = Diagnostics.merge d1 d2
+    /// </code>
+    /// </example>
     let rec merge (left: Diagnostics<'error>) (right: Diagnostics<'error>) : Diagnostics<'error> =
         let addBranch children key branch =
             match Map.tryFind key children with
@@ -95,6 +134,12 @@ module Diagnostics =
     /// </remarks>
     /// <param name="graph">The diagnostics graph to render.</param>
     /// <returns>A formatted string representation of the graph.</returns>
+    /// <example>
+    /// <code>
+    /// let d = Diagnostics.singleton "fail"
+    /// let s = Diagnostics.toString d
+    /// </code>
+    /// </example>
     let toString (graph: Diagnostics<'error>) : string =
         let indent level = String.replicate (level * 2) " "
 
@@ -135,6 +180,12 @@ module Diagnostics =
     /// </remarks>
     /// <param name="graph">The <see cref="T:FsFlow.Diagnostics`1" /> to flatten.</param>
     /// <returns>A list of type <see cref="T:FsFlow.Diagnostic`1" /> list.</returns>
+    /// <example>
+    /// <code>
+    /// let d = Diagnostics.singleton "fail"
+    /// let flat = Diagnostics.flatten d
+    /// </code>
+    /// </example>
     let flatten (graph: Diagnostics<'error>) : Diagnostic<'error> list =
         let rec flattenWithPrefix (prefix: Path) (node: Diagnostics<'error>) =
             let local =

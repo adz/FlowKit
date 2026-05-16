@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Diagnostics.singleton | FsFlow</title>
-<meta name="description" content="Diagnostics.singleton error Creates a diagnostics graph containing exactly one error at the root.
-Parameters error: ‘error The application error to store at the root. Returns A Diagnostics with a single error.">
+<meta name="description" content="Creates a diagnostics graph containing exactly one error at the root.
+Signature Diagnostics.singleton error Parameters Name Type Description error ‘error The application error to store at the root. Returns Type Description Diagnostics&lt;’error&gt; A Diagnostics with a single error. Examples let d = Diagnostics.singleton &#34;Something failed&#34; val d: obj">
 <meta property="og:url" content="http://localhost:3000/reference/diagnostics/m-diagnostics-singleton/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Diagnostics.singleton">
-  <meta property="og:description" content="Diagnostics.singleton error Creates a diagnostics graph containing exactly one error at the root.
-Parameters error: ‘error The application error to store at the root. Returns A Diagnostics with a single error.">
+  <meta property="og:description" content="Creates a diagnostics graph containing exactly one error at the root.
+Signature Diagnostics.singleton error Parameters Name Type Description error ‘error The application error to store at the root. Returns Type Description Diagnostics&lt;’error&gt; A Diagnostics with a single error. Examples let d = Diagnostics.singleton &#34;Something failed&#34; val d: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Diagnostics.singleton">
-  <meta itemprop="description" content="Diagnostics.singleton error Creates a diagnostics graph containing exactly one error at the root.
-Parameters error: ‘error The application error to store at the root. Returns A Diagnostics with a single error.">
-  <meta itemprop="wordCount" content="30">
+  <meta itemprop="description" content="Creates a diagnostics graph containing exactly one error at the root.
+Signature Diagnostics.singleton error Parameters Name Type Description error ‘error The application error to store at the root. Returns Type Description Diagnostics&lt;’error&gt; A Diagnostics with a single error. Examples let d = Diagnostics.singleton &#34;Something failed&#34; val d: obj">
+  <meta itemprop="wordCount" content="47">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Diagnostics.singleton">
-  <meta name="twitter:description" content="Diagnostics.singleton error Creates a diagnostics graph containing exactly one error at the root.
-Parameters error: ‘error The application error to store at the root. Returns A Diagnostics with a single error.">
+  <meta name="twitter:description" content="Creates a diagnostics graph containing exactly one error at the root.
+Signature Diagnostics.singleton error Parameters Name Type Description error ‘error The application error to store at the root. Returns Type Description Diagnostics&lt;’error&gt; A Diagnostics with a single error. Examples let d = Diagnostics.singleton &#34;Something failed&#34; val d: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,8 +517,10 @@ Parameters error: ‘error The application error to store at the root. Returns A
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -544,17 +546,47 @@ Parameters error: ‘error The application error to store at the root. Returns A
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Creates a diagnostics graph containing exactly one error at the root.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>Diagnostics.singleton&#32;<span>error</span></span></code>
 </div>
-<p>Creates a diagnostics graph containing exactly one error at the root.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>error</code>: <code>&lsquo;error</code>
-The application error to store at the root.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>error</code></td>
+          <td><code>&lsquo;error</code></td>
+          <td>The application error to store at the root.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a> with a single error.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;&rsquo;error&gt;</span></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a> with a single error.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">d</span> <span class="o">=</span> <span class="id">Diagnostics</span><span class="pn">.</span><span class="id">singleton</span> <span class="s">&quot;Something failed&quot;</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val d: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/diagnostics/t-pathsegment/" aria-label="Previous - PathSegment">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

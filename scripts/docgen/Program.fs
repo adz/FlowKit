@@ -1,9 +1,11 @@
 open FSharp.Formatting.ApiDocs
 open FSharp.Formatting.Templating
+open FSharp.Compiler.Symbols
 open System
 open System.IO
 open System.Reflection
 open System.Collections.Generic
+open System.Net
 
 type PageSpec = {
     OutPath: string list
@@ -53,6 +55,44 @@ let safeFullName (sym: FSharp.Compiler.Symbols.FSharpSymbol) =
     | _ -> 
         try sym.FullName with _ -> sym.DisplayName
 
+let hasAttribute named (attrs: seq<FSharpAttribute>) =
+    attrs
+    |> Seq.exists (fun attr ->
+        attr.AttributeType.DisplayName = named
+        || attr.AttributeType.FullName.EndsWith("." + named, StringComparison.Ordinal))
+
+let enclosingEntity (sym: FSharp.Compiler.Symbols.FSharpSymbol) =
+    match sym with
+    | :? FSharpMemberOrFunctionOrValue as mfv -> mfv.DeclaringEntity
+    | :? FSharpField as field -> field.DeclaringEntity
+    | _ -> None
+
+let memberUsageName (m: ApiDocMember) =
+    match enclosingEntity m.Symbol with
+    | Some ent ->
+        let moduleName = cleanName ent.FullName
+        let isAutoOpen = hasAttribute "AutoOpenAttribute" ent.Attributes
+        let isRequireQualifiedAccess = hasAttribute "RequireQualifiedAccessAttribute" ent.Attributes
+
+        if isAutoOpen && not isRequireQualifiedAccess then m.Name
+        else $"{moduleName}.{m.Name}"
+    | None -> cleanName (safeFullName m.Symbol)
+
+let qualifyUsageHtml usageName (html: string) =
+    let encodedUsageName = WebUtility.HtmlEncode usageName
+    let encodedShortName = WebUtility.HtmlEncode(usageName.Split('.').[usageName.Split('.').Length - 1])
+
+    if encodedUsageName = encodedShortName then html
+    else
+        let withArgs = $"<span>{encodedShortName}&#32;"
+        let qualifiedWithArgs = $"<span>{encodedUsageName}&#32;"
+        let withoutArgs = $"<span>{encodedShortName}</span>"
+        let qualifiedWithoutArgs = $"<span>{encodedUsageName}</span>"
+
+        if html.Contains withArgs then html.Replace(withArgs, qualifiedWithArgs)
+        elif html.Contains withoutArgs then html.Replace(withoutArgs, qualifiedWithoutArgs)
+        else html
+
 let renderMemberPage (m: ApiDocMember) =
     let fullName = safeFullName m.Symbol
     let qualifiedName = cleanName fullName
@@ -69,30 +109,47 @@ let renderMemberPage (m: ApiDocMember) =
     let mutable content = 
         $"---\ntitle: \"{qualifiedName}\"\nlinkTitle: \"{linkTitle}\"\n---\n\n"
     
-    // Usage / Signature
-    content <- content + "<div class=\"fsdocs-usage\">\n" + m.UsageHtml.HtmlText + "\n</div>\n\n"
-    
+    // Description
     content <- content + m.Comment.Summary.HtmlText + "\n\n"
-    
-    match m.SourceLocation with
-    | Some url -> content <- content + $"\n[Source]({url})\n\n"
-    | None -> ()
 
-    match m.Comment.Remarks with
-    | Some r -> content <- content + "## Remarks\n\n" + r.HtmlText + "\n\n"
-    | None -> ()
+    // Signature
+    let usageHtml =
+        m.UsageHtml.HtmlText
+        |> qualifyUsageHtml (memberUsageName m)
+
+    content <- content + "## Signature\n\n"
+    content <- content + "<div class=\"fsdocs-usage\">\n" + usageHtml + "\n</div>\n\n"
 
     if not m.Parameters.IsEmpty then
         content <- content + "## Parameters\n\n"
+        content <- content + "| Name | Type | Description |\n"
+        content <- content + "| --- | --- | --- |\n"
         for p in m.Parameters do
-            content <- content + $"- `{p.ParameterNameText}`: {p.ParameterType.HtmlText}\n"
-            match p.ParameterDocs with
-            | Some html -> content <- content + $"  {html.HtmlText}\n"
-            | None -> ()
+            let docs =
+                match p.ParameterDocs with
+                | Some html -> html.HtmlText
+                | None -> ""
+
+            content <- content + $"| `{p.ParameterNameText}` | {p.ParameterType.HtmlText} | {docs} |\n"
         content <- content + "\n"
 
-    match m.Comment.Returns with
-    | Some r -> content <- content + "## Returns\n\n" + r.HtmlText + "\n\n"
+    content <- content + "## Returns\n\n"
+    content <- content + "| Type | Description |\n"
+    content <- content + "| --- | --- |\n"
+    let returnDocs =
+        match m.ReturnInfo.ReturnDocs with
+        | Some html -> html.HtmlText
+        | None -> ""
+
+    let returnType =
+        match m.ReturnInfo.ReturnType with
+        | Some (_, html) -> html.HtmlText
+        | None -> "<code>unit</code>"
+
+    content <- content + $"| {returnType} | {returnDocs} |\n\n"
+
+    match m.Comment.Remarks with
+    | Some r -> content <- content + "## Remarks\n\n" + r.HtmlText + "\n\n"
     | None -> ()
 
     if not m.Comment.Examples.IsEmpty then
@@ -100,6 +157,58 @@ let renderMemberPage (m: ApiDocMember) =
         for e in m.Comment.Examples do
             content <- content + e.HtmlText + "\n\n"
 
+    match m.SourceLocation with
+    | Some url -> content <- content + $"\n[Source]({url})\n\n"
+    | None -> ()
+
+    content
+
+let renderEntityPage (e: ApiDocEntity) =
+    let fullName = safeFullName e.Symbol
+    let qualifiedName = cleanName fullName
+    let shortName = cleanName e.Name
+    
+    let mutable content = 
+        $"---\ntitle: \"{qualifiedName}\"\nlinkTitle: \"{shortName}\"\n---\n\n"
+    
+    // Construct signature
+    let signature = 
+        match e.Symbol with
+        | :? FSharp.Compiler.Symbols.FSharpEntity as ent ->
+            let generics = 
+                if ent.GenericParameters.Count > 0 then
+                    "<" + (ent.GenericParameters |> Seq.map (fun p -> "'" + p.DisplayName) |> String.concat ", ") + ">"
+                else ""
+            $"type {ent.DisplayName}{generics}"
+        | _ -> $"type {shortName}"
+
+    content <- content + e.Comment.Summary.HtmlText + "\n\n"
+
+    content <- content + "## Signature\n\n"
+    content <- content + "<div class=\"fsdocs-usage\">\n" + $"<code>{signature}</code>" + "\n</div>\n\n"
+    
+    match e.Symbol with
+    | :? FSharp.Compiler.Symbols.FSharpEntity as ent ->
+        if ent.GenericParameters.Count > 0 then
+            content <- content + "## Type Parameters\n\n"
+            content <- content + "| Name |\n"
+            content <- content + "| --- |\n"
+            for tp in ent.GenericParameters do
+                content <- content + $"| `{tp.DisplayName}` |\n"
+                // FSharpEntity.GenericParameters doesn't easily give us the XML doc for the type parameter
+                // without more work, but DisplayName is a start.
+            content <- content + "\n"
+    | _ -> ()
+
+    match e.Comment.Remarks with
+    | Some r -> content <- content + "## Remarks\n\n" + r.HtmlText + "\n\n"
+    | None -> ()
+
+    if not e.Comment.Examples.IsEmpty then
+        content <- content + "## Examples\n\n"
+        for ex in e.Comment.Examples do
+            content <- content + ex.HtmlText + "\n\n"
+    
     content
 
 let pageSpecs = [
@@ -389,14 +498,9 @@ let main argv =
                     let pageName = getPageName id
                     let eFullName = safeFullName e.Symbol
                     let linkText = cleanName eFullName
-                    let cleanShort = cleanName e.Name
                     indexContent <- indexContent + $"- [`{linkText}`](./{pageName}): {e.Comment.Summary.HtmlText}\n"
-                    let remarksText = match e.Comment.Remarks with Some r -> "## Remarks\n\n" + r.HtmlText | None -> ""
-                    let memberPageContent = 
-                        $"---\ntitle: \"{cleanName eFullName}\"\nlinkTitle: \"{cleanShort}\"\n---\n\n" + 
-                        e.Comment.Summary.HtmlText + "\n\n" +
-                        remarksText
-                    File.WriteAllText(Path.Combine(Path.GetDirectoryName(outPath), pageName), memberPageContent)
+                    let entityPageContent = renderEntityPage e
+                    File.WriteAllText(Path.Combine(Path.GetDirectoryName(outPath), pageName), entityPageContent)
                 | _ -> 
                     printfn "Warning: symbol not found: %s" id
             indexContent <- indexContent + "\n"

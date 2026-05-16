@@ -20,24 +20,44 @@
 
 <title>Diagnostics | FsFlow</title>
 <meta name="description" content="A mergeable validation graph that carries local errors and nested child branches.
-Remarks Errors holds the application errors attached exactly to the current node, while Children holds nested branches keyed by PathSegment. This structure allows hierarchical validation to stay navigable before flattening. Use flatten to convert it into a linear list.">
+Signature type Diagnostics&lt;&#39;error&gt; Type Parameters Name error Remarks Errors holds the application errors attached exactly to the current node, while Children holds nested branches keyed by PathSegment. This structure allows hierarchical validation to stay navigable before flattening. Use flatten to convert it into a linear list. Examples let diag = { Errors = [&#34;Root error&#34;]; Children = Map.empty } val diag: &#39;a Multiple items
+module Map from Microsoft.FSharp.Collections
+——————–
+type Map&lt;&#39;Key,&#39;Value (requires comparison)&gt; = interface IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt; interface IReadOnlyCollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt; interface IEnumerable interface IStructuralEquatable interface IComparable interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt; interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt; interface IDictionary&lt;&#39;Key,&#39;Value&gt; new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt; member Add: key: &#39;Key * value: &#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt; …
+——————–
+new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt;">
 <meta property="og:url" content="http://localhost:3000/reference/diagnostics/t-diagnostics-1/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Diagnostics">
   <meta property="og:description" content="A mergeable validation graph that carries local errors and nested child branches.
-Remarks Errors holds the application errors attached exactly to the current node, while Children holds nested branches keyed by PathSegment. This structure allows hierarchical validation to stay navigable before flattening. Use flatten to convert it into a linear list.">
+Signature type Diagnostics&lt;&#39;error&gt; Type Parameters Name error Remarks Errors holds the application errors attached exactly to the current node, while Children holds nested branches keyed by PathSegment. This structure allows hierarchical validation to stay navigable before flattening. Use flatten to convert it into a linear list. Examples let diag = { Errors = [&#34;Root error&#34;]; Children = Map.empty } val diag: &#39;a Multiple items
+module Map from Microsoft.FSharp.Collections
+——————–
+type Map&lt;&#39;Key,&#39;Value (requires comparison)&gt; = interface IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt; interface IReadOnlyCollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt; interface IEnumerable interface IStructuralEquatable interface IComparable interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt; interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt; interface IDictionary&lt;&#39;Key,&#39;Value&gt; new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt; member Add: key: &#39;Key * value: &#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt; …
+——————–
+new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt;">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Diagnostics">
   <meta itemprop="description" content="A mergeable validation graph that carries local errors and nested child branches.
-Remarks Errors holds the application errors attached exactly to the current node, while Children holds nested branches keyed by PathSegment. This structure allows hierarchical validation to stay navigable before flattening. Use flatten to convert it into a linear list.">
-  <meta itemprop="wordCount" content="51">
+Signature type Diagnostics&lt;&#39;error&gt; Type Parameters Name error Remarks Errors holds the application errors attached exactly to the current node, while Children holds nested branches keyed by PathSegment. This structure allows hierarchical validation to stay navigable before flattening. Use flatten to convert it into a linear list. Examples let diag = { Errors = [&#34;Root error&#34;]; Children = Map.empty } val diag: &#39;a Multiple items
+module Map from Microsoft.FSharp.Collections
+——————–
+type Map&lt;&#39;Key,&#39;Value (requires comparison)&gt; = interface IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt; interface IReadOnlyCollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt; interface IEnumerable interface IStructuralEquatable interface IComparable interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt; interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt; interface IDictionary&lt;&#39;Key,&#39;Value&gt; new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt; member Add: key: &#39;Key * value: &#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt; …
+——————–
+new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt;">
+  <meta itemprop="wordCount" content="137">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Diagnostics">
   <meta name="twitter:description" content="A mergeable validation graph that carries local errors and nested child branches.
-Remarks Errors holds the application errors attached exactly to the current node, while Children holds nested branches keyed by PathSegment. This structure allows hierarchical validation to stay navigable before flattening. Use flatten to convert it into a linear list.">
+Signature type Diagnostics&lt;&#39;error&gt; Type Parameters Name error Remarks Errors holds the application errors attached exactly to the current node, while Children holds nested branches keyed by PathSegment. This structure allows hierarchical validation to stay navigable before flattening. Use flatten to convert it into a linear list. Examples let diag = { Errors = [&#34;Root error&#34;]; Children = Map.empty } val diag: &#39;a Multiple items
+module Map from Microsoft.FSharp.Collections
+——————–
+type Map&lt;&#39;Key,&#39;Value (requires comparison)&gt; = interface IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt; interface IReadOnlyCollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt; interface IEnumerable interface IStructuralEquatable interface IComparable interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt; interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt; interface IDictionary&lt;&#39;Key,&#39;Value&gt; new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt; member Add: key: &#39;Key * value: &#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt; …
+——————–
+new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt;">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +537,10 @@ Remarks Errors holds the application errors attached exactly to the current node
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
+    <li><a href="#type-parameters">Type Parameters</a></li>
     <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -544,6 +567,23 @@ Remarks Errors holds the application errors attached exactly to the current node
 		
 </header>
 	<p>A mergeable validation graph that carries local errors and nested child branches.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code>type Diagnostics<'error></code>
+</div>
+<h2 id="type-parameters">Type Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>error</code></td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p class='fsdocs-para'><code>Errors</code> holds the application errors attached exactly to the current node, while
  <code>Children</code> holds nested branches keyed by <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-pathsegment.html">PathSegment</a>.
@@ -551,6 +591,24 @@ Remarks Errors holds the application errors attached exactly to the current node
  This structure allows hierarchical validation to stay navigable before flattening.
  Use <a href="https://learn.microsoft.com/dotnet/api/fsflow.diagnostics.flatten">flatten</a> to convert it into a linear list.
  </p>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">diag</span> <span class="o">=</span> <span class="pn">{</span> <span class="id">Errors</span> <span class="o">=</span> <span class="pn">[</span><span class="s">&quot;Root error&quot;</span><span class="pn">]</span><span class="pn">;</span> <span class="id">Children</span> <span class="o">=</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="id">Map</span><span class="pn">.</span><span data-fsdocs-tip="fs3" data-fsdocs-tip-unique="3" class="id">empty</span> <span class="pn">}</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val diag: &#39;a</div>
+<div popover class="fsdocs-tip" id="fs2">Multiple items<br />module Map
+<p>from Microsoft.FSharp.Collections<br /><br />&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;<br />type Map&lt;'Key,'Value (requires comparison)&gt; =
+interface IReadOnlyDictionary&lt;'Key,'Value&gt;
+interface IReadOnlyCollection&lt;KeyValuePair&lt;'Key,'Value&gt;&gt;
+interface IEnumerable
+interface IStructuralEquatable
+interface IComparable
+interface IEnumerable&lt;KeyValuePair&lt;'Key,'Value&gt;&gt;
+interface ICollection&lt;KeyValuePair&lt;'Key,'Value&gt;&gt;
+interface IDictionary&lt;'Key,'Value&gt;
+new: elements: ('Key * 'Value) seq -&gt; Map&lt;'Key,'Value&gt;
+member Add: key: 'Key * value: 'Value -&gt; Map&lt;'Key,'Value&gt;
+&hellip;<br /><br />&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;<br />new: elements: ('Key * 'Value) seq -&gt; Map&lt;'Key,'Value&gt;</div></p>
+<div popover class="fsdocs-tip" id="fs3">val empty&lt;&#39;Key,&#39;T (requires comparison)&gt; : Map&lt;&#39;Key,&#39;T&gt; (requires comparison)</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/diagnostics/t-diagnostic-1/" aria-label="Previous - Diagnostic">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

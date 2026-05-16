@@ -19,29 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Validation.orElseWith | FsFlow</title>
-<meta name="description" content="Validation.orElseWith fallback validation Computes a fallback validation from the source diagnostics when validation fails.
-Remarks This is the lazy counterpart to orElse and is useful when the alternate branch depends on the accumulated diagnostics.
-Parameters fallback: Diagnostics&lt;’error&gt; -&gt; Validation&lt;‘value, ’error&gt; A function that turns the diagnostics into an alternate validation. validation: Validation&lt;‘value, ’error&gt; The source validation. Returns The source validation when it succeeds, otherwise the computed fallback validation.">
+<meta name="description" content="Computes a fallback validation from the source diagnostics when validation fails.
+Signature Validation.orElseWith fallback validation Parameters Name Type Description fallback Diagnostics&lt;’error&gt; -&gt; Validation&lt;‘value, ’error&gt; A function that turns the diagnostics into an alternate validation. validation Validation&lt;‘value, ’error&gt; The source validation. Returns Type Description Validation&lt;‘value, ’error&gt; The source validation when it succeeds, otherwise the computed fallback validation. Remarks This is the lazy counterpart to orElse and is useful when the alternate branch depends on the accumulated diagnostics.">
 <meta property="og:url" content="http://localhost:3000/reference/validation/m-validation-orelsewith/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Validation.orElseWith">
-  <meta property="og:description" content="Validation.orElseWith fallback validation Computes a fallback validation from the source diagnostics when validation fails.
-Remarks This is the lazy counterpart to orElse and is useful when the alternate branch depends on the accumulated diagnostics.
-Parameters fallback: Diagnostics&lt;’error&gt; -&gt; Validation&lt;‘value, ’error&gt; A function that turns the diagnostics into an alternate validation. validation: Validation&lt;‘value, ’error&gt; The source validation. Returns The source validation when it succeeds, otherwise the computed fallback validation.">
+  <meta property="og:description" content="Computes a fallback validation from the source diagnostics when validation fails.
+Signature Validation.orElseWith fallback validation Parameters Name Type Description fallback Diagnostics&lt;’error&gt; -&gt; Validation&lt;‘value, ’error&gt; A function that turns the diagnostics into an alternate validation. validation Validation&lt;‘value, ’error&gt; The source validation. Returns Type Description Validation&lt;‘value, ’error&gt; The source validation when it succeeds, otherwise the computed fallback validation. Remarks This is the lazy counterpart to orElse and is useful when the alternate branch depends on the accumulated diagnostics.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Validation.orElseWith">
-  <meta itemprop="description" content="Validation.orElseWith fallback validation Computes a fallback validation from the source diagnostics when validation fails.
-Remarks This is the lazy counterpart to orElse and is useful when the alternate branch depends on the accumulated diagnostics.
-Parameters fallback: Diagnostics&lt;’error&gt; -&gt; Validation&lt;‘value, ’error&gt; A function that turns the diagnostics into an alternate validation. validation: Validation&lt;‘value, ’error&gt; The source validation. Returns The source validation when it succeeds, otherwise the computed fallback validation.">
-  <meta itemprop="wordCount" content="66">
+  <meta itemprop="description" content="Computes a fallback validation from the source diagnostics when validation fails.
+Signature Validation.orElseWith fallback validation Parameters Name Type Description fallback Diagnostics&lt;’error&gt; -&gt; Validation&lt;‘value, ’error&gt; A function that turns the diagnostics into an alternate validation. validation Validation&lt;‘value, ’error&gt; The source validation. Returns Type Description Validation&lt;‘value, ’error&gt; The source validation when it succeeds, otherwise the computed fallback validation. Remarks This is the lazy counterpart to orElse and is useful when the alternate branch depends on the accumulated diagnostics.">
+  <meta itemprop="wordCount" content="96">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Validation.orElseWith">
-  <meta name="twitter:description" content="Validation.orElseWith fallback validation Computes a fallback validation from the source diagnostics when validation fails.
-Remarks This is the lazy counterpart to orElse and is useful when the alternate branch depends on the accumulated diagnostics.
-Parameters fallback: Diagnostics&lt;’error&gt; -&gt; Validation&lt;‘value, ’error&gt; A function that turns the diagnostics into an alternate validation. validation: Validation&lt;‘value, ’error&gt; The source validation. Returns The source validation when it succeeds, otherwise the computed fallback validation.">
+  <meta name="twitter:description" content="Computes a fallback validation from the source diagnostics when validation fails.
+Signature Validation.orElseWith fallback validation Parameters Name Type Description fallback Diagnostics&lt;’error&gt; -&gt; Validation&lt;‘value, ’error&gt; A function that turns the diagnostics into an alternate validation. validation Validation&lt;‘value, ’error&gt; The source validation. Returns Type Description Validation&lt;‘value, ’error&gt; The source validation when it succeeds, otherwise the computed fallback validation. Remarks This is the lazy counterpart to orElse and is useful when the alternate branch depends on the accumulated diagnostics.">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -521,9 +517,11 @@ Parameters fallback: Diagnostics&lt;’error&gt; -&gt; Validation&lt;‘value, �
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -549,22 +547,56 @@ Parameters fallback: Diagnostics&lt;’error&gt; -&gt; Validation&lt;‘value, �
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Computes a fallback validation from the source diagnostics when validation fails.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>Validation.orElseWith&#32;<span>fallback&#32;validation</span></span></code>
 </div>
-<p>Computes a fallback validation from the source diagnostics when validation fails.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>fallback</code></td>
+          <td><code><span><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;&rsquo;error&gt;</span> -&gt; <span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></span></code></td>
+          <td>A function that turns the diagnostics into an alternate validation.</td>
+      </tr>
+      <tr>
+          <td><code>validation</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code></td>
+          <td>The source validation.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code></td>
+          <td>The source validation when it succeeds, otherwise the computed fallback validation.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p>This is the lazy counterpart to <a href="https://learn.microsoft.com/dotnet/api/orelse">orElse</a> and is useful when the alternate
 branch depends on the accumulated diagnostics.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>fallback</code>: <code><span><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;&rsquo;error&gt;</span> -&gt; <span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></span></code>
-A function that turns the diagnostics into an alternate validation.</li>
-<li><code>validation</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code>
-The source validation.</li>
-</ul>
-<h2 id="returns">Returns</h2>
-<p>The source validation when it succeeds, otherwise the computed fallback validation.</p>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">v1</span> <span class="o">=</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">fail</span> <span class="pn">(</span><span class="id">Diagnostics</span><span class="pn">.</span><span class="id">singleton</span> <span class="s">&quot;err&quot;</span><span class="pn">)</span>
+ <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="2" class="id">v1</span> <span class="o">|&gt;</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">orElseWith</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">diag</span> <span class="k">-&gt;</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">ok</span> <span class="n">10</span><span class="pn">)</span> <span class="c">// Validation (Ok 10)</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val v1: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/validation/m-validation-orelse/" aria-label="Previous - Validation.orElse">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Validation.sequence | FsFlow</title>
-<meta name="description" content="Validation.sequence validations Transforms a sequence of validations into a validation of a list.
-Parameters validations: Validation&lt;‘value, ’error&gt; seq The input sequence. Returns A validation containing the list of values.">
+<meta name="description" content="Transforms a sequence of validations into a validation of a list.
+Signature Validation.sequence validations Parameters Name Type Description validations Validation&lt;‘value, ’error&gt; seq The input sequence. Returns Type Description Validation&lt;‘value list, ’error&gt; A validation containing the list of values. Examples [Validation.ok 1] |&gt; Validation.sequence // Validation (Ok [1])">
 <meta property="og:url" content="http://localhost:3000/reference/validation/m-validation-sequence/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Validation.sequence">
-  <meta property="og:description" content="Validation.sequence validations Transforms a sequence of validations into a validation of a list.
-Parameters validations: Validation&lt;‘value, ’error&gt; seq The input sequence. Returns A validation containing the list of values.">
+  <meta property="og:description" content="Transforms a sequence of validations into a validation of a list.
+Signature Validation.sequence validations Parameters Name Type Description validations Validation&lt;‘value, ’error&gt; seq The input sequence. Returns Type Description Validation&lt;‘value list, ’error&gt; A validation containing the list of values. Examples [Validation.ok 1] |&gt; Validation.sequence // Validation (Ok [1])">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Validation.sequence">
-  <meta itemprop="description" content="Validation.sequence validations Transforms a sequence of validations into a validation of a list.
-Parameters validations: Validation&lt;‘value, ’error&gt; seq The input sequence. Returns A validation containing the list of values.">
-  <meta itemprop="wordCount" content="28">
+  <meta itemprop="description" content="Transforms a sequence of validations into a validation of a list.
+Signature Validation.sequence validations Parameters Name Type Description validations Validation&lt;‘value, ’error&gt; seq The input sequence. Returns Type Description Validation&lt;‘value list, ’error&gt; A validation containing the list of values. Examples [Validation.ok 1] |&gt; Validation.sequence // Validation (Ok [1])">
+  <meta itemprop="wordCount" content="46">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Validation.sequence">
-  <meta name="twitter:description" content="Validation.sequence validations Transforms a sequence of validations into a validation of a list.
-Parameters validations: Validation&lt;‘value, ’error&gt; seq The input sequence. Returns A validation containing the list of values.">
+  <meta name="twitter:description" content="Transforms a sequence of validations into a validation of a list.
+Signature Validation.sequence validations Parameters Name Type Description validations Validation&lt;‘value, ’error&gt; seq The input sequence. Returns Type Description Validation&lt;‘value list, ’error&gt; A validation containing the list of values. Examples [Validation.ok 1] |&gt; Validation.sequence // Validation (Ok [1])">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,8 +517,10 @@ Parameters validations: Validation&lt;‘value, ’error&gt; seq The input seque
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -544,17 +546,46 @@ Parameters validations: Validation&lt;‘value, ’error&gt; seq The input seque
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Transforms a sequence of validations into a validation of a list.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>Validation.sequence&#32;<span>validations</span></span></code>
 </div>
-<p>Transforms a sequence of validations into a validation of a list.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>validations</code>: <code><span><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span> seq</span></code>
-The input sequence.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>validations</code></td>
+          <td><code><span><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span> seq</span></code></td>
+          <td>The input sequence.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A validation containing the list of values.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span><span>&lsquo;value list</span>, &rsquo;error</span>&gt;</span></code></td>
+          <td>A validation containing the list of values.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="pn">[</span><span class="id">Validation</span><span class="pn">.</span><span class="id">ok</span> <span class="n">1</span><span class="pn">]</span> <span class="o">|&gt;</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">sequence</span> <span class="c">// Validation (Ok [1])</span>
+</code></pre>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/validation/m-validation-orelsewith/" aria-label="Previous - Validation.orElseWith">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

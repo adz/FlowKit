@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Validation.mapError | FsFlow</title>
-<meta name="description" content="Validation.mapError mapper validation Maps the error type of a validation graph.
-Parameters mapper: ‘error -&gt; ’nextError A function of type &#39;error -&gt; &#39;nextError. validation: Validation&lt;‘value, ’error&gt; The source Validation. Returns A validation with transformed error values.">
+<meta name="description" content="Maps the error type of a validation graph.
+Signature Validation.mapError mapper validation Parameters Name Type Description mapper ‘error -&gt; ’nextError A function of type &#39;error -&gt; &#39;nextError. validation Validation&lt;‘value, ’error&gt; The source Validation. Returns Type Description Validation&lt;‘value, ’nextError&gt; A validation with transformed error values. Examples validation |&gt; Validation.mapError (fun e -&gt; e.ToString())">
 <meta property="og:url" content="http://localhost:3000/reference/validation/m-validation-maperror/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Validation.mapError">
-  <meta property="og:description" content="Validation.mapError mapper validation Maps the error type of a validation graph.
-Parameters mapper: ‘error -&gt; ’nextError A function of type &#39;error -&gt; &#39;nextError. validation: Validation&lt;‘value, ’error&gt; The source Validation. Returns A validation with transformed error values.">
+  <meta property="og:description" content="Maps the error type of a validation graph.
+Signature Validation.mapError mapper validation Parameters Name Type Description mapper ‘error -&gt; ’nextError A function of type &#39;error -&gt; &#39;nextError. validation Validation&lt;‘value, ’error&gt; The source Validation. Returns Type Description Validation&lt;‘value, ’nextError&gt; A validation with transformed error values. Examples validation |&gt; Validation.mapError (fun e -&gt; e.ToString())">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Validation.mapError">
-  <meta itemprop="description" content="Validation.mapError mapper validation Maps the error type of a validation graph.
-Parameters mapper: ‘error -&gt; ’nextError A function of type &#39;error -&gt; &#39;nextError. validation: Validation&lt;‘value, ’error&gt; The source Validation. Returns A validation with transformed error values.">
-  <meta itemprop="wordCount" content="34">
+  <meta itemprop="description" content="Maps the error type of a validation graph.
+Signature Validation.mapError mapper validation Parameters Name Type Description mapper ‘error -&gt; ’nextError A function of type &#39;error -&gt; &#39;nextError. validation Validation&lt;‘value, ’error&gt; The source Validation. Returns Type Description Validation&lt;‘value, ’nextError&gt; A validation with transformed error values. Examples validation |&gt; Validation.mapError (fun e -&gt; e.ToString())">
+  <meta itemprop="wordCount" content="50">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Validation.mapError">
-  <meta name="twitter:description" content="Validation.mapError mapper validation Maps the error type of a validation graph.
-Parameters mapper: ‘error -&gt; ’nextError A function of type &#39;error -&gt; &#39;nextError. validation: Validation&lt;‘value, ’error&gt; The source Validation. Returns A validation with transformed error values.">
+  <meta name="twitter:description" content="Maps the error type of a validation graph.
+Signature Validation.mapError mapper validation Parameters Name Type Description mapper ‘error -&gt; ’nextError A function of type &#39;error -&gt; &#39;nextError. validation Validation&lt;‘value, ’error&gt; The source Validation. Returns Type Description Validation&lt;‘value, ’nextError&gt; A validation with transformed error values. Examples validation |&gt; Validation.mapError (fun e -&gt; e.ToString())">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,8 +517,10 @@ Parameters mapper: ‘error -&gt; ’nextError A function of type &#39;error -&g
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -544,19 +546,51 @@ Parameters mapper: ‘error -&gt; ’nextError A function of type &#39;error -&g
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Maps the error type of a validation graph.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>Validation.mapError&#32;<span>mapper&#32;validation</span></span></code>
 </div>
-<p>Maps the error type of a validation graph.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>mapper</code>: <code><span>&lsquo;error -&gt; &rsquo;nextError</span></code>
-A function of type <code>'error -&gt; 'nextError</code>.</li>
-<li><code>validation</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code>
-The source <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>mapper</code></td>
+          <td><code><span>&lsquo;error -&gt; &rsquo;nextError</span></code></td>
+          <td>A function of type <code>'error -&gt; 'nextError</code>.</td>
+      </tr>
+      <tr>
+          <td><code>validation</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code></td>
+          <td>The source <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A validation with transformed error values.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;nextError</span>&gt;</span></code></td>
+          <td>A validation with transformed error values.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="id">validation</span> <span class="o">|&gt;</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">mapError</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">e</span> <span class="k">-&gt;</span> <span class="id">e</span><span class="pn">.</span><span class="id">ToString</span><span class="pn">(</span><span class="pn">)</span><span class="pn">)</span>
+</code></pre>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/validation/m-validation-map3/" aria-label="Previous - Validation.map3">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>result | FsFlow</title>
-<meta name="description" content="result  The fail-fast result { } computation expression.
-Remarks Use this builder when the happy path should short-circuit on the first error and you want to keep the workflow in Result shape all the way through. It works well for parsing, validation, and other boundaries where failure is expected to stop the flow immediately instead of accumulating diagnostics. Use Check.orError when a pure check needs a domain error, and Guard.MapError when you need to remap an existing error before entering the CE.">
+<meta name="description" content="The fail-fast result { } computation expression.
+Signature result  Returns Type Description ResultBuilder A ResultBuilder instance. Remarks Use this builder when the happy path should short-circuit on the first error and you want to keep the workflow in Result shape all the way through. It works well for parsing, validation, and other boundaries where failure is expected to stop the flow immediately instead of accumulating diagnostics. Use Check.orError when a pure check needs a domain error, and Guard.MapError when you need to remap an existing error before entering the CE.">
 <meta property="og:url" content="http://localhost:3000/reference/result/p-result/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="result">
-  <meta property="og:description" content="result  The fail-fast result { } computation expression.
-Remarks Use this builder when the happy path should short-circuit on the first error and you want to keep the workflow in Result shape all the way through. It works well for parsing, validation, and other boundaries where failure is expected to stop the flow immediately instead of accumulating diagnostics. Use Check.orError when a pure check needs a domain error, and Guard.MapError when you need to remap an existing error before entering the CE.">
+  <meta property="og:description" content="The fail-fast result { } computation expression.
+Signature result  Returns Type Description ResultBuilder A ResultBuilder instance. Remarks Use this builder when the happy path should short-circuit on the first error and you want to keep the workflow in Result shape all the way through. It works well for parsing, validation, and other boundaries where failure is expected to stop the flow immediately instead of accumulating diagnostics. Use Check.orError when a pure check needs a domain error, and Guard.MapError when you need to remap an existing error before entering the CE.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="result">
-  <meta itemprop="description" content="result  The fail-fast result { } computation expression.
-Remarks Use this builder when the happy path should short-circuit on the first error and you want to keep the workflow in Result shape all the way through. It works well for parsing, validation, and other boundaries where failure is expected to stop the flow immediately instead of accumulating diagnostics. Use Check.orError when a pure check needs a domain error, and Guard.MapError when you need to remap an existing error before entering the CE.">
-  <meta itemprop="wordCount" content="108">
+  <meta itemprop="description" content="The fail-fast result { } computation expression.
+Signature result  Returns Type Description ResultBuilder A ResultBuilder instance. Remarks Use this builder when the happy path should short-circuit on the first error and you want to keep the workflow in Result shape all the way through. It works well for parsing, validation, and other boundaries where failure is expected to stop the flow immediately instead of accumulating diagnostics. Use Check.orError when a pure check needs a domain error, and Guard.MapError when you need to remap an existing error before entering the CE.">
+  <meta itemprop="wordCount" content="119">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="result">
-  <meta name="twitter:description" content="result  The fail-fast result { } computation expression.
-Remarks Use this builder when the happy path should short-circuit on the first error and you want to keep the workflow in Result shape all the way through. It works well for parsing, validation, and other boundaries where failure is expected to stop the flow immediately instead of accumulating diagnostics. Use Check.orError when a pure check needs a domain error, and Guard.MapError when you need to remap an existing error before entering the CE.">
+  <meta name="twitter:description" content="The fail-fast result { } computation expression.
+Signature result  Returns Type Description ResultBuilder A ResultBuilder instance. Remarks Use this builder when the happy path should short-circuit on the first error and you want to keep the workflow in Result shape all the way through. It works well for parsing, validation, and other boundaries where failure is expected to stop the flow immediately instead of accumulating diagnostics. Use Check.orError when a pure check needs a domain error, and Guard.MapError when you need to remap an existing error before entering the CE.">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,6 +517,8 @@ Remarks Use this builder when the happy path should short-circuit on the first e
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
+    <li><a href="#returns">Returns</a></li>
     <li><a href="#remarks">Remarks</a></li>
     <li><a href="#examples">Examples</a></li>
   </ul>
@@ -544,10 +546,26 @@ Remarks Use this builder when the happy path should short-circuit on the first e
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>The fail-fast <code>result { }</code> computation expression.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>result&#32;<span></span></span></code>
 </div>
-<p>The fail-fast <code>result { }</code> computation expression.</p>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-resultbuilder.html">ResultBuilder</a></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-resultbuilder.html">ResultBuilder</a> instance.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p class='fsdocs-para'>
  Use this builder when the happy path should short-circuit on the first error
@@ -560,13 +578,15 @@ Remarks Use this builder when the happy path should short-circuit on the first e
  you need to remap an existing error before entering the CE.
  </p>
 <h2 id="examples">Examples</h2>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">parsedUser</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">result</span> <span style="color:#ce5c00;font-weight:bold">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">age</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">parseAge</span> <span style="color:#000">input</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">name</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">parseName</span> <span style="color:#000">input</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#000">Age</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">age</span><span style="color:#ce5c00;font-weight:bold">;</span> <span style="color:#000">Name</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">name</span> <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span></code></pre></div>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">parsedUser</span> <span class="o">=</span>
+     <span class="id">result</span> <span class="pn">{</span>
+         <span class="k">let!</span> <span class="id">age</span> <span class="o">=</span> <span class="id">parseAge</span> <span class="id">input</span>
+         <span class="k">let!</span> <span class="id">name</span> <span class="o">=</span> <span class="id">parseName</span> <span class="id">input</span>
+         <span class="k">return</span> <span class="pn">{</span> <span class="id">Age</span> <span class="o">=</span> <span class="id">age</span><span class="pn">;</span> <span class="id">Name</span> <span class="o">=</span> <span class="id">name</span> <span class="pn">}</span>
+     <span class="pn">}</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val parsedUser: obj</div>
+
 	<nav class="docs-page-nav docs-page-nav--prev-only"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/result/builders-result/" aria-label="Previous - result">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>
     <span>Previous</span>

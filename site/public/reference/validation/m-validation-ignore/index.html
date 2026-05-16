@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Validation.ignore | FsFlow</title>
-<meta name="description" content="Validation.ignore validation Maps a successful validation value to unit while preserving the diagnostics.
-Parameters validation: Validation&lt;‘value, ’error&gt; The source validation. Returns A validation that keeps the original diagnostics and discards the success value.">
+<meta name="description" content="Maps a successful validation value to unit while preserving the diagnostics.
+Signature Validation.ignore validation Parameters Name Type Description validation Validation&lt;‘value, ’error&gt; The source validation. Returns Type Description Validation&lt;unit, ’error&gt; A validation that keeps the original diagnostics and discards the success value. Examples Validation.ok 5 |&gt; Validation.ignore // Validation (Ok ())">
 <meta property="og:url" content="http://localhost:3000/reference/validation/m-validation-ignore/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Validation.ignore">
-  <meta property="og:description" content="Validation.ignore validation Maps a successful validation value to unit while preserving the diagnostics.
-Parameters validation: Validation&lt;‘value, ’error&gt; The source validation. Returns A validation that keeps the original diagnostics and discards the success value.">
+  <meta property="og:description" content="Maps a successful validation value to unit while preserving the diagnostics.
+Signature Validation.ignore validation Parameters Name Type Description validation Validation&lt;‘value, ’error&gt; The source validation. Returns Type Description Validation&lt;unit, ’error&gt; A validation that keeps the original diagnostics and discards the success value. Examples Validation.ok 5 |&gt; Validation.ignore // Validation (Ok ())">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Validation.ignore">
-  <meta itemprop="description" content="Validation.ignore validation Maps a successful validation value to unit while preserving the diagnostics.
-Parameters validation: Validation&lt;‘value, ’error&gt; The source validation. Returns A validation that keeps the original diagnostics and discards the success value.">
-  <meta itemprop="wordCount" content="32">
+  <meta itemprop="description" content="Maps a successful validation value to unit while preserving the diagnostics.
+Signature Validation.ignore validation Parameters Name Type Description validation Validation&lt;‘value, ’error&gt; The source validation. Returns Type Description Validation&lt;unit, ’error&gt; A validation that keeps the original diagnostics and discards the success value. Examples Validation.ok 5 |&gt; Validation.ignore // Validation (Ok ())">
+  <meta itemprop="wordCount" content="49">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Validation.ignore">
-  <meta name="twitter:description" content="Validation.ignore validation Maps a successful validation value to unit while preserving the diagnostics.
-Parameters validation: Validation&lt;‘value, ’error&gt; The source validation. Returns A validation that keeps the original diagnostics and discards the success value.">
+  <meta name="twitter:description" content="Maps a successful validation value to unit while preserving the diagnostics.
+Signature Validation.ignore validation Parameters Name Type Description validation Validation&lt;‘value, ’error&gt; The source validation. Returns Type Description Validation&lt;unit, ’error&gt; A validation that keeps the original diagnostics and discards the success value. Examples Validation.ok 5 |&gt; Validation.ignore // Validation (Ok ())">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,8 +517,10 @@ Parameters validation: Validation&lt;‘value, ’error&gt; The source validatio
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -544,17 +546,46 @@ Parameters validation: Validation&lt;‘value, ’error&gt; The source validatio
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Maps a successful validation value to <code>unit</code> while preserving the diagnostics.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>Validation.ignore&#32;<span>validation</span></span></code>
 </div>
-<p>Maps a successful validation value to <code>unit</code> while preserving the diagnostics.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>validation</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code>
-The source validation.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>validation</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code></td>
+          <td>The source validation.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A validation that keeps the original diagnostics and discards the success value.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>unit, &rsquo;error</span>&gt;</span></code></td>
+          <td>A validation that keeps the original diagnostics and discards the success value.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="id">Validation</span><span class="pn">.</span><span class="id">ok</span> <span class="n">5</span> <span class="o">|&gt;</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">ignore</span> <span class="c">// Validation (Ok ())</span>
+</code></pre>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/validation/m-validation-fromresult/" aria-label="Previous - Validation.fromResult">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

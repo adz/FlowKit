@@ -35,6 +35,10 @@ type Exit<'value, 'error> =
 
 [<RequireQualifiedAccess>]
 module Cause =
+    /// <summary>Transforms the error value of a failure cause using the provided function.</summary>
+    /// <param name="mapper">The function to transform the error value.</param>
+    /// <param name="cause">The original cause to transform.</param>
+    /// <returns>A new cause with the transformed error value, or the original cause if it was not a <c>Fail</c>.</returns>
     let map (mapper: 'e -> 'f) (cause: Cause<'e>) : Cause<'f> =
         match cause with
         | Cause.Fail e -> Cause.Fail (mapper e)
@@ -43,31 +47,56 @@ module Cause =
 
 [<RequireQualifiedAccess>]
 module Exit =
+    /// <summary>Transforms the success value of an exit outcome using the provided function.</summary>
+    /// <param name="mapper">The function to transform the success value.</param>
+    /// <param name="exit">The exit outcome to transform.</param>
+    /// <returns>A new exit outcome with the transformed success value.</returns>
     let map (mapper: 'v -> 'w) (exit: Exit<'v, 'e>) : Exit<'w, 'e> =
         match exit with
         | Exit.Success v -> Exit.Success (mapper v)
         | Exit.Failure c -> Exit.Failure c
 
+    /// <summary>Binds the success value of an exit outcome to a function that returns a new exit outcome.</summary>
+    /// <param name="binder">The function that takes a success value and returns a new exit outcome.</param>
+    /// <param name="exit">The exit outcome to bind.</param>
+    /// <returns>The result of the binder function if the exit was successful; otherwise, the original failure.</returns>
     let bind (binder: 'v -> Exit<'w, 'e>) (exit: Exit<'v, 'e>) : Exit<'w, 'e> =
         match exit with
         | Exit.Success v -> binder v
         | Exit.Failure c -> Exit.Failure c
 
+    /// <summary>Transforms the error value of a failed exit outcome using the provided function.</summary>
+    /// <param name="mapper">The function to transform the error value.</param>
+    /// <param name="exit">The exit outcome to transform.</param>
+    /// <returns>A new exit outcome with the transformed error value.</returns>
     let mapError (mapper: 'e -> 'f) (exit: Exit<'v, 'e>) : Exit<'v, 'f> =
         match exit with
         | Exit.Success v -> Exit.Success v
         | Exit.Failure c -> Exit.Failure (Cause.map mapper c)
 
+    /// <summary>Transforms both success and failure outcomes of an exit using the provided functions.</summary>
+    /// <param name="onSuccess">The function to transform the success value.</param>
+    /// <param name="onFailure">The function to transform the failure cause.</param>
+    /// <param name="exit">The exit outcome to transform.</param>
+    /// <returns>A new exit outcome with transformed values.</returns>
     let mapBoth (onSuccess: 'v -> 'w) (onFailure: Cause<'e> -> Cause<'f>) (exit: Exit<'v, 'e>) : Exit<'w, 'f> =
         match exit with
         | Exit.Success v -> Exit.Success (onSuccess v)
         | Exit.Failure c -> Exit.Failure (onFailure c)
 
+    /// <summary>Creates an exit outcome from a standard F# <c>Result</c>.</summary>
+    /// <param name="result">The result to convert.</param>
+    /// <returns>An exit outcome representing the result.</returns>
     let fromResult (result: Result<'v, 'e>) : Exit<'v, 'e> =
         match result with
         | Ok v -> Exit.Success v
         | Error e -> Exit.Failure (Cause.Fail e)
 
+    /// <summary>Converts an exit outcome to a standard F# <c>Result</c>.</summary>
+    /// <param name="exit">The exit outcome to convert.</param>
+    /// <returns>A <c>Result</c> representing the successful value or the domain failure.</returns>
+    /// <exception cref="T:System.Exception">Re-throws the original exception if the exit was <c>Cause.Die</c>.</exception>
+    /// <exception cref="T:System.OperationCanceledException">Throws if the exit was <c>Cause.Interrupt</c>.</exception>
     let toResult (exit: Exit<'v, 'e>) : Result<'v, 'e> =
         match exit with
         | Exit.Success v -> Ok v

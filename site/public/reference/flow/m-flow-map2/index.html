@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.map2 | FsFlow</title>
-<meta name="description" content="map2 mapper left right Combines two flows with a mapping function.
-Parameters mapper: ‘left -&gt; ‘right -&gt; ‘value left: Flow&lt;‘env, ’error, ’left&gt; right: Flow&lt;‘env, ’error, ‘right&gt;">
+<meta name="description" content="Combines two flows with a mapping function.
+Signature Flow.map2 mapper left right Parameters Name Type Description mapper ‘left -&gt; ‘right -&gt; ‘value A function that combines the successful values of both flows. left Flow&lt;‘env, ’error, ’left&gt; The first flow to run. right Flow&lt;‘env, ’error, ‘right&gt; The second flow to run. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow containing the mapped value. Examples let flow = Flow.map2 (fun x y -&gt; x &#43; y) (Flow.succeed 1) (Flow.succeed 2) val flow: obj">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-map2/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.map2">
-  <meta property="og:description" content="map2 mapper left right Combines two flows with a mapping function.
-Parameters mapper: ‘left -&gt; ‘right -&gt; ‘value left: Flow&lt;‘env, ’error, ’left&gt; right: Flow&lt;‘env, ’error, ‘right&gt;">
+  <meta property="og:description" content="Combines two flows with a mapping function.
+Signature Flow.map2 mapper left right Parameters Name Type Description mapper ‘left -&gt; ‘right -&gt; ‘value A function that combines the successful values of both flows. left Flow&lt;‘env, ’error, ’left&gt; The first flow to run. right Flow&lt;‘env, ’error, ‘right&gt; The second flow to run. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow containing the mapped value. Examples let flow = Flow.map2 (fun x y -&gt; x &#43; y) (Flow.succeed 1) (Flow.succeed 2) val flow: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.map2">
-  <meta itemprop="description" content="map2 mapper left right Combines two flows with a mapping function.
-Parameters mapper: ‘left -&gt; ‘right -&gt; ‘value left: Flow&lt;‘env, ’error, ’left&gt; right: Flow&lt;‘env, ’error, ‘right&gt;">
-  <meta itemprop="wordCount" content="23">
+  <meta itemprop="description" content="Combines two flows with a mapping function.
+Signature Flow.map2 mapper left right Parameters Name Type Description mapper ‘left -&gt; ‘right -&gt; ‘value A function that combines the successful values of both flows. left Flow&lt;‘env, ’error, ’left&gt; The first flow to run. right Flow&lt;‘env, ’error, ‘right&gt; The second flow to run. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow containing the mapped value. Examples let flow = Flow.map2 (fun x y -&gt; x &#43; y) (Flow.succeed 1) (Flow.succeed 2) val flow: obj">
+  <meta itemprop="wordCount" content="78">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.map2">
-  <meta name="twitter:description" content="map2 mapper left right Combines two flows with a mapping function.
-Parameters mapper: ‘left -&gt; ‘right -&gt; ‘value left: Flow&lt;‘env, ’error, ’left&gt; right: Flow&lt;‘env, ’error, ‘right&gt;">
+  <meta name="twitter:description" content="Combines two flows with a mapping function.
+Signature Flow.map2 mapper left right Parameters Name Type Description mapper ‘left -&gt; ‘right -&gt; ‘value A function that combines the successful values of both flows. left Flow&lt;‘env, ’error, ’left&gt; The first flow to run. right Flow&lt;‘env, ’error, ‘right&gt; The second flow to run. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow containing the mapped value. Examples let flow = Flow.map2 (fun x y -&gt; x &#43; y) (Flow.succeed 1) (Flow.succeed 2) val flow: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +517,10 @@ Parameters mapper: ‘left -&gt; ‘right -&gt; ‘value left: Flow&lt;‘env, �
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -543,16 +546,57 @@ Parameters mapper: ‘left -&gt; ‘right -&gt; ‘value left: Flow&lt;‘env, �
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>map2&#32;<span>mapper&#32;left&#32;right</span></span></code>
+	<p>Combines two flows with a mapping function.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.map2&#32;<span>mapper&#32;left&#32;right</span></span></code>
 </div>
-<p>Combines two flows with a mapping function.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>mapper</code>: <code><span>&lsquo;left -&gt; &lsquo;right -&gt; &lsquo;value</span></code></li>
-<li><code>left</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &rsquo;left</span>&gt;</span></code></li>
-<li><code>right</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;right</span>&gt;</span></code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>mapper</code></td>
+          <td><code><span>&lsquo;left -&gt; &lsquo;right -&gt; &lsquo;value</span></code></td>
+          <td>A function that combines the successful values of both flows.</td>
+      </tr>
+      <tr>
+          <td><code>left</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &rsquo;left</span>&gt;</span></code></td>
+          <td>The first flow to run.</td>
+      </tr>
+      <tr>
+          <td><code>right</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;right</span>&gt;</span></code></td>
+          <td>The second flow to run.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>A flow containing the mapped value.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">flow</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">map2</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">x</span> <span class="id">y</span> <span class="k">-&gt;</span> <span class="id">x</span> <span class="o">+</span> <span class="id">y</span><span class="pn">)</span> <span class="pn">(</span><span class="id">Flow</span><span class="pn">.</span><span class="id">succeed</span> <span class="n">1</span><span class="pn">)</span> <span class="pn">(</span><span class="id">Flow</span><span class="pn">.</span><span class="id">succeed</span> <span class="n">2</span><span class="pn">)</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val flow: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/flow/m-flow-map/" aria-label="Previous - Flow.map">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

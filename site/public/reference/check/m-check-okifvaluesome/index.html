@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Check.okIfValueSome | FsFlow</title>
-<meta name="description" content="okIfValueSome opt Returns the value when the value option is ValueSome.
-Parameters opt: ‘a voption The voption to check. Returns A Check containing the value if present.">
+<meta name="description" content="Returns the value when the value option is ValueSome.
+Signature Check.okIfValueSome opt Parameters Name Type Description opt ‘a voption The voption to check. Returns Type Description Check&lt;‘a&gt; A Check containing the value if present; otherwise, an Error with unit. Examples ValueSome 5 |&gt; Check.okIfValueSome // Ok 5 ValueNone |&gt; Check.okIfValueSome // Error () union case ValueOption.ValueSome: &#39;T -&gt; ValueOption&lt;&#39;T&gt; union case ValueOption.ValueNone: ValueOption&lt;&#39;T&gt;">
 <meta property="og:url" content="http://localhost:3000/reference/check/m-check-okifvaluesome/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Check.okIfValueSome">
-  <meta property="og:description" content="okIfValueSome opt Returns the value when the value option is ValueSome.
-Parameters opt: ‘a voption The voption to check. Returns A Check containing the value if present.">
+  <meta property="og:description" content="Returns the value when the value option is ValueSome.
+Signature Check.okIfValueSome opt Parameters Name Type Description opt ‘a voption The voption to check. Returns Type Description Check&lt;‘a&gt; A Check containing the value if present; otherwise, an Error with unit. Examples ValueSome 5 |&gt; Check.okIfValueSome // Ok 5 ValueNone |&gt; Check.okIfValueSome // Error () union case ValueOption.ValueSome: &#39;T -&gt; ValueOption&lt;&#39;T&gt; union case ValueOption.ValueNone: ValueOption&lt;&#39;T&gt;">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Check.okIfValueSome">
-  <meta itemprop="description" content="okIfValueSome opt Returns the value when the value option is ValueSome.
-Parameters opt: ‘a voption The voption to check. Returns A Check containing the value if present.">
-  <meta itemprop="wordCount" content="26">
+  <meta itemprop="description" content="Returns the value when the value option is ValueSome.
+Signature Check.okIfValueSome opt Parameters Name Type Description opt ‘a voption The voption to check. Returns Type Description Check&lt;‘a&gt; A Check containing the value if present; otherwise, an Error with unit. Examples ValueSome 5 |&gt; Check.okIfValueSome // Ok 5 ValueNone |&gt; Check.okIfValueSome // Error () union case ValueOption.ValueSome: &#39;T -&gt; ValueOption&lt;&#39;T&gt; union case ValueOption.ValueNone: ValueOption&lt;&#39;T&gt;">
+  <meta itemprop="wordCount" content="62">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Check.okIfValueSome">
-  <meta name="twitter:description" content="okIfValueSome opt Returns the value when the value option is ValueSome.
-Parameters opt: ‘a voption The voption to check. Returns A Check containing the value if present.">
+  <meta name="twitter:description" content="Returns the value when the value option is ValueSome.
+Signature Check.okIfValueSome opt Parameters Name Type Description opt ‘a voption The voption to check. Returns Type Description Check&lt;‘a&gt; A Check containing the value if present; otherwise, an Error with unit. Examples ValueSome 5 |&gt; Check.okIfValueSome // Ok 5 ValueNone |&gt; Check.okIfValueSome // Error () union case ValueOption.ValueSome: &#39;T -&gt; ValueOption&lt;&#39;T&gt; union case ValueOption.ValueNone: ValueOption&lt;&#39;T&gt;">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,8 +517,10 @@ Parameters opt: ‘a voption The voption to check. Returns A Check containing th
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -544,17 +546,49 @@ Parameters opt: ‘a voption The voption to check. Returns A Check containing th
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>okIfValueSome&#32;<span>opt</span></span></code>
+	<p>Returns the value when the value option is <code>ValueSome</code>.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Check.okIfValueSome&#32;<span>opt</span></span></code>
 </div>
-<p>Returns the value when the value option is <code>ValueSome</code>.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>opt</code>: <code><span>&lsquo;a voption</span></code>
-The <a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpvalueoption-1">voption</a> to check.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>opt</code></td>
+          <td><code><span>&lsquo;a voption</span></code></td>
+          <td>The <a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpvalueoption-1">voption</a> to check.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> containing the value if present.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;&lsquo;a&gt;</span></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> containing the value if present; otherwise, an Error with unit.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="uc">ValueSome</span> <span class="n">5</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">okIfValueSome</span> <span class="c">// Ok 5</span>
+ <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="uc">ValueNone</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">okIfValueSome</span> <span class="c">// Error ()</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">union case ValueOption.ValueSome: &#39;T -&gt; ValueOption&lt;&#39;T&gt;</div>
+<div popover class="fsdocs-tip" id="fs2">union case ValueOption.ValueNone: ValueOption&lt;&#39;T&gt;</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/check/m-check-okifvaluenone/" aria-label="Previous - Check.okIfValueNone">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

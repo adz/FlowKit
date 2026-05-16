@@ -3,15 +3,25 @@ title: "Flow.fail"
 linkTitle: "fail"
 ---
 
-<div class="fsdocs-usage">
-<code><span>fail&#32;<span>failure</span></span></code>
-</div>
-
 Alias for <code>error</code> that reads well in some call sites.
+
+## Signature
+
+<div class="fsdocs-usage">
+<code><span>Flow.fail&#32;<span>failure</span></span></code>
+</div>
 
 ## Parameters
 
-- `failure`: <code>'error</code>
+| Name | Type | Description |
+| --- | --- | --- |
+| `failure` | <code>'error</code> | The error value to wrap in a failing flow. |
+
+## Returns
+
+| Type | Description |
+| --- | --- |
+| <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>'env,&#32;'error,&#32;'value</span>&gt;</span></code> | A flow that always fails with the provided error. |
 
 ## Examples
 

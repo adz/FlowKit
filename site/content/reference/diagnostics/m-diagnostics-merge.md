@@ -4,11 +4,26 @@ linkTitle: "merge"
 type: docs
 ---
 
+Recursively merges two diagnostics graphs, combining shared branches and local errors.
+
+## Signature
+
 <div class="fsdocs-usage">
 <code><span>Diagnostics.merge&#32;<span>left&#32;right</span></span></code>
 </div>
 
-Recursively merges two diagnostics graphs, combining shared branches and local errors.
+## Parameters
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `left` | <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;'error&gt;</span></code> | The first graph of type <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>. |
+| `right` | <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;'error&gt;</span></code> | The second graph of type <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>. |
+
+## Returns
+
+| Type | Description |
+| --- | --- |
+| <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;'error&gt;</span></code> | A new <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a> containing the union of both inputs. |
 
 ## Remarks
 
@@ -17,14 +32,15 @@ Recursively merges two diagnostics graphs, combining shared branches and local e
  fields are collected together into a single structured graph.
  
 
-## Parameters
+## Examples
 
-- `left`: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;'error&gt;</span></code>
-  The first graph of type <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>.
-- `right`: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;'error&gt;</span></code>
-  The second graph of type <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>.
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">d1</span> <span class="o">=</span> <span class="id">Diagnostics</span><span class="pn">.</span><span class="id">singleton</span> <span class="s">&quot;Error 1&quot;</span>
+ <span class="k">let</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="id">d2</span> <span class="o">=</span> <span class="id">Diagnostics</span><span class="pn">.</span><span class="id">singleton</span> <span class="s">&quot;Error 2&quot;</span>
+ <span class="k">let</span> <span data-fsdocs-tip="fs3" data-fsdocs-tip-unique="3" class="id">combined</span> <span class="o">=</span> <span class="id">Diagnostics</span><span class="pn">.</span><span class="id">merge</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="4" class="id">d1</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="5" class="id">d2</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val d1: obj</div>
+<div popover class="fsdocs-tip" id="fs2">val d2: obj</div>
+<div popover class="fsdocs-tip" id="fs3">val combined: obj</div>
 
-## Returns
 
-A new <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a> containing the union of both inputs.
 

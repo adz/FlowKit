@@ -19,29 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.catch | FsFlow</title>
-<meta name="description" content="catch handler flow Catches exceptions raised during execution and maps them to a typed error.
-Remarks Exceptions that are not caught by this helper will bubble up to the caller of run. This ensures that known exceptions can be handled within the flow context.
-Parameters handler: exn -&gt; ’error A function of type exn -&gt; &#39;error to map the exception. flow: Flow&lt;‘env, ’error, ‘value&gt; The source flow of type Flow to monitor. Returns A Flow that converts exceptions into success-path errors.">
+<meta name="description" content="Catches exceptions raised during execution and maps them to a typed error.
+Signature Flow.catch handler flow Parameters Name Type Description handler exn -&gt; ’error A function of type exn -&gt; &#39;error to map the exception. flow Flow&lt;‘env, ’error, ‘value&gt; The source flow of type Flow to monitor. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A Flow that converts exceptions into success-path errors. Remarks Exceptions that are not caught by this helper will bubble up to the caller of run. This ensures that known exceptions can be handled within the flow context.">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-catch/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.catch">
-  <meta property="og:description" content="catch handler flow Catches exceptions raised during execution and maps them to a typed error.
-Remarks Exceptions that are not caught by this helper will bubble up to the caller of run. This ensures that known exceptions can be handled within the flow context.
-Parameters handler: exn -&gt; ’error A function of type exn -&gt; &#39;error to map the exception. flow: Flow&lt;‘env, ’error, ‘value&gt; The source flow of type Flow to monitor. Returns A Flow that converts exceptions into success-path errors.">
+  <meta property="og:description" content="Catches exceptions raised during execution and maps them to a typed error.
+Signature Flow.catch handler flow Parameters Name Type Description handler exn -&gt; ’error A function of type exn -&gt; &#39;error to map the exception. flow Flow&lt;‘env, ’error, ‘value&gt; The source flow of type Flow to monitor. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A Flow that converts exceptions into success-path errors. Remarks Exceptions that are not caught by this helper will bubble up to the caller of run. This ensures that known exceptions can be handled within the flow context.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.catch">
-  <meta itemprop="description" content="catch handler flow Catches exceptions raised during execution and maps them to a typed error.
-Remarks Exceptions that are not caught by this helper will bubble up to the caller of run. This ensures that known exceptions can be handled within the flow context.
-Parameters handler: exn -&gt; ’error A function of type exn -&gt; &#39;error to map the exception. flow: Flow&lt;‘env, ’error, ‘value&gt; The source flow of type Flow to monitor. Returns A Flow that converts exceptions into success-path errors.">
-  <meta itemprop="wordCount" content="79">
+  <meta itemprop="description" content="Catches exceptions raised during execution and maps them to a typed error.
+Signature Flow.catch handler flow Parameters Name Type Description handler exn -&gt; ’error A function of type exn -&gt; &#39;error to map the exception. flow Flow&lt;‘env, ’error, ‘value&gt; The source flow of type Flow to monitor. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A Flow that converts exceptions into success-path errors. Remarks Exceptions that are not caught by this helper will bubble up to the caller of run. This ensures that known exceptions can be handled within the flow context.">
+  <meta itemprop="wordCount" content="180">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.catch">
-  <meta name="twitter:description" content="catch handler flow Catches exceptions raised during execution and maps them to a typed error.
-Remarks Exceptions that are not caught by this helper will bubble up to the caller of run. This ensures that known exceptions can be handled within the flow context.
-Parameters handler: exn -&gt; ’error A function of type exn -&gt; &#39;error to map the exception. flow: Flow&lt;‘env, ’error, ‘value&gt; The source flow of type Flow to monitor. Returns A Flow that converts exceptions into success-path errors.">
+  <meta name="twitter:description" content="Catches exceptions raised during execution and maps them to a typed error.
+Signature Flow.catch handler flow Parameters Name Type Description handler exn -&gt; ’error A function of type exn -&gt; &#39;error to map the exception. flow Flow&lt;‘env, ’error, ‘value&gt; The source flow of type Flow to monitor. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A Flow that converts exceptions into success-path errors. Remarks Exceptions that are not caught by this helper will bubble up to the caller of run. This ensures that known exceptions can be handled within the flow context.">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -521,9 +517,11 @@ Parameters handler: exn -&gt; ’error A function of type exn -&gt; &#39;error t
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -549,22 +547,68 @@ Parameters handler: exn -&gt; ’error A function of type exn -&gt; &#39;error t
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>catch&#32;<span>handler&#32;flow</span></span></code>
+	<p>Catches exceptions raised during execution and maps them to a typed error.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.catch&#32;<span>handler&#32;flow</span></span></code>
 </div>
-<p>Catches exceptions raised during execution and maps them to a typed error.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>handler</code></td>
+          <td><code><span>exn -&gt; &rsquo;error</span></code></td>
+          <td>A function of type <code>exn -&gt; 'error</code> to map the exception.</td>
+      </tr>
+      <tr>
+          <td><code>flow</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>The source flow of type <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a> to monitor.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a> that converts exceptions into success-path errors.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p>Exceptions that are not caught by this helper will bubble up to the caller of <a href="https://learn.microsoft.com/dotnet/api/run">run</a>.
 This ensures that known exceptions can be handled within the flow context.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>handler</code>: <code><span>exn -&gt; &rsquo;error</span></code>
-A function of type <code>exn -&gt; 'error</code> to map the exception.</li>
-<li><code>flow</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code>
-The source flow of type <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a> to monitor.</li>
-</ul>
-<h2 id="returns">Returns</h2>
-<p>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a> that converts exceptions into success-path errors.</p>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">flow</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">die</span> <span class="pn">(</span><span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="id">System</span><span class="pn">.</span><span data-fsdocs-tip="fs3" data-fsdocs-tip-unique="3" class="id">Exception</span><span class="pn">(</span><span class="s">&quot;boom&quot;</span><span class="pn">)</span><span class="pn">)</span> <span class="o">|&gt;</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">catch</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">ex</span> <span class="k">-&gt;</span> <span class="s">&quot;caught: &quot;</span> <span class="o">+</span> <span class="id">ex</span><span class="pn">.</span><span class="id">Message</span><span class="pn">)</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val flow: obj</div>
+<div popover class="fsdocs-tip" id="fs2">namespace System</div>
+<div popover class="fsdocs-tip" id="fs3">Multiple items<br />type Exception =
+  interface ISerializable
+  new: unit -&gt; unit + 2 overloads
+  member GetBaseException: unit -&gt; exn
+  member GetObjectData: info: SerializationInfo * context: StreamingContext -&gt; unit
+  member GetType: unit -&gt; Type
+  member ToString: unit -&gt; string
+  member Data: IDictionary
+  member HResult: int
+  member HelpLink: string
+  member InnerException: exn
+  ...<br /><em>&lt;summary&gt;Represents errors that occur during application execution.&lt;/summary&gt;</em><br /><br />--------------------<br />System.Exception() : System.Exception<br />System.Exception(message: string) : System.Exception<br />System.Exception(message: string, innerException: exn) : System.Exception</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/flow/m-flow-bind/" aria-label="Previous - Flow.bind">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Validation.apply | FsFlow</title>
-<meta name="description" content="Validation.apply validation value Applies a validation-wrapped function to a validation-wrapped value.
-Parameters validation: Validation&lt;(‘value -&gt; ’next), ’error&gt; The validation containing the function. value: Validation&lt;‘value, ’error&gt; The validation containing the value. Returns The result of applying the function to the value, with accumulated errors.">
+<meta name="description" content="Applies a validation-wrapped function to a validation-wrapped value.
+Signature Validation.apply validation value Parameters Name Type Description validation Validation&lt;(‘value -&gt; ’next), ’error&gt; The validation containing the function. value Validation&lt;‘value, ’error&gt; The validation containing the value. Returns Type Description Validation&lt;‘next, ’error&gt; The result of applying the function to the value, with accumulated errors. Examples let fn = Validation.ok (fun x -&gt; x &#43; 1) let v = Validation.ok 5 Validation.apply fn v // Validation (Ok 6) val fn: obj val v: obj">
 <meta property="og:url" content="http://localhost:3000/reference/validation/m-validation-apply/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Validation.apply">
-  <meta property="og:description" content="Validation.apply validation value Applies a validation-wrapped function to a validation-wrapped value.
-Parameters validation: Validation&lt;(‘value -&gt; ’next), ’error&gt; The validation containing the function. value: Validation&lt;‘value, ’error&gt; The validation containing the value. Returns The result of applying the function to the value, with accumulated errors.">
+  <meta property="og:description" content="Applies a validation-wrapped function to a validation-wrapped value.
+Signature Validation.apply validation value Parameters Name Type Description validation Validation&lt;(‘value -&gt; ’next), ’error&gt; The validation containing the function. value Validation&lt;‘value, ’error&gt; The validation containing the value. Returns Type Description Validation&lt;‘next, ’error&gt; The result of applying the function to the value, with accumulated errors. Examples let fn = Validation.ok (fun x -&gt; x &#43; 1) let v = Validation.ok 5 Validation.apply fn v // Validation (Ok 6) val fn: obj val v: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Validation.apply">
-  <meta itemprop="description" content="Validation.apply validation value Applies a validation-wrapped function to a validation-wrapped value.
-Parameters validation: Validation&lt;(‘value -&gt; ’next), ’error&gt; The validation containing the function. value: Validation&lt;‘value, ’error&gt; The validation containing the value. Returns The result of applying the function to the value, with accumulated errors.">
-  <meta itemprop="wordCount" content="41">
+  <meta itemprop="description" content="Applies a validation-wrapped function to a validation-wrapped value.
+Signature Validation.apply validation value Parameters Name Type Description validation Validation&lt;(‘value -&gt; ’next), ’error&gt; The validation containing the function. value Validation&lt;‘value, ’error&gt; The validation containing the value. Returns Type Description Validation&lt;‘next, ’error&gt; The result of applying the function to the value, with accumulated errors. Examples let fn = Validation.ok (fun x -&gt; x &#43; 1) let v = Validation.ok 5 Validation.apply fn v // Validation (Ok 6) val fn: obj val v: obj">
+  <meta itemprop="wordCount" content="78">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Validation.apply">
-  <meta name="twitter:description" content="Validation.apply validation value Applies a validation-wrapped function to a validation-wrapped value.
-Parameters validation: Validation&lt;(‘value -&gt; ’next), ’error&gt; The validation containing the function. value: Validation&lt;‘value, ’error&gt; The validation containing the value. Returns The result of applying the function to the value, with accumulated errors.">
+  <meta name="twitter:description" content="Applies a validation-wrapped function to a validation-wrapped value.
+Signature Validation.apply validation value Parameters Name Type Description validation Validation&lt;(‘value -&gt; ’next), ’error&gt; The validation containing the function. value Validation&lt;‘value, ’error&gt; The validation containing the value. Returns Type Description Validation&lt;‘next, ’error&gt; The result of applying the function to the value, with accumulated errors. Examples let fn = Validation.ok (fun x -&gt; x &#43; 1) let v = Validation.ok 5 Validation.apply fn v // Validation (Ok 6) val fn: obj val v: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,8 +517,10 @@ Parameters validation: Validation&lt;(‘value -&gt; ’next), ’error&gt; The 
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -544,19 +546,55 @@ Parameters validation: Validation&lt;(‘value -&gt; ’next), ’error&gt; The 
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Applies a validation-wrapped function to a validation-wrapped value.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>Validation.apply&#32;<span>validation&#32;value</span></span></code>
 </div>
-<p>Applies a validation-wrapped function to a validation-wrapped value.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>validation</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span><span>(<span>&lsquo;value -&gt; &rsquo;next</span>)</span>, &rsquo;error</span>&gt;</span></code>
-The validation containing the function.</li>
-<li><code>value</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code>
-The validation containing the value.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>validation</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span><span>(<span>&lsquo;value -&gt; &rsquo;next</span>)</span>, &rsquo;error</span>&gt;</span></code></td>
+          <td>The validation containing the function.</td>
+      </tr>
+      <tr>
+          <td><code>value</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code></td>
+          <td>The validation containing the value.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>The result of applying the function to the value, with accumulated errors.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;next, &rsquo;error</span>&gt;</span></code></td>
+          <td>The result of applying the function to the value, with accumulated errors.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">fn</span> <span class="o">=</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">ok</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">x</span> <span class="k">-&gt;</span> <span class="id">x</span> <span class="o">+</span> <span class="n">1</span><span class="pn">)</span>
+ <span class="k">let</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="id">v</span> <span class="o">=</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">ok</span> <span class="n">5</span>
+ <span class="id">Validation</span><span class="pn">.</span><span class="id">apply</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="3" class="id">fn</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="4" class="id">v</span> <span class="c">// Validation (Ok 6)</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val fn: obj</div>
+<div popover class="fsdocs-tip" id="fs2">val v: obj</div>
 
 	<nav class="docs-page-nav docs-page-nav--next-only"><a class="docs-home-cta docs-page-nav__link docs-page-nav__next" href="http://localhost:3000/reference/validation/m-validation-at/" aria-label="Next - Validation.at">
     <span>Next</span>

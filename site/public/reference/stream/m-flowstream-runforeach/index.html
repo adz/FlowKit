@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>FlowStream.runForEach | FsFlow</title>
-<meta name="description" content="FlowStream.runForEach environment action arg3 Executes the stream and performs an action for each value.
-Parameters environment: ‘env action: ‘value -&gt; unit arg2: FlowStream&lt;‘env, ’error, ‘value&gt;">
+<meta name="description" content="Executes the stream and performs a synchronous action for each successful value.
+Signature FlowStream.runForEach environment action arg3 Parameters Name Type Description environment ‘env The environment required to execute the stream. action ‘value -&gt; unit The function to execute for each value emitted by the stream. arg2 FlowStream&lt;‘env, ’error, ‘value&gt; Returns Type Description Flow&lt;‘env, ’error, unit&gt; A flow that represents the execution of the stream. If the stream fails, the flow fails with the same cause. Examples let stream = FlowStream.fromSeq [&#34;a&#34;; &#34;b&#34;; &#34;c&#34;] let flow = FlowStream.runForEach () (printfn &#34;%s&#34;) stream val stream: obj val flow: obj val printfn: format: Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T">
 <meta property="og:url" content="http://localhost:3000/reference/stream/m-flowstream-runforeach/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="FlowStream.runForEach">
-  <meta property="og:description" content="FlowStream.runForEach environment action arg3 Executes the stream and performs an action for each value.
-Parameters environment: ‘env action: ‘value -&gt; unit arg2: FlowStream&lt;‘env, ’error, ‘value&gt;">
+  <meta property="og:description" content="Executes the stream and performs a synchronous action for each successful value.
+Signature FlowStream.runForEach environment action arg3 Parameters Name Type Description environment ‘env The environment required to execute the stream. action ‘value -&gt; unit The function to execute for each value emitted by the stream. arg2 FlowStream&lt;‘env, ’error, ‘value&gt; Returns Type Description Flow&lt;‘env, ’error, unit&gt; A flow that represents the execution of the stream. If the stream fails, the flow fails with the same cause. Examples let stream = FlowStream.fromSeq [&#34;a&#34;; &#34;b&#34;; &#34;c&#34;] let flow = FlowStream.runForEach () (printfn &#34;%s&#34;) stream val stream: obj val flow: obj val printfn: format: Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="FlowStream.runForEach">
-  <meta itemprop="description" content="FlowStream.runForEach environment action arg3 Executes the stream and performs an action for each value.
-Parameters environment: ‘env action: ‘value -&gt; unit arg2: FlowStream&lt;‘env, ’error, ‘value&gt;">
-  <meta itemprop="wordCount" content="22">
+  <meta itemprop="description" content="Executes the stream and performs a synchronous action for each successful value.
+Signature FlowStream.runForEach environment action arg3 Parameters Name Type Description environment ‘env The environment required to execute the stream. action ‘value -&gt; unit The function to execute for each value emitted by the stream. arg2 FlowStream&lt;‘env, ’error, ‘value&gt; Returns Type Description Flow&lt;‘env, ’error, unit&gt; A flow that represents the execution of the stream. If the stream fails, the flow fails with the same cause. Examples let stream = FlowStream.fromSeq [&#34;a&#34;; &#34;b&#34;; &#34;c&#34;] let flow = FlowStream.runForEach () (printfn &#34;%s&#34;) stream val stream: obj val flow: obj val printfn: format: Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T">
+  <meta itemprop="wordCount" content="100">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="FlowStream.runForEach">
-  <meta name="twitter:description" content="FlowStream.runForEach environment action arg3 Executes the stream and performs an action for each value.
-Parameters environment: ‘env action: ‘value -&gt; unit arg2: FlowStream&lt;‘env, ’error, ‘value&gt;">
+  <meta name="twitter:description" content="Executes the stream and performs a synchronous action for each successful value.
+Signature FlowStream.runForEach environment action arg3 Parameters Name Type Description environment ‘env The environment required to execute the stream. action ‘value -&gt; unit The function to execute for each value emitted by the stream. arg2 FlowStream&lt;‘env, ’error, ‘value&gt; Returns Type Description Flow&lt;‘env, ’error, unit&gt; A flow that represents the execution of the stream. If the stream fails, the flow fails with the same cause. Examples let stream = FlowStream.fromSeq [&#34;a&#34;; &#34;b&#34;; &#34;c&#34;] let flow = FlowStream.runForEach () (printfn &#34;%s&#34;) stream val stream: obj val flow: obj val printfn: format: Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +517,10 @@ Parameters environment: ‘env action: ‘value -&gt; unit arg2: FlowStream&lt;�
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -543,16 +546,60 @@ Parameters environment: ‘env action: ‘value -&gt; unit arg2: FlowStream&lt;�
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Executes the stream and performs a synchronous action for each successful value.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>FlowStream.runForEach&#32;<span>environment&#32;action&#32;arg3</span></span></code>
 </div>
-<p>Executes the stream and performs an action for each value.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>environment</code>: <code>&lsquo;env</code></li>
-<li><code>action</code>: <code><span>&lsquo;value -&gt; unit</span></code></li>
-<li><code>arg2</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flowstream-3.html">FlowStream</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>environment</code></td>
+          <td><code>&lsquo;env</code></td>
+          <td>The environment required to execute the stream.</td>
+      </tr>
+      <tr>
+          <td><code>action</code></td>
+          <td><code><span>&lsquo;value -&gt; unit</span></code></td>
+          <td>The function to execute for each value emitted by the stream.</td>
+      </tr>
+      <tr>
+          <td><code>arg2</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flowstream-3.html">FlowStream</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, unit</span>&gt;</span></code></td>
+          <td>A flow that represents the execution of the stream. If the stream fails, the flow fails with the same cause.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">stream</span> <span class="o">=</span> <span class="id">FlowStream</span><span class="pn">.</span><span class="id">fromSeq</span> <span class="pn">[</span><span class="s">&quot;a&quot;</span><span class="pn">;</span> <span class="s">&quot;b&quot;</span><span class="pn">;</span> <span class="s">&quot;c&quot;</span><span class="pn">]</span>
+ <span class="k">let</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="id">flow</span> <span class="o">=</span> <span class="id">FlowStream</span><span class="pn">.</span><span class="id">runForEach</span> <span class="pn">(</span><span class="pn">)</span> <span class="pn">(</span><span data-fsdocs-tip="fs3" data-fsdocs-tip-unique="3" class="id">printfn</span> <span class="s">&quot;%s&quot;</span><span class="pn">)</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="4" class="id">stream</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val stream: obj</div>
+<div popover class="fsdocs-tip" id="fs2">val flow: obj</div>
+<div popover class="fsdocs-tip" id="fs3">val printfn: format: Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T</div>
 
 	<nav class="docs-page-nav docs-page-nav--prev-only"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/stream/m-flowstream-map/" aria-label="Previous - FlowStream.map">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

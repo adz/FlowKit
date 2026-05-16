@@ -8,3 +8,17 @@ linkTitle: "FlowStream<env, error, value>"
  and supports backpressure.
  
 
+## Signature
+
+<div class="fsdocs-usage">
+<code>type FlowStream<'env, 'error, 'value></code>
+</div>
+
+## Type Parameters
+
+| Name |
+| --- |
+| `env` |
+| `error` |
+| `value` |
+

@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.sequence | FsFlow</title>
-<meta name="description" content="sequence flows Transforms a sequence of flows into a flow of a sequence and stops at the first failure.
-Parameters flows: Flow&lt;‘env, ’error, ‘value&gt; seq">
+<meta name="description" content="Transforms a sequence of flows into a flow of a sequence and stops at the first failure.
+Signature Flow.sequence flows Parameters Name Type Description flows Flow&lt;‘env, ’error, ‘value&gt; seq The sequence of flows to run. Returns Type Description Flow&lt;‘env, ’error, ‘value list&gt; A flow containing a list of the successful values. Examples let flow = Flow.sequence [Flow.succeed 1; Flow.succeed 2] val flow: obj">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-sequence/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.sequence">
-  <meta property="og:description" content="sequence flows Transforms a sequence of flows into a flow of a sequence and stops at the first failure.
-Parameters flows: Flow&lt;‘env, ’error, ‘value&gt; seq">
+  <meta property="og:description" content="Transforms a sequence of flows into a flow of a sequence and stops at the first failure.
+Signature Flow.sequence flows Parameters Name Type Description flows Flow&lt;‘env, ’error, ‘value&gt; seq The sequence of flows to run. Returns Type Description Flow&lt;‘env, ’error, ‘value list&gt; A flow containing a list of the successful values. Examples let flow = Flow.sequence [Flow.succeed 1; Flow.succeed 2] val flow: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.sequence">
-  <meta itemprop="description" content="sequence flows Transforms a sequence of flows into a flow of a sequence and stops at the first failure.
-Parameters flows: Flow&lt;‘env, ’error, ‘value&gt; seq">
-  <meta itemprop="wordCount" content="24">
+  <meta itemprop="description" content="Transforms a sequence of flows into a flow of a sequence and stops at the first failure.
+Signature Flow.sequence flows Parameters Name Type Description flows Flow&lt;‘env, ’error, ‘value&gt; seq The sequence of flows to run. Returns Type Description Flow&lt;‘env, ’error, ‘value list&gt; A flow containing a list of the successful values. Examples let flow = Flow.sequence [Flow.succeed 1; Flow.succeed 2] val flow: obj">
+  <meta itemprop="wordCount" content="62">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.sequence">
-  <meta name="twitter:description" content="sequence flows Transforms a sequence of flows into a flow of a sequence and stops at the first failure.
-Parameters flows: Flow&lt;‘env, ’error, ‘value&gt; seq">
+  <meta name="twitter:description" content="Transforms a sequence of flows into a flow of a sequence and stops at the first failure.
+Signature Flow.sequence flows Parameters Name Type Description flows Flow&lt;‘env, ’error, ‘value&gt; seq The sequence of flows to run. Returns Type Description Flow&lt;‘env, ’error, ‘value list&gt; A flow containing a list of the successful values. Examples let flow = Flow.sequence [Flow.succeed 1; Flow.succeed 2] val flow: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +517,10 @@ Parameters flows: Flow&lt;‘env, ’error, ‘value&gt; seq">
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -543,14 +546,47 @@ Parameters flows: Flow&lt;‘env, ’error, ‘value&gt; seq">
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>sequence&#32;<span>flows</span></span></code>
+	<p>Transforms a sequence of flows into a flow of a sequence and stops at the first failure.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.sequence&#32;<span>flows</span></span></code>
 </div>
-<p>Transforms a sequence of flows into a flow of a sequence and stops at the first failure.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>flows</code>: <code><span><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span> seq</span></code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>flows</code></td>
+          <td><code><span><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span> seq</span></code></td>
+          <td>The sequence of flows to run.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, <span>&lsquo;value list</span></span>&gt;</span></code></td>
+          <td>A flow containing a list of the successful values.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">flow</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">sequence</span> <span class="pn">[</span><span class="id">Flow</span><span class="pn">.</span><span class="id">succeed</span> <span class="n">1</span><span class="pn">;</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">succeed</span> <span class="n">2</span><span class="pn">]</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val flow: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/flow/m-flow-run/" aria-label="Previous - Flow.run">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

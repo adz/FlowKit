@@ -4,18 +4,23 @@ linkTitle: "interrupt"
 type: docs
 ---
 
-<div class="fsdocs-usage">
-<code><span>interrupt&#32;<span>fiber</span></span></code>
-</div>
-
 Signals a fiber to stop and waits for it to finish its cleanup.
+
+## Signature
+
+<div class="fsdocs-usage">
+<code><span>Flow.interrupt&#32;<span>fiber</span></span></code>
+</div>
 
 ## Parameters
 
-- `fiber`: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-fiber-2.html">Fiber</a>&lt;<span>'error,&#32;'value</span>&gt;</span></code>
-  The fiber to interrupt.
+| Name | Type | Description |
+| --- | --- | --- |
+| `fiber` | <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-fiber-2.html">Fiber</a>&lt;<span>'error,&#32;'value</span>&gt;</span></code> | The fiber to interrupt. |
 
 ## Returns
 
-A flow that completes with the fiber&#39;s final outcome after interruption.
+| Type | Description |
+| --- | --- |
+| <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>'env,&#32;'none,&#32;<span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-exit-2.html">Exit</a>&lt;<span>'value,&#32;'error</span>&gt;</span></span>&gt;</span></code> | A flow that completes with the fiber&#39;s final outcome after interruption. |
 

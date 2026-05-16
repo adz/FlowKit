@@ -30,7 +30,7 @@
 
   <meta itemprop="name" content="Stream">
   <meta itemprop="description" content="This page shows the FlowStream surface for cold, pull-based streams that still participate in FsFlow’s environment and typed-error model. A stream can require env, emit values incrementally, and fail with the same error discipline as Flow. Use it when the boundary produces many values over time, such as file records, network messages, or paged API results. Keep per-item logic small and push final side effects through runForEach so cancellation and failure stay visible.">
-  <meta itemprop="wordCount" content="125">
+  <meta itemprop="wordCount" content="132">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Stream">
   <meta name="twitter:description" content="This page shows the FlowStream surface for cold, pull-based streams that still participate in FsFlow’s environment and typed-error model. A stream can require env, emit values incrementally, and fail with the same error discipline as Flow. Use it when the boundary produces many values over time, such as file records, network messages, or paged API results. Keep per-item logic small and push final side effects through runForEach so cancellation and failure stay visible.">
@@ -547,9 +547,9 @@ and supports backpressure.</li>
 </ul>
 <h2 id="module-functions">Module functions</h2>
 <ul>
-<li><a href="http://localhost:3000/reference/stream/m-flowstream-fromseq/"><code>FlowStream.fromSeq</code></a>: Creates a stream from a sequence of values.</li>
-<li><a href="http://localhost:3000/reference/stream/m-flowstream-map/"><code>FlowStream.map</code></a>: Maps the successful values of a stream.</li>
-<li><a href="http://localhost:3000/reference/stream/m-flowstream-runforeach/"><code>FlowStream.runForEach</code></a>: Executes the stream and performs an action for each value.</li>
+<li><a href="http://localhost:3000/reference/stream/m-flowstream-fromseq/"><code>FlowStream.fromSeq</code></a>: Creates a stream from a synchronous sequence of values.</li>
+<li><a href="http://localhost:3000/reference/stream/m-flowstream-map/"><code>FlowStream.map</code></a>: Transforms the successful values of a stream using the provided function.</li>
+<li><a href="http://localhost:3000/reference/stream/m-flowstream-runforeach/"><code>FlowStream.runForEach</code></a>: Executes the stream and performs a synchronous action for each successful value.</li>
 </ul>
 
 	<div class="section-index">

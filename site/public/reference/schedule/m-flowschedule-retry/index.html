@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>FlowSchedule.Retry | FsFlow</title>
-<meta name="description" content="Flow.Retry(flow, schedule) Retries a failing flow according to the supplied schedule.
-Parameters flow: Flow&lt;‘env, ’error, ‘value&gt; schedule: Schedule&lt;‘env, ’error, ‘output&gt;">
+<meta name="description" content="Retries a failing flow according to the supplied schedule.
+Signature Flow.Retry(flow, schedule) Parameters Name Type Description flow Flow&lt;‘env, ’error, ‘value&gt; The workflow to retry if it fails. schedule Schedule&lt;‘env, ’error, ‘output&gt; The schedule that determines when and if to retry based on the error. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that will retry the original flow according to the schedule until it succeeds or the schedule stops. Examples let flakyWork = Flow.fail &#34;oops&#34; let retried = Flow.Retry(flakyWork, Schedule.recurs 3) val flakyWork: obj val retried: obj">
 <meta property="og:url" content="http://localhost:3000/reference/schedule/m-flowschedule-retry/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="FlowSchedule.Retry">
-  <meta property="og:description" content="Flow.Retry(flow, schedule) Retries a failing flow according to the supplied schedule.
-Parameters flow: Flow&lt;‘env, ’error, ‘value&gt; schedule: Schedule&lt;‘env, ’error, ‘output&gt;">
+  <meta property="og:description" content="Retries a failing flow according to the supplied schedule.
+Signature Flow.Retry(flow, schedule) Parameters Name Type Description flow Flow&lt;‘env, ’error, ‘value&gt; The workflow to retry if it fails. schedule Schedule&lt;‘env, ’error, ‘output&gt; The schedule that determines when and if to retry based on the error. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that will retry the original flow according to the schedule until it succeeds or the schedule stops. Examples let flakyWork = Flow.fail &#34;oops&#34; let retried = Flow.Retry(flakyWork, Schedule.recurs 3) val flakyWork: obj val retried: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="FlowSchedule.Retry">
-  <meta itemprop="description" content="Flow.Retry(flow, schedule) Retries a failing flow according to the supplied schedule.
-Parameters flow: Flow&lt;‘env, ’error, ‘value&gt; schedule: Schedule&lt;‘env, ’error, ‘output&gt;">
-  <meta itemprop="wordCount" content="19">
+  <meta itemprop="description" content="Retries a failing flow according to the supplied schedule.
+Signature Flow.Retry(flow, schedule) Parameters Name Type Description flow Flow&lt;‘env, ’error, ‘value&gt; The workflow to retry if it fails. schedule Schedule&lt;‘env, ’error, ‘output&gt; The schedule that determines when and if to retry based on the error. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that will retry the original flow according to the schedule until it succeeds or the schedule stops. Examples let flakyWork = Flow.fail &#34;oops&#34; let retried = Flow.Retry(flakyWork, Schedule.recurs 3) val flakyWork: obj val retried: obj">
+  <meta itemprop="wordCount" content="86">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="FlowSchedule.Retry">
-  <meta name="twitter:description" content="Flow.Retry(flow, schedule) Retries a failing flow according to the supplied schedule.
-Parameters flow: Flow&lt;‘env, ’error, ‘value&gt; schedule: Schedule&lt;‘env, ’error, ‘output&gt;">
+  <meta name="twitter:description" content="Retries a failing flow according to the supplied schedule.
+Signature Flow.Retry(flow, schedule) Parameters Name Type Description flow Flow&lt;‘env, ’error, ‘value&gt; The workflow to retry if it fails. schedule Schedule&lt;‘env, ’error, ‘output&gt; The schedule that determines when and if to retry based on the error. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that will retry the original flow according to the schedule until it succeeds or the schedule stops. Examples let flakyWork = Flow.fail &#34;oops&#34; let retried = Flow.Retry(flakyWork, Schedule.recurs 3) val flakyWork: obj val retried: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +517,10 @@ Parameters flow: Flow&lt;‘env, ’error, ‘value&gt; schedule: Schedule&lt;�
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -543,15 +546,54 @@ Parameters flow: Flow&lt;‘env, ’error, ‘value&gt; schedule: Schedule&lt;�
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Retries a failing flow according to the supplied schedule.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>Flow.Retry<span><span>(<span>flow,&#32;schedule</span>)</span></span></span></code>
 </div>
-<p>Retries a failing flow according to the supplied schedule.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>flow</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></li>
-<li><code>schedule</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-schedule-3.html">Schedule</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;output</span>&gt;</span></code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>flow</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>The workflow to retry if it fails.</td>
+      </tr>
+      <tr>
+          <td><code>schedule</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-schedule-3.html">Schedule</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;output</span>&gt;</span></code></td>
+          <td>The schedule that determines when and if to retry based on the error.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>A flow that will retry the original flow according to the schedule until it succeeds or the schedule stops.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">flakyWork</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">fail</span> <span class="s">&quot;oops&quot;</span>
+ <span class="k">let</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="id">retried</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">Retry</span><span class="pn">(</span><span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="3" class="id">flakyWork</span><span class="pn">,</span> <span class="id">Schedule</span><span class="pn">.</span><span class="id">recurs</span> <span class="n">3</span><span class="pn">)</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val flakyWork: obj</div>
+<div popover class="fsdocs-tip" id="fs2">val retried: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/schedule/m-flowschedule-repeat/" aria-label="Previous - FlowSchedule.Repeat">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

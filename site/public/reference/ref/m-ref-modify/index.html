@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Ref.modify | FsFlow</title>
-<meta name="description" content="Ref.modify f arg2 Updates the value of the reference using the supplied function and returns a derived value.
-Parameters f: ‘T -&gt; ‘T * ‘v arg1: Ref&lt;‘T&gt;">
+<meta name="description" content="Updates the value of the reference using the supplied function and returns a derived value.
+Signature Ref.modify f reference Parameters Name Type Description f ‘T -&gt; ‘T * ‘v The update function of type &#39;T -&gt; &#39;T * &#39;v. reference Ref&lt;‘T&gt; The Ref to update. Returns Type Description Flow&lt;‘env, ’none, ‘v&gt; A flow that updates the value and returns the second part of the tuple returned by f. Examples Ref.modify (fun x -&gt; x &#43; 1, &#34;increased&#34;) myRef">
 <meta property="og:url" content="http://localhost:3000/reference/ref/m-ref-modify/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Ref.modify">
-  <meta property="og:description" content="Ref.modify f arg2 Updates the value of the reference using the supplied function and returns a derived value.
-Parameters f: ‘T -&gt; ‘T * ‘v arg1: Ref&lt;‘T&gt;">
+  <meta property="og:description" content="Updates the value of the reference using the supplied function and returns a derived value.
+Signature Ref.modify f reference Parameters Name Type Description f ‘T -&gt; ‘T * ‘v The update function of type &#39;T -&gt; &#39;T * &#39;v. reference Ref&lt;‘T&gt; The Ref to update. Returns Type Description Flow&lt;‘env, ’none, ‘v&gt; A flow that updates the value and returns the second part of the tuple returned by f. Examples Ref.modify (fun x -&gt; x &#43; 1, &#34;increased&#34;) myRef">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Ref.modify">
-  <meta itemprop="description" content="Ref.modify f arg2 Updates the value of the reference using the supplied function and returns a derived value.
-Parameters f: ‘T -&gt; ‘T * ‘v arg1: Ref&lt;‘T&gt;">
-  <meta itemprop="wordCount" content="25">
+  <meta itemprop="description" content="Updates the value of the reference using the supplied function and returns a derived value.
+Signature Ref.modify f reference Parameters Name Type Description f ‘T -&gt; ‘T * ‘v The update function of type &#39;T -&gt; &#39;T * &#39;v. reference Ref&lt;‘T&gt; The Ref to update. Returns Type Description Flow&lt;‘env, ’none, ‘v&gt; A flow that updates the value and returns the second part of the tuple returned by f. Examples Ref.modify (fun x -&gt; x &#43; 1, &#34;increased&#34;) myRef">
+  <meta itemprop="wordCount" content="76">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Ref.modify">
-  <meta name="twitter:description" content="Ref.modify f arg2 Updates the value of the reference using the supplied function and returns a derived value.
-Parameters f: ‘T -&gt; ‘T * ‘v arg1: Ref&lt;‘T&gt;">
+  <meta name="twitter:description" content="Updates the value of the reference using the supplied function and returns a derived value.
+Signature Ref.modify f reference Parameters Name Type Description f ‘T -&gt; ‘T * ‘v The update function of type &#39;T -&gt; &#39;T * &#39;v. reference Ref&lt;‘T&gt; The Ref to update. Returns Type Description Flow&lt;‘env, ’none, ‘v&gt; A flow that updates the value and returns the second part of the tuple returned by f. Examples Ref.modify (fun x -&gt; x &#43; 1, &#34;increased&#34;) myRef">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +517,10 @@ Parameters f: ‘T -&gt; ‘T * ‘v arg1: Ref&lt;‘T&gt;">
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -543,15 +546,51 @@ Parameters f: ‘T -&gt; ‘T * ‘v arg1: Ref&lt;‘T&gt;">
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>Ref.modify&#32;<span>f&#32;arg2</span></span></code>
+	<p>Updates the value of the reference using the supplied function and returns a derived value.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Ref.modify&#32;<span>f&#32;reference</span></span></code>
 </div>
-<p>Updates the value of the reference using the supplied function and returns a derived value.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>f</code>: <code><span>&lsquo;T -&gt; <span>&lsquo;T * &lsquo;v</span></span></code></li>
-<li><code>arg1</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-ref-1.html">Ref</a>&lt;&lsquo;T&gt;</span></code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>f</code></td>
+          <td><code><span>&lsquo;T -&gt; <span>&lsquo;T * &lsquo;v</span></span></code></td>
+          <td>The update function of type <code>'T -&gt; 'T * 'v</code>.</td>
+      </tr>
+      <tr>
+          <td><code>reference</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-ref-1.html">Ref</a>&lt;&lsquo;T&gt;</span></code></td>
+          <td>The <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-ref-1.html">Ref</a> to update.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;none, &lsquo;v</span>&gt;</span></code></td>
+          <td>A flow that updates the value and returns the second part of the tuple returned by <span class="fsdocs-param-name">f</span>.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="id">Ref</span><span class="pn">.</span><span class="id">modify</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">x</span> <span class="k">-&gt;</span> <span class="id">x</span> <span class="o">+</span> <span class="n">1</span><span class="pn">,</span> <span class="s">&quot;increased&quot;</span><span class="pn">)</span> <span class="id">myRef</span>
+</code></pre>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/ref/m-ref-make/" aria-label="Previous - Ref.make">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

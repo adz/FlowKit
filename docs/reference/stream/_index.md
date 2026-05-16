@@ -13,7 +13,7 @@ This page shows the `FlowStream` surface for cold, pull-based streams that still
 
 ## Module functions
 
-- [`FlowStream.fromSeq`](./m-flowstream-fromseq.md): Creates a stream from a sequence of values.
-- [`FlowStream.map`](./m-flowstream-map.md): Maps the successful values of a stream.
-- [`FlowStream.runForEach`](./m-flowstream-runforeach.md): Executes the stream and performs an action for each value.
+- [`FlowStream.fromSeq`](./m-flowstream-fromseq.md): Creates a stream from a synchronous sequence of values.
+- [`FlowStream.map`](./m-flowstream-map.md): Transforms the successful values of a stream using the provided function.
+- [`FlowStream.runForEach`](./m-flowstream-runforeach.md): Executes the stream and performs a synchronous action for each successful value.
 

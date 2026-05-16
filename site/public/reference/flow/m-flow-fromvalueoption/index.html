@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.fromValueOption | FsFlow</title>
-<meta name="description" content="fromValueOption error value Lifts a value option into a synchronous flow with the supplied error.
-Parameters error: ‘error The error to return if the value option is ValueNone. value: ‘value voption The value option to lift. Returns A Flow that succeeds with the option&#39;s value or fails with the provided error.">
+<meta name="description" content="Lifts a value option into a synchronous flow with the supplied error.
+Signature Flow.fromValueOption error value Parameters Name Type Description error ‘error The error to return if the value option is ValueNone. value ‘value voption The value option to lift. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A Flow that succeeds with the option&#39;s value or fails with the provided error.">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-fromvalueoption/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.fromValueOption">
-  <meta property="og:description" content="fromValueOption error value Lifts a value option into a synchronous flow with the supplied error.
-Parameters error: ‘error The error to return if the value option is ValueNone. value: ‘value voption The value option to lift. Returns A Flow that succeeds with the option&#39;s value or fails with the provided error.">
+  <meta property="og:description" content="Lifts a value option into a synchronous flow with the supplied error.
+Signature Flow.fromValueOption error value Parameters Name Type Description error ‘error The error to return if the value option is ValueNone. value ‘value voption The value option to lift. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A Flow that succeeds with the option&#39;s value or fails with the provided error.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.fromValueOption">
-  <meta itemprop="description" content="fromValueOption error value Lifts a value option into a synchronous flow with the supplied error.
-Parameters error: ‘error The error to return if the value option is ValueNone. value: ‘value voption The value option to lift. Returns A Flow that succeeds with the option&#39;s value or fails with the provided error.">
-  <meta itemprop="wordCount" content="49">
+  <meta itemprop="description" content="Lifts a value option into a synchronous flow with the supplied error.
+Signature Flow.fromValueOption error value Parameters Name Type Description error ‘error The error to return if the value option is ValueNone. value ‘value voption The value option to lift. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A Flow that succeeds with the option&#39;s value or fails with the provided error.">
+  <meta itemprop="wordCount" content="58">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.fromValueOption">
-  <meta name="twitter:description" content="fromValueOption error value Lifts a value option into a synchronous flow with the supplied error.
-Parameters error: ‘error The error to return if the value option is ValueNone. value: ‘value voption The value option to lift. Returns A Flow that succeeds with the option&#39;s value or fails with the provided error.">
+  <meta name="twitter:description" content="Lifts a value option into a synchronous flow with the supplied error.
+Signature Flow.fromValueOption error value Parameters Name Type Description error ‘error The error to return if the value option is ValueNone. value ‘value voption The value option to lift. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A Flow that succeeds with the option&#39;s value or fails with the provided error.">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,6 +517,7 @@ Parameters error: ‘error The error to return if the value option is ValueNone.
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
   </ul>
@@ -544,19 +545,48 @@ Parameters error: ‘error The error to return if the value option is ValueNone.
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>fromValueOption&#32;<span>error&#32;value</span></span></code>
+	<p>Lifts a value option into a synchronous flow with the supplied error.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.fromValueOption&#32;<span>error&#32;value</span></span></code>
 </div>
-<p>Lifts a value option into a synchronous flow with the supplied error.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>error</code>: <code>&lsquo;error</code>
-The error to return if the value option is <a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpvalueoption-1-valuenone">ValueNone</a>.</li>
-<li><code>value</code>: <code><span>&lsquo;value voption</span></code>
-The value option to lift.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>error</code></td>
+          <td><code>&lsquo;error</code></td>
+          <td>The error to return if the value option is <a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpvalueoption-1-valuenone">ValueNone</a>.</td>
+      </tr>
+      <tr>
+          <td><code>value</code></td>
+          <td><code><span>&lsquo;value voption</span></code></td>
+          <td>The value option to lift.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a> that succeeds with the option's value or fails with the provided error.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a> that succeeds with the option's value or fails with the provided error.</td>
+      </tr>
+  </tbody>
+</table>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/flow/m-flow-fromresult/" aria-label="Previous - Flow.fromResult">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

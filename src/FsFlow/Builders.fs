@@ -5,6 +5,7 @@ module Builders =
     /// <summary>
     /// The fail-fast <c>result { }</c> computation expression.
     /// </summary>
+    /// <returns>A <see cref="T:FsFlow.ResultBuilder"/> instance.</returns>
     /// <remarks>
     /// <para>
     /// Use this builder when the happy path should short-circuit on the first error
@@ -20,20 +21,21 @@ module Builders =
     /// </para>
     /// </remarks>
     /// <example>
-    /// ```fsharp
+    /// <code>
     /// let parsedUser =
     ///     result {
     ///         let! age = parseAge input
     ///         let! name = parseName input
     ///         return { Age = age; Name = name }
     ///     }
-    /// ```
+    /// </code>
     /// </example>
     let result = ResultBuilder()
 
     /// <summary>
     /// The universal <c>flow { }</c> computation expression.
     /// </summary>
+    /// <returns>A <see cref="T:FsFlow.FlowBuilder"/> instance.</returns>
     /// <remarks>
     /// <para>
     /// Use this builder when the boundary can mix synchronous values, <c>Async</c>, <c>Task</c>,
@@ -47,14 +49,14 @@ module Builders =
     /// </para>
     /// </remarks>
     /// <example>
-    /// ```fsharp
+    /// <code>
     /// let greeting =
     ///     flow {
     ///         let! name = Flow.env
     ///         let! suffix = async { return "!" }
     ///         return $"Hello, {name}{suffix}"
     ///     }
-    /// ```
+    /// </code>
     /// </example>
     let flow = FlowBuilder()
 
@@ -65,6 +67,7 @@ module Builders =
     /// <summary>
     /// The accumulating <c>validate { }</c> computation expression.
     /// </summary>
+    /// <returns>A <see cref="T:FsFlow.ValidateBuilder"/> instance.</returns>
     /// <remarks>
     /// <para>
     /// Use this builder when you want to collect all validation failures instead of stopping
@@ -94,16 +97,16 @@ module Builders =
     /// </para>
     /// </remarks>
     /// <example>
-    /// ```fsharp
+    /// <code>
     /// let validatedUser =
     ///     validate {
     ///         let! name = Check.notBlank input.Name
     ///         let! age = Check.okIf (input.Age > 0) "Age must be positive"
     ///         return { Name = name; Age = age }
     ///     }
-    /// ```
+    /// </code>
     ///
-    /// ```fsharp
+    /// <code>
     /// let validatedCustomer =
     ///     validate.key "customer" {
     ///         let! name =
@@ -113,6 +116,6 @@ module Builders =
     ///
     ///         return name
     ///     }
-    /// ```
+    /// </code>
     /// </example>
     let validate = ValidateBuilder()

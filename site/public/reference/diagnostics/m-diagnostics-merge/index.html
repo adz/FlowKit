@@ -19,29 +19,29 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Diagnostics.merge | FsFlow</title>
-<meta name="description" content="Diagnostics.merge left right Recursively merges two diagnostics graphs, combining shared branches and local errors.
-Remarks This is the core operation for applicative validation. It ensures that errors from sibling fields are collected together into a single structured graph.
-Parameters left: Diagnostics&lt;’error&gt; The first graph of type Diagnostics. right: Diagnostics&lt;’error&gt; The second graph of type Diagnostics. Returns A new Diagnostics containing the union of both inputs.">
+<meta name="description" content="Recursively merges two diagnostics graphs, combining shared branches and local errors.
+Signature Diagnostics.merge left right Parameters Name Type Description left Diagnostics&lt;’error&gt; The first graph of type Diagnostics. right Diagnostics&lt;’error&gt; The second graph of type Diagnostics. Returns Type Description Diagnostics&lt;’error&gt; A new Diagnostics containing the union of both inputs. Remarks This is the core operation for applicative validation. It ensures that errors from sibling fields are collected together into a single structured graph.
+Examples let d1 = Diagnostics.singleton &#34;Error 1&#34; let d2 = Diagnostics.singleton &#34;Error 2&#34; let combined = Diagnostics.merge d1 d2 val d1: obj val d2: obj val combined: obj">
 <meta property="og:url" content="http://localhost:3000/reference/diagnostics/m-diagnostics-merge/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Diagnostics.merge">
-  <meta property="og:description" content="Diagnostics.merge left right Recursively merges two diagnostics graphs, combining shared branches and local errors.
-Remarks This is the core operation for applicative validation. It ensures that errors from sibling fields are collected together into a single structured graph.
-Parameters left: Diagnostics&lt;’error&gt; The first graph of type Diagnostics. right: Diagnostics&lt;’error&gt; The second graph of type Diagnostics. Returns A new Diagnostics containing the union of both inputs.">
+  <meta property="og:description" content="Recursively merges two diagnostics graphs, combining shared branches and local errors.
+Signature Diagnostics.merge left right Parameters Name Type Description left Diagnostics&lt;’error&gt; The first graph of type Diagnostics. right Diagnostics&lt;’error&gt; The second graph of type Diagnostics. Returns Type Description Diagnostics&lt;’error&gt; A new Diagnostics containing the union of both inputs. Remarks This is the core operation for applicative validation. It ensures that errors from sibling fields are collected together into a single structured graph.
+Examples let d1 = Diagnostics.singleton &#34;Error 1&#34; let d2 = Diagnostics.singleton &#34;Error 2&#34; let combined = Diagnostics.merge d1 d2 val d1: obj val d2: obj val combined: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Diagnostics.merge">
-  <meta itemprop="description" content="Diagnostics.merge left right Recursively merges two diagnostics graphs, combining shared branches and local errors.
-Remarks This is the core operation for applicative validation. It ensures that errors from sibling fields are collected together into a single structured graph.
-Parameters left: Diagnostics&lt;’error&gt; The first graph of type Diagnostics. right: Diagnostics&lt;’error&gt; The second graph of type Diagnostics. Returns A new Diagnostics containing the union of both inputs.">
-  <meta itemprop="wordCount" content="63">
+  <meta itemprop="description" content="Recursively merges two diagnostics graphs, combining shared branches and local errors.
+Signature Diagnostics.merge left right Parameters Name Type Description left Diagnostics&lt;’error&gt; The first graph of type Diagnostics. right Diagnostics&lt;’error&gt; The second graph of type Diagnostics. Returns Type Description Diagnostics&lt;’error&gt; A new Diagnostics containing the union of both inputs. Remarks This is the core operation for applicative validation. It ensures that errors from sibling fields are collected together into a single structured graph.
+Examples let d1 = Diagnostics.singleton &#34;Error 1&#34; let d2 = Diagnostics.singleton &#34;Error 2&#34; let combined = Diagnostics.merge d1 d2 val d1: obj val d2: obj val combined: obj">
+  <meta itemprop="wordCount" content="98">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Diagnostics.merge">
-  <meta name="twitter:description" content="Diagnostics.merge left right Recursively merges two diagnostics graphs, combining shared branches and local errors.
-Remarks This is the core operation for applicative validation. It ensures that errors from sibling fields are collected together into a single structured graph.
-Parameters left: Diagnostics&lt;’error&gt; The first graph of type Diagnostics. right: Diagnostics&lt;’error&gt; The second graph of type Diagnostics. Returns A new Diagnostics containing the union of both inputs.">
+  <meta name="twitter:description" content="Recursively merges two diagnostics graphs, combining shared branches and local errors.
+Signature Diagnostics.merge left right Parameters Name Type Description left Diagnostics&lt;’error&gt; The first graph of type Diagnostics. right Diagnostics&lt;’error&gt; The second graph of type Diagnostics. Returns Type Description Diagnostics&lt;’error&gt; A new Diagnostics containing the union of both inputs. Remarks This is the core operation for applicative validation. It ensures that errors from sibling fields are collected together into a single structured graph.
+Examples let d1 = Diagnostics.singleton &#34;Error 1&#34; let d2 = Diagnostics.singleton &#34;Error 2&#34; let combined = Diagnostics.merge d1 d2 val d1: obj val d2: obj val combined: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -521,9 +521,11 @@ Parameters left: Diagnostics&lt;’error&gt; The first graph of type Diagnostics
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -549,22 +551,59 @@ Parameters left: Diagnostics&lt;’error&gt; The first graph of type Diagnostics
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Recursively merges two diagnostics graphs, combining shared branches and local errors.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>Diagnostics.merge&#32;<span>left&#32;right</span></span></code>
 </div>
-<p>Recursively merges two diagnostics graphs, combining shared branches and local errors.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>left</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;&rsquo;error&gt;</span></code></td>
+          <td>The first graph of type <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>.</td>
+      </tr>
+      <tr>
+          <td><code>right</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;&rsquo;error&gt;</span></code></td>
+          <td>The second graph of type <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;&rsquo;error&gt;</span></code></td>
+          <td>A new <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a> containing the union of both inputs.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p>This is the core operation for applicative validation. It ensures that errors from sibling
 fields are collected together into a single structured graph.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>left</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;&rsquo;error&gt;</span></code>
-The first graph of type <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>.</li>
-<li><code>right</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;&rsquo;error&gt;</span></code>
-The second graph of type <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>.</li>
-</ul>
-<h2 id="returns">Returns</h2>
-<p>A new <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a> containing the union of both inputs.</p>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">d1</span> <span class="o">=</span> <span class="id">Diagnostics</span><span class="pn">.</span><span class="id">singleton</span> <span class="s">&quot;Error 1&quot;</span>
+ <span class="k">let</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="id">d2</span> <span class="o">=</span> <span class="id">Diagnostics</span><span class="pn">.</span><span class="id">singleton</span> <span class="s">&quot;Error 2&quot;</span>
+ <span class="k">let</span> <span data-fsdocs-tip="fs3" data-fsdocs-tip-unique="3" class="id">combined</span> <span class="o">=</span> <span class="id">Diagnostics</span><span class="pn">.</span><span class="id">merge</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="4" class="id">d1</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="5" class="id">d2</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val d1: obj</div>
+<div popover class="fsdocs-tip" id="fs2">val d2: obj</div>
+<div popover class="fsdocs-tip" id="fs3">val combined: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/diagnostics/m-diagnostics-flatten/" aria-label="Previous - Diagnostics.flatten">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

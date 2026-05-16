@@ -19,29 +19,29 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Check.orError | FsFlow</title>
-<meta name="description" content="orError error result Maps a unit error into the supplied application error value.
-Remarks This is the primary bridge from checks to domain-specific results.
-Parameters error: ‘error The domain error of type &#39;error to return on failure. result: Check&lt;‘value&gt; The source Check. Returns A Result with the provided error value.">
+<meta name="description" content="Maps a unit error into the supplied application error value.
+Signature Check.orError error result Parameters Name Type Description error ‘error The domain error of type &#39;error to return on failure. result Check&lt;‘value&gt; The source Check. Returns Type Description Result&lt;‘value, ’error&gt; A Result with the provided error value. Remarks This is the primary bridge from checks to domain-specific results.
+Examples &#34;&#34; |&gt; Check.okIfNonEmptyStr |&gt; Check.orError &#34;Empty string&#34; // Error &#34;Empty string&#34; &#34;hello&#34; |&gt; Check.okIfNonEmptyStr |&gt; Check.orError &#34;Empty string&#34; // Ok &#34;hello&#34;">
 <meta property="og:url" content="http://localhost:3000/reference/check/m-check-orerror/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Check.orError">
-  <meta property="og:description" content="orError error result Maps a unit error into the supplied application error value.
-Remarks This is the primary bridge from checks to domain-specific results.
-Parameters error: ‘error The domain error of type &#39;error to return on failure. result: Check&lt;‘value&gt; The source Check. Returns A Result with the provided error value.">
+  <meta property="og:description" content="Maps a unit error into the supplied application error value.
+Signature Check.orError error result Parameters Name Type Description error ‘error The domain error of type &#39;error to return on failure. result Check&lt;‘value&gt; The source Check. Returns Type Description Result&lt;‘value, ’error&gt; A Result with the provided error value. Remarks This is the primary bridge from checks to domain-specific results.
+Examples &#34;&#34; |&gt; Check.okIfNonEmptyStr |&gt; Check.orError &#34;Empty string&#34; // Error &#34;Empty string&#34; &#34;hello&#34; |&gt; Check.okIfNonEmptyStr |&gt; Check.orError &#34;Empty string&#34; // Ok &#34;hello&#34;">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Check.orError">
-  <meta itemprop="description" content="orError error result Maps a unit error into the supplied application error value.
-Remarks This is the primary bridge from checks to domain-specific results.
-Parameters error: ‘error The domain error of type &#39;error to return on failure. result: Check&lt;‘value&gt; The source Check. Returns A Result with the provided error value.">
-  <meta itemprop="wordCount" content="48">
+  <meta itemprop="description" content="Maps a unit error into the supplied application error value.
+Signature Check.orError error result Parameters Name Type Description error ‘error The domain error of type &#39;error to return on failure. result Check&lt;‘value&gt; The source Check. Returns Type Description Result&lt;‘value, ’error&gt; A Result with the provided error value. Remarks This is the primary bridge from checks to domain-specific results.
+Examples &#34;&#34; |&gt; Check.okIfNonEmptyStr |&gt; Check.orError &#34;Empty string&#34; // Error &#34;Empty string&#34; &#34;hello&#34; |&gt; Check.okIfNonEmptyStr |&gt; Check.orError &#34;Empty string&#34; // Ok &#34;hello&#34;">
+  <meta itemprop="wordCount" content="78">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Check.orError">
-  <meta name="twitter:description" content="orError error result Maps a unit error into the supplied application error value.
-Remarks This is the primary bridge from checks to domain-specific results.
-Parameters error: ‘error The domain error of type &#39;error to return on failure. result: Check&lt;‘value&gt; The source Check. Returns A Result with the provided error value.">
+  <meta name="twitter:description" content="Maps a unit error into the supplied application error value.
+Signature Check.orError error result Parameters Name Type Description error ‘error The domain error of type &#39;error to return on failure. result Check&lt;‘value&gt; The source Check. Returns Type Description Result&lt;‘value, ’error&gt; A Result with the provided error value. Remarks This is the primary bridge from checks to domain-specific results.
+Examples &#34;&#34; |&gt; Check.okIfNonEmptyStr |&gt; Check.orError &#34;Empty string&#34; // Error &#34;Empty string&#34; &#34;hello&#34; |&gt; Check.okIfNonEmptyStr |&gt; Check.orError &#34;Empty string&#34; // Ok &#34;hello&#34;">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -521,9 +521,11 @@ Parameters error: ‘error The domain error of type &#39;error to return on fail
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -549,21 +551,54 @@ Parameters error: ‘error The domain error of type &#39;error to return on fail
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>orError&#32;<span>error&#32;result</span></span></code>
+	<p>Maps a unit error into the supplied application error value.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Check.orError&#32;<span>error&#32;result</span></span></code>
 </div>
-<p>Maps a unit error into the supplied application error value.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>error</code></td>
+          <td><code>&lsquo;error</code></td>
+          <td>The domain error of type <code>'error</code> to return on failure.</td>
+      </tr>
+      <tr>
+          <td><code>result</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;&lsquo;value&gt;</span></code></td>
+          <td>The source <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpresult-2">Result</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code></td>
+          <td>A <a href="https://learn.microsoft.com/dotnet/api/system.result-2">Result</a> with the provided error value.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p>This is the primary bridge from checks to domain-specific results.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>error</code>: <code>&lsquo;error</code>
-The domain error of type <code>'error</code> to return on failure.</li>
-<li><code>result</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;&lsquo;value&gt;</span></code>
-The source <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>.</li>
-</ul>
-<h2 id="returns">Returns</h2>
-<p>A <a href="https://learn.microsoft.com/dotnet/api/system.result-2">Result</a> with the provided error value.</p>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="s">&quot;&quot;</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">okIfNonEmptyStr</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">orError</span> <span class="s">&quot;Empty string&quot;</span> <span class="c">// Error &quot;Empty string&quot;</span>
+ <span class="s">&quot;hello&quot;</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">okIfNonEmptyStr</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">orError</span> <span class="s">&quot;Empty string&quot;</span> <span class="c">// Ok &quot;hello&quot;</span>
+</code></pre>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/check/m-check-okifvaluesome/" aria-label="Previous - Check.okIfValueSome">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

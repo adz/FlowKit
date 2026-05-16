@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Validation.merge | FsFlow</title>
-<meta name="description" content="Validation.merge left right Merges two validations into a validation of a tuple.
-Parameters left: Validation&lt;‘value, ’error&gt; The first validation. right: Validation&lt;‘next, ’error&gt; The second validation. Returns A validation containing a tuple of the results.">
+<meta name="description" content="Merges two validations into a validation of a tuple.
+Signature Validation.merge left right Parameters Name Type Description left Validation&lt;‘value, ’error&gt; The first validation. right Validation&lt;‘next, ’error&gt; The second validation. Returns Type Description Validation&lt;(‘value * ’next), ’error&gt; A validation containing a tuple of the results. Examples Validation.merge (Validation.ok 1) (Validation.ok &#34;a&#34;) // Validation (Ok (1, &#34;a&#34;))">
 <meta property="og:url" content="http://localhost:3000/reference/validation/m-validation-merge/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Validation.merge">
-  <meta property="og:description" content="Validation.merge left right Merges two validations into a validation of a tuple.
-Parameters left: Validation&lt;‘value, ’error&gt; The first validation. right: Validation&lt;‘next, ’error&gt; The second validation. Returns A validation containing a tuple of the results.">
+  <meta property="og:description" content="Merges two validations into a validation of a tuple.
+Signature Validation.merge left right Parameters Name Type Description left Validation&lt;‘value, ’error&gt; The first validation. right Validation&lt;‘next, ’error&gt; The second validation. Returns Type Description Validation&lt;(‘value * ’next), ’error&gt; A validation containing a tuple of the results. Examples Validation.merge (Validation.ok 1) (Validation.ok &#34;a&#34;) // Validation (Ok (1, &#34;a&#34;))">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Validation.merge">
-  <meta itemprop="description" content="Validation.merge left right Merges two validations into a validation of a tuple.
-Parameters left: Validation&lt;‘value, ’error&gt; The first validation. right: Validation&lt;‘next, ’error&gt; The second validation. Returns A validation containing a tuple of the results.">
-  <meta itemprop="wordCount" content="32">
+  <meta itemprop="description" content="Merges two validations into a validation of a tuple.
+Signature Validation.merge left right Parameters Name Type Description left Validation&lt;‘value, ’error&gt; The first validation. right Validation&lt;‘next, ’error&gt; The second validation. Returns Type Description Validation&lt;(‘value * ’next), ’error&gt; A validation containing a tuple of the results. Examples Validation.merge (Validation.ok 1) (Validation.ok &#34;a&#34;) // Validation (Ok (1, &#34;a&#34;))">
+  <meta itemprop="wordCount" content="53">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Validation.merge">
-  <meta name="twitter:description" content="Validation.merge left right Merges two validations into a validation of a tuple.
-Parameters left: Validation&lt;‘value, ’error&gt; The first validation. right: Validation&lt;‘next, ’error&gt; The second validation. Returns A validation containing a tuple of the results.">
+  <meta name="twitter:description" content="Merges two validations into a validation of a tuple.
+Signature Validation.merge left right Parameters Name Type Description left Validation&lt;‘value, ’error&gt; The first validation. right Validation&lt;‘next, ’error&gt; The second validation. Returns Type Description Validation&lt;(‘value * ’next), ’error&gt; A validation containing a tuple of the results. Examples Validation.merge (Validation.ok 1) (Validation.ok &#34;a&#34;) // Validation (Ok (1, &#34;a&#34;))">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,8 +517,10 @@ Parameters left: Validation&lt;‘value, ’error&gt; The first validation. righ
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -544,19 +546,51 @@ Parameters left: Validation&lt;‘value, ’error&gt; The first validation. righ
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Merges two validations into a validation of a tuple.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>Validation.merge&#32;<span>left&#32;right</span></span></code>
 </div>
-<p>Merges two validations into a validation of a tuple.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>left</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code>
-The first validation.</li>
-<li><code>right</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;next, &rsquo;error</span>&gt;</span></code>
-The second validation.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>left</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code></td>
+          <td>The first validation.</td>
+      </tr>
+      <tr>
+          <td><code>right</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;next, &rsquo;error</span>&gt;</span></code></td>
+          <td>The second validation.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A validation containing a tuple of the results.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span><span>(<span>&lsquo;value * &rsquo;next</span>)</span>, &rsquo;error</span>&gt;</span></code></td>
+          <td>A validation containing a tuple of the results.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="id">Validation</span><span class="pn">.</span><span class="id">merge</span> <span class="pn">(</span><span class="id">Validation</span><span class="pn">.</span><span class="id">ok</span> <span class="n">1</span><span class="pn">)</span> <span class="pn">(</span><span class="id">Validation</span><span class="pn">.</span><span class="id">ok</span> <span class="s">&quot;a&quot;</span><span class="pn">)</span> <span class="c">// Validation (Ok (1, &quot;a&quot;))</span>
+</code></pre>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/validation/m-validation-maperror/" aria-label="Previous - Validation.mapError">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

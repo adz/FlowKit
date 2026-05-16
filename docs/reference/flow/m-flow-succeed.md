@@ -3,15 +3,25 @@ title: "Flow.succeed"
 linkTitle: "succeed"
 ---
 
-<div class="fsdocs-usage">
-<code><span>succeed&#32;<span>value</span></span></code>
-</div>
-
 Alias for <code>ok</code> that reads well in some call sites.
+
+## Signature
+
+<div class="fsdocs-usage">
+<code><span>Flow.succeed&#32;<span>value</span></span></code>
+</div>
 
 ## Parameters
 
-- `value`: <code>'value</code>
+| Name | Type | Description |
+| --- | --- | --- |
+| `value` | <code>'value</code> | The value to wrap in a successful flow. |
+
+## Returns
+
+| Type | Description |
+| --- | --- |
+| <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>'env,&#32;'error,&#32;'value</span>&gt;</span></code> | A flow that always succeeds with the provided value. |
 
 ## Examples
 

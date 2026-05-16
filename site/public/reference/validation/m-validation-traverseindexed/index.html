@@ -19,29 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Validation.traverseIndexed | FsFlow</title>
-<meta name="description" content="Validation.traverseIndexed binder values Maps a sequence into validations while prefixing each item with its index.
-Remarks This is the indexed version of sequence. It is useful for list and array validation because each item can keep its own Index branch without the caller manually wrapping every item.
-Parameters binder: int -&gt; ‘source -&gt; Validation&lt;‘value, ’error&gt; A function of type int -&gt; &#39;source -&gt; Validation&lt;&#39;value, &#39;error&gt;. values: ‘source seq The input sequence. Returns A validation containing the list of values or accumulated diagnostics.">
+<meta name="description" content="Maps a sequence into validations while prefixing each item with its index.
+Signature Validation.traverseIndexed binder values Parameters Name Type Description binder int -&gt; ‘source -&gt; Validation&lt;‘value, ’error&gt; A function of type int -&gt; &#39;source -&gt; Validation&lt;&#39;value, &#39;error&gt;. values ‘source seq The input sequence. Returns Type Description Validation&lt;‘value list, ’error&gt; A validation containing the list of values or accumulated diagnostics. Remarks This is the indexed version of sequence. It is useful for list and array validation because each item can keep its own Index branch without the caller manually wrapping every item.">
 <meta property="og:url" content="http://localhost:3000/reference/validation/m-validation-traverseindexed/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Validation.traverseIndexed">
-  <meta property="og:description" content="Validation.traverseIndexed binder values Maps a sequence into validations while prefixing each item with its index.
-Remarks This is the indexed version of sequence. It is useful for list and array validation because each item can keep its own Index branch without the caller manually wrapping every item.
-Parameters binder: int -&gt; ‘source -&gt; Validation&lt;‘value, ’error&gt; A function of type int -&gt; &#39;source -&gt; Validation&lt;&#39;value, &#39;error&gt;. values: ‘source seq The input sequence. Returns A validation containing the list of values or accumulated diagnostics.">
+  <meta property="og:description" content="Maps a sequence into validations while prefixing each item with its index.
+Signature Validation.traverseIndexed binder values Parameters Name Type Description binder int -&gt; ‘source -&gt; Validation&lt;‘value, ’error&gt; A function of type int -&gt; &#39;source -&gt; Validation&lt;&#39;value, &#39;error&gt;. values ‘source seq The input sequence. Returns Type Description Validation&lt;‘value list, ’error&gt; A validation containing the list of values or accumulated diagnostics. Remarks This is the indexed version of sequence. It is useful for list and array validation because each item can keep its own Index branch without the caller manually wrapping every item.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Validation.traverseIndexed">
-  <meta itemprop="description" content="Validation.traverseIndexed binder values Maps a sequence into validations while prefixing each item with its index.
-Remarks This is the indexed version of sequence. It is useful for list and array validation because each item can keep its own Index branch without the caller manually wrapping every item.
-Parameters binder: int -&gt; ‘source -&gt; Validation&lt;‘value, ’error&gt; A function of type int -&gt; &#39;source -&gt; Validation&lt;&#39;value, &#39;error&gt;. values: ‘source seq The input sequence. Returns A validation containing the list of values or accumulated diagnostics.">
-  <meta itemprop="wordCount" content="80">
+  <meta itemprop="description" content="Maps a sequence into validations while prefixing each item with its index.
+Signature Validation.traverseIndexed binder values Parameters Name Type Description binder int -&gt; ‘source -&gt; Validation&lt;‘value, ’error&gt; A function of type int -&gt; &#39;source -&gt; Validation&lt;&#39;value, &#39;error&gt;. values ‘source seq The input sequence. Returns Type Description Validation&lt;‘value list, ’error&gt; A validation containing the list of values or accumulated diagnostics. Remarks This is the indexed version of sequence. It is useful for list and array validation because each item can keep its own Index branch without the caller manually wrapping every item.">
+  <meta itemprop="wordCount" content="102">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Validation.traverseIndexed">
-  <meta name="twitter:description" content="Validation.traverseIndexed binder values Maps a sequence into validations while prefixing each item with its index.
-Remarks This is the indexed version of sequence. It is useful for list and array validation because each item can keep its own Index branch without the caller manually wrapping every item.
-Parameters binder: int -&gt; ‘source -&gt; Validation&lt;‘value, ’error&gt; A function of type int -&gt; &#39;source -&gt; Validation&lt;&#39;value, &#39;error&gt;. values: ‘source seq The input sequence. Returns A validation containing the list of values or accumulated diagnostics.">
+  <meta name="twitter:description" content="Maps a sequence into validations while prefixing each item with its index.
+Signature Validation.traverseIndexed binder values Parameters Name Type Description binder int -&gt; ‘source -&gt; Validation&lt;‘value, ’error&gt; A function of type int -&gt; &#39;source -&gt; Validation&lt;&#39;value, &#39;error&gt;. values ‘source seq The input sequence. Returns Type Description Validation&lt;‘value list, ’error&gt; A validation containing the list of values or accumulated diagnostics. Remarks This is the indexed version of sequence. It is useful for list and array validation because each item can keep its own Index branch without the caller manually wrapping every item.">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -521,9 +517,11 @@ Parameters binder: int -&gt; ‘source -&gt; Validation&lt;‘value, ’error&gt
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -549,23 +547,55 @@ Parameters binder: int -&gt; ‘source -&gt; Validation&lt;‘value, ’error&gt
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Maps a sequence into validations while prefixing each item with its index.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>Validation.traverseIndexed&#32;<span>binder&#32;values</span></span></code>
 </div>
-<p>Maps a sequence into validations while prefixing each item with its index.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>binder</code></td>
+          <td><code><span>int -&gt; &lsquo;source -&gt; <span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></span></code></td>
+          <td>A function of type <code>int -&gt; 'source -&gt; Validation&lt;'value, 'error&gt;</code>.</td>
+      </tr>
+      <tr>
+          <td><code>values</code></td>
+          <td><code><span>&lsquo;source seq</span></code></td>
+          <td>The input sequence.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span><span>&lsquo;value list</span>, &rsquo;error</span>&gt;</span></code></td>
+          <td>A validation containing the list of values or accumulated diagnostics.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p>This is the indexed version of <a href="https://learn.microsoft.com/dotnet/api/sequence">sequence</a>. It is useful for list and array
 validation because each item can keep its own <a href="https://learn.microsoft.com/dotnet/api/fsflow.pathsegment.index">Index</a>
 branch without the caller manually wrapping every item.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>binder</code>: <code><span>int -&gt; &lsquo;source -&gt; <span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></span></code>
-A function of type <code>int -&gt; 'source -&gt; Validation&lt;'value, 'error&gt;</code>.</li>
-<li><code>values</code>: <code><span>&lsquo;source seq</span></code>
-The input sequence.</li>
-</ul>
-<h2 id="returns">Returns</h2>
-<p>A validation containing the list of values or accumulated diagnostics.</p>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="pn">[</span> <span class="s">&quot;a&quot;</span><span class="pn">;</span> <span class="s">&quot;b&quot;</span> <span class="pn">]</span> <span class="o">|&gt;</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">traverseIndexed</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">i</span> <span class="id">s</span> <span class="k">-&gt;</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">ok</span> <span class="pn">(</span><span class="id">s</span><span class="pn">.</span><span class="id">ToUpper</span><span class="pn">(</span><span class="pn">)</span><span class="pn">)</span><span class="pn">)</span>
+</code></pre>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/validation/m-validation-toresult/" aria-label="Previous - Validation.toResult">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

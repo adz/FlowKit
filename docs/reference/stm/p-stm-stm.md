@@ -3,11 +3,19 @@ title: "Stm.stm"
 linkTitle: "stm { }"
 ---
 
+
+ The <code>stm { }</code> computation expression for building atomic transactions.
+ 
+
+## Signature
+
 <div class="fsdocs-usage">
 <code><span>stm&#32;<span></span></span></code>
 </div>
 
+## Returns
 
- The <code>stm { }</code> computation expression for building atomic transactions.
- 
+| Type | Description |
+| --- | --- |
+| <code><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-stmbuilder.html">StmBuilder</a></code> |  |
 

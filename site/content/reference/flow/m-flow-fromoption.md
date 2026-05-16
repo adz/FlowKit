@@ -4,16 +4,26 @@ linkTitle: "fromOption"
 type: docs
 ---
 
-<div class="fsdocs-usage">
-<code><span>fromOption&#32;<span>error&#32;value</span></span></code>
-</div>
-
 Lifts an option into a synchronous flow with the supplied error.
+
+## Signature
+
+<div class="fsdocs-usage">
+<code><span>Flow.fromOption&#32;<span>error&#32;value</span></span></code>
+</div>
 
 ## Parameters
 
-- `error`: <code>'error</code>
-- `value`: <code><span>'value&#32;option</span></code>
+| Name | Type | Description |
+| --- | --- | --- |
+| `error` | <code>'error</code> | The error to return if the option is <code>None</code>. |
+| `value` | <code><span>'value&#32;option</span></code> | The option to lift. |
+
+## Returns
+
+| Type | Description |
+| --- | --- |
+| <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>'env,&#32;'error,&#32;'value</span>&gt;</span></code> | A flow that succeeds with the option&#39;s value or fails with the provided error. |
 
 ## Examples
 

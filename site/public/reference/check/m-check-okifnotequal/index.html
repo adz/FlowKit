@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Check.okIfNotEqual | FsFlow</title>
-<meta name="description" content="okIfNotEqual expected actual Returns success when the values are not equal.
-Parameters expected: ‘a The expected value. actual: ‘a The actual value. Returns A Check that succeeds if the values differ.">
+<meta name="description" content="Returns success when the values are not equal.
+Signature Check.okIfNotEqual expected actual Parameters Name Type Description expected ‘a The expected value. actual ‘a The actual value. Returns Type Description Check&lt;unit&gt; A Check that succeeds if the values differ; otherwise, an Error with unit. Examples Check.okIfNotEqual 5 6 // Ok () Check.okIfNotEqual 5 5 // Error ()">
 <meta property="og:url" content="http://localhost:3000/reference/check/m-check-okifnotequal/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Check.okIfNotEqual">
-  <meta property="og:description" content="okIfNotEqual expected actual Returns success when the values are not equal.
-Parameters expected: ‘a The expected value. actual: ‘a The actual value. Returns A Check that succeeds if the values differ.">
+  <meta property="og:description" content="Returns success when the values are not equal.
+Signature Check.okIfNotEqual expected actual Parameters Name Type Description expected ‘a The expected value. actual ‘a The actual value. Returns Type Description Check&lt;unit&gt; A Check that succeeds if the values differ; otherwise, an Error with unit. Examples Check.okIfNotEqual 5 6 // Ok () Check.okIfNotEqual 5 5 // Error ()">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Check.okIfNotEqual">
-  <meta itemprop="description" content="okIfNotEqual expected actual Returns success when the values are not equal.
-Parameters expected: ‘a The expected value. actual: ‘a The actual value. Returns A Check that succeeds if the values differ.">
-  <meta itemprop="wordCount" content="29">
+  <meta itemprop="description" content="Returns success when the values are not equal.
+Signature Check.okIfNotEqual expected actual Parameters Name Type Description expected ‘a The expected value. actual ‘a The actual value. Returns Type Description Check&lt;unit&gt; A Check that succeeds if the values differ; otherwise, an Error with unit. Examples Check.okIfNotEqual 5 6 // Ok () Check.okIfNotEqual 5 5 // Error ()">
+  <meta itemprop="wordCount" content="54">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Check.okIfNotEqual">
-  <meta name="twitter:description" content="okIfNotEqual expected actual Returns success when the values are not equal.
-Parameters expected: ‘a The expected value. actual: ‘a The actual value. Returns A Check that succeeds if the values differ.">
+  <meta name="twitter:description" content="Returns success when the values are not equal.
+Signature Check.okIfNotEqual expected actual Parameters Name Type Description expected ‘a The expected value. actual ‘a The actual value. Returns Type Description Check&lt;unit&gt; A Check that succeeds if the values differ; otherwise, an Error with unit. Examples Check.okIfNotEqual 5 6 // Ok () Check.okIfNotEqual 5 5 // Error ()">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,8 +517,10 @@ Parameters expected: ‘a The expected value. actual: ‘a The actual value. Ret
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -544,19 +546,52 @@ Parameters expected: ‘a The expected value. actual: ‘a The actual value. Ret
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>okIfNotEqual&#32;<span>expected&#32;actual</span></span></code>
+	<p>Returns success when the values are not equal.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Check.okIfNotEqual&#32;<span>expected&#32;actual</span></span></code>
 </div>
-<p>Returns success when the values are not equal.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>expected</code>: <code>&lsquo;a</code>
-The expected value.</li>
-<li><code>actual</code>: <code>&lsquo;a</code>
-The actual value.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>expected</code></td>
+          <td><code>&lsquo;a</code></td>
+          <td>The expected value.</td>
+      </tr>
+      <tr>
+          <td><code>actual</code></td>
+          <td><code>&lsquo;a</code></td>
+          <td>The actual value.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> that succeeds if the values differ.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;unit&gt;</span></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> that succeeds if the values differ; otherwise, an Error with unit.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="id">Check</span><span class="pn">.</span><span class="id">okIfNotEqual</span> <span class="n">5</span> <span class="n">6</span> <span class="c">// Ok ()</span>
+ <span class="id">Check</span><span class="pn">.</span><span class="id">okIfNotEqual</span> <span class="n">5</span> <span class="n">5</span> <span class="c">// Error ()</span>
+</code></pre>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/check/m-check-okifnotempty/" aria-label="Previous - Check.okIfNotEmpty">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

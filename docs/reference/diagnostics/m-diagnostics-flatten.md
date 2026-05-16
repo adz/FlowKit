@@ -3,11 +3,25 @@ title: "Diagnostics.flatten"
 linkTitle: "flatten"
 ---
 
+Flattens the structured diagnostics graph into a linear list of diagnostics.
+
+## Signature
+
 <div class="fsdocs-usage">
 <code><span>Diagnostics.flatten&#32;<span>graph</span></span></code>
 </div>
 
-Flattens the structured diagnostics graph into a linear list of diagnostics.
+## Parameters
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `graph` | <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;'error&gt;</span></code> | The <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a> to flatten. |
+
+## Returns
+
+| Type | Description |
+| --- | --- |
+| <code><span><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostic-1.html">Diagnostic</a>&lt;'error&gt;</span>&#32;list</span></code> | A list of type <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostic-1.html">Diagnostic</a> list. |
 
 ## Remarks
 
@@ -17,12 +31,13 @@ Flattens the structured diagnostics graph into a linear list of diagnostics.
  is reserved for reporting output.
  
 
-## Parameters
+## Examples
 
-- `graph`: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;'error&gt;</span></code>
-  The <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a> to flatten.
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">d</span> <span class="o">=</span> <span class="id">Diagnostics</span><span class="pn">.</span><span class="id">singleton</span> <span class="s">&quot;fail&quot;</span>
+ <span class="k">let</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="id">flat</span> <span class="o">=</span> <span class="id">Diagnostics</span><span class="pn">.</span><span class="id">flatten</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="3" class="id">d</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val d: obj</div>
+<div popover class="fsdocs-tip" id="fs2">val flat: obj</div>
 
-## Returns
 
-A list of type <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostic-1.html">Diagnostic</a> list.
 

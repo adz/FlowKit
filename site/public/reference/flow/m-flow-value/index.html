@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.value | FsFlow</title>
-<meta name="description" content="value item Alias for ok that reads well in some call sites.
-Parameters item: ‘value Examples let flow = Flow.value &#34;constant&#34; val flow: obj">
+<meta name="description" content="Alias for ok that reads well in some call sites.
+Signature Flow.value item Parameters Name Type Description item ‘value The value to wrap in a successful flow. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that always succeeds with the provided value. Examples let flow = Flow.value &#34;constant&#34; val flow: obj">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-value/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.value">
-  <meta property="og:description" content="value item Alias for ok that reads well in some call sites.
-Parameters item: ‘value Examples let flow = Flow.value &#34;constant&#34; val flow: obj">
+  <meta property="og:description" content="Alias for ok that reads well in some call sites.
+Signature Flow.value item Parameters Name Type Description item ‘value The value to wrap in a successful flow. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that always succeeds with the provided value. Examples let flow = Flow.value &#34;constant&#34; val flow: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.value">
-  <meta itemprop="description" content="value item Alias for ok that reads well in some call sites.
-Parameters item: ‘value Examples let flow = Flow.value &#34;constant&#34; val flow: obj">
-  <meta itemprop="wordCount" content="23">
+  <meta itemprop="description" content="Alias for ok that reads well in some call sites.
+Signature Flow.value item Parameters Name Type Description item ‘value The value to wrap in a successful flow. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that always succeeds with the provided value. Examples let flow = Flow.value &#34;constant&#34; val flow: obj">
+  <meta itemprop="wordCount" content="50">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.value">
-  <meta name="twitter:description" content="value item Alias for ok that reads well in some call sites.
-Parameters item: ‘value Examples let flow = Flow.value &#34;constant&#34; val flow: obj">
+  <meta name="twitter:description" content="Alias for ok that reads well in some call sites.
+Signature Flow.value item Parameters Name Type Description item ‘value The value to wrap in a successful flow. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that always succeeds with the provided value. Examples let flow = Flow.value &#34;constant&#34; val flow: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +517,9 @@ Parameters item: ‘value Examples let flow = Flow.value &#34;constant&#34; val 
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
     <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
@@ -544,14 +546,43 @@ Parameters item: ‘value Examples let flow = Flow.value &#34;constant&#34; val 
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>value&#32;<span>item</span></span></code>
+	<p>Alias for <code>ok</code> that reads well in some call sites.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.value&#32;<span>item</span></span></code>
 </div>
-<p>Alias for <code>ok</code> that reads well in some call sites.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>item</code>: <code>&lsquo;value</code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>item</code></td>
+          <td><code>&lsquo;value</code></td>
+          <td>The value to wrap in a successful flow.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>A flow that always succeeds with the provided value.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="examples">Examples</h2>
 <pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">flow</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">value</span> <span class="s">&quot;constant&quot;</span>
 </code></pre>

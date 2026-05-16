@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Ref.get | FsFlow</title>
-<meta name="description" content="Ref.get arg1 Reads the current value of the reference.
-Parameters arg0: Ref&lt;‘T&gt;">
+<meta name="description" content="Reads the current value of the reference.
+Signature Ref.get reference Parameters Name Type Description reference Ref&lt;‘T&gt; The Ref to read from. Returns Type Description Flow&lt;‘env, ’none, ‘T&gt; A flow that returns the current value. Examples Ref.get myRef">
 <meta property="og:url" content="http://localhost:3000/reference/ref/m-ref-get/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Ref.get">
-  <meta property="og:description" content="Ref.get arg1 Reads the current value of the reference.
-Parameters arg0: Ref&lt;‘T&gt;">
+  <meta property="og:description" content="Reads the current value of the reference.
+Signature Ref.get reference Parameters Name Type Description reference Ref&lt;‘T&gt; The Ref to read from. Returns Type Description Flow&lt;‘env, ’none, ‘T&gt; A flow that returns the current value. Examples Ref.get myRef">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Ref.get">
-  <meta itemprop="description" content="Ref.get arg1 Reads the current value of the reference.
-Parameters arg0: Ref&lt;‘T&gt;">
-  <meta itemprop="wordCount" content="11">
+  <meta itemprop="description" content="Reads the current value of the reference.
+Signature Ref.get reference Parameters Name Type Description reference Ref&lt;‘T&gt; The Ref to read from. Returns Type Description Flow&lt;‘env, ’none, ‘T&gt; A flow that returns the current value. Examples Ref.get myRef">
+  <meta itemprop="wordCount" content="36">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Ref.get">
-  <meta name="twitter:description" content="Ref.get arg1 Reads the current value of the reference.
-Parameters arg0: Ref&lt;‘T&gt;">
+  <meta name="twitter:description" content="Reads the current value of the reference.
+Signature Ref.get reference Parameters Name Type Description reference Ref&lt;‘T&gt; The Ref to read from. Returns Type Description Flow&lt;‘env, ’none, ‘T&gt; A flow that returns the current value. Examples Ref.get myRef">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +517,10 @@ Parameters arg0: Ref&lt;‘T&gt;">
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -543,14 +546,46 @@ Parameters arg0: Ref&lt;‘T&gt;">
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>Ref.get&#32;<span>arg1</span></span></code>
+	<p>Reads the current value of the reference.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Ref.get&#32;<span>reference</span></span></code>
 </div>
-<p>Reads the current value of the reference.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>arg0</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-ref-1.html">Ref</a>&lt;&lsquo;T&gt;</span></code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>reference</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-ref-1.html">Ref</a>&lt;&lsquo;T&gt;</span></code></td>
+          <td>The <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-ref-1.html">Ref</a> to read from.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;none, &lsquo;T</span>&gt;</span></code></td>
+          <td>A flow that returns the current value.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="id">Ref</span><span class="pn">.</span><span class="id">get</span> <span class="id">myRef</span>
+</code></pre>
 
 	<nav class="docs-page-nav docs-page-nav--next-only"><a class="docs-home-cta docs-page-nav__link docs-page-nav__next" href="http://localhost:3000/reference/ref/m-ref-make/" aria-label="Next - Ref.make">
     <span>Next</span>

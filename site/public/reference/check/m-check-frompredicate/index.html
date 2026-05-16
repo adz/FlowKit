@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Check.fromPredicate | FsFlow</title>
-<meta name="description" content="fromPredicate predicate value Builds a check from a predicate while preserving the successful value.
-Parameters predicate: ‘value -&gt; bool A function of type &#39;value -&gt; bool to test the value. value: ‘value The value of type &#39;value to check. Returns A Check containing the value if the predicate succeeds.">
+<meta name="description" content="Builds a check from a predicate while preserving the successful value.
+Signature Check.fromPredicate predicate value Parameters Name Type Description predicate ‘value -&gt; bool A function of type &#39;value -&gt; bool to test the value. value ‘value The value of type &#39;value to check. Returns Type Description Check&lt;‘value&gt; A Check containing the value if the predicate succeeds; otherwise, an Error with unit. Examples 5 |&gt; Check.fromPredicate (fun x -&gt; x &gt; 0) // Ok 5 -1 |&gt; Check.fromPredicate (fun x -&gt; x &gt; 0) // Error ()">
 <meta property="og:url" content="http://localhost:3000/reference/check/m-check-frompredicate/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Check.fromPredicate">
-  <meta property="og:description" content="fromPredicate predicate value Builds a check from a predicate while preserving the successful value.
-Parameters predicate: ‘value -&gt; bool A function of type &#39;value -&gt; bool to test the value. value: ‘value The value of type &#39;value to check. Returns A Check containing the value if the predicate succeeds.">
+  <meta property="og:description" content="Builds a check from a predicate while preserving the successful value.
+Signature Check.fromPredicate predicate value Parameters Name Type Description predicate ‘value -&gt; bool A function of type &#39;value -&gt; bool to test the value. value ‘value The value of type &#39;value to check. Returns Type Description Check&lt;‘value&gt; A Check containing the value if the predicate succeeds; otherwise, an Error with unit. Examples 5 |&gt; Check.fromPredicate (fun x -&gt; x &gt; 0) // Ok 5 -1 |&gt; Check.fromPredicate (fun x -&gt; x &gt; 0) // Error ()">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Check.fromPredicate">
-  <meta itemprop="description" content="fromPredicate predicate value Builds a check from a predicate while preserving the successful value.
-Parameters predicate: ‘value -&gt; bool A function of type &#39;value -&gt; bool to test the value. value: ‘value The value of type &#39;value to check. Returns A Check containing the value if the predicate succeeds.">
-  <meta itemprop="wordCount" content="47">
+  <meta itemprop="description" content="Builds a check from a predicate while preserving the successful value.
+Signature Check.fromPredicate predicate value Parameters Name Type Description predicate ‘value -&gt; bool A function of type &#39;value -&gt; bool to test the value. value ‘value The value of type &#39;value to check. Returns Type Description Check&lt;‘value&gt; A Check containing the value if the predicate succeeds; otherwise, an Error with unit. Examples 5 |&gt; Check.fromPredicate (fun x -&gt; x &gt; 0) // Ok 5 -1 |&gt; Check.fromPredicate (fun x -&gt; x &gt; 0) // Error ()">
+  <meta itemprop="wordCount" content="84">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Check.fromPredicate">
-  <meta name="twitter:description" content="fromPredicate predicate value Builds a check from a predicate while preserving the successful value.
-Parameters predicate: ‘value -&gt; bool A function of type &#39;value -&gt; bool to test the value. value: ‘value The value of type &#39;value to check. Returns A Check containing the value if the predicate succeeds.">
+  <meta name="twitter:description" content="Builds a check from a predicate while preserving the successful value.
+Signature Check.fromPredicate predicate value Parameters Name Type Description predicate ‘value -&gt; bool A function of type &#39;value -&gt; bool to test the value. value ‘value The value of type &#39;value to check. Returns Type Description Check&lt;‘value&gt; A Check containing the value if the predicate succeeds; otherwise, an Error with unit. Examples 5 |&gt; Check.fromPredicate (fun x -&gt; x &gt; 0) // Ok 5 -1 |&gt; Check.fromPredicate (fun x -&gt; x &gt; 0) // Error ()">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,8 +517,10 @@ Parameters predicate: ‘value -&gt; bool A function of type &#39;value -&gt; bo
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -544,19 +546,52 @@ Parameters predicate: ‘value -&gt; bool A function of type &#39;value -&gt; bo
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>fromPredicate&#32;<span>predicate&#32;value</span></span></code>
+	<p>Builds a check from a predicate while preserving the successful value.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Check.fromPredicate&#32;<span>predicate&#32;value</span></span></code>
 </div>
-<p>Builds a check from a predicate while preserving the successful value.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>predicate</code>: <code><span>&lsquo;value -&gt; bool</span></code>
-A function of type <code>'value -&gt; bool</code> to test the value.</li>
-<li><code>value</code>: <code>&lsquo;value</code>
-The value of type <code>'value</code> to check.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>predicate</code></td>
+          <td><code><span>&lsquo;value -&gt; bool</span></code></td>
+          <td>A function of type <code>'value -&gt; bool</code> to test the value.</td>
+      </tr>
+      <tr>
+          <td><code>value</code></td>
+          <td><code>&lsquo;value</code></td>
+          <td>The value of type <code>'value</code> to check.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> containing the value if the predicate succeeds.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;&lsquo;value&gt;</span></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> containing the value if the predicate succeeds; otherwise, an Error with unit.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="n">5</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">fromPredicate</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">x</span> <span class="k">-&gt;</span> <span class="id">x</span> <span class="pn">&gt;</span> <span class="n">0</span><span class="pn">)</span> <span class="c">// Ok 5</span>
+ <span class="o">-</span><span class="n">1</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">fromPredicate</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">x</span> <span class="k">-&gt;</span> <span class="id">x</span> <span class="pn">&gt;</span> <span class="n">0</span><span class="pn">)</span> <span class="c">// Error ()</span>
+</code></pre>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/check/m-check-failifvaluesome/" aria-label="Previous - Check.failIfValueSome">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

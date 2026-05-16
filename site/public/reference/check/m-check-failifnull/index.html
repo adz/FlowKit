@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Check.failIfNull | FsFlow</title>
-<meta name="description" content="failIfNull value Returns the value when it is null.
-Parameters value: ‘a The value to check. Returns A Check containing the null value.">
+<meta name="description" content="Returns the value when it is null.
+Signature Check.failIfNull value Parameters Name Type Description value ‘a The value to check. Returns Type Description Check&lt;‘a&gt; A Check containing the null value; otherwise, an Error with unit. Examples null |&gt; Check.failIfNull // Ok null &#34;hello&#34; |&gt; Check.failIfNull // Error ()">
 <meta property="og:url" content="http://localhost:3000/reference/check/m-check-failifnull/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Check.failIfNull">
-  <meta property="og:description" content="failIfNull value Returns the value when it is null.
-Parameters value: ‘a The value to check. Returns A Check containing the null value.">
+  <meta property="og:description" content="Returns the value when it is null.
+Signature Check.failIfNull value Parameters Name Type Description value ‘a The value to check. Returns Type Description Check&lt;‘a&gt; A Check containing the null value; otherwise, an Error with unit. Examples null |&gt; Check.failIfNull // Ok null &#34;hello&#34; |&gt; Check.failIfNull // Error ()">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Check.failIfNull">
-  <meta itemprop="description" content="failIfNull value Returns the value when it is null.
-Parameters value: ‘a The value to check. Returns A Check containing the null value.">
-  <meta itemprop="wordCount" content="22">
+  <meta itemprop="description" content="Returns the value when it is null.
+Signature Check.failIfNull value Parameters Name Type Description value ‘a The value to check. Returns Type Description Check&lt;‘a&gt; A Check containing the null value; otherwise, an Error with unit. Examples null |&gt; Check.failIfNull // Ok null &#34;hello&#34; |&gt; Check.failIfNull // Error ()">
+  <meta itemprop="wordCount" content="47">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Check.failIfNull">
-  <meta name="twitter:description" content="failIfNull value Returns the value when it is null.
-Parameters value: ‘a The value to check. Returns A Check containing the null value.">
+  <meta name="twitter:description" content="Returns the value when it is null.
+Signature Check.failIfNull value Parameters Name Type Description value ‘a The value to check. Returns Type Description Check&lt;‘a&gt; A Check containing the null value; otherwise, an Error with unit. Examples null |&gt; Check.failIfNull // Ok null &#34;hello&#34; |&gt; Check.failIfNull // Error ()">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,8 +517,10 @@ Parameters value: ‘a The value to check. Returns A Check containing the null v
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -544,17 +546,47 @@ Parameters value: ‘a The value to check. Returns A Check containing the null v
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>failIfNull&#32;<span>value</span></span></code>
+	<p>Returns the value when it is null.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Check.failIfNull&#32;<span>value</span></span></code>
 </div>
-<p>Returns the value when it is null.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>value</code>: <code>&lsquo;a</code>
-The value to check.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>value</code></td>
+          <td><code>&lsquo;a</code></td>
+          <td>The value to check.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> containing the null value.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;&lsquo;a&gt;</span></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> containing the null value; otherwise, an Error with unit.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">null</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">failIfNull</span> <span class="c">// Ok null</span>
+ <span class="s">&quot;hello&quot;</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">failIfNull</span> <span class="c">// Error ()</span>
+</code></pre>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/check/m-check-failifnotnull/" aria-label="Previous - Check.failIfNotNull">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

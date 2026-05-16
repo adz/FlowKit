@@ -4,11 +4,25 @@ linkTitle: "collect"
 type: docs
 ---
 
+Collects a sequence of validations into a single validation of a list.
+
+## Signature
+
 <div class="fsdocs-usage">
 <code><span>Validation.collect&#32;<span>validations</span></span></code>
 </div>
 
-Collects a sequence of validations into a single validation of a list.
+## Parameters
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `validations` | <code><span><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>'value,&#32;'error</span>&gt;</span>&#32;seq</span></code> | A sequence of type <code>seq&lt;Validation&lt;&#39;value, &#39;error&gt;&gt;</code>. |
+
+## Returns
+
+| Type | Description |
+| --- | --- |
+| <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span><span>'value&#32;list</span>,&#32;'error</span>&gt;</span></code> | A validation containing the list of values or accumulated diagnostics. |
 
 ## Remarks
 
@@ -16,12 +30,10 @@ Collects a sequence of validations into a single validation of a list.
  This operation is applicative: it will collect errors from ALL items in the sequence.
  
 
-## Parameters
+## Examples
 
-- `validations`: <code><span><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>'value,&#32;'error</span>&gt;</span>&#32;seq</span></code>
-  A sequence of type <code>seq&lt;Validation&lt;&#39;value, &#39;error&gt;&gt;</code>.
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="pn">[</span><span class="id">Validation</span><span class="pn">.</span><span class="id">ok</span> <span class="n">1</span><span class="pn">;</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">ok</span> <span class="n">2</span><span class="pn">]</span> <span class="o">|&gt;</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">collect</span> <span class="c">// Validation (Ok [1; 2])</span>
+</code></pre>
 
-## Returns
 
-A validation containing the list of values or accumulated diagnostics.
 

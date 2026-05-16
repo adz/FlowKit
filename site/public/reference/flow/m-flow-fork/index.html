@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.fork | FsFlow</title>
-<meta name="description" content="fork flow Starts a flow in a new fiber without waiting for it to complete.
-Parameters flow: Flow&lt;‘env, ’error, ‘value&gt; The flow to fork. Returns A flow that produces a Fiber handle.">
+<meta name="description" content="Starts a flow in a new fiber without waiting for it to complete.
+Signature Flow.fork flow Parameters Name Type Description flow Flow&lt;‘env, ’error, ‘value&gt; The flow to fork. Returns Type Description Flow&lt;‘env, ’none, Fiber&lt;‘error, ‘value&gt;&gt; A flow that produces a Fiber handle.">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-fork/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.fork">
-  <meta property="og:description" content="fork flow Starts a flow in a new fiber without waiting for it to complete.
-Parameters flow: Flow&lt;‘env, ’error, ‘value&gt; The flow to fork. Returns A flow that produces a Fiber handle.">
+  <meta property="og:description" content="Starts a flow in a new fiber without waiting for it to complete.
+Signature Flow.fork flow Parameters Name Type Description flow Flow&lt;‘env, ’error, ‘value&gt; The flow to fork. Returns Type Description Flow&lt;‘env, ’none, Fiber&lt;‘error, ‘value&gt;&gt; A flow that produces a Fiber handle.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.fork">
-  <meta itemprop="description" content="fork flow Starts a flow in a new fiber without waiting for it to complete.
-Parameters flow: Flow&lt;‘env, ’error, ‘value&gt; The flow to fork. Returns A flow that produces a Fiber handle.">
-  <meta itemprop="wordCount" content="31">
+  <meta itemprop="description" content="Starts a flow in a new fiber without waiting for it to complete.
+Signature Flow.fork flow Parameters Name Type Description flow Flow&lt;‘env, ’error, ‘value&gt; The flow to fork. Returns Type Description Flow&lt;‘env, ’none, Fiber&lt;‘error, ‘value&gt;&gt; A flow that produces a Fiber handle.">
+  <meta itemprop="wordCount" content="41">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.fork">
-  <meta name="twitter:description" content="fork flow Starts a flow in a new fiber without waiting for it to complete.
-Parameters flow: Flow&lt;‘env, ’error, ‘value&gt; The flow to fork. Returns A flow that produces a Fiber handle.">
+  <meta name="twitter:description" content="Starts a flow in a new fiber without waiting for it to complete.
+Signature Flow.fork flow Parameters Name Type Description flow Flow&lt;‘env, ’error, ‘value&gt; The flow to fork. Returns Type Description Flow&lt;‘env, ’none, Fiber&lt;‘error, ‘value&gt;&gt; A flow that produces a Fiber handle.">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,6 +517,7 @@ Parameters flow: Flow&lt;‘env, ’error, ‘value&gt; The flow to fork. Return
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
   </ul>
@@ -544,17 +545,43 @@ Parameters flow: Flow&lt;‘env, ’error, ‘value&gt; The flow to fork. Return
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>fork&#32;<span>flow</span></span></code>
+	<p>Starts a flow in a new fiber without waiting for it to complete.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.fork&#32;<span>flow</span></span></code>
 </div>
-<p>Starts a flow in a new fiber without waiting for it to complete.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>flow</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code>
-The flow to fork.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>flow</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>The flow to fork.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A flow that produces a <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-fiber-2.html">Fiber</a> handle.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;none, <span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-fiber-2.html">Fiber</a>&lt;<span>&lsquo;error, &lsquo;value</span>&gt;</span></span>&gt;</span></code></td>
+          <td>A flow that produces a <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-fiber-2.html">Fiber</a> handle.</td>
+      </tr>
+  </tbody>
+</table>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/flow/t-flow-3/" aria-label="Previous - Flow">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

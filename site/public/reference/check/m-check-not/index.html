@@ -19,29 +19,29 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Check. | FsFlow</title>
-<meta name="description" content="``not`` check Returns success when the supplied check fails.
-Remarks This is a logical &#34;not&#34; operation for checks. Note that it discards the success value and returns Unit on success.
-Parameters check: Check&lt;‘value&gt; The source Check to invert. Returns A Check that succeeds if the input fails.">
+<meta name="description" content="Returns success when the supplied check fails.
+Signature Check.``not`` check Parameters Name Type Description check Check&lt;‘value&gt; The source Check to invert. Returns Type Description Check&lt;unit&gt; A Check that succeeds if the input fails; otherwise, an Error with unit. Remarks This is a logical &#34;not&#34; operation for checks. Note that it discards the success value and returns Unit on success.
+Examples Check.okIf true |&gt; Check.not // Error () Check.okIf false |&gt; Check.not // Ok ()">
 <meta property="og:url" content="http://localhost:3000/reference/check/m-check-not/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Check.">
-  <meta property="og:description" content="``not`` check Returns success when the supplied check fails.
-Remarks This is a logical &#34;not&#34; operation for checks. Note that it discards the success value and returns Unit on success.
-Parameters check: Check&lt;‘value&gt; The source Check to invert. Returns A Check that succeeds if the input fails.">
+  <meta property="og:description" content="Returns success when the supplied check fails.
+Signature Check.``not`` check Parameters Name Type Description check Check&lt;‘value&gt; The source Check to invert. Returns Type Description Check&lt;unit&gt; A Check that succeeds if the input fails; otherwise, an Error with unit. Remarks This is a logical &#34;not&#34; operation for checks. Note that it discards the success value and returns Unit on success.
+Examples Check.okIf true |&gt; Check.not // Error () Check.okIf false |&gt; Check.not // Ok ()">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Check.">
-  <meta itemprop="description" content="``not`` check Returns success when the supplied check fails.
-Remarks This is a logical &#34;not&#34; operation for checks. Note that it discards the success value and returns Unit on success.
-Parameters check: Check&lt;‘value&gt; The source Check to invert. Returns A Check that succeeds if the input fails.">
-  <meta itemprop="wordCount" content="46">
+  <meta itemprop="description" content="Returns success when the supplied check fails.
+Signature Check.``not`` check Parameters Name Type Description check Check&lt;‘value&gt; The source Check to invert. Returns Type Description Check&lt;unit&gt; A Check that succeeds if the input fails; otherwise, an Error with unit. Remarks This is a logical &#34;not&#34; operation for checks. Note that it discards the success value and returns Unit on success.
+Examples Check.okIf true |&gt; Check.not // Error () Check.okIf false |&gt; Check.not // Ok ()">
+  <meta itemprop="wordCount" content="73">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Check.">
-  <meta name="twitter:description" content="``not`` check Returns success when the supplied check fails.
-Remarks This is a logical &#34;not&#34; operation for checks. Note that it discards the success value and returns Unit on success.
-Parameters check: Check&lt;‘value&gt; The source Check to invert. Returns A Check that succeeds if the input fails.">
+  <meta name="twitter:description" content="Returns success when the supplied check fails.
+Signature Check.``not`` check Parameters Name Type Description check Check&lt;‘value&gt; The source Check to invert. Returns Type Description Check&lt;unit&gt; A Check that succeeds if the input fails; otherwise, an Error with unit. Remarks This is a logical &#34;not&#34; operation for checks. Note that it discards the success value and returns Unit on success.
+Examples Check.okIf true |&gt; Check.not // Error () Check.okIf false |&gt; Check.not // Ok ()">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -521,9 +521,11 @@ Parameters check: Check&lt;‘value&gt; The source Check to invert. Returns A Ch
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -549,20 +551,50 @@ Parameters check: Check&lt;‘value&gt; The source Check to invert. Returns A Ch
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>``not``&#32;<span>check</span></span></code>
+	<p>Returns success when the supplied check fails.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Check.``not``&#32;<span>check</span></span></code>
 </div>
-<p>Returns success when the supplied check fails.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>check</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;&lsquo;value&gt;</span></code></td>
+          <td>The source <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> to invert.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;unit&gt;</span></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> that succeeds if the input fails; otherwise, an Error with unit.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p>This is a logical &quot;not&quot; operation for checks. Note that it discards the success value
 and returns <a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-unit">Unit</a> on success.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>check</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;&lsquo;value&gt;</span></code>
-The source <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> to invert.</li>
-</ul>
-<h2 id="returns">Returns</h2>
-<p>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> that succeeds if the input fails.</p>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="id">Check</span><span class="pn">.</span><span class="id">okIf</span> <span class="k">true</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">not</span> <span class="c">// Error ()</span>
+ <span class="id">Check</span><span class="pn">.</span><span class="id">okIf</span> <span class="k">false</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">not</span> <span class="c">// Ok ()</span>
+</code></pre>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/check/m-check-and/" aria-label="Previous - Check.">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

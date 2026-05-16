@@ -19,25 +19,45 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>TRef.get | FsFlow</title>
-<meta name="description" content="TRef.get tref Reads the current value of the transactional reference within a transaction.
-Parameters tref: TRef&lt;‘T&gt;">
+<meta name="description" content="Reads the current value of the transactional reference within a transaction.
+Signature TRef.get tref Parameters Name Type Description tref TRef&lt;‘T&gt; The transactional reference to read. Returns Type Description STM&lt;‘T&gt; An STM operation that produces the current value of the reference. Examples let tx (counter: TRef&lt;int&gt;) = stm { let! value = TRef.get counter return value } val tx: counter: &#39;a -&gt; &#39;b val counter: &#39;a Multiple items
+val int: value: &#39;T -&gt; int (requires member op_Explicit)
+--------------------
+type int = int32
+--------------------
+type int&lt;&#39;Measure&gt; = int">
 <meta property="og:url" content="http://localhost:3000/reference/stm/m-tref-get/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="TRef.get">
-  <meta property="og:description" content="TRef.get tref Reads the current value of the transactional reference within a transaction.
-Parameters tref: TRef&lt;‘T&gt;">
+  <meta property="og:description" content="Reads the current value of the transactional reference within a transaction.
+Signature TRef.get tref Parameters Name Type Description tref TRef&lt;‘T&gt; The transactional reference to read. Returns Type Description STM&lt;‘T&gt; An STM operation that produces the current value of the reference. Examples let tx (counter: TRef&lt;int&gt;) = stm { let! value = TRef.get counter return value } val tx: counter: &#39;a -&gt; &#39;b val counter: &#39;a Multiple items
+val int: value: &#39;T -&gt; int (requires member op_Explicit)
+--------------------
+type int = int32
+--------------------
+type int&lt;&#39;Measure&gt; = int">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="TRef.get">
-  <meta itemprop="description" content="TRef.get tref Reads the current value of the transactional reference within a transaction.
-Parameters tref: TRef&lt;‘T&gt;">
-  <meta itemprop="wordCount" content="15">
+  <meta itemprop="description" content="Reads the current value of the transactional reference within a transaction.
+Signature TRef.get tref Parameters Name Type Description tref TRef&lt;‘T&gt; The transactional reference to read. Returns Type Description STM&lt;‘T&gt; An STM operation that produces the current value of the reference. Examples let tx (counter: TRef&lt;int&gt;) = stm { let! value = TRef.get counter return value } val tx: counter: &#39;a -&gt; &#39;b val counter: &#39;a Multiple items
+val int: value: &#39;T -&gt; int (requires member op_Explicit)
+--------------------
+type int = int32
+--------------------
+type int&lt;&#39;Measure&gt; = int">
+  <meta itemprop="wordCount" content="85">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="TRef.get">
-  <meta name="twitter:description" content="TRef.get tref Reads the current value of the transactional reference within a transaction.
-Parameters tref: TRef&lt;‘T&gt;">
+  <meta name="twitter:description" content="Reads the current value of the transactional reference within a transaction.
+Signature TRef.get tref Parameters Name Type Description tref TRef&lt;‘T&gt; The transactional reference to read. Returns Type Description STM&lt;‘T&gt; An STM operation that produces the current value of the reference. Examples let tx (counter: TRef&lt;int&gt;) = stm { let! value = TRef.get counter return value } val tx: counter: &#39;a -&gt; &#39;b val counter: &#39;a Multiple items
+val int: value: &#39;T -&gt; int (requires member op_Explicit)
+--------------------
+type int = int32
+--------------------
+type int&lt;&#39;Measure&gt; = int">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +537,10 @@ Parameters tref: TRef&lt;‘T&gt;">
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -543,14 +566,53 @@ Parameters tref: TRef&lt;‘T&gt;">
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Reads the current value of the transactional reference within a transaction.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>TRef.get&#32;<span>tref</span></span></code>
 </div>
-<p>Reads the current value of the transactional reference within a transaction.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>tref</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-tref-1.html">TRef</a>&lt;&lsquo;T&gt;</span></code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>tref</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-tref-1.html">TRef</a>&lt;&lsquo;T&gt;</span></code></td>
+          <td>The transactional reference to read.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-stm-1.html">STM</a>&lt;&lsquo;T&gt;</span></code></td>
+          <td>An STM operation that produces the current value of the reference.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="fn">tx</span> <span class="pn">(</span><span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="fn">counter</span><span class="pn">:</span> <span class="id">TRef</span><span class="pn">&lt;</span><span data-fsdocs-tip="fs3" data-fsdocs-tip-unique="3" class="id">int</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="o">=</span> <span class="id">stm</span> <span class="pn">{</span>
+     <span class="k">let!</span> <span class="id">value</span> <span class="o">=</span> <span class="id">TRef</span><span class="pn">.</span><span class="id">get</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="4" class="id">counter</span>
+     <span class="k">return</span> <span class="id">value</span>
+ <span class="pn">}</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val tx: counter: &#39;a -&gt; &#39;b</div>
+<div popover class="fsdocs-tip" id="fs2">val counter: &#39;a</div>
+<div popover class="fsdocs-tip" id="fs3">Multiple items<br />val int: value: &#39;T -&gt; int (requires member op_Explicit)<br /><br />--------------------<br />type int = int32<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; =
+  int</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/stm/m-stm-atomically/" aria-label="Previous - STM.atomically">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

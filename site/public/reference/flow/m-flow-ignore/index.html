@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.ignore | FsFlow</title>
-<meta name="description" content="ignore flow Maps the successful value of a synchronous flow to unit.
-Parameters flow: Flow&lt;‘env, ’error, ‘value&gt;">
+<meta name="description" content="Maps the successful value of a synchronous flow to unit.
+Signature Flow.ignore flow Parameters Name Type Description flow Flow&lt;‘env, ’error, ‘value&gt; The source flow. Returns Type Description Flow&lt;‘env, ’error, unit&gt; A flow that succeeds with unit instead of the original value. Examples let flow = Flow.succeed 42 |&gt; Flow.ignore val flow: obj">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-ignore/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.ignore">
-  <meta property="og:description" content="ignore flow Maps the successful value of a synchronous flow to unit.
-Parameters flow: Flow&lt;‘env, ’error, ‘value&gt;">
+  <meta property="og:description" content="Maps the successful value of a synchronous flow to unit.
+Signature Flow.ignore flow Parameters Name Type Description flow Flow&lt;‘env, ’error, ‘value&gt; The source flow. Returns Type Description Flow&lt;‘env, ’error, unit&gt; A flow that succeeds with unit instead of the original value. Examples let flow = Flow.succeed 42 |&gt; Flow.ignore val flow: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.ignore">
-  <meta itemprop="description" content="ignore flow Maps the successful value of a synchronous flow to unit.
-Parameters flow: Flow&lt;‘env, ’error, ‘value&gt;">
-  <meta itemprop="wordCount" content="16">
+  <meta itemprop="description" content="Maps the successful value of a synchronous flow to unit.
+Signature Flow.ignore flow Parameters Name Type Description flow Flow&lt;‘env, ’error, ‘value&gt; The source flow. Returns Type Description Flow&lt;‘env, ’error, unit&gt; A flow that succeeds with unit instead of the original value. Examples let flow = Flow.succeed 42 |&gt; Flow.ignore val flow: obj">
+  <meta itemprop="wordCount" content="51">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.ignore">
-  <meta name="twitter:description" content="ignore flow Maps the successful value of a synchronous flow to unit.
-Parameters flow: Flow&lt;‘env, ’error, ‘value&gt;">
+  <meta name="twitter:description" content="Maps the successful value of a synchronous flow to unit.
+Signature Flow.ignore flow Parameters Name Type Description flow Flow&lt;‘env, ’error, ‘value&gt; The source flow. Returns Type Description Flow&lt;‘env, ’error, unit&gt; A flow that succeeds with unit instead of the original value. Examples let flow = Flow.succeed 42 |&gt; Flow.ignore val flow: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +517,10 @@ Parameters flow: Flow&lt;‘env, ’error, ‘value&gt;">
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -543,14 +546,47 @@ Parameters flow: Flow&lt;‘env, ’error, ‘value&gt;">
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>ignore&#32;<span>flow</span></span></code>
+	<p>Maps the successful value of a synchronous flow to <code>unit</code>.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.ignore&#32;<span>flow</span></span></code>
 </div>
-<p>Maps the successful value of a synchronous flow to <code>unit</code>.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>flow</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>flow</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>The source flow.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, unit</span>&gt;</span></code></td>
+          <td>A flow that succeeds with <code>unit</code> instead of the original value.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">flow</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">succeed</span> <span class="n">42</span> <span class="o">|&gt;</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">ignore</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val flow: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/flow/m-flow-fromvalueoption/" aria-label="Previous - Flow.fromValueOption">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

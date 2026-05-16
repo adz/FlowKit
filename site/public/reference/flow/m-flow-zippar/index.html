@@ -19,29 +19,29 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.zipPar | FsFlow</title>
-<meta name="description" content="zipPar left right Combines two flows into a tuple of their values, running them concurrently.
-Remarks If either flow fails, the other is interrupted immediately.
-Parameters left: Flow&lt;‘env, ’error, ’left&gt; right: Flow&lt;‘env, ’error, ‘right&gt;">
+<meta name="description" content="Combines two flows into a tuple of their values, running them concurrently.
+Signature Flow.zipPar left right Parameters Name Type Description left Flow&lt;‘env, ’error, ’left&gt; The first flow to combine. right Flow&lt;‘env, ’error, ‘right&gt; The second flow to combine. Returns Type Description Flow&lt;‘env, ’error, (‘left * ‘right)&gt; A flow that returns a tuple of both successful values. Remarks If either flow fails, the other is interrupted immediately.
+Examples let combined = Flow.zipPar flow1 flow2 val combined: obj">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-zippar/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.zipPar">
-  <meta property="og:description" content="zipPar left right Combines two flows into a tuple of their values, running them concurrently.
-Remarks If either flow fails, the other is interrupted immediately.
-Parameters left: Flow&lt;‘env, ’error, ’left&gt; right: Flow&lt;‘env, ’error, ‘right&gt;">
+  <meta property="og:description" content="Combines two flows into a tuple of their values, running them concurrently.
+Signature Flow.zipPar left right Parameters Name Type Description left Flow&lt;‘env, ’error, ’left&gt; The first flow to combine. right Flow&lt;‘env, ’error, ‘right&gt; The second flow to combine. Returns Type Description Flow&lt;‘env, ’error, (‘left * ‘right)&gt; A flow that returns a tuple of both successful values. Remarks If either flow fails, the other is interrupted immediately.
+Examples let combined = Flow.zipPar flow1 flow2 val combined: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.zipPar">
-  <meta itemprop="description" content="zipPar left right Combines two flows into a tuple of their values, running them concurrently.
-Remarks If either flow fails, the other is interrupted immediately.
-Parameters left: Flow&lt;‘env, ’error, ’left&gt; right: Flow&lt;‘env, ’error, ‘right&gt;">
-  <meta itemprop="wordCount" content="32">
+  <meta itemprop="description" content="Combines two flows into a tuple of their values, running them concurrently.
+Signature Flow.zipPar left right Parameters Name Type Description left Flow&lt;‘env, ’error, ’left&gt; The first flow to combine. right Flow&lt;‘env, ’error, ‘right&gt; The second flow to combine. Returns Type Description Flow&lt;‘env, ’error, (‘left * ‘right)&gt; A flow that returns a tuple of both successful values. Remarks If either flow fails, the other is interrupted immediately.
+Examples let combined = Flow.zipPar flow1 flow2 val combined: obj">
+  <meta itemprop="wordCount" content="74">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.zipPar">
-  <meta name="twitter:description" content="zipPar left right Combines two flows into a tuple of their values, running them concurrently.
-Remarks If either flow fails, the other is interrupted immediately.
-Parameters left: Flow&lt;‘env, ’error, ’left&gt; right: Flow&lt;‘env, ’error, ‘right&gt;">
+  <meta name="twitter:description" content="Combines two flows into a tuple of their values, running them concurrently.
+Signature Flow.zipPar left right Parameters Name Type Description left Flow&lt;‘env, ’error, ’left&gt; The first flow to combine. right Flow&lt;‘env, ’error, ‘right&gt; The second flow to combine. Returns Type Description Flow&lt;‘env, ’error, (‘left * ‘right)&gt; A flow that returns a tuple of both successful values. Remarks If either flow fails, the other is interrupted immediately.
+Examples let combined = Flow.zipPar flow1 flow2 val combined: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -521,8 +521,11 @@ Parameters left: Flow&lt;‘env, ’error, ’left&gt; right: Flow&lt;‘env, �
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
+    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -548,17 +551,54 @@ Parameters left: Flow&lt;‘env, ’error, ’left&gt; right: Flow&lt;‘env, �
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>zipPar&#32;<span>left&#32;right</span></span></code>
+	<p>Combines two flows into a tuple of their values, running them concurrently.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.zipPar&#32;<span>left&#32;right</span></span></code>
 </div>
-<p>Combines two flows into a tuple of their values, running them concurrently.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>left</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &rsquo;left</span>&gt;</span></code></td>
+          <td>The first flow to combine.</td>
+      </tr>
+      <tr>
+          <td><code>right</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;right</span>&gt;</span></code></td>
+          <td>The second flow to combine.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, <span>(<span>&lsquo;left * &lsquo;right</span>)</span></span>&gt;</span></code></td>
+          <td>A flow that returns a tuple of both successful values.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p>If either flow fails, the other is interrupted immediately.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>left</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &rsquo;left</span>&gt;</span></code></li>
-<li><code>right</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;right</span>&gt;</span></code></li>
-</ul>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">combined</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">zipPar</span> <span class="id">flow1</span> <span class="id">flow2</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val combined: obj</div>
 
 	<nav class="docs-page-nav docs-page-nav--prev-only"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/flow/m-flow-zip/" aria-label="Previous - Flow.zip">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

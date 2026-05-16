@@ -19,29 +19,41 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Validation.fromResult | FsFlow</title>
-<meta name="description" content="Validation.fromResult result Lifts a standard Result into the Validation context.
-Remarks If the result is an error, it is wrapped in a root-level Diagnostics graph.
-Parameters result: Result&lt;‘value, ’error&gt; The result to lift. Returns A Validation mirroring the result.">
+<meta name="description" content="Lifts a standard Result into the Validation context.
+Signature Validation.fromResult result Parameters Name Type Description result Result&lt;‘value, ’error&gt; The result to lift. Returns Type Description Validation&lt;‘value, ’error&gt; A Validation mirroring the result. Remarks If the result is an error, it is wrapped in a root-level Diagnostics graph.
+Examples let v = Result.Ok 5 |&gt; Validation.fromResult // Validation (Ok 5) let v2 = Result.Error &#34;fail&#34; |&gt; Validation.fromResult // Validation (Error { Errors = [&#34;fail&#34;]; ... }) val v: obj Multiple items
+module Result from Microsoft.FSharp.Core
+——————–
+type Result&lt;&#39;T,&#39;TError&gt; = | Ok of ResultValue: &#39;T | Error of ErrorValue: &#39;TError">
 <meta property="og:url" content="http://localhost:3000/reference/validation/m-validation-fromresult/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Validation.fromResult">
-  <meta property="og:description" content="Validation.fromResult result Lifts a standard Result into the Validation context.
-Remarks If the result is an error, it is wrapped in a root-level Diagnostics graph.
-Parameters result: Result&lt;‘value, ’error&gt; The result to lift. Returns A Validation mirroring the result.">
+  <meta property="og:description" content="Lifts a standard Result into the Validation context.
+Signature Validation.fromResult result Parameters Name Type Description result Result&lt;‘value, ’error&gt; The result to lift. Returns Type Description Validation&lt;‘value, ’error&gt; A Validation mirroring the result. Remarks If the result is an error, it is wrapped in a root-level Diagnostics graph.
+Examples let v = Result.Ok 5 |&gt; Validation.fromResult // Validation (Ok 5) let v2 = Result.Error &#34;fail&#34; |&gt; Validation.fromResult // Validation (Error { Errors = [&#34;fail&#34;]; ... }) val v: obj Multiple items
+module Result from Microsoft.FSharp.Core
+——————–
+type Result&lt;&#39;T,&#39;TError&gt; = | Ok of ResultValue: &#39;T | Error of ErrorValue: &#39;TError">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Validation.fromResult">
-  <meta itemprop="description" content="Validation.fromResult result Lifts a standard Result into the Validation context.
-Remarks If the result is an error, it is wrapped in a root-level Diagnostics graph.
-Parameters result: Result&lt;‘value, ’error&gt; The result to lift. Returns A Validation mirroring the result.">
-  <meta itemprop="wordCount" content="38">
+  <meta itemprop="description" content="Lifts a standard Result into the Validation context.
+Signature Validation.fromResult result Parameters Name Type Description result Result&lt;‘value, ’error&gt; The result to lift. Returns Type Description Validation&lt;‘value, ’error&gt; A Validation mirroring the result. Remarks If the result is an error, it is wrapped in a root-level Diagnostics graph.
+Examples let v = Result.Ok 5 |&gt; Validation.fromResult // Validation (Ok 5) let v2 = Result.Error &#34;fail&#34; |&gt; Validation.fromResult // Validation (Error { Errors = [&#34;fail&#34;]; ... }) val v: obj Multiple items
+module Result from Microsoft.FSharp.Core
+——————–
+type Result&lt;&#39;T,&#39;TError&gt; = | Ok of ResultValue: &#39;T | Error of ErrorValue: &#39;TError">
+  <meta itemprop="wordCount" content="114">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Validation.fromResult">
-  <meta name="twitter:description" content="Validation.fromResult result Lifts a standard Result into the Validation context.
-Remarks If the result is an error, it is wrapped in a root-level Diagnostics graph.
-Parameters result: Result&lt;‘value, ’error&gt; The result to lift. Returns A Validation mirroring the result.">
+  <meta name="twitter:description" content="Lifts a standard Result into the Validation context.
+Signature Validation.fromResult result Parameters Name Type Description result Result&lt;‘value, ’error&gt; The result to lift. Returns Type Description Validation&lt;‘value, ’error&gt; A Validation mirroring the result. Remarks If the result is an error, it is wrapped in a root-level Diagnostics graph.
+Examples let v = Result.Ok 5 |&gt; Validation.fromResult // Validation (Ok 5) let v2 = Result.Error &#34;fail&#34; |&gt; Validation.fromResult // Validation (Error { Errors = [&#34;fail&#34;]; ... }) val v: obj Multiple items
+module Result from Microsoft.FSharp.Core
+——————–
+type Result&lt;&#39;T,&#39;TError&gt; = | Ok of ResultValue: &#39;T | Error of ErrorValue: &#39;TError">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -521,9 +533,11 @@ Parameters result: Result&lt;‘value, ’error&gt; The result to lift. Returns 
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -549,19 +563,58 @@ Parameters result: Result&lt;‘value, ’error&gt; The result to lift. Returns 
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Lifts a standard <a href="https://learn.microsoft.com/dotnet/api/system.result-2">Result</a> into the <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a> context.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>Validation.fromResult&#32;<span>result</span></span></code>
 </div>
-<p>Lifts a standard <a href="https://learn.microsoft.com/dotnet/api/system.result-2">Result</a> into the <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a> context.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>result</code></td>
+          <td><code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpresult-2">Result</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code></td>
+          <td>The result to lift.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a> mirroring the result.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p>If the result is an error, it is wrapped in a root-level <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a> graph.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>result</code>: <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpresult-2">Result</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code>
-The result to lift.</li>
-</ul>
-<h2 id="returns">Returns</h2>
-<p>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a> mirroring the result.</p>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">v</span> <span class="o">=</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="vt">Result</span><span class="pn">.</span><span data-fsdocs-tip="fs3" data-fsdocs-tip-unique="3" class="id">Ok</span> <span class="n">5</span> <span class="o">|&gt;</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">fromResult</span> <span class="c">// Validation (Ok 5)</span>
+ <span class="k">let</span> <span data-fsdocs-tip="fs4" data-fsdocs-tip-unique="4" class="id">v2</span> <span class="o">=</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="5" class="vt">Result</span><span class="pn">.</span><span data-fsdocs-tip="fs5" data-fsdocs-tip-unique="6" class="id">Error</span> <span class="s">&quot;fail&quot;</span> <span class="o">|&gt;</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">fromResult</span> <span class="c">// Validation (Error { Errors = [&quot;fail&quot;]; ... })</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val v: obj</div>
+<div popover class="fsdocs-tip" id="fs2">Multiple items<br />module Result
+<p>from Microsoft.FSharp.Core<br /><br />&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;<br />
+type Result&lt;'T,'TError&gt; =
+| Ok of ResultValue: 'T
+| Error of ErrorValue: 'TError</div></p>
+<div popover class="fsdocs-tip" id="fs3">union case Result.Ok: ResultValue: &#39;T -&gt; Result&lt;&#39;T,&#39;TError&gt;</div>
+<div popover class="fsdocs-tip" id="fs4">val v2: obj</div>
+<div popover class="fsdocs-tip" id="fs5">union case Result.Error: ErrorValue: &#39;TError -&gt; Result&lt;&#39;T,&#39;TError&gt;</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/validation/m-validation-fail/" aria-label="Previous - Validation.fail">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

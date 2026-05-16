@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>TRef.make | FsFlow</title>
-<meta name="description" content="TRef.make value Creates a new TRef with the initial value.
-Parameters value: ‘T">
+<meta name="description" content="Creates a new TRef with the initial value within an STM transaction.
+Signature TRef.make value Parameters Name Type Description value ‘T The initial value for the transactional reference. Returns Type Description STM&lt;TRef&lt;‘T&gt;&gt; An STM operation that, when executed, produces a new transactional reference. Examples let tx = stm { let! counter = TRef.make 0 return counter } val tx: obj">
 <meta property="og:url" content="http://localhost:3000/reference/stm/m-tref-make/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="TRef.make">
-  <meta property="og:description" content="TRef.make value Creates a new TRef with the initial value.
-Parameters value: ‘T">
+  <meta property="og:description" content="Creates a new TRef with the initial value within an STM transaction.
+Signature TRef.make value Parameters Name Type Description value ‘T The initial value for the transactional reference. Returns Type Description STM&lt;TRef&lt;‘T&gt;&gt; An STM operation that, when executed, produces a new transactional reference. Examples let tx = stm { let! counter = TRef.make 0 return counter } val tx: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="TRef.make">
-  <meta itemprop="description" content="TRef.make value Creates a new TRef with the initial value.
-Parameters value: ‘T">
-  <meta itemprop="wordCount" content="12">
+  <meta itemprop="description" content="Creates a new TRef with the initial value within an STM transaction.
+Signature TRef.make value Parameters Name Type Description value ‘T The initial value for the transactional reference. Returns Type Description STM&lt;TRef&lt;‘T&gt;&gt; An STM operation that, when executed, produces a new transactional reference. Examples let tx = stm { let! counter = TRef.make 0 return counter } val tx: obj">
+  <meta itemprop="wordCount" content="59">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="TRef.make">
-  <meta name="twitter:description" content="TRef.make value Creates a new TRef with the initial value.
-Parameters value: ‘T">
+  <meta name="twitter:description" content="Creates a new TRef with the initial value within an STM transaction.
+Signature TRef.make value Parameters Name Type Description value ‘T The initial value for the transactional reference. Returns Type Description STM&lt;TRef&lt;‘T&gt;&gt; An STM operation that, when executed, produces a new transactional reference. Examples let tx = stm { let! counter = TRef.make 0 return counter } val tx: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +517,10 @@ Parameters value: ‘T">
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -543,14 +546,50 @@ Parameters value: ‘T">
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Creates a new <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-tref-1.html">TRef</a> with the initial value within an STM transaction.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>TRef.make&#32;<span>value</span></span></code>
 </div>
-<p>Creates a new <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-tref-1.html">TRef</a> with the initial value.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>value</code>: <code>&lsquo;T</code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>value</code></td>
+          <td><code>&lsquo;T</code></td>
+          <td>The initial value for the transactional reference.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-stm-1.html">STM</a>&lt;<span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-tref-1.html">TRef</a>&lt;&lsquo;T&gt;</span>&gt;</span></code></td>
+          <td>An STM operation that, when executed, produces a new transactional reference.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">tx</span> <span class="o">=</span> <span class="id">stm</span> <span class="pn">{</span>
+     <span class="k">let!</span> <span class="id">counter</span> <span class="o">=</span> <span class="id">TRef</span><span class="pn">.</span><span class="id">make</span> <span class="n">0</span>
+     <span class="k">return</span> <span class="id">counter</span>
+ <span class="pn">}</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val tx: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/stm/m-tref-get/" aria-label="Previous - TRef.get">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

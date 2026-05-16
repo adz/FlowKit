@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.error | FsFlow</title>
-<meta name="description" content="error failure Creates a failing synchronous flow.
-Parameters failure: ‘error">
+<meta name="description" content="Creates a failing synchronous flow.
+Signature Flow.error failure Parameters Name Type Description failure ‘error The error value to wrap in a failing flow. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that always fails with the provided error.">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-error/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.error">
-  <meta property="og:description" content="error failure Creates a failing synchronous flow.
-Parameters failure: ‘error">
+  <meta property="og:description" content="Creates a failing synchronous flow.
+Signature Flow.error failure Parameters Name Type Description failure ‘error The error value to wrap in a failing flow. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that always fails with the provided error.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.error">
-  <meta itemprop="description" content="error failure Creates a failing synchronous flow.
-Parameters failure: ‘error">
-  <meta itemprop="wordCount" content="9">
+  <meta itemprop="description" content="Creates a failing synchronous flow.
+Signature Flow.error failure Parameters Name Type Description failure ‘error The error value to wrap in a failing flow. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that always fails with the provided error.">
+  <meta itemprop="wordCount" content="37">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.error">
-  <meta name="twitter:description" content="error failure Creates a failing synchronous flow.
-Parameters failure: ‘error">
+  <meta name="twitter:description" content="Creates a failing synchronous flow.
+Signature Flow.error failure Parameters Name Type Description failure ‘error The error value to wrap in a failing flow. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that always fails with the provided error.">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +517,9 @@ Parameters failure: ‘error">
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
   </ul>
 </nav>
   </div>
@@ -543,14 +545,43 @@ Parameters failure: ‘error">
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>error&#32;<span>failure</span></span></code>
+	<p>Creates a failing synchronous flow.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.error&#32;<span>failure</span></span></code>
 </div>
-<p>Creates a failing synchronous flow.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>failure</code>: <code>&lsquo;error</code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>failure</code></td>
+          <td><code>&lsquo;error</code></td>
+          <td>The error value to wrap in a failing flow.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>A flow that always fails with the provided error.</td>
+      </tr>
+  </tbody>
+</table>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/flow/m-flow-env/" aria-label="Previous - Flow.env">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

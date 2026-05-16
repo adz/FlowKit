@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Validation.map | FsFlow</title>
-<meta name="description" content="Validation.map mapper validation Maps the successful value of a validation.
-Parameters mapper: ‘value -&gt; ’next A function of type &#39;value -&gt; &#39;next. validation: Validation&lt;‘value, ’error&gt; The source Validation. Returns A validation with the transformed success value.">
+<meta name="description" content="Maps the successful value of a validation.
+Signature Validation.map mapper validation Parameters Name Type Description mapper ‘value -&gt; ’next A function of type &#39;value -&gt; &#39;next. validation Validation&lt;‘value, ’error&gt; The source Validation. Returns Type Description Validation&lt;‘next, ’error&gt; A validation with the transformed success value. Examples Validation.ok 5 |&gt; Validation.map (fun x -&gt; x * 2) // Validation (Ok 10)">
 <meta property="og:url" content="http://localhost:3000/reference/validation/m-validation-map/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Validation.map">
-  <meta property="og:description" content="Validation.map mapper validation Maps the successful value of a validation.
-Parameters mapper: ‘value -&gt; ’next A function of type &#39;value -&gt; &#39;next. validation: Validation&lt;‘value, ’error&gt; The source Validation. Returns A validation with the transformed success value.">
+  <meta property="og:description" content="Maps the successful value of a validation.
+Signature Validation.map mapper validation Parameters Name Type Description mapper ‘value -&gt; ’next A function of type &#39;value -&gt; &#39;next. validation Validation&lt;‘value, ’error&gt; The source Validation. Returns Type Description Validation&lt;‘next, ’error&gt; A validation with the transformed success value. Examples Validation.ok 5 |&gt; Validation.map (fun x -&gt; x * 2) // Validation (Ok 10)">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Validation.map">
-  <meta itemprop="description" content="Validation.map mapper validation Maps the successful value of a validation.
-Parameters mapper: ‘value -&gt; ’next A function of type &#39;value -&gt; &#39;next. validation: Validation&lt;‘value, ’error&gt; The source Validation. Returns A validation with the transformed success value.">
-  <meta itemprop="wordCount" content="34">
+  <meta itemprop="description" content="Maps the successful value of a validation.
+Signature Validation.map mapper validation Parameters Name Type Description mapper ‘value -&gt; ’next A function of type &#39;value -&gt; &#39;next. validation Validation&lt;‘value, ’error&gt; The source Validation. Returns Type Description Validation&lt;‘next, ’error&gt; A validation with the transformed success value. Examples Validation.ok 5 |&gt; Validation.map (fun x -&gt; x * 2) // Validation (Ok 10)">
+  <meta itemprop="wordCount" content="57">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Validation.map">
-  <meta name="twitter:description" content="Validation.map mapper validation Maps the successful value of a validation.
-Parameters mapper: ‘value -&gt; ’next A function of type &#39;value -&gt; &#39;next. validation: Validation&lt;‘value, ’error&gt; The source Validation. Returns A validation with the transformed success value.">
+  <meta name="twitter:description" content="Maps the successful value of a validation.
+Signature Validation.map mapper validation Parameters Name Type Description mapper ‘value -&gt; ’next A function of type &#39;value -&gt; &#39;next. validation Validation&lt;‘value, ’error&gt; The source Validation. Returns Type Description Validation&lt;‘next, ’error&gt; A validation with the transformed success value. Examples Validation.ok 5 |&gt; Validation.map (fun x -&gt; x * 2) // Validation (Ok 10)">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,8 +517,10 @@ Parameters mapper: ‘value -&gt; ’next A function of type &#39;value -&gt; &#
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -544,19 +546,51 @@ Parameters mapper: ‘value -&gt; ’next A function of type &#39;value -&gt; &#
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Maps the successful value of a validation.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>Validation.map&#32;<span>mapper&#32;validation</span></span></code>
 </div>
-<p>Maps the successful value of a validation.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>mapper</code>: <code><span>&lsquo;value -&gt; &rsquo;next</span></code>
-A function of type <code>'value -&gt; 'next</code>.</li>
-<li><code>validation</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code>
-The source <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>mapper</code></td>
+          <td><code><span>&lsquo;value -&gt; &rsquo;next</span></code></td>
+          <td>A function of type <code>'value -&gt; 'next</code>.</td>
+      </tr>
+      <tr>
+          <td><code>validation</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code></td>
+          <td>The source <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A validation with the transformed success value.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;next, &rsquo;error</span>&gt;</span></code></td>
+          <td>A validation with the transformed success value.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="id">Validation</span><span class="pn">.</span><span class="id">ok</span> <span class="n">5</span> <span class="o">|&gt;</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">map</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">x</span> <span class="k">-&gt;</span> <span class="id">x</span> <span class="pn">*</span> <span class="n">2</span><span class="pn">)</span> <span class="c">// Validation (Ok 10)</span>
+</code></pre>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/validation/m-validation-key/" aria-label="Previous - Validation.key">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

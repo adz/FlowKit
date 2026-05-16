@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.fromOption | FsFlow</title>
-<meta name="description" content="fromOption error value Lifts an option into a synchronous flow with the supplied error.
-Parameters error: ‘error value: ‘value option Examples let opt = Some &#34;value&#34; let flow = Flow.fromOption &#34;missing&#34; opt val opt: string option union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt; val flow: obj">
+<meta name="description" content="Lifts an option into a synchronous flow with the supplied error.
+Signature Flow.fromOption error value Parameters Name Type Description error ‘error The error to return if the option is None. value ‘value option The option to lift. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that succeeds with the option&#39;s value or fails with the provided error. Examples let opt = Some &#34;value&#34; let flow = Flow.fromOption &#34;missing&#34; opt val opt: string option union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt; val flow: obj">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-fromoption/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.fromOption">
-  <meta property="og:description" content="fromOption error value Lifts an option into a synchronous flow with the supplied error.
-Parameters error: ‘error value: ‘value option Examples let opt = Some &#34;value&#34; let flow = Flow.fromOption &#34;missing&#34; opt val opt: string option union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt; val flow: obj">
+  <meta property="og:description" content="Lifts an option into a synchronous flow with the supplied error.
+Signature Flow.fromOption error value Parameters Name Type Description error ‘error The error to return if the option is None. value ‘value option The option to lift. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that succeeds with the option&#39;s value or fails with the provided error. Examples let opt = Some &#34;value&#34; let flow = Flow.fromOption &#34;missing&#34; opt val opt: string option union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt; val flow: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.fromOption">
-  <meta itemprop="description" content="fromOption error value Lifts an option into a synchronous flow with the supplied error.
-Parameters error: ‘error value: ‘value option Examples let opt = Some &#34;value&#34; let flow = Flow.fromOption &#34;missing&#34; opt val opt: string option union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt; val flow: obj">
-  <meta itemprop="wordCount" content="44">
+  <meta itemprop="description" content="Lifts an option into a synchronous flow with the supplied error.
+Signature Flow.fromOption error value Parameters Name Type Description error ‘error The error to return if the option is None. value ‘value option The option to lift. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that succeeds with the option&#39;s value or fails with the provided error. Examples let opt = Some &#34;value&#34; let flow = Flow.fromOption &#34;missing&#34; opt val opt: string option union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt; val flow: obj">
+  <meta itemprop="wordCount" content="81">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.fromOption">
-  <meta name="twitter:description" content="fromOption error value Lifts an option into a synchronous flow with the supplied error.
-Parameters error: ‘error value: ‘value option Examples let opt = Some &#34;value&#34; let flow = Flow.fromOption &#34;missing&#34; opt val opt: string option union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt; val flow: obj">
+  <meta name="twitter:description" content="Lifts an option into a synchronous flow with the supplied error.
+Signature Flow.fromOption error value Parameters Name Type Description error ‘error The error to return if the option is None. value ‘value option The option to lift. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that succeeds with the option&#39;s value or fails with the provided error. Examples let opt = Some &#34;value&#34; let flow = Flow.fromOption &#34;missing&#34; opt val opt: string option union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt; val flow: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +517,9 @@ Parameters error: ‘error value: ‘value option Examples let opt = Some &#34;v
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
     <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
@@ -544,15 +546,48 @@ Parameters error: ‘error value: ‘value option Examples let opt = Some &#34;v
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>fromOption&#32;<span>error&#32;value</span></span></code>
+	<p>Lifts an option into a synchronous flow with the supplied error.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.fromOption&#32;<span>error&#32;value</span></span></code>
 </div>
-<p>Lifts an option into a synchronous flow with the supplied error.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>error</code>: <code>&lsquo;error</code></li>
-<li><code>value</code>: <code><span>&lsquo;value option</span></code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>error</code></td>
+          <td><code>&lsquo;error</code></td>
+          <td>The error to return if the option is <code>None</code>.</td>
+      </tr>
+      <tr>
+          <td><code>value</code></td>
+          <td><code><span>&lsquo;value option</span></code></td>
+          <td>The option to lift.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>A flow that succeeds with the option's value or fails with the provided error.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="examples">Examples</h2>
 <pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">opt</span> <span class="o">=</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="uc">Some</span> <span class="s">&quot;value&quot;</span>
  <span class="k">let</span> <span data-fsdocs-tip="fs3" data-fsdocs-tip-unique="3" class="id">flow</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">fromOption</span> <span class="s">&quot;missing&quot;</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="4" class="id">opt</span>

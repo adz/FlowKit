@@ -19,29 +19,29 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.mapError | FsFlow</title>
-<meta name="description" content="mapError mapper flow Maps the error value of a synchronous flow.
-Remarks Transforms the error type of the flow while leaving successful values untouched. Useful for mapping internal errors into public-facing domain errors.
-Parameters mapper: ‘error -&gt; ’nextError The function to transform the error value. flow: Flow&lt;‘env, ’error, ‘value&gt; The source flow. Returns A Flow with the transformed error type.">
+<meta name="description" content="Maps the error value of a synchronous flow.
+Signature Flow.mapError mapper flow Parameters Name Type Description mapper ‘error -&gt; ’nextError The function to transform the error value. flow Flow&lt;‘env, ’error, ‘value&gt; The source flow. Returns Type Description Flow&lt;‘env, ’nextError, ‘value&gt; A Flow with the transformed error type. Remarks Transforms the error type of the flow while leaving successful values untouched. Useful for mapping internal errors into public-facing domain errors.
+Examples let flow = Flow.fail &#34;error&#34; |&gt; Flow.mapError (fun err -&gt; err &#43; &#34;!&#34;) val flow: obj">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-maperror/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.mapError">
-  <meta property="og:description" content="mapError mapper flow Maps the error value of a synchronous flow.
-Remarks Transforms the error type of the flow while leaving successful values untouched. Useful for mapping internal errors into public-facing domain errors.
-Parameters mapper: ‘error -&gt; ’nextError The function to transform the error value. flow: Flow&lt;‘env, ’error, ‘value&gt; The source flow. Returns A Flow with the transformed error type.">
+  <meta property="og:description" content="Maps the error value of a synchronous flow.
+Signature Flow.mapError mapper flow Parameters Name Type Description mapper ‘error -&gt; ’nextError The function to transform the error value. flow Flow&lt;‘env, ’error, ‘value&gt; The source flow. Returns Type Description Flow&lt;‘env, ’nextError, ‘value&gt; A Flow with the transformed error type. Remarks Transforms the error type of the flow while leaving successful values untouched. Useful for mapping internal errors into public-facing domain errors.
+Examples let flow = Flow.fail &#34;error&#34; |&gt; Flow.mapError (fun err -&gt; err &#43; &#34;!&#34;) val flow: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.mapError">
-  <meta itemprop="description" content="mapError mapper flow Maps the error value of a synchronous flow.
-Remarks Transforms the error type of the flow while leaving successful values untouched. Useful for mapping internal errors into public-facing domain errors.
-Parameters mapper: ‘error -&gt; ’nextError The function to transform the error value. flow: Flow&lt;‘env, ’error, ‘value&gt; The source flow. Returns A Flow with the transformed error type.">
-  <meta itemprop="wordCount" content="58">
+  <meta itemprop="description" content="Maps the error value of a synchronous flow.
+Signature Flow.mapError mapper flow Parameters Name Type Description mapper ‘error -&gt; ’nextError The function to transform the error value. flow Flow&lt;‘env, ’error, ‘value&gt; The source flow. Returns Type Description Flow&lt;‘env, ’nextError, ‘value&gt; A Flow with the transformed error type. Remarks Transforms the error type of the flow while leaving successful values untouched. Useful for mapping internal errors into public-facing domain errors.
+Examples let flow = Flow.fail &#34;error&#34; |&gt; Flow.mapError (fun err -&gt; err &#43; &#34;!&#34;) val flow: obj">
+  <meta itemprop="wordCount" content="84">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.mapError">
-  <meta name="twitter:description" content="mapError mapper flow Maps the error value of a synchronous flow.
-Remarks Transforms the error type of the flow while leaving successful values untouched. Useful for mapping internal errors into public-facing domain errors.
-Parameters mapper: ‘error -&gt; ’nextError The function to transform the error value. flow: Flow&lt;‘env, ’error, ‘value&gt; The source flow. Returns A Flow with the transformed error type.">
+  <meta name="twitter:description" content="Maps the error value of a synchronous flow.
+Signature Flow.mapError mapper flow Parameters Name Type Description mapper ‘error -&gt; ’nextError The function to transform the error value. flow Flow&lt;‘env, ’error, ‘value&gt; The source flow. Returns Type Description Flow&lt;‘env, ’nextError, ‘value&gt; A Flow with the transformed error type. Remarks Transforms the error type of the flow while leaving successful values untouched. Useful for mapping internal errors into public-facing domain errors.
+Examples let flow = Flow.fail &#34;error&#34; |&gt; Flow.mapError (fun err -&gt; err &#43; &#34;!&#34;) val flow: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -521,9 +521,11 @@ Parameters mapper: ‘error -&gt; ’nextError The function to transform the err
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -549,22 +551,55 @@ Parameters mapper: ‘error -&gt; ’nextError The function to transform the err
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>mapError&#32;<span>mapper&#32;flow</span></span></code>
+	<p>Maps the error value of a synchronous flow.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.mapError&#32;<span>mapper&#32;flow</span></span></code>
 </div>
-<p>Maps the error value of a synchronous flow.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>mapper</code></td>
+          <td><code><span>&lsquo;error -&gt; &rsquo;nextError</span></code></td>
+          <td>The function to transform the error value.</td>
+      </tr>
+      <tr>
+          <td><code>flow</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>The source flow.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;nextError, &lsquo;value</span>&gt;</span></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a> with the transformed error type.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p>Transforms the error type of the flow while leaving successful values untouched.
 Useful for mapping internal errors into public-facing domain errors.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>mapper</code>: <code><span>&lsquo;error -&gt; &rsquo;nextError</span></code>
-The function to transform the error value.</li>
-<li><code>flow</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code>
-The source flow.</li>
-</ul>
-<h2 id="returns">Returns</h2>
-<p>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a> with the transformed error type.</p>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">flow</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">fail</span> <span class="s">&quot;error&quot;</span> <span class="o">|&gt;</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">mapError</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">err</span> <span class="k">-&gt;</span> <span class="id">err</span> <span class="o">+</span> <span class="s">&quot;!&quot;</span><span class="pn">)</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val flow: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/flow/m-flow-map3/" aria-label="Previous - Flow.map3">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

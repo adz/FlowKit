@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.orElse | FsFlow</title>
-<meta name="description" content="orElse fallback flow Falls back to another flow when the source flow fails.
-Parameters fallback: Flow&lt;‘env, ’error, ‘value&gt; flow: Flow&lt;‘env, ’error, ‘value&gt;">
+<meta name="description" content="Falls back to another flow when the source flow fails.
+Signature Flow.orElse fallback flow Parameters Name Type Description fallback Flow&lt;‘env, ’error, ‘value&gt; The flow to run if the source flow fails. flow Flow&lt;‘env, ’error, ‘value&gt; The source flow. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that recovers from errors using the fallback flow. Examples let flow = Flow.fail &#34;error&#34; |&gt; Flow.orElse (Flow.succeed &#34;recovered&#34;) val flow: obj">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-orelse/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.orElse">
-  <meta property="og:description" content="orElse fallback flow Falls back to another flow when the source flow fails.
-Parameters fallback: Flow&lt;‘env, ’error, ‘value&gt; flow: Flow&lt;‘env, ’error, ‘value&gt;">
+  <meta property="og:description" content="Falls back to another flow when the source flow fails.
+Signature Flow.orElse fallback flow Parameters Name Type Description fallback Flow&lt;‘env, ’error, ‘value&gt; The flow to run if the source flow fails. flow Flow&lt;‘env, ’error, ‘value&gt; The source flow. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that recovers from errors using the fallback flow. Examples let flow = Flow.fail &#34;error&#34; |&gt; Flow.orElse (Flow.succeed &#34;recovered&#34;) val flow: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.orElse">
-  <meta itemprop="description" content="orElse fallback flow Falls back to another flow when the source flow fails.
-Parameters fallback: Flow&lt;‘env, ’error, ‘value&gt; flow: Flow&lt;‘env, ’error, ‘value&gt;">
-  <meta itemprop="wordCount" content="20">
+  <meta itemprop="description" content="Falls back to another flow when the source flow fails.
+Signature Flow.orElse fallback flow Parameters Name Type Description fallback Flow&lt;‘env, ’error, ‘value&gt; The flow to run if the source flow fails. flow Flow&lt;‘env, ’error, ‘value&gt; The source flow. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that recovers from errors using the fallback flow. Examples let flow = Flow.fail &#34;error&#34; |&gt; Flow.orElse (Flow.succeed &#34;recovered&#34;) val flow: obj">
+  <meta itemprop="wordCount" content="65">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.orElse">
-  <meta name="twitter:description" content="orElse fallback flow Falls back to another flow when the source flow fails.
-Parameters fallback: Flow&lt;‘env, ’error, ‘value&gt; flow: Flow&lt;‘env, ’error, ‘value&gt;">
+  <meta name="twitter:description" content="Falls back to another flow when the source flow fails.
+Signature Flow.orElse fallback flow Parameters Name Type Description fallback Flow&lt;‘env, ’error, ‘value&gt; The flow to run if the source flow fails. flow Flow&lt;‘env, ’error, ‘value&gt; The source flow. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that recovers from errors using the fallback flow. Examples let flow = Flow.fail &#34;error&#34; |&gt; Flow.orElse (Flow.succeed &#34;recovered&#34;) val flow: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +517,10 @@ Parameters fallback: Flow&lt;‘env, ’error, ‘value&gt; flow: Flow&lt;‘env
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -543,15 +546,52 @@ Parameters fallback: Flow&lt;‘env, ’error, ‘value&gt; flow: Flow&lt;‘env
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>orElse&#32;<span>fallback&#32;flow</span></span></code>
+	<p>Falls back to another flow when the source flow fails.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.orElse&#32;<span>fallback&#32;flow</span></span></code>
 </div>
-<p>Falls back to another flow when the source flow fails.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>fallback</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></li>
-<li><code>flow</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>fallback</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>The flow to run if the source flow fails.</td>
+      </tr>
+      <tr>
+          <td><code>flow</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>The source flow.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>A flow that recovers from errors using the fallback flow.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">flow</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">fail</span> <span class="s">&quot;error&quot;</span> <span class="o">|&gt;</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">orElse</span> <span class="pn">(</span><span class="id">Flow</span><span class="pn">.</span><span class="id">succeed</span> <span class="s">&quot;recovered&quot;</span><span class="pn">)</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val flow: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/flow/m-flow-ok/" aria-label="Previous - Flow.ok">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

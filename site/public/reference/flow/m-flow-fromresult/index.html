@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.fromResult | FsFlow</title>
-<meta name="description" content="fromResult result Lifts a Result into a synchronous flow.
-Parameters result: Result&lt;‘value, ’error&gt; Examples let res = Ok &#34;success&#34; let flow = Flow.fromResult res val res: Result&lt;string,&#39;a&gt; union case Result.Ok: ResultValue: &#39;T -&gt; Result&lt;&#39;T,&#39;TError&gt; val flow: obj">
+<meta name="description" content="Lifts a Result into a synchronous flow.
+Signature Flow.fromResult result Parameters Name Type Description result Result&lt;‘value, ’error&gt; The result value to lift. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that succeeds or fails based on the result. Examples let res = Ok &#34;success&#34; let flow = Flow.fromResult res val res: Result&lt;string,&#39;a&gt; union case Result.Ok: ResultValue: &#39;T -&gt; Result&lt;&#39;T,&#39;TError&gt; val flow: obj">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-fromresult/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.fromResult">
-  <meta property="og:description" content="fromResult result Lifts a Result into a synchronous flow.
-Parameters result: Result&lt;‘value, ’error&gt; Examples let res = Ok &#34;success&#34; let flow = Flow.fromResult res val res: Result&lt;string,&#39;a&gt; union case Result.Ok: ResultValue: &#39;T -&gt; Result&lt;&#39;T,&#39;TError&gt; val flow: obj">
+  <meta property="og:description" content="Lifts a Result into a synchronous flow.
+Signature Flow.fromResult result Parameters Name Type Description result Result&lt;‘value, ’error&gt; The result value to lift. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that succeeds or fails based on the result. Examples let res = Ok &#34;success&#34; let flow = Flow.fromResult res val res: Result&lt;string,&#39;a&gt; union case Result.Ok: ResultValue: &#39;T -&gt; Result&lt;&#39;T,&#39;TError&gt; val flow: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.fromResult">
-  <meta itemprop="description" content="fromResult result Lifts a Result into a synchronous flow.
-Parameters result: Result&lt;‘value, ’error&gt; Examples let res = Ok &#34;success&#34; let flow = Flow.fromResult res val res: Result&lt;string,&#39;a&gt; union case Result.Ok: ResultValue: &#39;T -&gt; Result&lt;&#39;T,&#39;TError&gt; val flow: obj">
-  <meta itemprop="wordCount" content="36">
+  <meta itemprop="description" content="Lifts a Result into a synchronous flow.
+Signature Flow.fromResult result Parameters Name Type Description result Result&lt;‘value, ’error&gt; The result value to lift. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that succeeds or fails based on the result. Examples let res = Ok &#34;success&#34; let flow = Flow.fromResult res val res: Result&lt;string,&#39;a&gt; union case Result.Ok: ResultValue: &#39;T -&gt; Result&lt;&#39;T,&#39;TError&gt; val flow: obj">
+  <meta itemprop="wordCount" content="61">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.fromResult">
-  <meta name="twitter:description" content="fromResult result Lifts a Result into a synchronous flow.
-Parameters result: Result&lt;‘value, ’error&gt; Examples let res = Ok &#34;success&#34; let flow = Flow.fromResult res val res: Result&lt;string,&#39;a&gt; union case Result.Ok: ResultValue: &#39;T -&gt; Result&lt;&#39;T,&#39;TError&gt; val flow: obj">
+  <meta name="twitter:description" content="Lifts a Result into a synchronous flow.
+Signature Flow.fromResult result Parameters Name Type Description result Result&lt;‘value, ’error&gt; The result value to lift. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that succeeds or fails based on the result. Examples let res = Ok &#34;success&#34; let flow = Flow.fromResult res val res: Result&lt;string,&#39;a&gt; union case Result.Ok: ResultValue: &#39;T -&gt; Result&lt;&#39;T,&#39;TError&gt; val flow: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +517,9 @@ Parameters result: Result&lt;‘value, ’error&gt; Examples let res = Ok &#34;s
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
     <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
@@ -544,14 +546,43 @@ Parameters result: Result&lt;‘value, ’error&gt; Examples let res = Ok &#34;s
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>fromResult&#32;<span>result</span></span></code>
+	<p>Lifts a <a href="https://learn.microsoft.com/dotnet/api/system.result-2">Result</a> into a synchronous flow.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.fromResult&#32;<span>result</span></span></code>
 </div>
-<p>Lifts a <a href="https://learn.microsoft.com/dotnet/api/system.result-2">Result</a> into a synchronous flow.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>result</code>: <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpresult-2">Result</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>result</code></td>
+          <td><code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpresult-2">Result</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code></td>
+          <td>The result value to lift.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>A flow that succeeds or fails based on the result.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="examples">Examples</h2>
 <pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">res</span> <span class="o">=</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="uc">Ok</span> <span class="s">&quot;success&quot;</span>
  <span class="k">let</span> <span data-fsdocs-tip="fs3" data-fsdocs-tip-unique="3" class="id">flow</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">fromResult</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="4" class="id">res</span>

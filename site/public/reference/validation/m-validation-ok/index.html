@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Validation.ok | FsFlow</title>
-<meta name="description" content="Validation.ok value Creates a successful validation result.
-Parameters value: ‘value The success value of type &#39;value. Returns A successful Validation.">
+<meta name="description" content="Creates a successful validation result.
+Signature Validation.ok value Parameters Name Type Description value ‘value The success value of type &#39;value. Returns Type Description Validation&lt;‘value, ’error&gt; A successful Validation. Examples let v = Validation.ok 5 val v: obj">
 <meta property="og:url" content="http://localhost:3000/reference/validation/m-validation-ok/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Validation.ok">
-  <meta property="og:description" content="Validation.ok value Creates a successful validation result.
-Parameters value: ‘value The success value of type &#39;value. Returns A successful Validation.">
+  <meta property="og:description" content="Creates a successful validation result.
+Signature Validation.ok value Parameters Name Type Description value ‘value The success value of type &#39;value. Returns Type Description Validation&lt;‘value, ’error&gt; A successful Validation. Examples let v = Validation.ok 5 val v: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Validation.ok">
-  <meta itemprop="description" content="Validation.ok value Creates a successful validation result.
-Parameters value: ‘value The success value of type &#39;value. Returns A successful Validation.">
-  <meta itemprop="wordCount" content="19">
+  <meta itemprop="description" content="Creates a successful validation result.
+Signature Validation.ok value Parameters Name Type Description value ‘value The success value of type &#39;value. Returns Type Description Validation&lt;‘value, ’error&gt; A successful Validation. Examples let v = Validation.ok 5 val v: obj">
+  <meta itemprop="wordCount" content="36">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Validation.ok">
-  <meta name="twitter:description" content="Validation.ok value Creates a successful validation result.
-Parameters value: ‘value The success value of type &#39;value. Returns A successful Validation.">
+  <meta name="twitter:description" content="Creates a successful validation result.
+Signature Validation.ok value Parameters Name Type Description value ‘value The success value of type &#39;value. Returns Type Description Validation&lt;‘value, ’error&gt; A successful Validation. Examples let v = Validation.ok 5 val v: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,8 +517,10 @@ Parameters value: ‘value The success value of type &#39;value. Returns A succe
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -544,17 +546,47 @@ Parameters value: ‘value The success value of type &#39;value. Returns A succe
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Creates a successful validation result.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>Validation.ok&#32;<span>value</span></span></code>
 </div>
-<p>Creates a successful validation result.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>value</code>: <code>&lsquo;value</code>
-The success value of type <code>'value</code>.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>value</code></td>
+          <td><code>&lsquo;value</code></td>
+          <td>The success value of type <code>'value</code>.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A successful <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code></td>
+          <td>A successful <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">v</span> <span class="o">=</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">ok</span> <span class="n">5</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val v: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/validation/m-validation-name/" aria-label="Previous - Validation.name">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

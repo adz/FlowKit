@@ -19,21 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Diagnostic | FsFlow</title>
-<meta name="description" content="A single failure item attached to a path in a validation graph.">
+<meta name="description" content="A single failure item attached to a path in a validation graph.
+Signature type Diagnostic&lt;&#39;error&gt; Type Parameters Name error Examples let d = { Path = [ PathSegment.Name &#34;Email&#34; ]; Error = &#34;Invalid format&#34; } val d: &#39;a union case Result.Error: ErrorValue: &#39;TError -&gt; Result&lt;&#39;T,&#39;TError&gt;">
 <meta property="og:url" content="http://localhost:3000/reference/diagnostics/t-diagnostic-1/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Diagnostic">
-  <meta property="og:description" content="A single failure item attached to a path in a validation graph.">
+  <meta property="og:description" content="A single failure item attached to a path in a validation graph.
+Signature type Diagnostic&lt;&#39;error&gt; Type Parameters Name error Examples let d = { Path = [ PathSegment.Name &#34;Email&#34; ]; Error = &#34;Invalid format&#34; } val d: &#39;a union case Result.Error: ErrorValue: &#39;TError -&gt; Result&lt;&#39;T,&#39;TError&gt;">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Diagnostic">
-  <meta itemprop="description" content="A single failure item attached to a path in a validation graph.">
-  <meta itemprop="wordCount" content="12">
+  <meta itemprop="description" content="A single failure item attached to a path in a validation graph.
+Signature type Diagnostic&lt;&#39;error&gt; Type Parameters Name error Examples let d = { Path = [ PathSegment.Name &#34;Email&#34; ]; Error = &#34;Invalid format&#34; } val d: &#39;a union case Result.Error: ErrorValue: &#39;TError -&gt; Result&lt;&#39;T,&#39;TError&gt;">
+  <meta itemprop="wordCount" content="45">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Diagnostic">
-  <meta name="twitter:description" content="A single failure item attached to a path in a validation graph.">
+  <meta name="twitter:description" content="A single failure item attached to a path in a validation graph.
+Signature type Diagnostic&lt;&#39;error&gt; Type Parameters Name error Examples let d = { Path = [ PathSegment.Name &#34;Email&#34; ]; Error = &#34;Invalid format&#34; } val d: &#39;a union case Result.Error: ErrorValue: &#39;TError -&gt; Result&lt;&#39;T,&#39;TError&gt;">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -507,7 +511,18 @@
 </div>
 
             <div class="td-toc" data-proofer-ignore>
-</div>
+<div class="td-toc-title">
+      <span class="td-toc-title__text">On this page</span>
+      <a class="td-toc-title__link" title="Top of page" href="#"></a>
+    </div>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#signature">Signature</a></li>
+    <li><a href="#type-parameters">Type Parameters</a></li>
+    <li><a href="#examples">Examples</a></li>
+  </ul>
+</nav>
+  </div>
 
             
 
@@ -531,6 +546,28 @@
 		
 </header>
 	<p>A single failure item attached to a path in a validation graph.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code>type Diagnostic<'error></code>
+</div>
+<h2 id="type-parameters">Type Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>error</code></td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">d</span> <span class="o">=</span> <span class="pn">{</span> <span class="id">Path</span> <span class="o">=</span> <span class="pn">[</span> <span class="id">PathSegment</span><span class="pn">.</span><span class="id">Name</span> <span class="s">&quot;Email&quot;</span> <span class="pn">]</span><span class="pn">;</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="id">Error</span> <span class="o">=</span> <span class="s">&quot;Invalid format&quot;</span> <span class="pn">}</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val d: &#39;a</div>
+<div popover class="fsdocs-tip" id="fs2">union case Result.Error: ErrorValue: &#39;TError -&gt; Result&lt;&#39;T,&#39;TError&gt;</div>
 
 	<nav class="docs-page-nav docs-page-nav--next-only"><a class="docs-home-cta docs-page-nav__link docs-page-nav__next" href="http://localhost:3000/reference/diagnostics/t-diagnostics-1/" aria-label="Next - Diagnostics">
     <span>Next</span>

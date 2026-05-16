@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Validation.name | FsFlow</title>
-<meta name="description" content="Validation.name name validation Prefixes a validation with a named branch.
-Parameters name: string The branch name. validation: Validation&lt;‘value, ’error&gt; The validation to scope. Returns A validation whose diagnostics are prefixed with Name name.">
+<meta name="description" content="Prefixes a validation with a named branch.
+Signature Validation.name Validation.name validation Parameters Name Type Description name string The branch name. validation Validation&lt;‘value, ’error&gt; The validation to scope. Returns Type Description Validation&lt;‘value, ’error&gt; A validation whose diagnostics are prefixed with Name name. Examples Validation.error (Diagnostics.singleton &#34;fail&#34;) |&gt; Validation.name &#34;email&#34;">
 <meta property="og:url" content="http://localhost:3000/reference/validation/m-validation-name/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Validation.name">
-  <meta property="og:description" content="Validation.name name validation Prefixes a validation with a named branch.
-Parameters name: string The branch name. validation: Validation&lt;‘value, ’error&gt; The validation to scope. Returns A validation whose diagnostics are prefixed with Name name.">
+  <meta property="og:description" content="Prefixes a validation with a named branch.
+Signature Validation.name Validation.name validation Parameters Name Type Description name string The branch name. validation Validation&lt;‘value, ’error&gt; The validation to scope. Returns Type Description Validation&lt;‘value, ’error&gt; A validation whose diagnostics are prefixed with Name name. Examples Validation.error (Diagnostics.singleton &#34;fail&#34;) |&gt; Validation.name &#34;email&#34;">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Validation.name">
-  <meta itemprop="description" content="Validation.name name validation Prefixes a validation with a named branch.
-Parameters name: string The branch name. validation: Validation&lt;‘value, ’error&gt; The validation to scope. Returns A validation whose diagnostics are prefixed with Name name.">
-  <meta itemprop="wordCount" content="31">
+  <meta itemprop="description" content="Prefixes a validation with a named branch.
+Signature Validation.name Validation.name validation Parameters Name Type Description name string The branch name. validation Validation&lt;‘value, ’error&gt; The validation to scope. Returns Type Description Validation&lt;‘value, ’error&gt; A validation whose diagnostics are prefixed with Name name. Examples Validation.error (Diagnostics.singleton &#34;fail&#34;) |&gt; Validation.name &#34;email&#34;">
+  <meta itemprop="wordCount" content="46">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Validation.name">
-  <meta name="twitter:description" content="Validation.name name validation Prefixes a validation with a named branch.
-Parameters name: string The branch name. validation: Validation&lt;‘value, ’error&gt; The validation to scope. Returns A validation whose diagnostics are prefixed with Name name.">
+  <meta name="twitter:description" content="Prefixes a validation with a named branch.
+Signature Validation.name Validation.name validation Parameters Name Type Description name string The branch name. validation Validation&lt;‘value, ’error&gt; The validation to scope. Returns Type Description Validation&lt;‘value, ’error&gt; A validation whose diagnostics are prefixed with Name name. Examples Validation.error (Diagnostics.singleton &#34;fail&#34;) |&gt; Validation.name &#34;email&#34;">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,8 +517,10 @@ Parameters name: string The branch name. validation: Validation&lt;‘value, ’
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -544,19 +546,52 @@ Parameters name: string The branch name. validation: Validation&lt;‘value, ’
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>Validation.name&#32;<span>name&#32;validation</span></span></code>
+	<p>Prefixes a validation with a named branch.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Validation.name&#32;<span>Validation.name&#32;validation</span></span></code>
 </div>
-<p>Prefixes a validation with a named branch.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>name</code>: <code>string</code>
-The branch name.</li>
-<li><code>validation</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code>
-The validation to scope.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>name</code></td>
+          <td><code>string</code></td>
+          <td>The branch name.</td>
+      </tr>
+      <tr>
+          <td><code>validation</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code></td>
+          <td>The validation to scope.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A validation whose diagnostics are prefixed with <code>Name name</code>.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code></td>
+          <td>A validation whose diagnostics are prefixed with <code>Name name</code>.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="id">Validation</span><span class="pn">.</span><span class="id">error</span> <span class="pn">(</span><span class="id">Diagnostics</span><span class="pn">.</span><span class="id">singleton</span> <span class="s">&quot;fail&quot;</span><span class="pn">)</span> 
+ <span class="o">|&gt;</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">name</span> <span class="s">&quot;email&quot;</span>
+</code></pre>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/validation/m-validation-merge/" aria-label="Previous - Validation.merge">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

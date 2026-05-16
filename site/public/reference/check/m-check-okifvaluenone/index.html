@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Check.okIfValueNone | FsFlow</title>
-<meta name="description" content="okIfValueNone opt Returns success when the value option is ValueNone.
-Parameters opt: ‘a voption The value option to check. Returns A Check that succeeds if the value option is ValueNone.">
+<meta name="description" content="Returns success when the value option is ValueNone.
+Signature Check.okIfValueNone opt Parameters Name Type Description opt ‘a voption The value option to check. Returns Type Description Check&lt;unit&gt; A Check that succeeds if the value option is ValueNone. Examples ValueNone |&gt; Check.okIfValueNone // Ok () ValueSome 5 |&gt; Check.okIfValueNone // Error () union case ValueOption.ValueNone: ValueOption&lt;&#39;T&gt; union case ValueOption.ValueSome: &#39;T -&gt; ValueOption&lt;&#39;T&gt;">
 <meta property="og:url" content="http://localhost:3000/reference/check/m-check-okifvaluenone/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Check.okIfValueNone">
-  <meta property="og:description" content="okIfValueNone opt Returns success when the value option is ValueNone.
-Parameters opt: ‘a voption The value option to check. Returns A Check that succeeds if the value option is ValueNone.">
+  <meta property="og:description" content="Returns success when the value option is ValueNone.
+Signature Check.okIfValueNone opt Parameters Name Type Description opt ‘a voption The value option to check. Returns Type Description Check&lt;unit&gt; A Check that succeeds if the value option is ValueNone. Examples ValueNone |&gt; Check.okIfValueNone // Ok () ValueSome 5 |&gt; Check.okIfValueNone // Error () union case ValueOption.ValueNone: ValueOption&lt;&#39;T&gt; union case ValueOption.ValueSome: &#39;T -&gt; ValueOption&lt;&#39;T&gt;">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Check.okIfValueNone">
-  <meta itemprop="description" content="okIfValueNone opt Returns success when the value option is ValueNone.
-Parameters opt: ‘a voption The value option to check. Returns A Check that succeeds if the value option is ValueNone.">
-  <meta itemprop="wordCount" content="29">
+  <meta itemprop="description" content="Returns success when the value option is ValueNone.
+Signature Check.okIfValueNone opt Parameters Name Type Description opt ‘a voption The value option to check. Returns Type Description Check&lt;unit&gt; A Check that succeeds if the value option is ValueNone. Examples ValueNone |&gt; Check.okIfValueNone // Ok () ValueSome 5 |&gt; Check.okIfValueNone // Error () union case ValueOption.ValueNone: ValueOption&lt;&#39;T&gt; union case ValueOption.ValueSome: &#39;T -&gt; ValueOption&lt;&#39;T&gt;">
+  <meta itemprop="wordCount" content="60">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Check.okIfValueNone">
-  <meta name="twitter:description" content="okIfValueNone opt Returns success when the value option is ValueNone.
-Parameters opt: ‘a voption The value option to check. Returns A Check that succeeds if the value option is ValueNone.">
+  <meta name="twitter:description" content="Returns success when the value option is ValueNone.
+Signature Check.okIfValueNone opt Parameters Name Type Description opt ‘a voption The value option to check. Returns Type Description Check&lt;unit&gt; A Check that succeeds if the value option is ValueNone. Examples ValueNone |&gt; Check.okIfValueNone // Ok () ValueSome 5 |&gt; Check.okIfValueNone // Error () union case ValueOption.ValueNone: ValueOption&lt;&#39;T&gt; union case ValueOption.ValueSome: &#39;T -&gt; ValueOption&lt;&#39;T&gt;">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,8 +517,10 @@ Parameters opt: ‘a voption The value option to check. Returns A Check that suc
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -544,17 +546,49 @@ Parameters opt: ‘a voption The value option to check. Returns A Check that suc
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>okIfValueNone&#32;<span>opt</span></span></code>
+	<p>Returns success when the value option is <code>ValueNone</code>.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Check.okIfValueNone&#32;<span>opt</span></span></code>
 </div>
-<p>Returns success when the value option is <code>ValueNone</code>.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>opt</code>: <code><span>&lsquo;a voption</span></code>
-The value option to check.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>opt</code></td>
+          <td><code><span>&lsquo;a voption</span></code></td>
+          <td>The value option to check.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> that succeeds if the value option is <a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpvalueoption-1-valuenone">ValueNone</a>.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;unit&gt;</span></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> that succeeds if the value option is <a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpvalueoption-1-valuenone">ValueNone</a>.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="uc">ValueNone</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">okIfValueNone</span> <span class="c">// Ok ()</span>
+ <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="uc">ValueSome</span> <span class="n">5</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">okIfValueNone</span> <span class="c">// Error ()</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">union case ValueOption.ValueNone: ValueOption&lt;&#39;T&gt;</div>
+<div popover class="fsdocs-tip" id="fs2">union case ValueOption.ValueSome: &#39;T -&gt; ValueOption&lt;&#39;T&gt;</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/check/m-check-okifsome/" aria-label="Previous - Check.okIfSome">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

@@ -4,18 +4,23 @@ linkTitle: "fork"
 type: docs
 ---
 
-<div class="fsdocs-usage">
-<code><span>fork&#32;<span>flow</span></span></code>
-</div>
-
 Starts a flow in a new fiber without waiting for it to complete.
+
+## Signature
+
+<div class="fsdocs-usage">
+<code><span>Flow.fork&#32;<span>flow</span></span></code>
+</div>
 
 ## Parameters
 
-- `flow`: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>'env,&#32;'error,&#32;'value</span>&gt;</span></code>
-  The flow to fork.
+| Name | Type | Description |
+| --- | --- | --- |
+| `flow` | <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>'env,&#32;'error,&#32;'value</span>&gt;</span></code> | The flow to fork. |
 
 ## Returns
 
-A flow that produces a <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-fiber-2.html">Fiber</a> handle.
+| Type | Description |
+| --- | --- |
+| <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>'env,&#32;'none,&#32;<span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-fiber-2.html">Fiber</a>&lt;<span>'error,&#32;'value</span>&gt;</span></span>&gt;</span></code> | A flow that produces a <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-fiber-2.html">Fiber</a> handle. |
 

@@ -9,3 +9,9 @@ linkTitle: "Check"
  the source value; others are gates and return <code>unit</code> on success.
  
 
+## Signature
+
+<div class="fsdocs-usage">
+<code>type Check</code>
+</div>
+

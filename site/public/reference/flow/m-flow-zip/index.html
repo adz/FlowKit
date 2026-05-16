@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.zip | FsFlow</title>
-<meta name="description" content="zip left right Runs two flows sequentially and combines their successful values into a tuple.
-Parameters left: Flow&lt;‘env, ’error, ’left&gt; right: Flow&lt;‘env, ’error, ‘right&gt;">
+<meta name="description" content="Runs two flows sequentially and combines their successful values into a tuple.
+Signature Flow.zip left right Parameters Name Type Description left Flow&lt;‘env, ’error, ’left&gt; The first flow to run. right Flow&lt;‘env, ’error, ‘right&gt; The second flow to run. Returns Type Description Flow&lt;‘env, ’error, (‘left * ‘right)&gt; A flow that returns a tuple of both successful values. Examples let flow = Flow.zip (Flow.succeed 1) (Flow.succeed 2) val flow: obj">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-zip/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.zip">
-  <meta property="og:description" content="zip left right Runs two flows sequentially and combines their successful values into a tuple.
-Parameters left: Flow&lt;‘env, ’error, ’left&gt; right: Flow&lt;‘env, ’error, ‘right&gt;">
+  <meta property="og:description" content="Runs two flows sequentially and combines their successful values into a tuple.
+Signature Flow.zip left right Parameters Name Type Description left Flow&lt;‘env, ’error, ’left&gt; The first flow to run. right Flow&lt;‘env, ’error, ‘right&gt; The second flow to run. Returns Type Description Flow&lt;‘env, ’error, (‘left * ‘right)&gt; A flow that returns a tuple of both successful values. Examples let flow = Flow.zip (Flow.succeed 1) (Flow.succeed 2) val flow: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.zip">
-  <meta itemprop="description" content="zip left right Runs two flows sequentially and combines their successful values into a tuple.
-Parameters left: Flow&lt;‘env, ’error, ’left&gt; right: Flow&lt;‘env, ’error, ‘right&gt;">
-  <meta itemprop="wordCount" content="22">
+  <meta itemprop="description" content="Runs two flows sequentially and combines their successful values into a tuple.
+Signature Flow.zip left right Parameters Name Type Description left Flow&lt;‘env, ’error, ’left&gt; The first flow to run. right Flow&lt;‘env, ’error, ‘right&gt; The second flow to run. Returns Type Description Flow&lt;‘env, ’error, (‘left * ‘right)&gt; A flow that returns a tuple of both successful values. Examples let flow = Flow.zip (Flow.succeed 1) (Flow.succeed 2) val flow: obj">
+  <meta itemprop="wordCount" content="66">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.zip">
-  <meta name="twitter:description" content="zip left right Runs two flows sequentially and combines their successful values into a tuple.
-Parameters left: Flow&lt;‘env, ’error, ’left&gt; right: Flow&lt;‘env, ’error, ‘right&gt;">
+  <meta name="twitter:description" content="Runs two flows sequentially and combines their successful values into a tuple.
+Signature Flow.zip left right Parameters Name Type Description left Flow&lt;‘env, ’error, ’left&gt; The first flow to run. right Flow&lt;‘env, ’error, ‘right&gt; The second flow to run. Returns Type Description Flow&lt;‘env, ’error, (‘left * ‘right)&gt; A flow that returns a tuple of both successful values. Examples let flow = Flow.zip (Flow.succeed 1) (Flow.succeed 2) val flow: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +517,10 @@ Parameters left: Flow&lt;‘env, ’error, ’left&gt; right: Flow&lt;‘env, �
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -543,15 +546,52 @@ Parameters left: Flow&lt;‘env, ’error, ’left&gt; right: Flow&lt;‘env, �
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>zip&#32;<span>left&#32;right</span></span></code>
+	<p>Runs two flows sequentially and combines their successful values into a tuple.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.zip&#32;<span>left&#32;right</span></span></code>
 </div>
-<p>Runs two flows sequentially and combines their successful values into a tuple.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>left</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &rsquo;left</span>&gt;</span></code></li>
-<li><code>right</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;right</span>&gt;</span></code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>left</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &rsquo;left</span>&gt;</span></code></td>
+          <td>The first flow to run.</td>
+      </tr>
+      <tr>
+          <td><code>right</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;right</span>&gt;</span></code></td>
+          <td>The second flow to run.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, <span>(<span>&lsquo;left * &lsquo;right</span>)</span></span>&gt;</span></code></td>
+          <td>A flow that returns a tuple of both successful values.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">flow</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">zip</span> <span class="pn">(</span><span class="id">Flow</span><span class="pn">.</span><span class="id">succeed</span> <span class="n">1</span><span class="pn">)</span> <span class="pn">(</span><span class="id">Flow</span><span class="pn">.</span><span class="id">succeed</span> <span class="n">2</span><span class="pn">)</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val flow: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/flow/m-flow-value/" aria-label="Previous - Flow.value">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

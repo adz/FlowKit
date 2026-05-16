@@ -19,29 +19,29 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Check. | FsFlow</title>
-<meta name="description" content="``and`` left right Returns success when both checks succeed.
-Remarks This is a logical &#34;and&#34; operation. It short-circuits: if left fails, right is not evaluated.
-Parameters left: Check&lt;’left&gt; The first check. right: Check&lt;‘right&gt; The second check. Returns A Check that succeeds only if both inputs succeed.">
+<meta name="description" content="Returns success when both checks succeed.
+Signature Check.``and`` left right Parameters Name Type Description left Check&lt;’left&gt; The first check. right Check&lt;‘right&gt; The second check. Returns Type Description Check&lt;unit&gt; A Check that succeeds only if both inputs succeed. Remarks This is a logical &#34;and&#34; operation. It short-circuits: if left fails, right is not evaluated.
+Examples Check.and (Check.okIf true) (Check.okIf true) // Ok () Check.and (Check.okIf true) (Check.okIf false) // Error ()">
 <meta property="og:url" content="http://localhost:3000/reference/check/m-check-and/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Check.">
-  <meta property="og:description" content="``and`` left right Returns success when both checks succeed.
-Remarks This is a logical &#34;and&#34; operation. It short-circuits: if left fails, right is not evaluated.
-Parameters left: Check&lt;’left&gt; The first check. right: Check&lt;‘right&gt; The second check. Returns A Check that succeeds only if both inputs succeed.">
+  <meta property="og:description" content="Returns success when both checks succeed.
+Signature Check.``and`` left right Parameters Name Type Description left Check&lt;’left&gt; The first check. right Check&lt;‘right&gt; The second check. Returns Type Description Check&lt;unit&gt; A Check that succeeds only if both inputs succeed. Remarks This is a logical &#34;and&#34; operation. It short-circuits: if left fails, right is not evaluated.
+Examples Check.and (Check.okIf true) (Check.okIf true) // Ok () Check.and (Check.okIf true) (Check.okIf false) // Error ()">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Check.">
-  <meta itemprop="description" content="``and`` left right Returns success when both checks succeed.
-Remarks This is a logical &#34;and&#34; operation. It short-circuits: if left fails, right is not evaluated.
-Parameters left: Check&lt;’left&gt; The first check. right: Check&lt;‘right&gt; The second check. Returns A Check that succeeds only if both inputs succeed.">
-  <meta itemprop="wordCount" content="44">
+  <meta itemprop="description" content="Returns success when both checks succeed.
+Signature Check.``and`` left right Parameters Name Type Description left Check&lt;’left&gt; The first check. right Check&lt;‘right&gt; The second check. Returns Type Description Check&lt;unit&gt; A Check that succeeds only if both inputs succeed. Remarks This is a logical &#34;and&#34; operation. It short-circuits: if left fails, right is not evaluated.
+Examples Check.and (Check.okIf true) (Check.okIf true) // Ok () Check.and (Check.okIf true) (Check.okIf false) // Error ()">
+  <meta itemprop="wordCount" content="68">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Check.">
-  <meta name="twitter:description" content="``and`` left right Returns success when both checks succeed.
-Remarks This is a logical &#34;and&#34; operation. It short-circuits: if left fails, right is not evaluated.
-Parameters left: Check&lt;’left&gt; The first check. right: Check&lt;‘right&gt; The second check. Returns A Check that succeeds only if both inputs succeed.">
+  <meta name="twitter:description" content="Returns success when both checks succeed.
+Signature Check.``and`` left right Parameters Name Type Description left Check&lt;’left&gt; The first check. right Check&lt;‘right&gt; The second check. Returns Type Description Check&lt;unit&gt; A Check that succeeds only if both inputs succeed. Remarks This is a logical &#34;and&#34; operation. It short-circuits: if left fails, right is not evaluated.
+Examples Check.and (Check.okIf true) (Check.okIf true) // Ok () Check.and (Check.okIf true) (Check.okIf false) // Error ()">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -521,9 +521,11 @@ Parameters left: Check&lt;’left&gt; The first check. right: Check&lt;‘right&
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -549,22 +551,55 @@ Parameters left: Check&lt;’left&gt; The first check. right: Check&lt;‘right&
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>``and``&#32;<span>left&#32;right</span></span></code>
+	<p>Returns success when both checks succeed.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Check.``and``&#32;<span>left&#32;right</span></span></code>
 </div>
-<p>Returns success when both checks succeed.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>left</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;&rsquo;left&gt;</span></code></td>
+          <td>The first check.</td>
+      </tr>
+      <tr>
+          <td><code>right</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;&lsquo;right&gt;</span></code></td>
+          <td>The second check.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;unit&gt;</span></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> that succeeds only if both inputs succeed.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p>This is a logical &quot;and&quot; operation. It short-circuits: if <span class="fsdocs-param-name">left</span> fails,
 <span class="fsdocs-param-name">right</span> is not evaluated.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>left</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;&rsquo;left&gt;</span></code>
-The first check.</li>
-<li><code>right</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;&lsquo;right&gt;</span></code>
-The second check.</li>
-</ul>
-<h2 id="returns">Returns</h2>
-<p>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> that succeeds only if both inputs succeed.</p>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="id">Check</span><span class="pn">.</span><span class="k">and</span> <span class="pn">(</span><span class="id">Check</span><span class="pn">.</span><span class="id">okIf</span> <span class="k">true</span><span class="pn">)</span> <span class="pn">(</span><span class="id">Check</span><span class="pn">.</span><span class="id">okIf</span> <span class="k">true</span><span class="pn">)</span> <span class="c">// Ok ()</span>
+ <span class="id">Check</span><span class="pn">.</span><span class="k">and</span> <span class="pn">(</span><span class="id">Check</span><span class="pn">.</span><span class="id">okIf</span> <span class="k">true</span><span class="pn">)</span> <span class="pn">(</span><span class="id">Check</span><span class="pn">.</span><span class="id">okIf</span> <span class="k">false</span><span class="pn">)</span> <span class="c">// Error ()</span>
+</code></pre>
 
 	<nav class="docs-page-nav docs-page-nav--next-only"><a class="docs-home-cta docs-page-nav__link docs-page-nav__next" href="http://localhost:3000/reference/check/m-check-not/" aria-label="Next - Check.">
     <span>Next</span>

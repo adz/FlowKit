@@ -4,20 +4,32 @@ linkTitle: "failIfEqual"
 type: docs
 ---
 
-<div class="fsdocs-usage">
-<code><span>failIfEqual&#32;<span>expected&#32;actual</span></span></code>
-</div>
-
 Returns success when the values are equal.
+
+## Signature
+
+<div class="fsdocs-usage">
+<code><span>Check.failIfEqual&#32;<span>expected&#32;actual</span></span></code>
+</div>
 
 ## Parameters
 
-- `expected`: <code>'a</code>
-  The expected value.
-- `actual`: <code>'a</code>
-  The actual value.
+| Name | Type | Description |
+| --- | --- | --- |
+| `expected` | <code>'a</code> | The expected value. |
+| `actual` | <code>'a</code> | The actual value. |
 
 ## Returns
 
-A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> that succeeds if the values are equal.
+| Type | Description |
+| --- | --- |
+| <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;unit&gt;</span></code> | A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> that succeeds if the values are equal; otherwise, an Error with unit. |
+
+## Examples
+
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="id">Check</span><span class="pn">.</span><span class="id">failIfEqual</span> <span class="n">5</span> <span class="n">6</span> <span class="c">// Ok ()</span>
+ <span class="id">Check</span><span class="pn">.</span><span class="id">failIfEqual</span> <span class="n">5</span> <span class="n">5</span> <span class="c">// Error ()</span>
+</code></pre>
+
+
 

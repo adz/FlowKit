@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Validation.error | FsFlow</title>
-<meta name="description" content="Validation.error diagnostics Creates a failing validation result with the provided diagnostics.
-Parameters diagnostics: Diagnostics&lt;’error&gt; The Diagnostics graph. Returns A failing Validation.">
+<meta name="description" content="Creates a failing validation result with the provided diagnostics.
+Signature Validation.error diagnostics Parameters Name Type Description diagnostics Diagnostics&lt;’error&gt; The Diagnostics graph. Returns Type Description Validation&lt;‘value, ’error&gt; A failing Validation. Examples let v = Validation.error (Diagnostics.singleton &#34;Something went wrong&#34;) val v: obj">
 <meta property="og:url" content="http://localhost:3000/reference/validation/m-validation-error/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Validation.error">
-  <meta property="og:description" content="Validation.error diagnostics Creates a failing validation result with the provided diagnostics.
-Parameters diagnostics: Diagnostics&lt;’error&gt; The Diagnostics graph. Returns A failing Validation.">
+  <meta property="og:description" content="Creates a failing validation result with the provided diagnostics.
+Signature Validation.error diagnostics Parameters Name Type Description diagnostics Diagnostics&lt;’error&gt; The Diagnostics graph. Returns Type Description Validation&lt;‘value, ’error&gt; A failing Validation. Examples let v = Validation.error (Diagnostics.singleton &#34;Something went wrong&#34;) val v: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Validation.error">
-  <meta itemprop="description" content="Validation.error diagnostics Creates a failing validation result with the provided diagnostics.
-Parameters diagnostics: Diagnostics&lt;’error&gt; The Diagnostics graph. Returns A failing Validation.">
-  <meta itemprop="wordCount" content="20">
+  <meta itemprop="description" content="Creates a failing validation result with the provided diagnostics.
+Signature Validation.error diagnostics Parameters Name Type Description diagnostics Diagnostics&lt;’error&gt; The Diagnostics graph. Returns Type Description Validation&lt;‘value, ’error&gt; A failing Validation. Examples let v = Validation.error (Diagnostics.singleton &#34;Something went wrong&#34;) val v: obj">
+  <meta itemprop="wordCount" content="40">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Validation.error">
-  <meta name="twitter:description" content="Validation.error diagnostics Creates a failing validation result with the provided diagnostics.
-Parameters diagnostics: Diagnostics&lt;’error&gt; The Diagnostics graph. Returns A failing Validation.">
+  <meta name="twitter:description" content="Creates a failing validation result with the provided diagnostics.
+Signature Validation.error diagnostics Parameters Name Type Description diagnostics Diagnostics&lt;’error&gt; The Diagnostics graph. Returns Type Description Validation&lt;‘value, ’error&gt; A failing Validation. Examples let v = Validation.error (Diagnostics.singleton &#34;Something went wrong&#34;) val v: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,8 +517,10 @@ Parameters diagnostics: Diagnostics&lt;’error&gt; The Diagnostics graph. Retur
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -544,17 +546,47 @@ Parameters diagnostics: Diagnostics&lt;’error&gt; The Diagnostics graph. Retur
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Creates a failing validation result with the provided diagnostics.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>Validation.error&#32;<span>diagnostics</span></span></code>
 </div>
-<p>Creates a failing validation result with the provided diagnostics.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>diagnostics</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;&rsquo;error&gt;</span></code>
-The <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a> graph.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>diagnostics</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;&rsquo;error&gt;</span></code></td>
+          <td>The <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a> graph.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A failing <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code></td>
+          <td>A failing <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">v</span> <span class="o">=</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">error</span> <span class="pn">(</span><span class="id">Diagnostics</span><span class="pn">.</span><span class="id">singleton</span> <span class="s">&quot;Something went wrong&quot;</span><span class="pn">)</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val v: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/validation/m-validation-collect/" aria-label="Previous - Validation.collect">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

@@ -4,15 +4,25 @@ linkTitle: "value"
 type: docs
 ---
 
-<div class="fsdocs-usage">
-<code><span>value&#32;<span>item</span></span></code>
-</div>
-
 Alias for <code>ok</code> that reads well in some call sites.
+
+## Signature
+
+<div class="fsdocs-usage">
+<code><span>Flow.value&#32;<span>item</span></span></code>
+</div>
 
 ## Parameters
 
-- `item`: <code>'value</code>
+| Name | Type | Description |
+| --- | --- | --- |
+| `item` | <code>'value</code> | The value to wrap in a successful flow. |
+
+## Returns
+
+| Type | Description |
+| --- | --- |
+| <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>'env,&#32;'error,&#32;'value</span>&gt;</span></code> | A flow that always succeeds with the provided value. |
 
 ## Examples
 

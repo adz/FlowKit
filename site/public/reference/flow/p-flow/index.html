@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>flow | FsFlow</title>
-<meta name="description" content="flow  The universal flow { } computation expression.
-Remarks Use this builder when the boundary can mix synchronous values, Async, Task, Result, and environment requests while keeping typed failures and explicit dependency access. It preserves the current environment model while allowing the workflow to compose task-oriented inputs directly, so callers do not need to switch builders just to cross an async boundary. Examples let greeting = flow { let! name = Flow.env let! suffix = async { return &amp;quot;!&amp;quot; } return $&amp;quot;Hello, {name}{suffix}&amp;quot; }">
+<meta name="description" content="The universal flow { } computation expression.
+Signature flow  Returns Type Description FlowBuilder A FlowBuilder instance. Remarks Use this builder when the boundary can mix synchronous values, Async, Task, Result, and environment requests while keeping typed failures and explicit dependency access. It preserves the current environment model while allowing the workflow to compose task-oriented inputs directly, so callers do not need to switch builders just to cross an async boundary.">
 <meta property="og:url" content="http://localhost:3000/reference/flow/p-flow/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="flow">
-  <meta property="og:description" content="flow  The universal flow { } computation expression.
-Remarks Use this builder when the boundary can mix synchronous values, Async, Task, Result, and environment requests while keeping typed failures and explicit dependency access. It preserves the current environment model while allowing the workflow to compose task-oriented inputs directly, so callers do not need to switch builders just to cross an async boundary. Examples let greeting = flow { let! name = Flow.env let! suffix = async { return &amp;quot;!&amp;quot; } return $&amp;quot;Hello, {name}{suffix}&amp;quot; }">
+  <meta property="og:description" content="The universal flow { } computation expression.
+Signature flow  Returns Type Description FlowBuilder A FlowBuilder instance. Remarks Use this builder when the boundary can mix synchronous values, Async, Task, Result, and environment requests while keeping typed failures and explicit dependency access. It preserves the current environment model while allowing the workflow to compose task-oriented inputs directly, so callers do not need to switch builders just to cross an async boundary.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="flow">
-  <meta itemprop="description" content="flow  The universal flow { } computation expression.
-Remarks Use this builder when the boundary can mix synchronous values, Async, Task, Result, and environment requests while keeping typed failures and explicit dependency access. It preserves the current environment model while allowing the workflow to compose task-oriented inputs directly, so callers do not need to switch builders just to cross an async boundary. Examples let greeting = flow { let! name = Flow.env let! suffix = async { return &amp;quot;!&amp;quot; } return $&amp;quot;Hello, {name}{suffix}&amp;quot; }">
-  <meta itemprop="wordCount" content="84">
+  <meta itemprop="description" content="The universal flow { } computation expression.
+Signature flow  Returns Type Description FlowBuilder A FlowBuilder instance. Remarks Use this builder when the boundary can mix synchronous values, Async, Task, Result, and environment requests while keeping typed failures and explicit dependency access. It preserves the current environment model while allowing the workflow to compose task-oriented inputs directly, so callers do not need to switch builders just to cross an async boundary.">
+  <meta itemprop="wordCount" content="98">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="flow">
-  <meta name="twitter:description" content="flow  The universal flow { } computation expression.
-Remarks Use this builder when the boundary can mix synchronous values, Async, Task, Result, and environment requests while keeping typed failures and explicit dependency access. It preserves the current environment model while allowing the workflow to compose task-oriented inputs directly, so callers do not need to switch builders just to cross an async boundary. Examples let greeting = flow { let! name = Flow.env let! suffix = async { return &amp;quot;!&amp;quot; } return $&amp;quot;Hello, {name}{suffix}&amp;quot; }">
+  <meta name="twitter:description" content="The universal flow { } computation expression.
+Signature flow  Returns Type Description FlowBuilder A FlowBuilder instance. Remarks Use this builder when the boundary can mix synchronous values, Async, Task, Result, and environment requests while keeping typed failures and explicit dependency access. It preserves the current environment model while allowing the workflow to compose task-oriented inputs directly, so callers do not need to switch builders just to cross an async boundary.">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,6 +517,8 @@ Remarks Use this builder when the boundary can mix synchronous values, Async, Ta
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
+    <li><a href="#returns">Returns</a></li>
     <li><a href="#remarks">Remarks</a></li>
     <li><a href="#examples">Examples</a></li>
   </ul>
@@ -544,10 +546,26 @@ Remarks Use this builder when the boundary can mix synchronous values, Async, Ta
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>The universal <code>flow { }</code> computation expression.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>flow&#32;<span></span></span></code>
 </div>
-<p>The universal <code>flow { }</code> computation expression.</p>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flowbuilder.html">FlowBuilder</a></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flowbuilder.html">FlowBuilder</a> instance.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p class='fsdocs-para'>
  Use this builder when the boundary can mix synchronous values, <code>Async</code>, <code>Task</code>,
@@ -559,13 +577,16 @@ Remarks Use this builder when the boundary can mix synchronous values, Async, Ta
  an async boundary.
  </p>
 <h2 id="examples">Examples</h2>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">greeting</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">name</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">env</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">suffix</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">async</span> <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#ce5c00;font-weight:bold">&amp;</span><span style="color:#000">quot</span><span style="color:#ce5c00;font-weight:bold">;!&amp;</span><span style="color:#000">quot</span><span style="color:#ce5c00;font-weight:bold">;</span> <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#ce5c00;font-weight:bold">$&amp;</span><span style="color:#000">quot</span><span style="color:#ce5c00;font-weight:bold">;</span><span style="color:#000">Hello</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#ce5c00;font-weight:bold">{</span><span style="color:#000">name</span><span style="color:#ce5c00;font-weight:bold">}{</span><span style="color:#000">suffix</span><span style="color:#ce5c00;font-weight:bold">}&amp;</span><span style="color:#000">quot</span><span style="color:#ce5c00;font-weight:bold">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span></code></pre></div>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">greeting</span> <span class="o">=</span>
+     <span class="id">flow</span> <span class="pn">{</span>
+         <span class="k">let!</span> <span class="id">name</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">env</span>
+         <span class="k">let!</span> <span class="id">suffix</span> <span class="o">=</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="id">async</span> <span class="pn">{</span> <span class="k">return</span> <span class="s">&quot;!&quot;</span> <span class="pn">}</span>
+         <span class="k">return</span> <span class="s">$&quot;Hello, {</span><span class="id">name</span><span class="s">}{</span><span class="id">suffix</span><span class="s">}&quot;</span>
+     <span class="pn">}</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val greeting: obj</div>
+<div popover class="fsdocs-tip" id="fs2">val async: AsyncBuilder</div>
+
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/flow/builders-flow/" aria-label="Previous - flow { }">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>
     <span>Previous</span>

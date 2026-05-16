@@ -8,6 +8,12 @@ namespace FsFlow
 /// composition using <c>and!</c> in the <c>validate { }</c> builder, which merges errors instead of
 /// short-circuiting.
 /// </remarks>
+/// <example>
+/// <code>
+/// let v1 = Validation.ok 5
+/// let v2 = Validation.error (Diagnostics.singleton "Error 1")
+/// </code>
+/// </example>
 type Validation<'value, 'error> = private Validation of Result<'value, Diagnostics<'error>>
 
 /// <summary>
@@ -21,12 +27,22 @@ module Validation =
     /// <summary>Converts a <see cref="T:FsFlow.Validation`2" /> into a standard <see cref="T:System.Result`2" />.</summary>
     /// <param name="validation">The validation to convert.</param>
     /// <returns>A result containing either the success value or the full diagnostics graph.</returns>
+    /// <example>
+    /// <code>
+    /// let res = Validation.ok 5 |> Validation.toResult // Ok 5
+    /// </code>
+    /// </example>
     let toResult (validation: Validation<'value, 'error>) : Result<'value, Diagnostics<'error>> =
         unwrap validation
 
     /// <summary>Creates a successful validation result.</summary>
     /// <param name="value">The success value of type <c>'value</c>.</param>
     /// <returns>A successful <see cref="T:FsFlow.Validation`2" />.</returns>
+    /// <example>
+    /// <code>
+    /// let v = Validation.ok 5
+    /// </code>
+    /// </example>
     let ok (value: 'value) : Validation<'value, 'error> =
         Validation (Ok value)
 
@@ -39,6 +55,11 @@ module Validation =
     /// <summary>Creates a failing validation result with the provided diagnostics.</summary>
     /// <param name="diagnostics">The <see cref="T:FsFlow.Diagnostics`1" /> graph.</param>
     /// <returns>A failing <see cref="T:FsFlow.Validation`2" />.</returns>
+    /// <example>
+    /// <code>
+    /// let v = Validation.error (Diagnostics.singleton "Something went wrong")
+    /// </code>
+    /// </example>
     let error (diagnostics: Diagnostics<'error>) : Validation<'value, 'error> =
         Validation (Error diagnostics)
 
@@ -54,6 +75,12 @@ module Validation =
     /// </remarks>
     /// <param name="result">The result to lift.</param>
     /// <returns>A <see cref="T:FsFlow.Validation`2" /> mirroring the result.</returns>
+    /// <example>
+    /// <code>
+    /// let v = Result.Ok 5 |> Validation.fromResult // Validation (Ok 5)
+    /// let v2 = Result.Error "fail" |> Validation.fromResult // Validation (Error { Errors = ["fail"]; ... })
+    /// </code>
+    /// </example>
     let fromResult (result: Result<'value, 'error>) : Validation<'value, 'error> =
         match result with
         | Ok value -> ok value
@@ -63,6 +90,11 @@ module Validation =
     /// <param name="mapper">A function of type <c>'value -> 'next</c>.</param>
     /// <param name="validation">The source <see cref="T:FsFlow.Validation`2" />.</param>
     /// <returns>A validation with the transformed success value.</returns>
+    /// <example>
+    /// <code>
+    /// Validation.ok 5 |> Validation.map (fun x -> x * 2) // Validation (Ok 10)
+    /// </code>
+    /// </example>
     let map
         (mapper: 'value -> 'next)
         (validation: Validation<'value, 'error>)
@@ -78,6 +110,11 @@ module Validation =
     /// <param name="binder">A function of type <c>'value -> Validation&lt;'next, 'error&gt;</c>.</param>
     /// <param name="validation">The source validation.</param>
     /// <returns>The result of the binder or the original diagnostics.</returns>
+    /// <example>
+    /// <code>
+    /// Validation.ok 5 |> Validation.bind (fun x -> Validation.ok (x + 1)) // Validation (Ok 6)
+    /// </code>
+    /// </example>
     let bind
         (binder: 'value -> Validation<'next, 'error>)
         (validation: Validation<'value, 'error>)
@@ -90,6 +127,11 @@ module Validation =
     /// <param name="mapper">A function of type <c>'error -> 'nextError</c>.</param>
     /// <param name="validation">The source <see cref="T:FsFlow.Validation`2" />.</param>
     /// <returns>A validation with transformed error values.</returns>
+    /// <example>
+    /// <code>
+    /// validation |> Validation.mapError (fun e -> e.ToString())
+    /// </code>
+    /// </example>
     let mapError
         (mapper: 'error -> 'nextError)
         (validation: Validation<'value, 'error>)
@@ -115,6 +157,13 @@ module Validation =
     /// <param name="left">The first validation.</param>
     /// <param name="right">The second validation.</param>
     /// <returns>A validation with the combined result.</returns>
+    /// <example>
+    /// <code>
+    /// let v1 = Validation.ok 1
+    /// let v2 = Validation.ok 2
+    /// Validation.map2 (+) v1 v2 // Validation (Ok 3)
+    /// </code>
+    /// </example>
     let map2
         (mapper: 'left -> 'right -> 'value)
         (left: Validation<'left, 'error>)
@@ -132,6 +181,13 @@ module Validation =
     /// <param name="validation">The validation containing the function.</param>
     /// <param name="value">The validation containing the value.</param>
     /// <returns>The result of applying the function to the value, with accumulated errors.</returns>
+    /// <example>
+    /// <code>
+    /// let fn = Validation.ok (fun x -> x + 1)
+    /// let v = Validation.ok 5
+    /// Validation.apply fn v // Validation (Ok 6)
+    /// </code>
+    /// </example>
     let apply
         (validation: Validation<'value -> 'next, 'error>)
         (value: Validation<'value, 'error>)
@@ -141,6 +197,11 @@ module Validation =
     /// <summary>Maps a successful validation value to <c>unit</c> while preserving the diagnostics.</summary>
     /// <param name="validation">The source validation.</param>
     /// <returns>A validation that keeps the original diagnostics and discards the success value.</returns>
+    /// <example>
+    /// <code>
+    /// Validation.ok 5 |> Validation.ignore // Validation (Ok ())
+    /// </code>
+    /// </example>
     let ignore (validation: Validation<'value, 'error>) : Validation<unit, 'error> =
         map (fun _ -> ()) validation
 
@@ -150,6 +211,14 @@ module Validation =
     /// <param name="middle">The second validation.</param>
     /// <param name="right">The third validation.</param>
     /// <returns>A validation with the combined result.</returns>
+    /// <example>
+    /// <code>
+    /// let v1 = Validation.ok 1
+    /// let v2 = Validation.ok 2
+    /// let v3 = Validation.ok 3
+    /// Validation.map3 (fun x y z -> x + y + z) v1 v2 v3 // Validation (Ok 6)
+    /// </code>
+    /// </example>
     let map3
         (mapper: 'left -> 'middle -> 'right -> 'value)
         (left: Validation<'left, 'error>)
@@ -168,6 +237,13 @@ module Validation =
     /// <param name="fallback">The validation to use when the source fails.</param>
     /// <param name="validation">The source validation.</param>
     /// <returns>The source validation when it succeeds, otherwise the fallback validation.</returns>
+    /// <example>
+    /// <code>
+    /// let v1 = Validation.fail (Diagnostics.singleton "err")
+    /// let v2 = Validation.ok 5
+    /// v1 |> Validation.orElse v2 // Validation (Ok 5)
+    /// </code>
+    /// </example>
     let orElse
         (fallback: Validation<'value, 'error>)
         (validation: Validation<'value, 'error>)
@@ -184,6 +260,12 @@ module Validation =
     /// <param name="fallback">A function that turns the diagnostics into an alternate validation.</param>
     /// <param name="validation">The source validation.</param>
     /// <returns>The source validation when it succeeds, otherwise the computed fallback validation.</returns>
+    /// <example>
+    /// <code>
+    /// let v1 = Validation.fail (Diagnostics.singleton "err")
+    /// v1 |> Validation.orElseWith (fun diag -> Validation.ok 10) // Validation (Ok 10)
+    /// </code>
+    /// </example>
     let orElseWith
         (fallback: Diagnostics<'error> -> Validation<'value, 'error>)
         (validation: Validation<'value, 'error>)
@@ -196,6 +278,11 @@ module Validation =
     /// <param name="mapper">A function of type <c>'value -> 'next</c>.</param>
     /// <param name="validation">The source <see cref="T:FsFlow.Validation`2" />.</param>
     /// <returns>A validation with the transformed success value.</returns>
+    /// <example>
+    /// <code>
+    /// (+) &lt;!&gt; Validation.ok 1 &lt;*&gt; Validation.ok 2 // Validation (Ok 3)
+    /// </code>
+    /// </example>
     let inline (<!>) (mapper: 'value -> 'next) (validation: Validation<'value, 'error>) : Validation<'next, 'error> =
         map mapper validation
 
@@ -203,6 +290,11 @@ module Validation =
     /// <param name="validation">The validation containing the function.</param>
     /// <param name="value">The validation containing the value.</param>
     /// <returns>The result of applying the function to the value, with accumulated errors.</returns>
+    /// <example>
+    /// <code>
+    /// Validation.ok ((+) 1) &lt;*&gt; Validation.ok 2 // Validation (Ok 3)
+    /// </code>
+    /// </example>
     let inline (<*>) (validation: Validation<'value -> 'next, 'error>) (value: Validation<'value, 'error>) : Validation<'next, 'error> =
         apply validation value
 
@@ -212,6 +304,11 @@ module Validation =
     /// </remarks>
     /// <param name="validations">A sequence of type <c>seq&lt;Validation&lt;'value, 'error&gt;&gt;</c>.</param>
     /// <returns>A validation containing the list of values or accumulated diagnostics.</returns>
+    /// <example>
+    /// <code>
+    /// [Validation.ok 1; Validation.ok 2] |> Validation.collect // Validation (Ok [1; 2])
+    /// </code>
+    /// </example>
     let collect (validations: seq<Validation<'value, 'error>>) : Validation<'value list, 'error> =
         let folder
             (state: Validation<'value list, 'error>)
@@ -223,6 +320,11 @@ module Validation =
     /// <summary>Transforms a sequence of validations into a validation of a list.</summary>
     /// <param name="validations">The input sequence.</param>
     /// <returns>A validation containing the list of values.</returns>
+    /// <example>
+    /// <code>
+    /// [Validation.ok 1] |> Validation.sequence // Validation (Ok [1])
+    /// </code>
+    /// </example>
     let sequence (validations: seq<Validation<'value, 'error>>) : Validation<'value list, 'error> =
         collect validations
 
@@ -230,6 +332,11 @@ module Validation =
     /// <param name="left">The first validation.</param>
     /// <param name="right">The second validation.</param>
     /// <returns>A validation containing a tuple of the results.</returns>
+    /// <example>
+    /// <code>
+    /// Validation.merge (Validation.ok 1) (Validation.ok "a") // Validation (Ok (1, "a"))
+    /// </code>
+    /// </example>
     let merge (left: Validation<'value, 'error>) (right: Validation<'next, 'error>) : Validation<'value * 'next, 'error> =
         map2 (fun leftValue rightValue -> leftValue, rightValue) left right
 
@@ -237,6 +344,12 @@ module Validation =
     /// <param name="path">The path segments to apply to the validation.</param>
     /// <param name="validation">The validation to scope.</param>
     /// <returns>A validation nested under the given path.</returns>
+    /// <example>
+    /// <code>
+    /// Validation.error (Diagnostics.singleton "fail") 
+    /// |> Validation.at [PathSegment.Name "user"]
+    /// </code>
+    /// </example>
     let at (path: PathSegment list) (validation: Validation<'value, 'error>) : Validation<'value, 'error> =
         let rec attach path graph =
             match path with
@@ -253,6 +366,12 @@ module Validation =
     /// <param name="key">The branch key.</param>
     /// <param name="validation">The validation to scope.</param>
     /// <returns>A validation whose diagnostics are prefixed with <c>Key key</c>.</returns>
+    /// <example>
+    /// <code>
+    /// Validation.error (Diagnostics.singleton "fail") 
+    /// |> Validation.key "id-123"
+    /// </code>
+    /// </example>
     let key (key: string) (validation: Validation<'value, 'error>) : Validation<'value, 'error> =
         at [ PathSegment.Key key ] validation
 
@@ -260,6 +379,12 @@ module Validation =
     /// <param name="index">The branch index.</param>
     /// <param name="validation">The validation to scope.</param>
     /// <returns>A validation whose diagnostics are prefixed with <c>Index index</c>.</returns>
+    /// <example>
+    /// <code>
+    /// Validation.error (Diagnostics.singleton "fail") 
+    /// |> Validation.index 0
+    /// </code>
+    /// </example>
     let index (index: int) (validation: Validation<'value, 'error>) : Validation<'value, 'error> =
         at [ PathSegment.Index index ] validation
 
@@ -267,6 +392,12 @@ module Validation =
     /// <param name="name">The branch name.</param>
     /// <param name="validation">The validation to scope.</param>
     /// <returns>A validation whose diagnostics are prefixed with <c>Name name</c>.</returns>
+    /// <example>
+    /// <code>
+    /// Validation.error (Diagnostics.singleton "fail") 
+    /// |> Validation.name "email"
+    /// </code>
+    /// </example>
     let name (name: string) (validation: Validation<'value, 'error>) : Validation<'value, 'error> =
         at [ PathSegment.Name name ] validation
 
@@ -279,6 +410,11 @@ module Validation =
     /// <param name="binder">A function of type <c>int -> 'source -> Validation&lt;'value, 'error&gt;</c>.</param>
     /// <param name="values">The input sequence.</param>
     /// <returns>A validation containing the list of values or accumulated diagnostics.</returns>
+    /// <example>
+    /// <code>
+    /// [ "a"; "b" ] |> Validation.traverseIndexed (fun i s -> Validation.ok (s.ToUpper()))
+    /// </code>
+    /// </example>
     let traverseIndexed
         (binder: int -> 'source -> Validation<'value, 'error>)
         (values: seq<'source>)

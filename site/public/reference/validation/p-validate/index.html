@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>validate | FsFlow</title>
-<meta name="description" content="validate  The accumulating validate { } computation expression.
-Remarks Use this builder when you want to collect all validation failures instead of stopping at the first one. Use and! when sibling validations should accumulate into the same diagnostics graph. Plain let! and do! are sequential: if the left side fails, the later step is not evaluated. Check&lt;&#39;value&gt; covers both value-preserving checks and gate checks. Use Check.orError to attach an application error, and Guard.Of / Guard.MapError when you want the same error-bound source shape to participate directly in validation.">
+<meta name="description" content="The accumulating validate { } computation expression.
+Signature validate  Returns Type Description ValidateBuilder A ValidateBuilder instance. Remarks Use this builder when you want to collect all validation failures instead of stopping at the first one. Use and! when sibling validations should accumulate into the same diagnostics graph. Plain let! and do! are sequential: if the left side fails, the later step is not evaluated. Check&lt;&#39;value&gt; covers both value-preserving checks and gate checks. Use Check.orError to attach an application error, and Guard.Of / Guard.MapError when you want the same error-bound source shape to participate directly in validation.">
 <meta property="og:url" content="http://localhost:3000/reference/validation/p-validate/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="validate">
-  <meta property="og:description" content="validate  The accumulating validate { } computation expression.
-Remarks Use this builder when you want to collect all validation failures instead of stopping at the first one. Use and! when sibling validations should accumulate into the same diagnostics graph. Plain let! and do! are sequential: if the left side fails, the later step is not evaluated. Check&lt;&#39;value&gt; covers both value-preserving checks and gate checks. Use Check.orError to attach an application error, and Guard.Of / Guard.MapError when you want the same error-bound source shape to participate directly in validation.">
+  <meta property="og:description" content="The accumulating validate { } computation expression.
+Signature validate  Returns Type Description ValidateBuilder A ValidateBuilder instance. Remarks Use this builder when you want to collect all validation failures instead of stopping at the first one. Use and! when sibling validations should accumulate into the same diagnostics graph. Plain let! and do! are sequential: if the left side fails, the later step is not evaluated. Check&lt;&#39;value&gt; covers both value-preserving checks and gate checks. Use Check.orError to attach an application error, and Guard.Of / Guard.MapError when you want the same error-bound source shape to participate directly in validation.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="validate">
-  <meta itemprop="description" content="validate  The accumulating validate { } computation expression.
-Remarks Use this builder when you want to collect all validation failures instead of stopping at the first one. Use and! when sibling validations should accumulate into the same diagnostics graph. Plain let! and do! are sequential: if the left side fails, the later step is not evaluated. Check&lt;&#39;value&gt; covers both value-preserving checks and gate checks. Use Check.orError to attach an application error, and Guard.Of / Guard.MapError when you want the same error-bound source shape to participate directly in validation.">
-  <meta itemprop="wordCount" content="209">
+  <meta itemprop="description" content="The accumulating validate { } computation expression.
+Signature validate  Returns Type Description ValidateBuilder A ValidateBuilder instance. Remarks Use this builder when you want to collect all validation failures instead of stopping at the first one. Use and! when sibling validations should accumulate into the same diagnostics graph. Plain let! and do! are sequential: if the left side fails, the later step is not evaluated. Check&lt;&#39;value&gt; covers both value-preserving checks and gate checks. Use Check.orError to attach an application error, and Guard.Of / Guard.MapError when you want the same error-bound source shape to participate directly in validation.">
+  <meta itemprop="wordCount" content="223">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="validate">
-  <meta name="twitter:description" content="validate  The accumulating validate { } computation expression.
-Remarks Use this builder when you want to collect all validation failures instead of stopping at the first one. Use and! when sibling validations should accumulate into the same diagnostics graph. Plain let! and do! are sequential: if the left side fails, the later step is not evaluated. Check&lt;&#39;value&gt; covers both value-preserving checks and gate checks. Use Check.orError to attach an application error, and Guard.Of / Guard.MapError when you want the same error-bound source shape to participate directly in validation.">
+  <meta name="twitter:description" content="The accumulating validate { } computation expression.
+Signature validate  Returns Type Description ValidateBuilder A ValidateBuilder instance. Remarks Use this builder when you want to collect all validation failures instead of stopping at the first one. Use and! when sibling validations should accumulate into the same diagnostics graph. Plain let! and do! are sequential: if the left side fails, the later step is not evaluated. Check&lt;&#39;value&gt; covers both value-preserving checks and gate checks. Use Check.orError to attach an application error, and Guard.Of / Guard.MapError when you want the same error-bound source shape to participate directly in validation.">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,6 +517,8 @@ Remarks Use this builder when you want to collect all validation failures instea
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
+    <li><a href="#returns">Returns</a></li>
     <li><a href="#remarks">Remarks</a></li>
     <li><a href="#examples">Examples</a></li>
   </ul>
@@ -544,10 +546,26 @@ Remarks Use this builder when you want to collect all validation failures instea
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>The accumulating <code>validate { }</code> computation expression.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>validate&#32;<span></span></span></code>
 </div>
-<p>The accumulating <code>validate { }</code> computation expression.</p>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validatebuilder.html">ValidateBuilder</a></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validatebuilder.html">ValidateBuilder</a> instance.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p class='fsdocs-para'>
  Use this builder when you want to collect all validation failures instead of stopping
@@ -571,22 +589,26 @@ Remarks Use this builder when you want to collect all validation failures instea
  the user benefits from seeing every problem at once.
  </p>
 <h2 id="examples">Examples</h2>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">validatedUser</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">validate</span> <span style="color:#ce5c00;font-weight:bold">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">name</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Check</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">notBlank</span> <span style="color:#000">input</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Name</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">age</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Check</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">okIf</span> <span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">input</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Age</span> <span style="color:#ce5c00;font-weight:bold">&amp;</span><span style="color:#000">gt</span><span style="color:#ce5c00;font-weight:bold">;</span> <span style="color:#000">0</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">&amp;</span><span style="color:#000">quot</span><span style="color:#ce5c00;font-weight:bold">;</span><span style="color:#000">Age</span> <span style="color:#000">must</span> <span style="color:#000">be</span> <span style="color:#000">positive</span><span style="color:#ce5c00;font-weight:bold">&amp;</span><span style="color:#000">quot</span><span style="color:#ce5c00;font-weight:bold">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#000">Name</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">name</span><span style="color:#ce5c00;font-weight:bold">;</span> <span style="color:#000">Age</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">age</span> <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">validatedCustomer</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">validate</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">key</span> <span style="color:#ce5c00;font-weight:bold">&amp;</span><span style="color:#000">quot</span><span style="color:#ce5c00;font-weight:bold">;</span><span style="color:#000">customer</span><span style="color:#ce5c00;font-weight:bold">&amp;</span><span style="color:#000">quot</span><span style="color:#ce5c00;font-weight:bold">;</span> <span style="color:#ce5c00;font-weight:bold">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">name</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#000">validate</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">name</span> <span style="color:#ce5c00;font-weight:bold">&amp;</span><span style="color:#000">quot</span><span style="color:#ce5c00;font-weight:bold">;</span><span style="color:#000">Name</span><span style="color:#ce5c00;font-weight:bold">&amp;</span><span style="color:#000">quot</span><span style="color:#ce5c00;font-weight:bold">;</span> <span style="color:#ce5c00;font-weight:bold">{</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#204a87;font-weight:bold">return</span><span style="color:#ce5c00;font-weight:bold">!</span> <span style="color:#000">input</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Name</span> <span style="color:#ce5c00;font-weight:bold">|&amp;</span><span style="color:#000">gt</span><span style="color:#ce5c00;font-weight:bold">;</span> <span style="color:#000">Check</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">notBlank</span> <span style="color:#ce5c00;font-weight:bold">|&amp;</span><span style="color:#000">gt</span><span style="color:#ce5c00;font-weight:bold">;</span> <span style="color:#000">Check</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">orError</span> <span style="color:#ce5c00;font-weight:bold">&amp;</span><span style="color:#000">quot</span><span style="color:#ce5c00;font-weight:bold">;</span><span style="color:#000">Name</span> <span style="color:#000">required</span><span style="color:#ce5c00;font-weight:bold">&amp;</span><span style="color:#000">quot</span><span style="color:#ce5c00;font-weight:bold">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">name</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span></code></pre></div>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">validatedUser</span> <span class="o">=</span>
+     <span class="id">validate</span> <span class="pn">{</span>
+         <span class="k">let!</span> <span class="id">name</span> <span class="o">=</span> <span class="id">Check</span><span class="pn">.</span><span class="id">notBlank</span> <span class="id">input</span><span class="pn">.</span><span class="id">Name</span>
+         <span class="k">let!</span> <span class="id">age</span> <span class="o">=</span> <span class="id">Check</span><span class="pn">.</span><span class="id">okIf</span> <span class="pn">(</span><span class="id">input</span><span class="pn">.</span><span class="id">Age</span> <span class="pn">&gt;</span> <span class="n">0</span><span class="pn">)</span> <span class="s">&quot;Age must be positive&quot;</span>
+         <span class="k">return</span> <span class="pn">{</span> <span class="id">Name</span> <span class="o">=</span> <span class="id">name</span><span class="pn">;</span> <span class="id">Age</span> <span class="o">=</span> <span class="id">age</span> <span class="pn">}</span>
+     <span class="pn">}</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val validatedUser: obj</div>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">validatedCustomer</span> <span class="o">=</span>
+     <span class="id">validate</span><span class="pn">.</span><span class="id">key</span> <span class="s">&quot;customer&quot;</span> <span class="pn">{</span>
+         <span class="k">let!</span> <span class="id">name</span> <span class="o">=</span>
+             <span class="id">validate</span><span class="pn">.</span><span class="id">name</span> <span class="s">&quot;Name&quot;</span> <span class="pn">{</span>
+                 <span class="k">return!</span> <span class="id">input</span><span class="pn">.</span><span class="id">Name</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">notBlank</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">orError</span> <span class="s">&quot;Name required&quot;</span>
+             <span class="pn">}</span>
+
+         <span class="k">return</span> <span class="id">name</span>
+     <span class="pn">}</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val validatedCustomer: obj</div>
+
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/validation/builders-validate/" aria-label="Previous - validate { }">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>
     <span>Previous</span>

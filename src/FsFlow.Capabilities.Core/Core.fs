@@ -33,15 +33,19 @@ type EnvironmentVariableError =
 [<RequireQualifiedAccess>]
 module Clock =
     /// <summary>Reads the current UTC timestamp from the ambient runtime.</summary>
+    /// <returns>A flow that produces the current <see cref="T:System.DateTimeOffset"/>.</returns>
     let now : Flow<'env, 'e, DateTimeOffset> =
         Flow.Runtime.now
 
     /// <summary>Creates a live clock backed by <see cref="P:System.DateTimeOffset.UtcNow" />.</summary>
+    /// <returns>A live <see cref="T:FsFlow.IClock"/> implementation.</returns>
     let live : IClock =
         { new IClock with
             member _.UtcNow() = DateTimeOffset.UtcNow }
 
     /// <summary>Creates a deterministic clock that always returns the supplied instant.</summary>
+    /// <param name="utcNow">The fixed timestamp to return from the clock.</param>
+    /// <returns>A mock <see cref="T:FsFlow.IClock"/> implementation.</returns>
     let fromValue (utcNow: DateTimeOffset) : IClock =
         { new IClock with
             member _.UtcNow() = utcNow }
@@ -50,10 +54,13 @@ module Clock =
 [<RequireQualifiedAccess>]
 module Log =
     /// <summary>Writes an informational log message through the ambient runtime.</summary>
+    /// <param name="message">The message to log.</param>
+    /// <returns>A flow that performs the logging operation.</returns>
     let info (message: string) : Flow<'env, 'e, unit> =
         Flow.Runtime.log message
 
     /// <summary>Creates a no-op logger for tests and local overrides.</summary>
+    /// <returns>A no-op <see cref="T:FsFlow.ILog"/> implementation.</returns>
     let live : ILog =
         { new ILog with
             member _.Info _ = () }
@@ -62,10 +69,14 @@ module Log =
 [<RequireQualifiedAccess>]
 module Random =
     /// <summary>Reads a random integer from the ambient runtime.</summary>
+    /// <param name="minInclusive">The inclusive lower bound.</param>
+    /// <param name="maxExclusive">The exclusive upper bound.</param>
+    /// <returns>A flow that produces a random integer.</returns>
     let nextInt (minInclusive: int) (maxExclusive: int) : Flow<'env, 'e, int> =
         Flow.Runtime.nextInt minInclusive maxExclusive
 
     /// <summary>Creates a live random-number generator backed by <see cref="T:System.Random" />.</summary>
+    /// <returns>A live <see cref="T:FsFlow.IRandom"/> implementation.</returns>
     let live : IRandom =
         let rng = System.Random()
         let gate = obj()
@@ -80,6 +91,8 @@ module Random =
         }
 
     /// <summary>Creates a deterministic random generator that always returns the supplied value.</summary>
+    /// <param name="value">The fixed integer to return.</param>
+    /// <returns>A mock <see cref="T:FsFlow.IRandom"/> implementation.</returns>
     let fromValue (value: int) : IRandom =
         { new IRandom with
             member _.NextInt _ _ = value }
@@ -88,15 +101,19 @@ module Random =
 [<RequireQualifiedAccess>]
 module Guid =
     /// <summary>Reads a GUID from the ambient runtime.</summary>
+    /// <returns>A flow that produces a new <see cref="T:System.Guid"/>.</returns>
     let newGuid : Flow<'env, 'e, global.System.Guid> =
         Flow.Runtime.newGuid
 
     /// <summary>Creates a live GUID generator backed by <see cref="M:System.Guid.NewGuid" />.</summary>
+    /// <returns>A live <see cref="T:FsFlow.IGuid"/> implementation.</returns>
     let live : IGuid =
         { new IGuid with
             member _.NewGuid() = global.System.Guid.NewGuid() }
 
     /// <summary>Creates a deterministic GUID generator that always returns the supplied value.</summary>
+    /// <param name="value">The fixed GUID to return.</param>
+    /// <returns>A mock <see cref="T:FsFlow.IGuid"/> implementation.</returns>
     let fromValue (value: global.System.Guid) : IGuid =
         { new IGuid with
             member _.NewGuid() = value }
@@ -105,10 +122,13 @@ module Guid =
 [<RequireQualifiedAccess>]
 module EnvironmentVariables =
     /// <summary>Reads a raw environment-variable value from the ambient runtime.</summary>
+    /// <param name="name">The name of the environment variable.</param>
+    /// <returns>A flow that produces the variable value if it exists.</returns>
     let tryGet (name: string) : Flow<'env, 'e, string option> =
         Flow.Runtime.tryGetEnvironmentVariable name
 
     /// <summary>Creates a live provider backed by the current process environment.</summary>
+    /// <returns>A live <see cref="T:FsFlow.IEnvironmentVariables"/> implementation.</returns>
     let live : IEnvironmentVariables =
         { new IEnvironmentVariables with
             member _.TryGet name =
@@ -122,6 +142,8 @@ module EnvironmentVariables =
         }
 
     /// <summary>Creates a deterministic provider from a fixed set of name/value pairs.</summary>
+    /// <param name="values">The fixed name/value pairs to serve.</param>
+    /// <returns>A mock <see cref="T:FsFlow.IEnvironmentVariables"/> implementation.</returns>
     let fromPairs (values: seq<string * string>) : IEnvironmentVariables =
         #if FABLE_COMPILER
         let lookup = Dictionary<string, string>()
@@ -166,6 +188,8 @@ module EnvironmentVariable =
         }
 
     /// <summary>Reads a raw string environment variable from the ambient runtime.</summary>
+    /// <param name="name">The name of the environment variable.</param>
+    /// <returns>A flow that produces the variable value or fails if it is missing.</returns>
     let get (name: string) : Flow<'env, EnvironmentVariableError, string> =
         flow {
             let! value = EnvironmentVariables.tryGet name
@@ -175,10 +199,14 @@ module EnvironmentVariable =
         }
 
     /// <summary>Reads a raw string environment variable without wrapping it in a result.</summary>
+    /// <param name="name">The name of the environment variable.</param>
+    /// <returns>A flow that produces the variable value if it exists.</returns>
     let tryGet (name: string) : Flow<'env, 'e, string option> =
         EnvironmentVariables.tryGet name
 
     /// <summary>Reads an integer environment variable from the ambient runtime.</summary>
+    /// <param name="name">The name of the environment variable.</param>
+    /// <returns>A flow that produces the parsed integer or fails if missing or invalid.</returns>
     let getInt (name: string) : Flow<'env, EnvironmentVariableError, int> =
         readParsed "an integer" (fun value ->
             match Int32.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture) with
@@ -186,6 +214,8 @@ module EnvironmentVariable =
             | false, _ -> None) name
 
     /// <summary>Reads a GUID environment variable from the ambient runtime.</summary>
+    /// <param name="name">The name of the environment variable.</param>
+    /// <returns>A flow that produces the parsed GUID or fails if missing or invalid.</returns>
     let getGuid (name: string) : Flow<'env, EnvironmentVariableError, global.System.Guid> =
         readParsed "a GUID" (fun value ->
             match Guid.TryParse value with
@@ -193,6 +223,8 @@ module EnvironmentVariable =
             | false, _ -> None) name
 
     /// <summary>Reads a boolean environment variable from the ambient runtime.</summary>
+    /// <param name="name">The name of the environment variable.</param>
+    /// <returns>A flow that produces the parsed boolean or fails if missing or invalid.</returns>
     let getBool (name: string) : Flow<'env, EnvironmentVariableError, bool> =
         readParsed "a boolean" (fun value ->
             match Boolean.TryParse value with
@@ -203,6 +235,8 @@ module EnvironmentVariable =
 [<RequireQualifiedAccess>]
 module EnvironmentVariableErrors =
     /// <summary>Formats a human-readable description for an error.</summary>
+    /// <param name="error">The environment variable error to describe.</param>
+    /// <returns>A human-readable error message.</returns>
     let describe =
         function
         | EnvironmentVariableError.MissingVariable name ->

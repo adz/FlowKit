@@ -19,29 +19,29 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.run | FsFlow</title>
-<meta name="description" content="run environment flow Executes a flow with the provided environment and the default cancellation token.
-Remarks Uncaught exceptions become Cause.Die; cancellation becomes Cause.Interrupt.
-Parameters environment: ‘env flow: Flow&lt;‘env, ’error, ‘value&gt; Examples let flow = Flow.read (fun env -&gt; $&#34;Hello, {env}!&#34;) let result = Flow.run &#34;World&#34; flow // result = Effect that resolves to Success &#34;Hello, World!&#34; on both .NET and Fable val flow: obj val result: obj">
+<meta name="description" content="Executes a flow with the provided environment and the default cancellation token.
+Signature Flow.run environment flow Parameters Name Type Description environment ‘env The environment required by the flow. flow Flow&lt;‘env, ’error, ‘value&gt; The workflow to execute. Returns Type Description Effect&lt;‘value, ’error&gt; An effect that represents the asynchronous execution outcome. Remarks Uncaught exceptions become Cause.Die; cancellation becomes Cause.Interrupt.
+Examples let flow = Flow.read (fun env -&gt; $&#34;Hello, {env}!&#34;) let result = Flow.run &#34;World&#34; flow // result = Effect that resolves to Success &#34;Hello, World!&#34; on both .NET and Fable val flow: obj val result: obj">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-run/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.run">
-  <meta property="og:description" content="run environment flow Executes a flow with the provided environment and the default cancellation token.
-Remarks Uncaught exceptions become Cause.Die; cancellation becomes Cause.Interrupt.
-Parameters environment: ‘env flow: Flow&lt;‘env, ’error, ‘value&gt; Examples let flow = Flow.read (fun env -&gt; $&#34;Hello, {env}!&#34;) let result = Flow.run &#34;World&#34; flow // result = Effect that resolves to Success &#34;Hello, World!&#34; on both .NET and Fable val flow: obj val result: obj">
+  <meta property="og:description" content="Executes a flow with the provided environment and the default cancellation token.
+Signature Flow.run environment flow Parameters Name Type Description environment ‘env The environment required by the flow. flow Flow&lt;‘env, ’error, ‘value&gt; The workflow to execute. Returns Type Description Effect&lt;‘value, ’error&gt; An effect that represents the asynchronous execution outcome. Remarks Uncaught exceptions become Cause.Die; cancellation becomes Cause.Interrupt.
+Examples let flow = Flow.read (fun env -&gt; $&#34;Hello, {env}!&#34;) let result = Flow.run &#34;World&#34; flow // result = Effect that resolves to Success &#34;Hello, World!&#34; on both .NET and Fable val flow: obj val result: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.run">
-  <meta itemprop="description" content="run environment flow Executes a flow with the provided environment and the default cancellation token.
-Remarks Uncaught exceptions become Cause.Die; cancellation becomes Cause.Interrupt.
-Parameters environment: ‘env flow: Flow&lt;‘env, ’error, ‘value&gt; Examples let flow = Flow.read (fun env -&gt; $&#34;Hello, {env}!&#34;) let result = Flow.run &#34;World&#34; flow // result = Effect that resolves to Success &#34;Hello, World!&#34; on both .NET and Fable val flow: obj val result: obj">
-  <meta itemprop="wordCount" content="65">
+  <meta itemprop="description" content="Executes a flow with the provided environment and the default cancellation token.
+Signature Flow.run environment flow Parameters Name Type Description environment ‘env The environment required by the flow. flow Flow&lt;‘env, ’error, ‘value&gt; The workflow to execute. Returns Type Description Effect&lt;‘value, ’error&gt; An effect that represents the asynchronous execution outcome. Remarks Uncaught exceptions become Cause.Die; cancellation becomes Cause.Interrupt.
+Examples let flow = Flow.read (fun env -&gt; $&#34;Hello, {env}!&#34;) let result = Flow.run &#34;World&#34; flow // result = Effect that resolves to Success &#34;Hello, World!&#34; on both .NET and Fable val flow: obj val result: obj">
+  <meta itemprop="wordCount" content="92">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.run">
-  <meta name="twitter:description" content="run environment flow Executes a flow with the provided environment and the default cancellation token.
-Remarks Uncaught exceptions become Cause.Die; cancellation becomes Cause.Interrupt.
-Parameters environment: ‘env flow: Flow&lt;‘env, ’error, ‘value&gt; Examples let flow = Flow.read (fun env -&gt; $&#34;Hello, {env}!&#34;) let result = Flow.run &#34;World&#34; flow // result = Effect that resolves to Success &#34;Hello, World!&#34; on both .NET and Fable val flow: obj val result: obj">
+  <meta name="twitter:description" content="Executes a flow with the provided environment and the default cancellation token.
+Signature Flow.run environment flow Parameters Name Type Description environment ‘env The environment required by the flow. flow Flow&lt;‘env, ’error, ‘value&gt; The workflow to execute. Returns Type Description Effect&lt;‘value, ’error&gt; An effect that represents the asynchronous execution outcome. Remarks Uncaught exceptions become Cause.Die; cancellation becomes Cause.Interrupt.
+Examples let flow = Flow.read (fun env -&gt; $&#34;Hello, {env}!&#34;) let result = Flow.run &#34;World&#34; flow // result = Effect that resolves to Success &#34;Hello, World!&#34; on both .NET and Fable val flow: obj val result: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -521,8 +521,10 @@ Parameters environment: ‘env flow: Flow&lt;‘env, ’error, ‘value&gt; Exam
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
+    <li><a href="#remarks">Remarks</a></li>
     <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
@@ -549,17 +551,50 @@ Parameters environment: ‘env flow: Flow&lt;‘env, ’error, ‘value&gt; Exam
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>run&#32;<span>environment&#32;flow</span></span></code>
+	<p>Executes a flow with the provided environment and the default cancellation token.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.run&#32;<span>environment&#32;flow</span></span></code>
 </div>
-<p>Executes a flow with the provided environment and the default cancellation token.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>environment</code></td>
+          <td><code>&lsquo;env</code></td>
+          <td>The environment required by the flow.</td>
+      </tr>
+      <tr>
+          <td><code>flow</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>The workflow to execute.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-effect-2.html">Effect</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code></td>
+          <td>An effect that represents the asynchronous execution outcome.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p>Uncaught exceptions become <code>Cause.Die</code>; cancellation becomes <code>Cause.Interrupt</code>.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>environment</code>: <code>&lsquo;env</code></li>
-<li><code>flow</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></li>
-</ul>
 <h2 id="examples">Examples</h2>
 <pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">flow</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">read</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">env</span> <span class="k">-&gt;</span> <span class="s">$&quot;Hello, {</span><span class="id">env</span><span class="s">}!&quot;</span><span class="pn">)</span>
  <span class="k">let</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="id">result</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">run</span> <span class="s">&quot;World&quot;</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="3" class="id">flow</span>

@@ -3,13 +3,21 @@ title: "result"
 linkTitle: "result { }"
 ---
 
+
+ The fail-fast <code>result { }</code> computation expression.
+ 
+
+## Signature
+
 <div class="fsdocs-usage">
 <code><span>result&#32;<span></span></span></code>
 </div>
 
+## Returns
 
- The fail-fast <code>result { }</code> computation expression.
- 
+| Type | Description |
+| --- | --- |
+| <code><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-resultbuilder.html">ResultBuilder</a></code> | A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-resultbuilder.html">ResultBuilder</a> instance. |
 
 ## Remarks
 
@@ -26,14 +34,14 @@ linkTitle: "result { }"
 
 ## Examples
 
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">parsedUser</span> <span class="o">=</span>
+     <span class="id">result</span> <span class="pn">{</span>
+         <span class="k">let!</span> <span class="id">age</span> <span class="o">=</span> <span class="id">parseAge</span> <span class="id">input</span>
+         <span class="k">let!</span> <span class="id">name</span> <span class="o">=</span> <span class="id">parseName</span> <span class="id">input</span>
+         <span class="k">return</span> <span class="pn">{</span> <span class="id">Age</span> <span class="o">=</span> <span class="id">age</span><span class="pn">;</span> <span class="id">Name</span> <span class="o">=</span> <span class="id">name</span> <span class="pn">}</span>
+     <span class="pn">}</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val parsedUser: obj</div>
 
- ```fsharp
- let parsedUser =
-     result {
-         let! age = parseAge input
-         let! name = parseName input
-         return { Age = age; Name = name }
-     }
- ```
- 
+
 

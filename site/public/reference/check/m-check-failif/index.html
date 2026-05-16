@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Check.failIf | FsFlow</title>
-<meta name="description" content="failIf cond Returns success when the condition is false.
-Parameters cond: bool The boolean condition to check. Returns A Check that succeeds if cond is false.">
+<meta name="description" content="Returns success when the condition is false.
+Signature Check.failIf cond Parameters Name Type Description cond bool The boolean condition to check. Returns Type Description Check&lt;unit&gt; A Check that succeeds if cond is false. Examples Check.failIf (1 = 2) // Ok () Check.failIf (1 = 1) // Error ()">
 <meta property="og:url" content="http://localhost:3000/reference/check/m-check-failif/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Check.failIf">
-  <meta property="og:description" content="failIf cond Returns success when the condition is false.
-Parameters cond: bool The boolean condition to check. Returns A Check that succeeds if cond is false.">
+  <meta property="og:description" content="Returns success when the condition is false.
+Signature Check.failIf cond Parameters Name Type Description cond bool The boolean condition to check. Returns Type Description Check&lt;unit&gt; A Check that succeeds if cond is false. Examples Check.failIf (1 = 2) // Ok () Check.failIf (1 = 1) // Error ()">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Check.failIf">
-  <meta itemprop="description" content="failIf cond Returns success when the condition is false.
-Parameters cond: bool The boolean condition to check. Returns A Check that succeeds if cond is false.">
-  <meta itemprop="wordCount" content="25">
+  <meta itemprop="description" content="Returns success when the condition is false.
+Signature Check.failIf cond Parameters Name Type Description cond bool The boolean condition to check. Returns Type Description Check&lt;unit&gt; A Check that succeeds if cond is false. Examples Check.failIf (1 = 2) // Ok () Check.failIf (1 = 1) // Error ()">
+  <meta itemprop="wordCount" content="47">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Check.failIf">
-  <meta name="twitter:description" content="failIf cond Returns success when the condition is false.
-Parameters cond: bool The boolean condition to check. Returns A Check that succeeds if cond is false.">
+  <meta name="twitter:description" content="Returns success when the condition is false.
+Signature Check.failIf cond Parameters Name Type Description cond bool The boolean condition to check. Returns Type Description Check&lt;unit&gt; A Check that succeeds if cond is false. Examples Check.failIf (1 = 2) // Ok () Check.failIf (1 = 1) // Error ()">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,8 +517,10 @@ Parameters cond: bool The boolean condition to check. Returns A Check that succe
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -544,17 +546,47 @@ Parameters cond: bool The boolean condition to check. Returns A Check that succe
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>failIf&#32;<span>cond</span></span></code>
+	<p>Returns success when the condition is false.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Check.failIf&#32;<span>cond</span></span></code>
 </div>
-<p>Returns success when the condition is false.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>cond</code>: <code>bool</code>
-The boolean condition to check.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>cond</code></td>
+          <td><code>bool</code></td>
+          <td>The boolean condition to check.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> that succeeds if <span class="fsdocs-param-name">cond</span> is false.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;unit&gt;</span></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> that succeeds if <span class="fsdocs-param-name">cond</span> is false.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="id">Check</span><span class="pn">.</span><span class="id">failIf</span> <span class="pn">(</span><span class="n">1</span> <span class="o">=</span> <span class="n">2</span><span class="pn">)</span> <span class="c">// Ok ()</span>
+ <span class="id">Check</span><span class="pn">.</span><span class="id">failIf</span> <span class="pn">(</span><span class="n">1</span> <span class="o">=</span> <span class="n">1</span><span class="pn">)</span> <span class="c">// Error ()</span>
+</code></pre>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/check/m-check-equal/" aria-label="Previous - Check.equal">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

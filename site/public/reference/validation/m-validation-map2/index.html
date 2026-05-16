@@ -19,29 +19,29 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Validation.map2 | FsFlow</title>
-<meta name="description" content="Validation.map2 mapper left right Combines two validations, accumulating errors if both fail.
-Remarks This is the core applicative operation. If both left and right fail, their diagnostics graphs are merged.
-Parameters mapper: ‘left -&gt; ‘right -&gt; ‘value A function of type &#39;left -&gt; &#39;right -&gt; &#39;value. left: Validation&lt;‘left, ’error&gt; The first validation. right: Validation&lt;‘right, ’error&gt; The second validation. Returns A validation with the combined result.">
+<meta name="description" content="Combines two validations, accumulating errors if both fail.
+Signature Validation.map2 mapper left right Parameters Name Type Description mapper ‘left -&gt; ‘right -&gt; ‘value A function of type &#39;left -&gt; &#39;right -&gt; &#39;value. left Validation&lt;‘left, ’error&gt; The first validation. right Validation&lt;‘right, ’error&gt; The second validation. Returns Type Description Validation&lt;‘value, ’error&gt; A validation with the combined result. Remarks This is the core applicative operation. If both left and right fail, their diagnostics graphs are merged.
+Examples let v1 = Validation.ok 1 let v2 = Validation.ok 2 Validation.map2 (&#43;) v1 v2 // Validation (Ok 3) val v1: obj val v2: obj">
 <meta property="og:url" content="http://localhost:3000/reference/validation/m-validation-map2/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Validation.map2">
-  <meta property="og:description" content="Validation.map2 mapper left right Combines two validations, accumulating errors if both fail.
-Remarks This is the core applicative operation. If both left and right fail, their diagnostics graphs are merged.
-Parameters mapper: ‘left -&gt; ‘right -&gt; ‘value A function of type &#39;left -&gt; &#39;right -&gt; &#39;value. left: Validation&lt;‘left, ’error&gt; The first validation. right: Validation&lt;‘right, ’error&gt; The second validation. Returns A validation with the combined result.">
+  <meta property="og:description" content="Combines two validations, accumulating errors if both fail.
+Signature Validation.map2 mapper left right Parameters Name Type Description mapper ‘left -&gt; ‘right -&gt; ‘value A function of type &#39;left -&gt; &#39;right -&gt; &#39;value. left Validation&lt;‘left, ’error&gt; The first validation. right Validation&lt;‘right, ’error&gt; The second validation. Returns Type Description Validation&lt;‘value, ’error&gt; A validation with the combined result. Remarks This is the core applicative operation. If both left and right fail, their diagnostics graphs are merged.
+Examples let v1 = Validation.ok 1 let v2 = Validation.ok 2 Validation.map2 (&#43;) v1 v2 // Validation (Ok 3) val v1: obj val v2: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Validation.map2">
-  <meta itemprop="description" content="Validation.map2 mapper left right Combines two validations, accumulating errors if both fail.
-Remarks This is the core applicative operation. If both left and right fail, their diagnostics graphs are merged.
-Parameters mapper: ‘left -&gt; ‘right -&gt; ‘value A function of type &#39;left -&gt; &#39;right -&gt; &#39;value. left: Validation&lt;‘left, ’error&gt; The first validation. right: Validation&lt;‘right, ’error&gt; The second validation. Returns A validation with the combined result.">
-  <meta itemprop="wordCount" content="62">
+  <meta itemprop="description" content="Combines two validations, accumulating errors if both fail.
+Signature Validation.map2 mapper left right Parameters Name Type Description mapper ‘left -&gt; ‘right -&gt; ‘value A function of type &#39;left -&gt; &#39;right -&gt; &#39;value. left Validation&lt;‘left, ’error&gt; The first validation. right Validation&lt;‘right, ’error&gt; The second validation. Returns Type Description Validation&lt;‘value, ’error&gt; A validation with the combined result. Remarks This is the core applicative operation. If both left and right fail, their diagnostics graphs are merged.
+Examples let v1 = Validation.ok 1 let v2 = Validation.ok 2 Validation.map2 (&#43;) v1 v2 // Validation (Ok 3) val v1: obj val v2: obj">
+  <meta itemprop="wordCount" content="95">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Validation.map2">
-  <meta name="twitter:description" content="Validation.map2 mapper left right Combines two validations, accumulating errors if both fail.
-Remarks This is the core applicative operation. If both left and right fail, their diagnostics graphs are merged.
-Parameters mapper: ‘left -&gt; ‘right -&gt; ‘value A function of type &#39;left -&gt; &#39;right -&gt; &#39;value. left: Validation&lt;‘left, ’error&gt; The first validation. right: Validation&lt;‘right, ’error&gt; The second validation. Returns A validation with the combined result.">
+  <meta name="twitter:description" content="Combines two validations, accumulating errors if both fail.
+Signature Validation.map2 mapper left right Parameters Name Type Description mapper ‘left -&gt; ‘right -&gt; ‘value A function of type &#39;left -&gt; &#39;right -&gt; &#39;value. left Validation&lt;‘left, ’error&gt; The first validation. right Validation&lt;‘right, ’error&gt; The second validation. Returns Type Description Validation&lt;‘value, ’error&gt; A validation with the combined result. Remarks This is the core applicative operation. If both left and right fail, their diagnostics graphs are merged.
+Examples let v1 = Validation.ok 1 let v2 = Validation.ok 2 Validation.map2 (&#43;) v1 v2 // Validation (Ok 3) val v1: obj val v2: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -521,9 +521,11 @@ Parameters mapper: ‘left -&gt; ‘right -&gt; ‘value A function of type &#39
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -549,24 +551,63 @@ Parameters mapper: ‘left -&gt; ‘right -&gt; ‘value A function of type &#39
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Combines two validations, accumulating errors if both fail.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>Validation.map2&#32;<span>mapper&#32;left&#32;right</span></span></code>
 </div>
-<p>Combines two validations, accumulating errors if both fail.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>mapper</code></td>
+          <td><code><span>&lsquo;left -&gt; &lsquo;right -&gt; &lsquo;value</span></code></td>
+          <td>A function of type <code>'left -&gt; 'right -&gt; 'value</code>.</td>
+      </tr>
+      <tr>
+          <td><code>left</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;left, &rsquo;error</span>&gt;</span></code></td>
+          <td>The first validation.</td>
+      </tr>
+      <tr>
+          <td><code>right</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;right, &rsquo;error</span>&gt;</span></code></td>
+          <td>The second validation.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code></td>
+          <td>A validation with the combined result.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p>This is the core applicative operation. If both <span class="fsdocs-param-name">left</span> and
 <span class="fsdocs-param-name">right</span> fail, their diagnostics graphs are merged.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>mapper</code>: <code><span>&lsquo;left -&gt; &lsquo;right -&gt; &lsquo;value</span></code>
-A function of type <code>'left -&gt; 'right -&gt; 'value</code>.</li>
-<li><code>left</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;left, &rsquo;error</span>&gt;</span></code>
-The first validation.</li>
-<li><code>right</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a>&lt;<span>&lsquo;right, &rsquo;error</span>&gt;</span></code>
-The second validation.</li>
-</ul>
-<h2 id="returns">Returns</h2>
-<p>A validation with the combined result.</p>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">v1</span> <span class="o">=</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">ok</span> <span class="n">1</span>
+ <span class="k">let</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="id">v2</span> <span class="o">=</span> <span class="id">Validation</span><span class="pn">.</span><span class="id">ok</span> <span class="n">2</span>
+ <span class="id">Validation</span><span class="pn">.</span><span class="id">map2</span> <span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="3" class="id">v1</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="4" class="id">v2</span> <span class="c">// Validation (Ok 3)</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val v1: obj</div>
+<div popover class="fsdocs-tip" id="fs2">val v2: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/validation/m-validation-map/" aria-label="Previous - Validation.map">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

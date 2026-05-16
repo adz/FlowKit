@@ -19,25 +19,45 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>STM.atomically | FsFlow</title>
-<meta name="description" content="STM.atomically transaction Executes an STM transaction atomically within a flow while preserving retry/orElse coordination.
-Parameters transaction: STM&lt;‘T&gt; The STM transaction to execute. Returns A flow that performs the transaction and returns its result.">
+<meta name="description" content="Executes an STM transaction atomically within a flow while preserving retry/orElse coordination.
+Signature STM.atomically transaction Parameters Name Type Description transaction STM&lt;‘T&gt; The STM transaction to execute. Returns Type Description Flow&lt;‘env, ’none, ‘T&gt; A flow that performs the transaction and returns its result. Examples let transfer (fromAcc: TRef&lt;int&gt;) (toAcc: TRef&lt;int&gt;) amount = stm { let! bal = TRef.get fromAcc if bal &lt; amount then do! STM.retry do! TRef.set (bal - amount) fromAcc do! TRef.update (fun b -&gt; b &#43; amount) toAcc } let flow = STM.atomically (transfer acc1 acc2 100) val transfer: fromAcc: &#39;a -&gt; toAcc: &#39;b -&gt; amount: &#39;c -&gt; &#39;d val fromAcc: &#39;a Multiple items
+val int: value: &#39;T -&gt; int (requires member op_Explicit)
+--------------------
+type int = int32
+--------------------
+type int&lt;&#39;Measure&gt; = int val toAcc: &#39;b val amount: &#39;c val flow: obj">
 <meta property="og:url" content="http://localhost:3000/reference/stm/m-stm-atomically/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="STM.atomically">
-  <meta property="og:description" content="STM.atomically transaction Executes an STM transaction atomically within a flow while preserving retry/orElse coordination.
-Parameters transaction: STM&lt;‘T&gt; The STM transaction to execute. Returns A flow that performs the transaction and returns its result.">
+  <meta property="og:description" content="Executes an STM transaction atomically within a flow while preserving retry/orElse coordination.
+Signature STM.atomically transaction Parameters Name Type Description transaction STM&lt;‘T&gt; The STM transaction to execute. Returns Type Description Flow&lt;‘env, ’none, ‘T&gt; A flow that performs the transaction and returns its result. Examples let transfer (fromAcc: TRef&lt;int&gt;) (toAcc: TRef&lt;int&gt;) amount = stm { let! bal = TRef.get fromAcc if bal &lt; amount then do! STM.retry do! TRef.set (bal - amount) fromAcc do! TRef.update (fun b -&gt; b &#43; amount) toAcc } let flow = STM.atomically (transfer acc1 acc2 100) val transfer: fromAcc: &#39;a -&gt; toAcc: &#39;b -&gt; amount: &#39;c -&gt; &#39;d val fromAcc: &#39;a Multiple items
+val int: value: &#39;T -&gt; int (requires member op_Explicit)
+--------------------
+type int = int32
+--------------------
+type int&lt;&#39;Measure&gt; = int val toAcc: &#39;b val amount: &#39;c val flow: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="STM.atomically">
-  <meta itemprop="description" content="STM.atomically transaction Executes an STM transaction atomically within a flow while preserving retry/orElse coordination.
-Parameters transaction: STM&lt;‘T&gt; The STM transaction to execute. Returns A flow that performs the transaction and returns its result.">
-  <meta itemprop="wordCount" content="32">
+  <meta itemprop="description" content="Executes an STM transaction atomically within a flow while preserving retry/orElse coordination.
+Signature STM.atomically transaction Parameters Name Type Description transaction STM&lt;‘T&gt; The STM transaction to execute. Returns Type Description Flow&lt;‘env, ’none, ‘T&gt; A flow that performs the transaction and returns its result. Examples let transfer (fromAcc: TRef&lt;int&gt;) (toAcc: TRef&lt;int&gt;) amount = stm { let! bal = TRef.get fromAcc if bal &lt; amount then do! STM.retry do! TRef.set (bal - amount) fromAcc do! TRef.update (fun b -&gt; b &#43; amount) toAcc } let flow = STM.atomically (transfer acc1 acc2 100) val transfer: fromAcc: &#39;a -&gt; toAcc: &#39;b -&gt; amount: &#39;c -&gt; &#39;d val fromAcc: &#39;a Multiple items
+val int: value: &#39;T -&gt; int (requires member op_Explicit)
+--------------------
+type int = int32
+--------------------
+type int&lt;&#39;Measure&gt; = int val toAcc: &#39;b val amount: &#39;c val flow: obj">
+  <meta itemprop="wordCount" content="133">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="STM.atomically">
-  <meta name="twitter:description" content="STM.atomically transaction Executes an STM transaction atomically within a flow while preserving retry/orElse coordination.
-Parameters transaction: STM&lt;‘T&gt; The STM transaction to execute. Returns A flow that performs the transaction and returns its result.">
+  <meta name="twitter:description" content="Executes an STM transaction atomically within a flow while preserving retry/orElse coordination.
+Signature STM.atomically transaction Parameters Name Type Description transaction STM&lt;‘T&gt; The STM transaction to execute. Returns Type Description Flow&lt;‘env, ’none, ‘T&gt; A flow that performs the transaction and returns its result. Examples let transfer (fromAcc: TRef&lt;int&gt;) (toAcc: TRef&lt;int&gt;) amount = stm { let! bal = TRef.get fromAcc if bal &lt; amount then do! STM.retry do! TRef.set (bal - amount) fromAcc do! TRef.update (fun b -&gt; b &#43; amount) toAcc } let flow = STM.atomically (transfer acc1 acc2 100) val transfer: fromAcc: &#39;a -&gt; toAcc: &#39;b -&gt; amount: &#39;c -&gt; &#39;d val fromAcc: &#39;a Multiple items
+val int: value: &#39;T -&gt; int (requires member op_Explicit)
+--------------------
+type int = int32
+--------------------
+type int&lt;&#39;Measure&gt; = int val toAcc: &#39;b val amount: &#39;c val flow: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,8 +537,10 @@ Parameters transaction: STM&lt;‘T&gt; The STM transaction to execute. Returns 
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -544,17 +566,61 @@ Parameters transaction: STM&lt;‘T&gt; The STM transaction to execute. Returns 
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Executes an STM transaction atomically within a flow while preserving retry/orElse coordination.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>STM.atomically&#32;<span>transaction</span></span></code>
 </div>
-<p>Executes an STM transaction atomically within a flow while preserving retry/orElse coordination.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>transaction</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-stm-1.html">STM</a>&lt;&lsquo;T&gt;</span></code>
-The STM transaction to execute.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>transaction</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-stm-1.html">STM</a>&lt;&lsquo;T&gt;</span></code></td>
+          <td>The STM transaction to execute.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A flow that performs the transaction and returns its result.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;none, &lsquo;T</span>&gt;</span></code></td>
+          <td>A flow that performs the transaction and returns its result.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="fn">transfer</span> <span class="pn">(</span><span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="fn">fromAcc</span><span class="pn">:</span> <span class="id">TRef</span><span class="pn">&lt;</span><span data-fsdocs-tip="fs3" data-fsdocs-tip-unique="3" class="id">int</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="pn">(</span><span data-fsdocs-tip="fs4" data-fsdocs-tip-unique="4" class="fn">toAcc</span><span class="pn">:</span> <span class="id">TRef</span><span class="pn">&lt;</span><span data-fsdocs-tip="fs3" data-fsdocs-tip-unique="5" class="id">int</span><span class="pn">&gt;</span><span class="pn">)</span> <span data-fsdocs-tip="fs5" data-fsdocs-tip-unique="6" class="fn">amount</span> <span class="o">=</span>
+     <span class="id">stm</span> <span class="pn">{</span>
+         <span class="k">let!</span> <span class="id">bal</span> <span class="o">=</span> <span class="id">TRef</span><span class="pn">.</span><span class="id">get</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="7" class="id">fromAcc</span>
+         <span class="k">if</span> <span class="id">bal</span> <span class="pn">&lt;</span> <span data-fsdocs-tip="fs5" data-fsdocs-tip-unique="8" class="id">amount</span> <span class="k">then</span> <span class="k">do!</span> <span class="id">STM</span><span class="pn">.</span><span class="id">retry</span>
+         <span class="k">do!</span> <span class="id">TRef</span><span class="pn">.</span><span class="id">set</span> <span class="pn">(</span><span class="id">bal</span> <span class="o">-</span> <span data-fsdocs-tip="fs5" data-fsdocs-tip-unique="9" class="id">amount</span><span class="pn">)</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="10" class="id">fromAcc</span>
+         <span class="k">do!</span> <span class="id">TRef</span><span class="pn">.</span><span class="id">update</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">b</span> <span class="k">-&gt;</span> <span class="id">b</span> <span class="o">+</span> <span data-fsdocs-tip="fs5" data-fsdocs-tip-unique="11" class="id">amount</span><span class="pn">)</span> <span data-fsdocs-tip="fs4" data-fsdocs-tip-unique="12" class="id">toAcc</span>
+     <span class="pn">}</span>
+ 
+ <span class="k">let</span> <span data-fsdocs-tip="fs6" data-fsdocs-tip-unique="13" class="id">flow</span> <span class="o">=</span> <span class="id">STM</span><span class="pn">.</span><span class="id">atomically</span> <span class="pn">(</span><span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="14" class="id">transfer</span> <span class="id">acc1</span> <span class="id">acc2</span> <span class="n">100</span><span class="pn">)</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val transfer: fromAcc: &#39;a -&gt; toAcc: &#39;b -&gt; amount: &#39;c -&gt; &#39;d</div>
+<div popover class="fsdocs-tip" id="fs2">val fromAcc: &#39;a</div>
+<div popover class="fsdocs-tip" id="fs3">Multiple items<br />val int: value: &#39;T -&gt; int (requires member op_Explicit)<br /><br />--------------------<br />type int = int32<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; =
+  int</div>
+<div popover class="fsdocs-tip" id="fs4">val toAcc: &#39;b</div>
+<div popover class="fsdocs-tip" id="fs5">val amount: &#39;c</div>
+<div popover class="fsdocs-tip" id="fs6">val flow: obj</div>
 
 	<nav class="docs-page-nav docs-page-nav--next-only"><a class="docs-home-cta docs-page-nav__link docs-page-nav__next" href="http://localhost:3000/reference/stm/m-tref-get/" aria-label="Next - TRef.get">
     <span>Next</span>

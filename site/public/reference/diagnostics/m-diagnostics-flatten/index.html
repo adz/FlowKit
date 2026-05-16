@@ -19,29 +19,29 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Diagnostics.flatten | FsFlow</title>
-<meta name="description" content="Diagnostics.flatten graph Flattens the structured diagnostics graph into a linear list of diagnostics.
-Remarks During flattening, child paths are accumulated from the root down into each emitted diagnostic. The tree itself stores only local errors and child branches, while Diagnostic is reserved for reporting output.
-Parameters graph: Diagnostics&lt;’error&gt; The Diagnostics to flatten. Returns A list of type Diagnostic list.">
+<meta name="description" content="Flattens the structured diagnostics graph into a linear list of diagnostics.
+Signature Diagnostics.flatten graph Parameters Name Type Description graph Diagnostics&lt;’error&gt; The Diagnostics to flatten. Returns Type Description Diagnostic&lt;’error&gt; list A list of type Diagnostic list. Remarks During flattening, child paths are accumulated from the root down into each emitted diagnostic. The tree itself stores only local errors and child branches, while Diagnostic is reserved for reporting output.
+Examples let d = Diagnostics.singleton &#34;fail&#34; let flat = Diagnostics.flatten d val d: obj val flat: obj">
 <meta property="og:url" content="http://localhost:3000/reference/diagnostics/m-diagnostics-flatten/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Diagnostics.flatten">
-  <meta property="og:description" content="Diagnostics.flatten graph Flattens the structured diagnostics graph into a linear list of diagnostics.
-Remarks During flattening, child paths are accumulated from the root down into each emitted diagnostic. The tree itself stores only local errors and child branches, while Diagnostic is reserved for reporting output.
-Parameters graph: Diagnostics&lt;’error&gt; The Diagnostics to flatten. Returns A list of type Diagnostic list.">
+  <meta property="og:description" content="Flattens the structured diagnostics graph into a linear list of diagnostics.
+Signature Diagnostics.flatten graph Parameters Name Type Description graph Diagnostics&lt;’error&gt; The Diagnostics to flatten. Returns Type Description Diagnostic&lt;’error&gt; list A list of type Diagnostic list. Remarks During flattening, child paths are accumulated from the root down into each emitted diagnostic. The tree itself stores only local errors and child branches, while Diagnostic is reserved for reporting output.
+Examples let d = Diagnostics.singleton &#34;fail&#34; let flat = Diagnostics.flatten d val d: obj val flat: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Diagnostics.flatten">
-  <meta itemprop="description" content="Diagnostics.flatten graph Flattens the structured diagnostics graph into a linear list of diagnostics.
-Remarks During flattening, child paths are accumulated from the root down into each emitted diagnostic. The tree itself stores only local errors and child branches, while Diagnostic is reserved for reporting output.
-Parameters graph: Diagnostics&lt;’error&gt; The Diagnostics to flatten. Returns A list of type Diagnostic list.">
-  <meta itemprop="wordCount" content="58">
+  <meta itemprop="description" content="Flattens the structured diagnostics graph into a linear list of diagnostics.
+Signature Diagnostics.flatten graph Parameters Name Type Description graph Diagnostics&lt;’error&gt; The Diagnostics to flatten. Returns Type Description Diagnostic&lt;’error&gt; list A list of type Diagnostic list. Remarks During flattening, child paths are accumulated from the root down into each emitted diagnostic. The tree itself stores only local errors and child branches, while Diagnostic is reserved for reporting output.
+Examples let d = Diagnostics.singleton &#34;fail&#34; let flat = Diagnostics.flatten d val d: obj val flat: obj">
+  <meta itemprop="wordCount" content="83">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Diagnostics.flatten">
-  <meta name="twitter:description" content="Diagnostics.flatten graph Flattens the structured diagnostics graph into a linear list of diagnostics.
-Remarks During flattening, child paths are accumulated from the root down into each emitted diagnostic. The tree itself stores only local errors and child branches, while Diagnostic is reserved for reporting output.
-Parameters graph: Diagnostics&lt;’error&gt; The Diagnostics to flatten. Returns A list of type Diagnostic list.">
+  <meta name="twitter:description" content="Flattens the structured diagnostics graph into a linear list of diagnostics.
+Signature Diagnostics.flatten graph Parameters Name Type Description graph Diagnostics&lt;’error&gt; The Diagnostics to flatten. Returns Type Description Diagnostic&lt;’error&gt; list A list of type Diagnostic list. Remarks During flattening, child paths are accumulated from the root down into each emitted diagnostic. The tree itself stores only local errors and child branches, while Diagnostic is reserved for reporting output.
+Examples let d = Diagnostics.singleton &#34;fail&#34; let flat = Diagnostics.flatten d val d: obj val flat: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -521,9 +521,11 @@ Parameters graph: Diagnostics&lt;’error&gt; The Diagnostics to flatten. Return
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -549,21 +551,53 @@ Parameters graph: Diagnostics&lt;’error&gt; The Diagnostics to flatten. Return
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Flattens the structured diagnostics graph into a linear list of diagnostics.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>Diagnostics.flatten&#32;<span>graph</span></span></code>
 </div>
-<p>Flattens the structured diagnostics graph into a linear list of diagnostics.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>graph</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;&rsquo;error&gt;</span></code></td>
+          <td>The <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a> to flatten.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostic-1.html">Diagnostic</a>&lt;&rsquo;error&gt;</span> list</span></code></td>
+          <td>A list of type <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostic-1.html">Diagnostic</a> list.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p>During flattening, child paths are accumulated from the root down into each emitted diagnostic.
 The tree itself stores only local errors and child branches, while <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostic-1.html">Diagnostic</a>
 is reserved for reporting output.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>graph</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;&rsquo;error&gt;</span></code>
-The <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a> to flatten.</li>
-</ul>
-<h2 id="returns">Returns</h2>
-<p>A list of type <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostic-1.html">Diagnostic</a> list.</p>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">d</span> <span class="o">=</span> <span class="id">Diagnostics</span><span class="pn">.</span><span class="id">singleton</span> <span class="s">&quot;fail&quot;</span>
+ <span class="k">let</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="id">flat</span> <span class="o">=</span> <span class="id">Diagnostics</span><span class="pn">.</span><span class="id">flatten</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="3" class="id">d</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val d: obj</div>
+<div popover class="fsdocs-tip" id="fs2">val flat: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/diagnostics/m-diagnostics-empty/" aria-label="Previous - Diagnostics.empty">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

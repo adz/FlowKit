@@ -19,29 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.map | FsFlow</title>
-<meta name="description" content="map mapper flow Transforms the successful value of a flow.
-Remarks If the source flow fails, the mapper is not executed. The original failure cause is preserved, including typed failures, interruption, and defects. Use map for pure value transformations after an effect has succeeded.
-Parameters mapper: ‘value -&gt; ’next A function of type &#39;value -&gt; &#39;next to transform the successful value. flow: Flow&lt;‘env, ’error, ‘value&gt; The source flow of type Flow to transform. Returns A new Flow with the transformed success value of type &#39;next.">
+<meta name="description" content="Transforms the successful value of a flow.
+Signature Flow.map mapper flow Parameters Name Type Description mapper ‘value -&gt; ’next A function of type &#39;value -&gt; &#39;next to transform the successful value. flow Flow&lt;‘env, ’error, ‘value&gt; The source flow of type Flow to transform. Returns Type Description Flow&lt;‘env, ’error, ’next&gt; A new Flow with the transformed success value of type &#39;next. Remarks If the source flow fails, the mapper is not executed. The original failure cause is preserved, including typed failures, interruption, and defects. Use map for pure value transformations after an effect has succeeded.">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-map/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.map">
-  <meta property="og:description" content="map mapper flow Transforms the successful value of a flow.
-Remarks If the source flow fails, the mapper is not executed. The original failure cause is preserved, including typed failures, interruption, and defects. Use map for pure value transformations after an effect has succeeded.
-Parameters mapper: ‘value -&gt; ’next A function of type &#39;value -&gt; &#39;next to transform the successful value. flow: Flow&lt;‘env, ’error, ‘value&gt; The source flow of type Flow to transform. Returns A new Flow with the transformed success value of type &#39;next.">
+  <meta property="og:description" content="Transforms the successful value of a flow.
+Signature Flow.map mapper flow Parameters Name Type Description mapper ‘value -&gt; ’next A function of type &#39;value -&gt; &#39;next to transform the successful value. flow Flow&lt;‘env, ’error, ‘value&gt; The source flow of type Flow to transform. Returns Type Description Flow&lt;‘env, ’error, ’next&gt; A new Flow with the transformed success value of type &#39;next. Remarks If the source flow fails, the mapper is not executed. The original failure cause is preserved, including typed failures, interruption, and defects. Use map for pure value transformations after an effect has succeeded.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.map">
-  <meta itemprop="description" content="map mapper flow Transforms the successful value of a flow.
-Remarks If the source flow fails, the mapper is not executed. The original failure cause is preserved, including typed failures, interruption, and defects. Use map for pure value transformations after an effect has succeeded.
-Parameters mapper: ‘value -&gt; ’next A function of type &#39;value -&gt; &#39;next to transform the successful value. flow: Flow&lt;‘env, ’error, ‘value&gt; The source flow of type Flow to transform. Returns A new Flow with the transformed success value of type &#39;next.">
-  <meta itemprop="wordCount" content="83">
+  <meta itemprop="description" content="Transforms the successful value of a flow.
+Signature Flow.map mapper flow Parameters Name Type Description mapper ‘value -&gt; ’next A function of type &#39;value -&gt; &#39;next to transform the successful value. flow Flow&lt;‘env, ’error, ‘value&gt; The source flow of type Flow to transform. Returns Type Description Flow&lt;‘env, ’error, ’next&gt; A new Flow with the transformed success value of type &#39;next. Remarks If the source flow fails, the mapper is not executed. The original failure cause is preserved, including typed failures, interruption, and defects. Use map for pure value transformations after an effect has succeeded.">
+  <meta itemprop="wordCount" content="109">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.map">
-  <meta name="twitter:description" content="map mapper flow Transforms the successful value of a flow.
-Remarks If the source flow fails, the mapper is not executed. The original failure cause is preserved, including typed failures, interruption, and defects. Use map for pure value transformations after an effect has succeeded.
-Parameters mapper: ‘value -&gt; ’next A function of type &#39;value -&gt; &#39;next to transform the successful value. flow: Flow&lt;‘env, ’error, ‘value&gt; The source flow of type Flow to transform. Returns A new Flow with the transformed success value of type &#39;next.">
+  <meta name="twitter:description" content="Transforms the successful value of a flow.
+Signature Flow.map mapper flow Parameters Name Type Description mapper ‘value -&gt; ’next A function of type &#39;value -&gt; &#39;next to transform the successful value. flow Flow&lt;‘env, ’error, ‘value&gt; The source flow of type Flow to transform. Returns Type Description Flow&lt;‘env, ’error, ’next&gt; A new Flow with the transformed success value of type &#39;next. Remarks If the source flow fails, the mapper is not executed. The original failure cause is preserved, including typed failures, interruption, and defects. Use map for pure value transformations after an effect has succeeded.">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -521,9 +517,11 @@ Parameters mapper: ‘value -&gt; ’next A function of type &#39;value -&gt; &#
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -549,23 +547,56 @@ Parameters mapper: ‘value -&gt; ’next A function of type &#39;value -&gt; &#
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>map&#32;<span>mapper&#32;flow</span></span></code>
+	<p>Transforms the successful value of a flow.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.map&#32;<span>mapper&#32;flow</span></span></code>
 </div>
-<p>Transforms the successful value of a flow.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>mapper</code></td>
+          <td><code><span>&lsquo;value -&gt; &rsquo;next</span></code></td>
+          <td>A function of type <code>'value -&gt; 'next</code> to transform the successful value.</td>
+      </tr>
+      <tr>
+          <td><code>flow</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>The source flow of type <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a> to transform.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &rsquo;next</span>&gt;</span></code></td>
+          <td>A new <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a> with the transformed success value of type <code>'next</code>.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p>If the source <span class="fsdocs-param-name">flow</span> fails, the <span class="fsdocs-param-name">mapper</span> is not executed.
 The original failure cause is preserved, including typed failures, interruption, and defects.
 Use <code>map</code> for pure value transformations after an effect has succeeded.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>mapper</code>: <code><span>&lsquo;value -&gt; &rsquo;next</span></code>
-A function of type <code>'value -&gt; 'next</code> to transform the successful value.</li>
-<li><code>flow</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code>
-The source flow of type <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a> to transform.</li>
-</ul>
-<h2 id="returns">Returns</h2>
-<p>A new <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a> with the transformed success value of type <code>'next</code>.</p>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">flow</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">succeed</span> <span class="n">1</span> <span class="o">|&gt;</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">map</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">x</span> <span class="k">-&gt;</span> <span class="id">x</span> <span class="o">+</span> <span class="n">1</span><span class="pn">)</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val flow: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/flow/m-flow-localenv/" aria-label="Previous - Flow.localEnv">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

@@ -19,29 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.bind | FsFlow</title>
-<meta name="description" content="bind binder flow Sequences a dependent flow after a successful value.
-Remarks This is the flatmap operation for Flow. The continuation only runs when the source flow succeeds, and it receives the successful value. Use bind when the next effect depends on the previous result; use map when the next step is pure.
-Parameters binder: ‘value -&gt; Flow&lt;‘env, ’error, ’next&gt; A function that takes the successful value and returns a new flow. flow: Flow&lt;‘env, ’error, ‘value&gt; The source flow to sequence. Returns A Flow representing the combined workflow.">
+<meta name="description" content="Sequences a dependent flow after a successful value.
+Signature Flow.bind binder flow Parameters Name Type Description binder ‘value -&gt; Flow&lt;‘env, ’error, ’next&gt; A function that takes the successful value and returns a new flow. flow Flow&lt;‘env, ’error, ‘value&gt; The source flow to sequence. Returns Type Description Flow&lt;‘env, ’error, ’next&gt; A Flow representing the combined workflow. Remarks This is the flatmap operation for Flow. The continuation only runs when the source flow succeeds, and it receives the successful value. Use bind when the next effect depends on the previous result; use map when the next step is pure.">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-bind/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.bind">
-  <meta property="og:description" content="bind binder flow Sequences a dependent flow after a successful value.
-Remarks This is the flatmap operation for Flow. The continuation only runs when the source flow succeeds, and it receives the successful value. Use bind when the next effect depends on the previous result; use map when the next step is pure.
-Parameters binder: ‘value -&gt; Flow&lt;‘env, ’error, ’next&gt; A function that takes the successful value and returns a new flow. flow: Flow&lt;‘env, ’error, ‘value&gt; The source flow to sequence. Returns A Flow representing the combined workflow.">
+  <meta property="og:description" content="Sequences a dependent flow after a successful value.
+Signature Flow.bind binder flow Parameters Name Type Description binder ‘value -&gt; Flow&lt;‘env, ’error, ’next&gt; A function that takes the successful value and returns a new flow. flow Flow&lt;‘env, ’error, ‘value&gt; The source flow to sequence. Returns Type Description Flow&lt;‘env, ’error, ’next&gt; A Flow representing the combined workflow. Remarks This is the flatmap operation for Flow. The continuation only runs when the source flow succeeds, and it receives the successful value. Use bind when the next effect depends on the previous result; use map when the next step is pure.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.bind">
-  <meta itemprop="description" content="bind binder flow Sequences a dependent flow after a successful value.
-Remarks This is the flatmap operation for Flow. The continuation only runs when the source flow succeeds, and it receives the successful value. Use bind when the next effect depends on the previous result; use map when the next step is pure.
-Parameters binder: ‘value -&gt; Flow&lt;‘env, ’error, ’next&gt; A function that takes the successful value and returns a new flow. flow: Flow&lt;‘env, ’error, ‘value&gt; The source flow to sequence. Returns A Flow representing the combined workflow.">
-  <meta itemprop="wordCount" content="86">
+  <meta itemprop="description" content="Sequences a dependent flow after a successful value.
+Signature Flow.bind binder flow Parameters Name Type Description binder ‘value -&gt; Flow&lt;‘env, ’error, ’next&gt; A function that takes the successful value and returns a new flow. flow Flow&lt;‘env, ’error, ‘value&gt; The source flow to sequence. Returns Type Description Flow&lt;‘env, ’error, ’next&gt; A Flow representing the combined workflow. Remarks This is the flatmap operation for Flow. The continuation only runs when the source flow succeeds, and it receives the successful value. Use bind when the next effect depends on the previous result; use map when the next step is pure.">
+  <meta itemprop="wordCount" content="113">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.bind">
-  <meta name="twitter:description" content="bind binder flow Sequences a dependent flow after a successful value.
-Remarks This is the flatmap operation for Flow. The continuation only runs when the source flow succeeds, and it receives the successful value. Use bind when the next effect depends on the previous result; use map when the next step is pure.
-Parameters binder: ‘value -&gt; Flow&lt;‘env, ’error, ’next&gt; A function that takes the successful value and returns a new flow. flow: Flow&lt;‘env, ’error, ‘value&gt; The source flow to sequence. Returns A Flow representing the combined workflow.">
+  <meta name="twitter:description" content="Sequences a dependent flow after a successful value.
+Signature Flow.bind binder flow Parameters Name Type Description binder ‘value -&gt; Flow&lt;‘env, ’error, ’next&gt; A function that takes the successful value and returns a new flow. flow Flow&lt;‘env, ’error, ‘value&gt; The source flow to sequence. Returns Type Description Flow&lt;‘env, ’error, ’next&gt; A Flow representing the combined workflow. Remarks This is the flatmap operation for Flow. The continuation only runs when the source flow succeeds, and it receives the successful value. Use bind when the next effect depends on the previous result; use map when the next step is pure.">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -521,9 +517,11 @@ Parameters binder: ‘value -&gt; Flow&lt;‘env, ’error, ’next&gt; A functi
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -549,23 +547,56 @@ Parameters binder: ‘value -&gt; Flow&lt;‘env, ’error, ’next&gt; A functi
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>bind&#32;<span>binder&#32;flow</span></span></code>
+	<p>Sequences a dependent flow after a successful value.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.bind&#32;<span>binder&#32;flow</span></span></code>
 </div>
-<p>Sequences a dependent flow after a successful value.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>binder</code></td>
+          <td><code><span>&lsquo;value -&gt; <span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &rsquo;next</span>&gt;</span></span></code></td>
+          <td>A function that takes the successful value and returns a new flow.</td>
+      </tr>
+      <tr>
+          <td><code>flow</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>The source flow to sequence.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &rsquo;next</span>&gt;</span></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a> representing the combined workflow.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p>This is the flatmap operation for <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>. The continuation only runs
 when the source flow succeeds, and it receives the successful value. Use <code>bind</code> when the
 next effect depends on the previous result; use <code>map</code> when the next step is pure.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>binder</code>: <code><span>&lsquo;value -&gt; <span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &rsquo;next</span>&gt;</span></span></code>
-A function that takes the successful value and returns a new flow.</li>
-<li><code>flow</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code>
-The source flow to sequence.</li>
-</ul>
-<h2 id="returns">Returns</h2>
-<p>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a> representing the combined workflow.</p>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">flow</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">succeed</span> <span class="n">1</span> <span class="o">|&gt;</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">bind</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">x</span> <span class="k">-&gt;</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">succeed</span> <span class="pn">(</span><span class="id">x</span> <span class="o">+</span> <span class="n">1</span><span class="pn">)</span><span class="pn">)</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val flow: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/flow/m-flow-apply/" aria-label="Previous - Flow.apply">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

@@ -19,25 +19,45 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>TRef.update | FsFlow</title>
-<meta name="description" content="TRef.update f tref Updates the value of the transactional reference within a transaction using the supplied function.
-Parameters f: ‘T -&gt; ‘T tref: TRef&lt;‘T&gt;">
+<meta name="description" content="Updates the value of the transactional reference within a transaction using the supplied function.
+Signature TRef.update f tref Parameters Name Type Description f ‘T -&gt; ‘T The function to apply to the current value to produce the new value. tref TRef&lt;‘T&gt; The transactional reference to update. Returns Type Description STM&lt;unit&gt; An STM operation that updates the reference value. Examples let tx (counter: TRef&lt;int&gt;) = stm { do! TRef.update (fun n -&gt; n &#43; 1) counter } val tx: counter: &#39;a -&gt; &#39;b val counter: &#39;a Multiple items
+val int: value: &#39;T -&gt; int (requires member op_Explicit)
+--------------------
+type int = int32
+--------------------
+type int&lt;&#39;Measure&gt; = int">
 <meta property="og:url" content="http://localhost:3000/reference/stm/m-tref-update/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="TRef.update">
-  <meta property="og:description" content="TRef.update f tref Updates the value of the transactional reference within a transaction using the supplied function.
-Parameters f: ‘T -&gt; ‘T tref: TRef&lt;‘T&gt;">
+  <meta property="og:description" content="Updates the value of the transactional reference within a transaction using the supplied function.
+Signature TRef.update f tref Parameters Name Type Description f ‘T -&gt; ‘T The function to apply to the current value to produce the new value. tref TRef&lt;‘T&gt; The transactional reference to update. Returns Type Description STM&lt;unit&gt; An STM operation that updates the reference value. Examples let tx (counter: TRef&lt;int&gt;) = stm { do! TRef.update (fun n -&gt; n &#43; 1) counter } val tx: counter: &#39;a -&gt; &#39;b val counter: &#39;a Multiple items
+val int: value: &#39;T -&gt; int (requires member op_Explicit)
+--------------------
+type int = int32
+--------------------
+type int&lt;&#39;Measure&gt; = int">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="TRef.update">
-  <meta itemprop="description" content="TRef.update f tref Updates the value of the transactional reference within a transaction using the supplied function.
-Parameters f: ‘T -&gt; ‘T tref: TRef&lt;‘T&gt;">
-  <meta itemprop="wordCount" content="22">
+  <meta itemprop="description" content="Updates the value of the transactional reference within a transaction using the supplied function.
+Signature TRef.update f tref Parameters Name Type Description f ‘T -&gt; ‘T The function to apply to the current value to produce the new value. tref TRef&lt;‘T&gt; The transactional reference to update. Returns Type Description STM&lt;unit&gt; An STM operation that updates the reference value. Examples let tx (counter: TRef&lt;int&gt;) = stm { do! TRef.update (fun n -&gt; n &#43; 1) counter } val tx: counter: &#39;a -&gt; &#39;b val counter: &#39;a Multiple items
+val int: value: &#39;T -&gt; int (requires member op_Explicit)
+--------------------
+type int = int32
+--------------------
+type int&lt;&#39;Measure&gt; = int">
+  <meta itemprop="wordCount" content="104">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="TRef.update">
-  <meta name="twitter:description" content="TRef.update f tref Updates the value of the transactional reference within a transaction using the supplied function.
-Parameters f: ‘T -&gt; ‘T tref: TRef&lt;‘T&gt;">
+  <meta name="twitter:description" content="Updates the value of the transactional reference within a transaction using the supplied function.
+Signature TRef.update f tref Parameters Name Type Description f ‘T -&gt; ‘T The function to apply to the current value to produce the new value. tref TRef&lt;‘T&gt; The transactional reference to update. Returns Type Description STM&lt;unit&gt; An STM operation that updates the reference value. Examples let tx (counter: TRef&lt;int&gt;) = stm { do! TRef.update (fun n -&gt; n &#43; 1) counter } val tx: counter: &#39;a -&gt; &#39;b val counter: &#39;a Multiple items
+val int: value: &#39;T -&gt; int (requires member op_Explicit)
+--------------------
+type int = int32
+--------------------
+type int&lt;&#39;Measure&gt; = int">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +537,10 @@ Parameters f: ‘T -&gt; ‘T tref: TRef&lt;‘T&gt;">
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -543,15 +566,57 @@ Parameters f: ‘T -&gt; ‘T tref: TRef&lt;‘T&gt;">
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Updates the value of the transactional reference within a transaction using the supplied function.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>TRef.update&#32;<span>f&#32;tref</span></span></code>
 </div>
-<p>Updates the value of the transactional reference within a transaction using the supplied function.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>f</code>: <code><span>&lsquo;T -&gt; &lsquo;T</span></code></li>
-<li><code>tref</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-tref-1.html">TRef</a>&lt;&lsquo;T&gt;</span></code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>f</code></td>
+          <td><code><span>&lsquo;T -&gt; &lsquo;T</span></code></td>
+          <td>The function to apply to the current value to produce the new value.</td>
+      </tr>
+      <tr>
+          <td><code>tref</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-tref-1.html">TRef</a>&lt;&lsquo;T&gt;</span></code></td>
+          <td>The transactional reference to update.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-stm-1.html">STM</a>&lt;unit&gt;</span></code></td>
+          <td>An STM operation that updates the reference value.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="fn">tx</span> <span class="pn">(</span><span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="fn">counter</span><span class="pn">:</span> <span class="id">TRef</span><span class="pn">&lt;</span><span data-fsdocs-tip="fs3" data-fsdocs-tip-unique="3" class="id">int</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="o">=</span> <span class="id">stm</span> <span class="pn">{</span>
+     <span class="k">do!</span> <span class="id">TRef</span><span class="pn">.</span><span class="id">update</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">n</span> <span class="k">-&gt;</span> <span class="id">n</span> <span class="o">+</span> <span class="n">1</span><span class="pn">)</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="4" class="id">counter</span>
+ <span class="pn">}</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val tx: counter: &#39;a -&gt; &#39;b</div>
+<div popover class="fsdocs-tip" id="fs2">val counter: &#39;a</div>
+<div popover class="fsdocs-tip" id="fs3">Multiple items<br />val int: value: &#39;T -&gt; int (requires member op_Explicit)<br /><br />--------------------<br />type int = int32<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; =
+  int</div>
 
 	<nav class="docs-page-nav docs-page-nav--prev-only"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/stm/t-tref-1/" aria-label="Previous - TRef">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

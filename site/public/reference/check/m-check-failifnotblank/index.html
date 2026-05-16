@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Check.failIfNotBlank | FsFlow</title>
-<meta name="description" content="failIfNotBlank str Returns success when the string is blank.
-Parameters str: string The string to check. Returns A Check that succeeds if the string is blank.">
+<meta name="description" content="Returns success when the string is blank.
+Signature Check.failIfNotBlank str Parameters Name Type Description str string The string to check. Returns Type Description Check&lt;unit&gt; A Check that succeeds if the string is blank; otherwise, an Error with unit. Examples &#34; &#34; |&gt; Check.failIfNotBlank // Ok () &#34;hello&#34; |&gt; Check.failIfNotBlank // Error ()">
 <meta property="og:url" content="http://localhost:3000/reference/check/m-check-failifnotblank/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Check.failIfNotBlank">
-  <meta property="og:description" content="failIfNotBlank str Returns success when the string is blank.
-Parameters str: string The string to check. Returns A Check that succeeds if the string is blank.">
+  <meta property="og:description" content="Returns success when the string is blank.
+Signature Check.failIfNotBlank str Parameters Name Type Description str string The string to check. Returns Type Description Check&lt;unit&gt; A Check that succeeds if the string is blank; otherwise, an Error with unit. Examples &#34; &#34; |&gt; Check.failIfNotBlank // Ok () &#34;hello&#34; |&gt; Check.failIfNotBlank // Error ()">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Check.failIfNotBlank">
-  <meta itemprop="description" content="failIfNotBlank str Returns success when the string is blank.
-Parameters str: string The string to check. Returns A Check that succeeds if the string is blank.">
-  <meta itemprop="wordCount" content="25">
+  <meta itemprop="description" content="Returns success when the string is blank.
+Signature Check.failIfNotBlank str Parameters Name Type Description str string The string to check. Returns Type Description Check&lt;unit&gt; A Check that succeeds if the string is blank; otherwise, an Error with unit. Examples &#34; &#34; |&gt; Check.failIfNotBlank // Ok () &#34;hello&#34; |&gt; Check.failIfNotBlank // Error ()">
+  <meta itemprop="wordCount" content="51">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Check.failIfNotBlank">
-  <meta name="twitter:description" content="failIfNotBlank str Returns success when the string is blank.
-Parameters str: string The string to check. Returns A Check that succeeds if the string is blank.">
+  <meta name="twitter:description" content="Returns success when the string is blank.
+Signature Check.failIfNotBlank str Parameters Name Type Description str string The string to check. Returns Type Description Check&lt;unit&gt; A Check that succeeds if the string is blank; otherwise, an Error with unit. Examples &#34; &#34; |&gt; Check.failIfNotBlank // Ok () &#34;hello&#34; |&gt; Check.failIfNotBlank // Error ()">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,8 +517,10 @@ Parameters str: string The string to check. Returns A Check that succeeds if the
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -544,17 +546,47 @@ Parameters str: string The string to check. Returns A Check that succeeds if the
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>failIfNotBlank&#32;<span>str</span></span></code>
+	<p>Returns success when the string is blank.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Check.failIfNotBlank&#32;<span>str</span></span></code>
 </div>
-<p>Returns success when the string is blank.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>str</code>: <code>string</code>
-The string to check.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>str</code></td>
+          <td><code>string</code></td>
+          <td>The string to check.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> that succeeds if the string is blank.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;unit&gt;</span></code></td>
+          <td>A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> that succeeds if the string is blank; otherwise, an Error with unit.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="s">&quot;  &quot;</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">failIfNotBlank</span> <span class="c">// Ok ()</span>
+ <span class="s">&quot;hello&quot;</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">failIfNotBlank</span> <span class="c">// Error ()</span>
+</code></pre>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/check/m-check-failifnonemptystr/" aria-label="Previous - Check.failIfNonEmptyStr">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

@@ -19,29 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Diagnostics.toString | FsFlow</title>
-<meta name="description" content="Diagnostics.toString graph Renders a diagnostics graph in a YAML-like layout for display.
-Remarks This is intended for human-readable output. Empty sections are omitted, and children are shown directly under their branch labels at the same indentation level as errors. Errors render as YAML-style bullet items without an Errors: key. Use flatten when you need path-bearing diagnostics for reporting or assertions.
-Parameters graph: Diagnostics&lt;’error&gt; The diagnostics graph to render. Returns A formatted string representation of the graph.">
+<meta name="description" content="Renders a diagnostics graph in a YAML-like layout for display.
+Signature Diagnostics.toString graph Parameters Name Type Description graph Diagnostics&lt;’error&gt; The diagnostics graph to render. Returns Type Description string A formatted string representation of the graph. Remarks This is intended for human-readable output. Empty sections are omitted, and children are shown directly under their branch labels at the same indentation level as errors. Errors render as YAML-style bullet items without an Errors: key. Use flatten when you need path-bearing diagnostics for reporting or assertions.">
 <meta property="og:url" content="http://localhost:3000/reference/diagnostics/m-diagnostics-tostring/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Diagnostics.toString">
-  <meta property="og:description" content="Diagnostics.toString graph Renders a diagnostics graph in a YAML-like layout for display.
-Remarks This is intended for human-readable output. Empty sections are omitted, and children are shown directly under their branch labels at the same indentation level as errors. Errors render as YAML-style bullet items without an Errors: key. Use flatten when you need path-bearing diagnostics for reporting or assertions.
-Parameters graph: Diagnostics&lt;’error&gt; The diagnostics graph to render. Returns A formatted string representation of the graph.">
+  <meta property="og:description" content="Renders a diagnostics graph in a YAML-like layout for display.
+Signature Diagnostics.toString graph Parameters Name Type Description graph Diagnostics&lt;’error&gt; The diagnostics graph to render. Returns Type Description string A formatted string representation of the graph. Remarks This is intended for human-readable output. Empty sections are omitted, and children are shown directly under their branch labels at the same indentation level as errors. Errors render as YAML-style bullet items without an Errors: key. Use flatten when you need path-bearing diagnostics for reporting or assertions.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Diagnostics.toString">
-  <meta itemprop="description" content="Diagnostics.toString graph Renders a diagnostics graph in a YAML-like layout for display.
-Remarks This is intended for human-readable output. Empty sections are omitted, and children are shown directly under their branch labels at the same indentation level as errors. Errors render as YAML-style bullet items without an Errors: key. Use flatten when you need path-bearing diagnostics for reporting or assertions.
-Parameters graph: Diagnostics&lt;’error&gt; The diagnostics graph to render. Returns A formatted string representation of the graph.">
-  <meta itemprop="wordCount" content="75">
+  <meta itemprop="description" content="Renders a diagnostics graph in a YAML-like layout for display.
+Signature Diagnostics.toString graph Parameters Name Type Description graph Diagnostics&lt;’error&gt; The diagnostics graph to render. Returns Type Description string A formatted string representation of the graph. Remarks This is intended for human-readable output. Empty sections are omitted, and children are shown directly under their branch labels at the same indentation level as errors. Errors render as YAML-style bullet items without an Errors: key. Use flatten when you need path-bearing diagnostics for reporting or assertions.">
+  <meta itemprop="wordCount" content="99">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Diagnostics.toString">
-  <meta name="twitter:description" content="Diagnostics.toString graph Renders a diagnostics graph in a YAML-like layout for display.
-Remarks This is intended for human-readable output. Empty sections are omitted, and children are shown directly under their branch labels at the same indentation level as errors. Errors render as YAML-style bullet items without an Errors: key. Use flatten when you need path-bearing diagnostics for reporting or assertions.
-Parameters graph: Diagnostics&lt;’error&gt; The diagnostics graph to render. Returns A formatted string representation of the graph.">
+  <meta name="twitter:description" content="Renders a diagnostics graph in a YAML-like layout for display.
+Signature Diagnostics.toString graph Parameters Name Type Description graph Diagnostics&lt;’error&gt; The diagnostics graph to render. Returns Type Description string A formatted string representation of the graph. Remarks This is intended for human-readable output. Empty sections are omitted, and children are shown directly under their branch labels at the same indentation level as errors. Errors render as YAML-style bullet items without an Errors: key. Use flatten when you need path-bearing diagnostics for reporting or assertions.">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -521,9 +517,11 @@ Parameters graph: Diagnostics&lt;’error&gt; The diagnostics graph to render. R
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -549,23 +547,55 @@ Parameters graph: Diagnostics&lt;’error&gt; The diagnostics graph to render. R
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
+	<p>Renders a diagnostics graph in a YAML-like layout for display.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
 <code><span>Diagnostics.toString&#32;<span>graph</span></span></code>
 </div>
-<p>Renders a diagnostics graph in a YAML-like layout for display.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>graph</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;&rsquo;error&gt;</span></code></td>
+          <td>The diagnostics graph to render.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>string</code></td>
+          <td>A formatted string representation of the graph.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p>This is intended for human-readable output. Empty sections are omitted, and children are
 shown directly under their branch labels at the same indentation level as errors. Errors
 render as YAML-style bullet items without an <code>Errors:</code> key. Use
 <a href="https://learn.microsoft.com/dotnet/api/fsflow.diagnostics.flatten">flatten</a> when you need path-bearing diagnostics for
 reporting or assertions.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>graph</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-diagnostics-1.html">Diagnostics</a>&lt;&rsquo;error&gt;</span></code>
-The diagnostics graph to render.</li>
-</ul>
-<h2 id="returns">Returns</h2>
-<p>A formatted string representation of the graph.</p>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">d</span> <span class="o">=</span> <span class="id">Diagnostics</span><span class="pn">.</span><span class="id">singleton</span> <span class="s">&quot;fail&quot;</span>
+ <span class="k">let</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="id">s</span> <span class="o">=</span> <span class="id">Diagnostics</span><span class="pn">.</span><span class="id">toString</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="3" class="id">d</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val d: obj</div>
+<div popover class="fsdocs-tip" id="fs2">val s: obj</div>
 
 	<nav class="docs-page-nav docs-page-nav--prev-only"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/diagnostics/m-diagnostics-singleton/" aria-label="Previous - Diagnostics.singleton">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

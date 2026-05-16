@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.interrupt | FsFlow</title>
-<meta name="description" content="interrupt fiber Signals a fiber to stop and waits for it to finish its cleanup.
-Parameters fiber: Fiber&lt;‘error, ‘value&gt; The fiber to interrupt. Returns A flow that completes with the fiber&#39;s final outcome after interruption.">
+<meta name="description" content="Signals a fiber to stop and waits for it to finish its cleanup.
+Signature Flow.interrupt fiber Parameters Name Type Description fiber Fiber&lt;‘error, ‘value&gt; The fiber to interrupt. Returns Type Description Flow&lt;‘env, ’none, Exit&lt;‘value, ’error&gt;&gt; A flow that completes with the fiber&#39;s final outcome after interruption.">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-interrupt/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.interrupt">
-  <meta property="og:description" content="interrupt fiber Signals a fiber to stop and waits for it to finish its cleanup.
-Parameters fiber: Fiber&lt;‘error, ‘value&gt; The fiber to interrupt. Returns A flow that completes with the fiber&#39;s final outcome after interruption.">
+  <meta property="og:description" content="Signals a fiber to stop and waits for it to finish its cleanup.
+Signature Flow.interrupt fiber Parameters Name Type Description fiber Fiber&lt;‘error, ‘value&gt; The fiber to interrupt. Returns Type Description Flow&lt;‘env, ’none, Exit&lt;‘value, ’error&gt;&gt; A flow that completes with the fiber&#39;s final outcome after interruption.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.interrupt">
-  <meta itemprop="description" content="interrupt fiber Signals a fiber to stop and waits for it to finish its cleanup.
-Parameters fiber: Fiber&lt;‘error, ‘value&gt; The fiber to interrupt. Returns A flow that completes with the fiber&#39;s final outcome after interruption.">
-  <meta itemprop="wordCount" content="34">
+  <meta itemprop="description" content="Signals a fiber to stop and waits for it to finish its cleanup.
+Signature Flow.interrupt fiber Parameters Name Type Description fiber Fiber&lt;‘error, ‘value&gt; The fiber to interrupt. Returns Type Description Flow&lt;‘env, ’none, Exit&lt;‘value, ’error&gt;&gt; A flow that completes with the fiber&#39;s final outcome after interruption.">
+  <meta itemprop="wordCount" content="44">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.interrupt">
-  <meta name="twitter:description" content="interrupt fiber Signals a fiber to stop and waits for it to finish its cleanup.
-Parameters fiber: Fiber&lt;‘error, ‘value&gt; The fiber to interrupt. Returns A flow that completes with the fiber&#39;s final outcome after interruption.">
+  <meta name="twitter:description" content="Signals a fiber to stop and waits for it to finish its cleanup.
+Signature Flow.interrupt fiber Parameters Name Type Description fiber Fiber&lt;‘error, ‘value&gt; The fiber to interrupt. Returns Type Description Flow&lt;‘env, ’none, Exit&lt;‘value, ’error&gt;&gt; A flow that completes with the fiber&#39;s final outcome after interruption.">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,6 +517,7 @@ Parameters fiber: Fiber&lt;‘error, ‘value&gt; The fiber to interrupt. Return
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
   </ul>
@@ -544,17 +545,43 @@ Parameters fiber: Fiber&lt;‘error, ‘value&gt; The fiber to interrupt. Return
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>interrupt&#32;<span>fiber</span></span></code>
+	<p>Signals a fiber to stop and waits for it to finish its cleanup.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.interrupt&#32;<span>fiber</span></span></code>
 </div>
-<p>Signals a fiber to stop and waits for it to finish its cleanup.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>fiber</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-fiber-2.html">Fiber</a>&lt;<span>&lsquo;error, &lsquo;value</span>&gt;</span></code>
-The fiber to interrupt.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>fiber</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-fiber-2.html">Fiber</a>&lt;<span>&lsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>The fiber to interrupt.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A flow that completes with the fiber's final outcome after interruption.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;none, <span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-exit-2.html">Exit</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></span>&gt;</span></code></td>
+          <td>A flow that completes with the fiber's final outcome after interruption.</td>
+      </tr>
+  </tbody>
+</table>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/flow/m-flow-inject/" aria-label="Previous - Flow.inject">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

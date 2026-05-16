@@ -19,29 +19,29 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.race | FsFlow</title>
-<meta name="description" content="race left right Runs two flows concurrently and returns the result of the first one to complete.
-Remarks The &#34;loser&#34; flow is interrupted immediately.
-Parameters left: Flow&lt;‘env, ’error, ‘value&gt; right: Flow&lt;‘env, ’error, ‘value&gt;">
+<meta name="description" content="Runs two flows concurrently and returns the result of the first one to complete.
+Signature Flow.race left right Parameters Name Type Description left Flow&lt;‘env, ’error, ‘value&gt; The first flow to run. right Flow&lt;‘env, ’error, ‘value&gt; The second flow to run. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow containing the result of the first flow to complete. Remarks The &#34;loser&#34; flow is interrupted immediately.
+Examples let fastOrSlow = Flow.race fastFlow slowFlow val fastOrSlow: obj">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-race/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.race">
-  <meta property="og:description" content="race left right Runs two flows concurrently and returns the result of the first one to complete.
-Remarks The &#34;loser&#34; flow is interrupted immediately.
-Parameters left: Flow&lt;‘env, ’error, ‘value&gt; right: Flow&lt;‘env, ’error, ‘value&gt;">
+  <meta property="og:description" content="Runs two flows concurrently and returns the result of the first one to complete.
+Signature Flow.race left right Parameters Name Type Description left Flow&lt;‘env, ’error, ‘value&gt; The first flow to run. right Flow&lt;‘env, ’error, ‘value&gt; The second flow to run. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow containing the result of the first flow to complete. Remarks The &#34;loser&#34; flow is interrupted immediately.
+Examples let fastOrSlow = Flow.race fastFlow slowFlow val fastOrSlow: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.race">
-  <meta itemprop="description" content="race left right Runs two flows concurrently and returns the result of the first one to complete.
-Remarks The &#34;loser&#34; flow is interrupted immediately.
-Parameters left: Flow&lt;‘env, ’error, ‘value&gt; right: Flow&lt;‘env, ’error, ‘value&gt;">
-  <meta itemprop="wordCount" content="31">
+  <meta itemprop="description" content="Runs two flows concurrently and returns the result of the first one to complete.
+Signature Flow.race left right Parameters Name Type Description left Flow&lt;‘env, ’error, ‘value&gt; The first flow to run. right Flow&lt;‘env, ’error, ‘value&gt; The second flow to run. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow containing the result of the first flow to complete. Remarks The &#34;loser&#34; flow is interrupted immediately.
+Examples let fastOrSlow = Flow.race fastFlow slowFlow val fastOrSlow: obj">
+  <meta itemprop="wordCount" content="72">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.race">
-  <meta name="twitter:description" content="race left right Runs two flows concurrently and returns the result of the first one to complete.
-Remarks The &#34;loser&#34; flow is interrupted immediately.
-Parameters left: Flow&lt;‘env, ’error, ‘value&gt; right: Flow&lt;‘env, ’error, ‘value&gt;">
+  <meta name="twitter:description" content="Runs two flows concurrently and returns the result of the first one to complete.
+Signature Flow.race left right Parameters Name Type Description left Flow&lt;‘env, ’error, ‘value&gt; The first flow to run. right Flow&lt;‘env, ’error, ‘value&gt; The second flow to run. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow containing the result of the first flow to complete. Remarks The &#34;loser&#34; flow is interrupted immediately.
+Examples let fastOrSlow = Flow.race fastFlow slowFlow val fastOrSlow: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -521,8 +521,11 @@ Parameters left: Flow&lt;‘env, ’error, ‘value&gt; right: Flow&lt;‘env, �
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
+    <li><a href="#remarks">Remarks</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -548,17 +551,54 @@ Parameters left: Flow&lt;‘env, ’error, ‘value&gt; right: Flow&lt;‘env, �
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>race&#32;<span>left&#32;right</span></span></code>
+	<p>Runs two flows concurrently and returns the result of the first one to complete.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.race&#32;<span>left&#32;right</span></span></code>
 </div>
-<p>Runs two flows concurrently and returns the result of the first one to complete.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>left</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>The first flow to run.</td>
+      </tr>
+      <tr>
+          <td><code>right</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>The second flow to run.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>A flow containing the result of the first flow to complete.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="remarks">Remarks</h2>
 <p>The &quot;loser&quot; flow is interrupted immediately.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>left</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></li>
-<li><code>right</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></li>
-</ul>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">fastOrSlow</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">race</span> <span class="id">fastFlow</span> <span class="id">slowFlow</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val fastOrSlow: obj</div>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/flow/m-flow-providelayer/" aria-label="Previous - Flow.provideLayer">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

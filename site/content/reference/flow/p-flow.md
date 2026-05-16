@@ -4,13 +4,21 @@ linkTitle: "flow { }"
 type: docs
 ---
 
+
+ The universal <code>flow { }</code> computation expression.
+ 
+
+## Signature
+
 <div class="fsdocs-usage">
 <code><span>flow&#32;<span></span></span></code>
 </div>
 
+## Returns
 
- The universal <code>flow { }</code> computation expression.
- 
+| Type | Description |
+| --- | --- |
+| <code><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flowbuilder.html">FlowBuilder</a></code> | A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flowbuilder.html">FlowBuilder</a> instance. |
 
 ## Remarks
 
@@ -26,14 +34,15 @@ type: docs
 
 ## Examples
 
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">greeting</span> <span class="o">=</span>
+     <span class="id">flow</span> <span class="pn">{</span>
+         <span class="k">let!</span> <span class="id">name</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">env</span>
+         <span class="k">let!</span> <span class="id">suffix</span> <span class="o">=</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="id">async</span> <span class="pn">{</span> <span class="k">return</span> <span class="s">&quot;!&quot;</span> <span class="pn">}</span>
+         <span class="k">return</span> <span class="s">$&quot;Hello, {</span><span class="id">name</span><span class="s">}{</span><span class="id">suffix</span><span class="s">}&quot;</span>
+     <span class="pn">}</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val greeting: obj</div>
+<div popover class="fsdocs-tip" id="fs2">val async: AsyncBuilder</div>
 
- ```fsharp
- let greeting =
-     flow {
-         let! name = Flow.env
-         let! suffix = async { return &quot;!&quot; }
-         return $&quot;Hello, {name}{suffix}&quot;
-     }
- ```
- 
+
 

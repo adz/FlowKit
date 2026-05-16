@@ -3,13 +3,23 @@ title: "Flow.error"
 linkTitle: "error"
 ---
 
-<div class="fsdocs-usage">
-<code><span>error&#32;<span>failure</span></span></code>
-</div>
-
 Creates a failing synchronous flow.
+
+## Signature
+
+<div class="fsdocs-usage">
+<code><span>Flow.error&#32;<span>failure</span></span></code>
+</div>
 
 ## Parameters
 
-- `failure`: <code>'error</code>
+| Name | Type | Description |
+| --- | --- | --- |
+| `failure` | <code>'error</code> | The error value to wrap in a failing flow. |
+
+## Returns
+
+| Type | Description |
+| --- | --- |
+| <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>'env,&#32;'error,&#32;'value</span>&gt;</span></code> | A flow that always fails with the provided error. |
 

@@ -4,11 +4,19 @@ linkTitle: "env"
 type: docs
 ---
 
+Reads the current environment as the successful flow value.
+
+## Signature
+
 <div class="fsdocs-usage">
-<code><span>env&#32;<span></span></span></code>
+<code><span>Flow.env&#32;<span></span></span></code>
 </div>
 
-Reads the current environment as the successful flow value.
+## Returns
+
+| Type | Description |
+| --- | --- |
+| <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>'env,&#32;'error,&#32;'env</span>&gt;</span></code> | A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a> whose successful value is the current environment. |
 
 ## Remarks
 
@@ -18,7 +26,11 @@ Reads the current environment as the successful flow value.
  prefer <code>Flow.read</code>; it keeps the dependency local and makes the workflow easier to scan.
  
 
-## Returns
+## Examples
 
-A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a> whose successful value is the current environment.
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">myFlow</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">env</span> <span class="o">|&gt;</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">map</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">env</span> <span class="k">-&gt;</span> <span class="id">env</span><span class="pn">)</span>
+</code></pre>
+<div popover class="fsdocs-tip" id="fs1">val myFlow: obj</div>
+
+
 

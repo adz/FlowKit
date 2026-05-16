@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Check.orErrorWith | FsFlow</title>
-<meta name="description" content="orErrorWith errorFn result Maps a unit error into an application error produced on demand.
-Parameters errorFn: unit -&gt; ’error A function of type unit -&gt; &#39;error to produce the error. result: Check&lt;‘value&gt; The source Check. Returns A Result with the produced error value.">
+<meta name="description" content="Maps a unit error into an application error produced on demand.
+Signature Check.orErrorWith errorFn result Parameters Name Type Description errorFn unit -&gt; ’error A function of type unit -&gt; &#39;error to produce the error. result Check&lt;‘value&gt; The source Check. Returns Type Description Result&lt;‘value, ’error&gt; A Result with the produced error value. Examples &#34;&#34; |&gt; Check.okIfNonEmptyStr |&gt; Check.orErrorWith (fun () -&gt; &#34;Empty string&#34;) // Error &#34;Empty string&#34;">
 <meta property="og:url" content="http://localhost:3000/reference/check/m-check-orerrorwith/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Check.orErrorWith">
-  <meta property="og:description" content="orErrorWith errorFn result Maps a unit error into an application error produced on demand.
-Parameters errorFn: unit -&gt; ’error A function of type unit -&gt; &#39;error to produce the error. result: Check&lt;‘value&gt; The source Check. Returns A Result with the produced error value.">
+  <meta property="og:description" content="Maps a unit error into an application error produced on demand.
+Signature Check.orErrorWith errorFn result Parameters Name Type Description errorFn unit -&gt; ’error A function of type unit -&gt; &#39;error to produce the error. result Check&lt;‘value&gt; The source Check. Returns Type Description Result&lt;‘value, ’error&gt; A Result with the produced error value. Examples &#34;&#34; |&gt; Check.okIfNonEmptyStr |&gt; Check.orErrorWith (fun () -&gt; &#34;Empty string&#34;) // Error &#34;Empty string&#34;">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Check.orErrorWith">
-  <meta itemprop="description" content="orErrorWith errorFn result Maps a unit error into an application error produced on demand.
-Parameters errorFn: unit -&gt; ’error A function of type unit -&gt; &#39;error to produce the error. result: Check&lt;‘value&gt; The source Check. Returns A Result with the produced error value.">
-  <meta itemprop="wordCount" content="41">
+  <meta itemprop="description" content="Maps a unit error into an application error produced on demand.
+Signature Check.orErrorWith errorFn result Parameters Name Type Description errorFn unit -&gt; ’error A function of type unit -&gt; &#39;error to produce the error. result Check&lt;‘value&gt; The source Check. Returns Type Description Result&lt;‘value, ’error&gt; A Result with the produced error value. Examples &#34;&#34; |&gt; Check.okIfNonEmptyStr |&gt; Check.orErrorWith (fun () -&gt; &#34;Empty string&#34;) // Error &#34;Empty string&#34;">
+  <meta itemprop="wordCount" content="64">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Check.orErrorWith">
-  <meta name="twitter:description" content="orErrorWith errorFn result Maps a unit error into an application error produced on demand.
-Parameters errorFn: unit -&gt; ’error A function of type unit -&gt; &#39;error to produce the error. result: Check&lt;‘value&gt; The source Check. Returns A Result with the produced error value.">
+  <meta name="twitter:description" content="Maps a unit error into an application error produced on demand.
+Signature Check.orErrorWith errorFn result Parameters Name Type Description errorFn unit -&gt; ’error A function of type unit -&gt; &#39;error to produce the error. result Check&lt;‘value&gt; The source Check. Returns Type Description Result&lt;‘value, ’error&gt; A Result with the produced error value. Examples &#34;&#34; |&gt; Check.okIfNonEmptyStr |&gt; Check.orErrorWith (fun () -&gt; &#34;Empty string&#34;) // Error &#34;Empty string&#34;">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,8 +517,10 @@ Parameters errorFn: unit -&gt; ’error A function of type unit -&gt; &#39;error
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
   </div>
@@ -544,19 +546,51 @@ Parameters errorFn: unit -&gt; ’error A function of type unit -&gt; &#39;error
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>orErrorWith&#32;<span>errorFn&#32;result</span></span></code>
+	<p>Maps a unit error into an application error produced on demand.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Check.orErrorWith&#32;<span>errorFn&#32;result</span></span></code>
 </div>
-<p>Maps a unit error into an application error produced on demand.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>errorFn</code>: <code><span>unit -&gt; &rsquo;error</span></code>
-A function of type <code>unit -&gt; 'error</code> to produce the error.</li>
-<li><code>result</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;&lsquo;value&gt;</span></code>
-The source <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>errorFn</code></td>
+          <td><code><span>unit -&gt; &rsquo;error</span></code></td>
+          <td>A function of type <code>unit -&gt; 'error</code> to produce the error.</td>
+      </tr>
+      <tr>
+          <td><code>result</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;&lsquo;value&gt;</span></code></td>
+          <td>The source <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A <a href="https://learn.microsoft.com/dotnet/api/system.result-2">Result</a> with the produced error value.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpresult-2">Result</a>&lt;<span>&lsquo;value, &rsquo;error</span>&gt;</span></code></td>
+          <td>A <a href="https://learn.microsoft.com/dotnet/api/system.result-2">Result</a> with the produced error value.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="s">&quot;&quot;</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">okIfNonEmptyStr</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">orErrorWith</span> <span class="pn">(</span><span class="k">fun</span> <span class="pn">(</span><span class="pn">)</span> <span class="k">-&gt;</span> <span class="s">&quot;Empty string&quot;</span><span class="pn">)</span> <span class="c">// Error &quot;Empty string&quot;</span>
+</code></pre>
 
 	<nav class="docs-page-nav docs-page-nav--prev-only"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/check/m-check-orerror/" aria-label="Previous - Check.orError">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

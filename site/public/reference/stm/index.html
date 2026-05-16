@@ -30,7 +30,7 @@
 
   <meta itemprop="name" content="STM">
   <meta itemprop="description" content="This page shows the STM surface for composable atomic state transitions. STM is for cases where several transactional references must be read and updated as one operation, or where a workflow should wait until state satisfies a condition. Build transactions with TRef reads and writes, compose them before execution, then cross back into Flow with STM.atomically. Use Ref for one independent mutable value; use STM when correctness depends on a group of values changing together.">
-  <meta itemprop="wordCount" content="178">
+  <meta itemprop="wordCount" content="182">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="STM">
   <meta name="twitter:description" content="This page shows the STM surface for composable atomic state transitions. STM is for cases where several transactional references must be read and updated as one operation, or where a workflow should wait until state satisfies a condition. Build transactions with TRef reads and writes, compose them before execution, then cross back into Flow with STM.atomically. Use Ref for one independent mutable value; use STM when correctness depends on a group of values changing together.">
@@ -553,7 +553,7 @@ Represents a transactional operation that can be composed, retried, and executed
 </ul>
 <h2 id="module-functions">Module functions</h2>
 <ul>
-<li><a href="http://localhost:3000/reference/stm/m-tref-make/"><code>TRef.make</code></a>: Creates a new <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-tref-1.html">TRef</a> with the initial value.</li>
+<li><a href="http://localhost:3000/reference/stm/m-tref-make/"><code>TRef.make</code></a>: Creates a new <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-tref-1.html">TRef</a> with the initial value within an STM transaction.</li>
 <li><a href="http://localhost:3000/reference/stm/m-tref-get/"><code>TRef.get</code></a>: Reads the current value of the transactional reference within a transaction.</li>
 <li><a href="http://localhost:3000/reference/stm/m-tref-set/"><code>TRef.set</code></a>: Sets the value of the transactional reference within a transaction.</li>
 <li><a href="http://localhost:3000/reference/stm/m-tref-update/"><code>TRef.update</code></a>: Updates the value of the transactional reference within a transaction using the supplied function.</li>

@@ -3,18 +3,31 @@ title: "Check.failIfNotEmpty"
 linkTitle: "failIfNotEmpty"
 ---
 
-<div class="fsdocs-usage">
-<code><span>failIfNotEmpty&#32;<span>coll</span></span></code>
-</div>
-
 Returns success when the sequence is empty.
+
+## Signature
+
+<div class="fsdocs-usage">
+<code><span>Check.failIfNotEmpty&#32;<span>coll</span></span></code>
+</div>
 
 ## Parameters
 
-- `coll`: <code><span>'a&#32;seq</span></code>
-  The sequence to check.
+| Name | Type | Description |
+| --- | --- | --- |
+| `coll` | <code><span>'a&#32;seq</span></code> | The sequence to check. |
 
 ## Returns
 
-A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> that succeeds if the sequence is empty.
+| Type | Description |
+| --- | --- |
+| <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a>&lt;unit&gt;</span></code> | A <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-check-1.html">Check</a> that succeeds if the sequence is empty; otherwise, an Error with unit. |
+
+## Examples
+
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="pn">[</span><span class="pn">]</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">failIfNotEmpty</span> <span class="c">// Ok ()</span>
+ <span class="pn">[</span><span class="n">1</span><span class="pn">]</span> <span class="o">|&gt;</span> <span class="id">Check</span><span class="pn">.</span><span class="id">failIfNotEmpty</span> <span class="c">// Error ()</span>
+</code></pre>
+
+
 

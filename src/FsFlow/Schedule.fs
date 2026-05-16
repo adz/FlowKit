@@ -16,6 +16,14 @@ type Schedule<'env, 'input, 'output> =
 [<RequireQualifiedAccess>]
 module Schedule =
     /// <summary>Creates a schedule that recurs a fixed number of times.</summary>
+    /// <param name="n">The maximum number of times to recur.</param>
+    /// <returns>A schedule that recurs up to <paramref name="n"/> times, emitting the current attempt count (0 to n-1).</returns>
+    /// <example>
+    /// <code>
+    /// let schedule = Schedule.recurs 3
+    /// // Will run for attempts 0, 1, 2 and then stop.
+    /// </code>
+    /// </example>
     let recurs (n: int) : Schedule<'env, 'input, int> =
         Schedule(fun _ attempt ->
             if attempt < n then
@@ -24,17 +32,39 @@ module Schedule =
                 Flow.ok (None, TimeSpan.Zero))
 
     /// <summary>Creates a schedule that recurs with a fixed delay between attempts.</summary>
+    /// <param name="delay">The fixed time span to wait between each attempt.</param>
+    /// <returns>A schedule that recurs indefinitely with the specified fixed delay, emitting the current attempt count.</returns>
+    /// <example>
+    /// <code>
+    /// let schedule = Schedule.spaced (TimeSpan.FromSeconds 1.0)
+    /// </code>
+    /// </example>
     let spaced (delay: TimeSpan) : Schedule<'env, 'input, int> =
         Schedule(fun _ attempt ->
             Flow.ok (Some attempt, delay))
 
     /// <summary>Creates a schedule that recurs with exponential backoff.</summary>
+    /// <param name="baseDelay">The initial delay for the first retry.</param>
+    /// <returns>A schedule that recurs indefinitely, doubling the delay each time (baseDelay * 2^attempt).</returns>
+    /// <example>
+    /// <code>
+    /// let schedule = Schedule.exponential (TimeSpan.FromMilliseconds 100.0)
+    /// // Delays: 100ms, 200ms, 400ms, 800ms...
+    /// </code>
+    /// </example>
     let exponential (baseDelay: TimeSpan) : Schedule<'env, 'input, TimeSpan> =
         Schedule(fun _ attempt ->
             let delay = TimeSpan.FromTicks(baseDelay.Ticks * int64 (Math.Pow(2.0, float attempt)))
             Flow.ok (Some delay, delay))
 
     /// <summary>Adds random jitter to a schedule's delay.</summary>
+    /// <param name="schedule">The base schedule to which jitter will be applied.</param>
+    /// <returns>A new schedule where each delay is multiplied by a random factor between 0.5 and 1.5.</returns>
+    /// <example>
+    /// <code>
+    /// let schedule = Schedule.spaced (TimeSpan.FromSeconds 1.0) |> Schedule.jittered
+    /// </code>
+    /// </example>
     let jittered (Schedule op) : Schedule<'env, 'input, 'output> =
         let random = Random()
         Schedule(fun input attempt ->
@@ -48,6 +78,15 @@ module Schedule =
 module FlowScheduleExtensions =
     type Flow<'env, 'error, 'value> with
         /// <summary>Retries a failing flow according to the supplied schedule.</summary>
+        /// <param name="flow">The workflow to retry if it fails.</param>
+        /// <param name="schedule">The schedule that determines when and if to retry based on the error.</param>
+        /// <returns>A flow that will retry the original flow according to the schedule until it succeeds or the schedule stops.</returns>
+        /// <example>
+        /// <code>
+        /// let flakyWork = Flow.fail "oops"
+        /// let retried = Flow.Retry(flakyWork, Schedule.recurs 3)
+        /// </code>
+        /// </example>
         static member Retry
             (
                 flow: Flow<'env, 'error, 'value>,
@@ -78,6 +117,15 @@ module FlowScheduleExtensions =
             loop 0
 
         /// <summary>Repeats a successful flow according to the supplied schedule.</summary>
+        /// <param name="flow">The workflow to repeat if it succeeds.</param>
+        /// <param name="schedule">The schedule that determines when and if to repeat based on the successful value.</param>
+        /// <returns>A flow that repeats the original flow according to the schedule, returning the last successful value when it stops.</returns>
+        /// <example>
+        /// <code>
+        /// let work = Flow.ok 42
+        /// let repeated = Flow.Repeat(work, Schedule.recurs 5)
+        /// </code>
+        /// </example>
         static member Repeat
             (
                 flow: Flow<'env, 'error, 'value>,

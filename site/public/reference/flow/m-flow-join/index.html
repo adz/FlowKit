@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.join | FsFlow</title>
-<meta name="description" content="join fiber Waits for a fiber to complete and returns its final outcome.
-Parameters fiber: Fiber&lt;‘error, ‘value&gt; The fiber to join. Returns A flow that completes with the fiber&#39;s outcome.">
+<meta name="description" content="Waits for a fiber to complete and returns its final outcome.
+Signature Flow.join fiber Parameters Name Type Description fiber Fiber&lt;‘error, ‘value&gt; The fiber to join. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that completes with the fiber&#39;s outcome.">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-join/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.join">
-  <meta property="og:description" content="join fiber Waits for a fiber to complete and returns its final outcome.
-Parameters fiber: Fiber&lt;‘error, ‘value&gt; The fiber to join. Returns A flow that completes with the fiber&#39;s outcome.">
+  <meta property="og:description" content="Waits for a fiber to complete and returns its final outcome.
+Signature Flow.join fiber Parameters Name Type Description fiber Fiber&lt;‘error, ‘value&gt; The fiber to join. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that completes with the fiber&#39;s outcome.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.join">
-  <meta itemprop="description" content="join fiber Waits for a fiber to complete and returns its final outcome.
-Parameters fiber: Fiber&lt;‘error, ‘value&gt; The fiber to join. Returns A flow that completes with the fiber&#39;s outcome.">
-  <meta itemprop="wordCount" content="29">
+  <meta itemprop="description" content="Waits for a fiber to complete and returns its final outcome.
+Signature Flow.join fiber Parameters Name Type Description fiber Fiber&lt;‘error, ‘value&gt; The fiber to join. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that completes with the fiber&#39;s outcome.">
+  <meta itemprop="wordCount" content="38">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.join">
-  <meta name="twitter:description" content="join fiber Waits for a fiber to complete and returns its final outcome.
-Parameters fiber: Fiber&lt;‘error, ‘value&gt; The fiber to join. Returns A flow that completes with the fiber&#39;s outcome.">
+  <meta name="twitter:description" content="Waits for a fiber to complete and returns its final outcome.
+Signature Flow.join fiber Parameters Name Type Description fiber Fiber&lt;‘error, ‘value&gt; The fiber to join. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that completes with the fiber&#39;s outcome.">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,6 +517,7 @@ Parameters fiber: Fiber&lt;‘error, ‘value&gt; The fiber to join. Returns A f
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
     <li><a href="#returns">Returns</a></li>
   </ul>
@@ -544,17 +545,43 @@ Parameters fiber: Fiber&lt;‘error, ‘value&gt; The fiber to join. Returns A f
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>join&#32;<span>fiber</span></span></code>
+	<p>Waits for a fiber to complete and returns its final outcome.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.join&#32;<span>fiber</span></span></code>
 </div>
-<p>Waits for a fiber to complete and returns its final outcome.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>fiber</code>: <code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-fiber-2.html">Fiber</a>&lt;<span>&lsquo;error, &lsquo;value</span>&gt;</span></code>
-The fiber to join.</li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>fiber</code></td>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-fiber-2.html">Fiber</a>&lt;<span>&lsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>The fiber to join.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="returns">Returns</h2>
-<p>A flow that completes with the fiber's outcome.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>A flow that completes with the fiber's outcome.</td>
+      </tr>
+  </tbody>
+</table>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/flow/m-flow-interrupt/" aria-label="Previous - Flow.interrupt">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

@@ -19,25 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Flow.fail | FsFlow</title>
-<meta name="description" content="fail failure Alias for error that reads well in some call sites.
-Parameters failure: ‘error Examples let flow = Flow.fail &#34;error&#34; let result = Flow.run () flow // result = Failure (Cause.Fail &#34;error&#34;) val flow: obj val result: obj">
+<meta name="description" content="Alias for error that reads well in some call sites.
+Signature Flow.fail failure Parameters Name Type Description failure ‘error The error value to wrap in a failing flow. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that always fails with the provided error. Examples let flow = Flow.fail &#34;error&#34; let result = Flow.run () flow // result = Failure (Cause.Fail &#34;error&#34;) val flow: obj val result: obj">
 <meta property="og:url" content="http://localhost:3000/reference/flow/m-flow-fail/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Flow.fail">
-  <meta property="og:description" content="fail failure Alias for error that reads well in some call sites.
-Parameters failure: ‘error Examples let flow = Flow.fail &#34;error&#34; let result = Flow.run () flow // result = Failure (Cause.Fail &#34;error&#34;) val flow: obj val result: obj">
+  <meta property="og:description" content="Alias for error that reads well in some call sites.
+Signature Flow.fail failure Parameters Name Type Description failure ‘error The error value to wrap in a failing flow. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that always fails with the provided error. Examples let flow = Flow.fail &#34;error&#34; let result = Flow.run () flow // result = Failure (Cause.Fail &#34;error&#34;) val flow: obj val result: obj">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Flow.fail">
-  <meta itemprop="description" content="fail failure Alias for error that reads well in some call sites.
-Parameters failure: ‘error Examples let flow = Flow.fail &#34;error&#34; let result = Flow.run () flow // result = Failure (Cause.Fail &#34;error&#34;) val flow: obj val result: obj">
-  <meta itemprop="wordCount" content="38">
+  <meta itemprop="description" content="Alias for error that reads well in some call sites.
+Signature Flow.fail failure Parameters Name Type Description failure ‘error The error value to wrap in a failing flow. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that always fails with the provided error. Examples let flow = Flow.fail &#34;error&#34; let result = Flow.run () flow // result = Failure (Cause.Fail &#34;error&#34;) val flow: obj val result: obj">
+  <meta itemprop="wordCount" content="66">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flow.fail">
-  <meta name="twitter:description" content="fail failure Alias for error that reads well in some call sites.
-Parameters failure: ‘error Examples let flow = Flow.fail &#34;error&#34; let result = Flow.run () flow // result = Failure (Cause.Fail &#34;error&#34;) val flow: obj val result: obj">
+  <meta name="twitter:description" content="Alias for error that reads well in some call sites.
+Signature Flow.fail failure Parameters Name Type Description failure ‘error The error value to wrap in a failing flow. Returns Type Description Flow&lt;‘env, ’error, ‘value&gt; A flow that always fails with the provided error. Examples let flow = Flow.fail &#34;error&#34; let result = Flow.run () flow // result = Failure (Cause.Fail &#34;error&#34;) val flow: obj val result: obj">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -517,7 +517,9 @@ Parameters failure: ‘error Examples let flow = Flow.fail &#34;error&#34; let r
     </div>
     <nav id="TableOfContents">
   <ul>
+    <li><a href="#signature">Signature</a></li>
     <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#returns">Returns</a></li>
     <li><a href="#examples">Examples</a></li>
   </ul>
 </nav>
@@ -544,14 +546,43 @@ Parameters failure: ‘error Examples let flow = Flow.fail &#34;error&#34; let r
 	<header class="article-meta">
 		
 </header>
-	<div class="fsdocs-usage">
-<code><span>fail&#32;<span>failure</span></span></code>
+	<p>Alias for <code>error</code> that reads well in some call sites.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code><span>Flow.fail&#32;<span>failure</span></span></code>
 </div>
-<p>Alias for <code>error</code> that reads well in some call sites.</p>
 <h2 id="parameters">Parameters</h2>
-<ul>
-<li><code>failure</code>: <code>&lsquo;error</code></li>
-</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>failure</code></td>
+          <td><code>&lsquo;error</code></td>
+          <td>The error value to wrap in a failing flow.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="returns">Returns</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Type</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code><span><a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-flow-3.html">Flow</a>&lt;<span>&lsquo;env, &rsquo;error, &lsquo;value</span>&gt;</span></code></td>
+          <td>A flow that always fails with the provided error.</td>
+      </tr>
+  </tbody>
+</table>
 <h2 id="examples">Examples</h2>
 <pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="1" class="id">flow</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">fail</span> <span class="s">&quot;error&quot;</span>
  <span class="k">let</span> <span data-fsdocs-tip="fs2" data-fsdocs-tip-unique="2" class="id">result</span> <span class="o">=</span> <span class="id">Flow</span><span class="pn">.</span><span class="id">run</span> <span class="pn">(</span><span class="pn">)</span> <span data-fsdocs-tip="fs1" data-fsdocs-tip-unique="3" class="id">flow</span>

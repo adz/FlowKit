@@ -45,14 +45,25 @@ module Flow =
     let internal runFullInternal = invoke
 
     /// <summary>Executes a flow with an explicit cancellation token.</summary>
+    /// <param name="environment">The environment required by the flow.</param>
+    /// <param name="cancellationToken">The token used to signal cancellation.</param>
+    /// <param name="flow">The workflow to execute.</param>
+    /// <returns>An effect that represents the asynchronous execution outcome.</returns>
     /// <remarks>Uncaught exceptions become <c>Cause.Die</c>; cancellation becomes <c>Cause.Interrupt</c>.</remarks>
     let runFull (environment: 'env) (cancellationToken: CancellationToken) (flow: Flow<'env, 'error, 'value>) : Effect<'value, 'error> =
         runEffect environment cancellationToken flow
 
     /// <summary>Executes a flow with an explicit cancellation token.</summary>
+    /// <param name="environment">The environment required by the flow.</param>
+    /// <param name="cancellationToken">The token used to signal cancellation.</param>
+    /// <param name="flow">The workflow to execute.</param>
+    /// <returns>An effect that represents the asynchronous execution outcome.</returns>
     let runWithToken = runFull
 
     /// <summary>Executes a flow with the provided environment and the default cancellation token.</summary>
+    /// <param name="environment">The environment required by the flow.</param>
+    /// <param name="flow">The workflow to execute.</param>
+    /// <returns>An effect that represents the asynchronous execution outcome.</returns>
     /// <remarks>Uncaught exceptions become <c>Cause.Die</c>; cancellation becomes <c>Cause.Interrupt</c>.</remarks>
     /// <example>
     /// <code>
@@ -65,10 +76,14 @@ module Flow =
         runEffect environment CancellationToken.None flow
 
     /// <summary>Creates a successful synchronous flow.</summary>
+    /// <param name="value">The value to wrap in a successful flow.</param>
+    /// <returns>A flow that always succeeds with the provided value.</returns>
     let ok (value: 'value) : Flow<'env, 'error, 'value> =
         Flow(fun _ _ -> EffectFlow.ofValue value)
 
     /// <summary>Alias for <c>ok</c> that reads well in some call sites.</summary>
+    /// <param name="value">The value to wrap in a successful flow.</param>
+    /// <returns>A flow that always succeeds with the provided value.</returns>
     /// <example>
     /// <code>
     /// let flow = Flow.succeed 42
@@ -80,6 +95,8 @@ module Flow =
         ok value
 
     /// <summary>Alias for <c>ok</c> that reads well in some call sites.</summary>
+    /// <param name="item">The value to wrap in a successful flow.</param>
+    /// <returns>A flow that always succeeds with the provided value.</returns>
     /// <example>
     /// <code>
     /// let flow = Flow.value "constant"
@@ -89,10 +106,14 @@ module Flow =
         succeed item
 
     /// <summary>Creates a failing synchronous flow.</summary>
+    /// <param name="failure">The error value to wrap in a failing flow.</param>
+    /// <returns>A flow that always fails with the provided error.</returns>
     let error (failure: 'error) : Flow<'env, 'error, 'value> =
         Flow(fun _ _ -> EffectFlow.ofError failure)
 
     /// <summary>Alias for <c>error</c> that reads well in some call sites.</summary>
+    /// <param name="failure">The error value to wrap in a failing flow.</param>
+    /// <returns>A flow that always fails with the provided error.</returns>
     /// <example>
     /// <code>
     /// let flow = Flow.fail "error"
@@ -104,6 +125,8 @@ module Flow =
         error failure
 
     /// <summary>Creates a defective flow that fails with an exception.</summary>
+    /// <param name="exn">The exception representing the defect.</param>
+    /// <returns>A flow that always dies with the provided exception.</returns>
     /// <remarks>
     /// This is the public constructor for non-domain defects. Use <c>fail</c> for expected
     /// typed failures and <c>die</c> when the workflow should surface a bug or panic.
@@ -112,6 +135,8 @@ module Flow =
         Flow(fun _ _ -> EffectFlow.ofDie exn)
 
     /// <summary>Lifts a <see cref="T:System.Result`2" /> into a synchronous flow.</summary>
+    /// <param name="result">The result value to lift.</param>
+    /// <returns>A flow that succeeds or fails based on the result.</returns>
     /// <example>
     /// <code>
     /// let res = Ok "success"
@@ -171,6 +196,8 @@ module Flow =
     [<RequireQualifiedAccess>]
     module Runtime =
         /// <summary>Suspends the flow for the specified duration, observing cancellation.</summary>
+        /// <param name="delay">The duration to sleep.</param>
+        /// <returns>A flow that completes after the specified delay.</returns>
         let sleep (delay: TimeSpan) : Flow<'env, 'error, unit> =
             Flow(fun _ cancellationToken ->
                 #if FABLE_COMPILER
@@ -194,25 +221,34 @@ module Flow =
             )
 
         /// <summary>Reads the ambient UTC clock owned by the runtime.</summary>
+        /// <returns>A flow that returns the current UTC time.</returns>
         let now : Flow<'env, 'error, DateTimeOffset> =
             Flow(fun _ _ -> EffectFlow.ofValue (RuntimeState.current().Clock.UtcNow()))
 
         /// <summary>Writes a message through the ambient runtime logger.</summary>
+        /// <param name="message">The message to log.</param>
+        /// <returns>A flow that logs the message and returns unit.</returns>
         let log (message: string) : Flow<'env, 'error, unit> =
             Flow(fun _ _ ->
                 RuntimeState.current().Log.Info message
                 EffectFlow.ofValue ())
 
         /// <summary>Creates a new GUID through the ambient runtime GUID generator.</summary>
+        /// <returns>A flow that returns a fresh GUID.</returns>
         let newGuid : Flow<'env, 'error, Guid> =
             Flow(fun _ _ -> EffectFlow.ofValue (RuntimeState.current().Guid.NewGuid()))
 
         /// <summary>Creates a random integer through the ambient runtime random generator.</summary>
+        /// <param name="minInclusive">The inclusive lower bound.</param>
+        /// <param name="maxExclusive">The exclusive upper bound.</param>
+        /// <returns>A flow that returns a random integer in the specified range.</returns>
         let nextInt (minInclusive: int) (maxExclusive: int) : Flow<'env, 'error, int> =
             Flow(fun _ _ ->
                 EffectFlow.ofValue (RuntimeState.current().Random.NextInt minInclusive maxExclusive))
 
         /// <summary>Reads an environment variable from the ambient runtime environment provider.</summary>
+        /// <param name="name">The name of the environment variable.</param>
+        /// <returns>A flow that returns the variable value if it exists, or None.</returns>
         let tryGetEnvironmentVariable (name: string) : Flow<'env, 'error, string option> =
             Flow(fun _ _ -> EffectFlow.ofValue (RuntimeState.current().EnvironmentVariables.TryGet name))
 
@@ -296,6 +332,14 @@ module Flow =
     /// <remarks>
     /// If either flow fails, the other is interrupted immediately.
     /// </remarks>
+    /// <param name="left">The first flow to combine.</param>
+    /// <param name="right">The second flow to combine.</param>
+    /// <returns>A flow that returns a tuple of both successful values.</returns>
+    /// <example>
+    /// <code>
+    /// let combined = Flow.zipPar flow1 flow2
+    /// </code>
+    /// </example>
     let zipPar
         (left: Flow<'env, 'error, 'left>)
         (right: Flow<'env, 'error, 'right>)
@@ -362,6 +406,14 @@ module Flow =
     /// <remarks>
     /// The "loser" flow is interrupted immediately.
     /// </remarks>
+    /// <param name="left">The first flow to run.</param>
+    /// <param name="right">The second flow to run.</param>
+    /// <returns>A flow containing the result of the first flow to complete.</returns>
+    /// <example>
+    /// <code>
+    /// let fastOrSlow = Flow.race fastFlow slowFlow
+    /// </code>
+    /// </example>
     let race
         (left: Flow<'env, 'error, 'value>)
         (right: Flow<'env, 'error, 'value>)
@@ -389,6 +441,9 @@ module Flow =
         )
 
     /// <summary>Lifts an option into a synchronous flow with the supplied error.</summary>
+    /// <param name="error">The error to return if the option is <c>None</c>.</param>
+    /// <param name="value">The option to lift.</param>
+    /// <returns>A flow that succeeds with the option's value or fails with the provided error.</returns>
     /// <example>
     /// <code>
     /// let opt = Some "value"
@@ -418,6 +473,12 @@ module Flow =
     /// <param name="errorFlow">A flow that reads the environment to produce an error value.</param>
     /// <param name="result">The pure result to bridge.</param>
     /// <returns>A <see cref="T:FsFlow.Flow`3" /> that mirrors the success of the result or fails with the outcome of the error flow.</returns>
+    /// <example>
+    /// <code>
+    /// let result = Result.Error ()
+    /// let flow = Flow.orElseFlow (Flow.read (fun env -> "error")) result
+    /// </code>
+    /// </example>
     let orElseFlow
         (errorFlow: Flow<'env, 'error, 'error>)
         (result: Result<'value, unit>)
@@ -436,6 +497,11 @@ module Flow =
     /// prefer <c>Flow.read</c>; it keeps the dependency local and makes the workflow easier to scan.
     /// </remarks>
     /// <returns>A <see cref="T:FsFlow.Flow`3" /> whose successful value is the current environment.</returns>
+    /// <example>
+    /// <code>
+    /// let myFlow = Flow.env |> Flow.map (fun env -> env)
+    /// </code>
+    /// </example>
     let env<'env, 'error> : Flow<'env, 'error, 'env> =
         Flow(fun environment _ -> EffectFlow.ofValue environment)
 
@@ -448,16 +514,33 @@ module Flow =
     /// </remarks>
     /// <param name="projection">A function that extracts a value from the environment.</param>
     /// <returns>A <see cref="T:FsFlow.Flow`3" /> containing the projected value.</returns>
+    /// <example>
+    /// <code>
+    /// let myFlow = Flow.read (fun env -> env)
+    /// </code>
+    /// </example>
     let read (projection: 'env -> 'value) : Flow<'env, 'error, 'value> =
         Flow(fun environment _ -> EffectFlow.ofValue (projection environment))
 
     /// <summary>Extracts a specific service from an environment that implements <c>IHas&lt;'service&gt;</c>.</summary>
     /// <remarks>This is the statically honest way to access dependencies.</remarks>
+    /// <returns>A flow containing the requested service.</returns>
+    /// <example>
+    /// <code>
+    /// let flow = Flow.service&lt;IMyService, _, _&gt;()
+    /// </code>
+    /// </example>
     let inline service<'service, 'env, 'error when 'env :> IHas<'service>> () : Flow<'env, 'error, 'service> =
         read (fun (env: 'env) -> env.Service)
 
     /// <summary>Injects a service from a dynamic IServiceProvider environment.</summary>
     /// <remarks>Trades compile-time safety for pragmatic .NET interop.</remarks>
+    /// <returns>A flow containing the requested service.</returns>
+    /// <example>
+    /// <code>
+    /// let flow = Flow.inject&lt;IMyService, _, _&gt;()
+    /// </code>
+    /// </example>
     let inline inject<'service, 'env, 'error when 'env :> IServiceProvider> () : Flow<'env, 'error, 'service> =
         read (fun (env: 'env) ->
             let svc = env.GetService(typeof<'service>)
@@ -476,6 +559,11 @@ module Flow =
     /// <param name="mapper">A function of type <c>'value -> 'next</c> to transform the successful value.</param>
     /// <param name="flow">The source flow of type <see cref="T:FsFlow.Flow`3" /> to transform.</param>
     /// <returns>A new <see cref="T:FsFlow.Flow`3" /> with the transformed success value of type <c>'next</c>.</returns>
+    /// <example>
+    /// <code>
+    /// let flow = Flow.succeed 1 |> Flow.map (fun x -> x + 1)
+    /// </code>
+    /// </example>
     let map
         (mapper: 'value -> 'next)
         (flow: Flow<'env, 'error, 'value>)
@@ -485,6 +573,13 @@ module Flow =
             |> EffectFlow.map mapper)
 
     /// <summary>Maps the successful value of a synchronous flow to <c>unit</c>.</summary>
+    /// <param name="flow">The source flow.</param>
+    /// <returns>A flow that succeeds with <c>unit</c> instead of the original value.</returns>
+    /// <example>
+    /// <code>
+    /// let flow = Flow.succeed 42 |> Flow.ignore
+    /// </code>
+    /// </example>
     let ignore (flow: Flow<'env, 'error, 'value>) : Flow<'env, 'error, unit> =
         map (fun _ -> ()) flow
 
@@ -497,6 +592,11 @@ module Flow =
     /// <param name="binder">A function that takes the successful value and returns a new flow.</param>
     /// <param name="flow">The source flow to sequence.</param>
     /// <returns>A <see cref="T:FsFlow.Flow`3" /> representing the combined workflow.</returns>
+    /// <example>
+    /// <code>
+    /// let flow = Flow.succeed 1 |> Flow.bind (fun x -> Flow.succeed (x + 1))
+    /// </code>
+    /// </example>
     let bind
         (binder: 'value -> Flow<'env, 'error, 'next>)
         (flow: Flow<'env, 'error, 'value>)
@@ -521,6 +621,11 @@ module Flow =
     /// <param name="binder">A function that produces a side-effect flow from the successful value.</param>
     /// <param name="flow">The source flow.</param>
     /// <returns>A <see cref="T:FsFlow.Flow`3" /> that preserves the original success value after the side effect.</returns>
+    /// <example>
+    /// <code>
+    /// let flow = Flow.succeed 42 |> Flow.tap (fun x -> Flow.succeed ())
+    /// </code>
+    /// </example>
     let tap
         (binder: 'value -> Flow<'env, 'error, unit>)
         (flow: Flow<'env, 'error, 'value>)
@@ -540,6 +645,11 @@ module Flow =
     /// <param name="binder">A function that produces a side-effect flow from the error value.</param>
     /// <param name="flow">The source flow.</param>
     /// <returns>A <see cref="T:FsFlow.Flow`3" /> that preserves the original error after the side effect.</returns>
+    /// <example>
+    /// <code>
+    /// let flow = Flow.fail "error" |> Flow.tapError (fun err -> Flow.succeed ())
+    /// </code>
+    /// </example>
     let tapError
         (binder: 'error -> Flow<'env, 'error, unit>)
         (flow: Flow<'env, 'error, 'value>)
@@ -565,6 +675,11 @@ module Flow =
     /// <param name="mapper">The function to transform the error value.</param>
     /// <param name="flow">The source flow.</param>
     /// <returns>A <see cref="T:FsFlow.Flow`3" /> with the transformed error type.</returns>
+    /// <example>
+    /// <code>
+    /// let flow = Flow.fail "error" |> Flow.mapError (fun err -> err + "!")
+    /// </code>
+    /// </example>
     let mapError
         (mapper: 'error -> 'nextError)
         (flow: Flow<'env, 'error, 'value>)
@@ -615,6 +730,11 @@ module Flow =
     /// <param name="handler">A function of type <c>exn -> 'error</c> to map the exception.</param>
     /// <param name="flow">The source flow of type <see cref="T:FsFlow.Flow`3" /> to monitor.</param>
     /// <returns>A <see cref="T:FsFlow.Flow`3" /> that converts exceptions into success-path errors.</returns>
+    /// <example>
+    /// <code>
+    /// let flow = Flow.die (System.Exception("boom")) |> Flow.catch (fun ex -> "caught: " + ex.Message)
+    /// </code>
+    /// </example>
     let catch
         (handler: exn -> 'error)
         (flow: Flow<'env, 'error, 'value>)
@@ -643,6 +763,14 @@ module Flow =
     /// not catch interruption or defects. Use this for domain-level recovery, not for swallowing
     /// cancellation or unexpected exceptions.
     /// </remarks>
+    /// <param name="fallback">A function that produces a new flow from the error value.</param>
+    /// <param name="flow">The source flow.</param>
+    /// <returns>A flow that recovers from errors using the fallback function.</returns>
+    /// <example>
+    /// <code>
+    /// let flow = Flow.fail "error" |> Flow.orElseWith (fun err -> Flow.succeed "recovered")
+    /// </code>
+    /// </example>
     let orElseWith
         (fallback: 'error -> Flow<'env, 'error, 'value>)
         (flow: Flow<'env, 'error, 'value>)
@@ -657,6 +785,14 @@ module Flow =
                     | _ -> EffectFlow.ofCause cause))
 
     /// <summary>Falls back to another flow when the source flow fails.</summary>
+    /// <param name="fallback">The flow to run if the source flow fails.</param>
+    /// <param name="flow">The source flow.</param>
+    /// <returns>A flow that recovers from errors using the fallback flow.</returns>
+    /// <example>
+    /// <code>
+    /// let flow = Flow.fail "error" |> Flow.orElse (Flow.succeed "recovered")
+    /// </code>
+    /// </example>
     let orElse
         (fallback: Flow<'env, 'error, 'value>)
         (flow: Flow<'env, 'error, 'value>)
@@ -664,6 +800,14 @@ module Flow =
         orElseWith (fun _ -> fallback) flow
 
     /// <summary>Runs two flows sequentially and combines their successful values into a tuple.</summary>
+    /// <param name="left">The first flow to run.</param>
+    /// <param name="right">The second flow to run.</param>
+    /// <returns>A flow that returns a tuple of both successful values.</returns>
+    /// <example>
+    /// <code>
+    /// let flow = Flow.zip (Flow.succeed 1) (Flow.succeed 2)
+    /// </code>
+    /// </example>
     let zip
         (left: Flow<'env, 'error, 'left>)
         (right: Flow<'env, 'error, 'right>)
@@ -675,6 +819,15 @@ module Flow =
             left
 
     /// <summary>Combines two flows with a mapping function.</summary>
+    /// <param name="mapper">A function that combines the successful values of both flows.</param>
+    /// <param name="left">The first flow to run.</param>
+    /// <param name="right">The second flow to run.</param>
+    /// <returns>A flow containing the mapped value.</returns>
+    /// <example>
+    /// <code>
+    /// let flow = Flow.map2 (fun x y -> x + y) (Flow.succeed 1) (Flow.succeed 2)
+    /// </code>
+    /// </example>
     let map2
         (mapper: 'left -> 'right -> 'value)
         (left: Flow<'env, 'error, 'left>)
@@ -684,6 +837,14 @@ module Flow =
         |> map (fun (leftValue, rightValue) -> mapper leftValue rightValue)
 
     /// <summary>Applies a flow-wrapped function to a flow-wrapped value.</summary>
+    /// <param name="flow">A flow that contains a function to apply.</param>
+    /// <param name="value">A flow that contains the value to apply the function to.</param>
+    /// <returns>A flow containing the result of applying the function to the value.</returns>
+    /// <example>
+    /// <code>
+    /// let flow = Flow.apply (Flow.succeed (fun x -> x + 1)) (Flow.succeed 1)
+    /// </code>
+    /// </example>
     let apply
         (flow: Flow<'env, 'error, 'value -> 'next>)
         (value: Flow<'env, 'error, 'value>)
@@ -691,6 +852,16 @@ module Flow =
         map2 (fun mapper input -> mapper input) flow value
 
     /// <summary>Combines three flows with a mapping function.</summary>
+    /// <param name="mapper">A function that combines the successful values of all three flows.</param>
+    /// <param name="left">The first flow to run.</param>
+    /// <param name="middle">The second flow to run.</param>
+    /// <param name="right">The third flow to run.</param>
+    /// <returns>A flow containing the mapped value.</returns>
+    /// <example>
+    /// <code>
+    /// let flow = Flow.map3 (fun x y z -> x + y + z) (Flow.succeed 1) (Flow.succeed 2) (Flow.succeed 3)
+    /// </code>
+    /// </example>
     let map3
         (mapper: 'left -> 'middle -> 'right -> 'value)
         (left: Flow<'env, 'error, 'left>)
@@ -721,6 +892,14 @@ module Flow =
     /// the smaller workflow's type. The mapping is applied at execution time. This is useful for
     /// preserving narrow helper signatures while still running everything from one app boundary.
     /// </remarks>
+    /// <param name="mapping">A function that maps the outer environment to the inner environment.</param>
+    /// <param name="flow">The flow to run with the inner environment.</param>
+    /// <returns>A flow that expects the outer environment.</returns>
+    /// <example>
+    /// <code>
+    /// let flow = Flow.succeed 1 |> Flow.localEnv (fun outer -> outer)
+    /// </code>
+    /// </example>
     let localEnv
         (mapping: 'outerEnvironment -> 'innerEnvironment)
         (flow: Flow<'innerEnvironment, 'error, 'value>)
@@ -736,6 +915,15 @@ module Flow =
     /// <c>Flow.read</c>; <c>provideLayer</c> is for deriving or provisioning an environment before a
     /// downstream workflow starts.
     /// </remarks>
+    /// <param name="layer">A flow that provides the environment required by the downstream flow.</param>
+    /// <param name="flow">The flow to run with the provided environment.</param>
+    /// <returns>A flow that requires only the input environment of the layer.</returns>
+    /// <example>
+    /// <code>
+    /// let layer = Flow.succeed "test"
+    /// let flow = Flow.env |> Flow.provideLayer layer
+    /// </code>
+    /// </example>
     let provideLayer
         (layer: Flow<'input, 'error, 'environment>)
         (flow: Flow<'environment, 'error, 'value>)
@@ -745,10 +933,25 @@ module Flow =
             |> EffectFlow.bind (fun innerEnvironment -> invoke flow innerEnvironment ct))
 
     /// <summary>Defers flow construction until execution time.</summary>
+    /// <param name="factory">A function that returns the flow to execute.</param>
+    /// <returns>A flow that lazily evaluates the factory when executed.</returns>
+    /// <example>
+    /// <code>
+    /// let flow = Flow.delay (fun () -> Flow.succeed 42)
+    /// </code>
+    /// </example>
     let delay (factory: unit -> Flow<'env, 'error, 'value>) : Flow<'env, 'error, 'value> =
         Flow(fun environment ct -> invoke (factory ()) environment ct)
 
     /// <summary>Transforms a sequence of values into a flow and stops at the first failure.</summary>
+    /// <param name="mapping">A function that maps each value to a flow.</param>
+    /// <param name="values">The sequence of values to transform.</param>
+    /// <returns>A flow containing a list of the successful mapped values.</returns>
+    /// <example>
+    /// <code>
+    /// let flows = [1; 2; 3] |> Flow.traverse (fun x -> Flow.succeed (x * 2))
+    /// </code>
+    /// </example>
     let traverse
         (mapping: 'value -> Flow<'env, 'error, 'next>)
         (values: seq<'value>)
@@ -765,5 +968,12 @@ module Flow =
             |> EffectFlow.map List.rev)
 
     /// <summary>Transforms a sequence of flows into a flow of a sequence and stops at the first failure.</summary>
+    /// <param name="flows">The sequence of flows to run.</param>
+    /// <returns>A flow containing a list of the successful values.</returns>
+    /// <example>
+    /// <code>
+    /// let flow = Flow.sequence [Flow.succeed 1; Flow.succeed 2]
+    /// </code>
+    /// </example>
     let sequence (flows: seq<Flow<'env, 'error, 'value>>) : Flow<'env, 'error, 'value list> =
         traverse id flows

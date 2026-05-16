@@ -17,7 +17,7 @@ This page shows the STM surface for composable atomic state transitions. STM is 
 
 ## Module functions
 
-- [`TRef.make`](./m-tref-make.md): Creates a new <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-tref-1.html">TRef</a> with the initial value.
+- [`TRef.make`](./m-tref-make.md): Creates a new <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-tref-1.html">TRef</a> with the initial value within an STM transaction.
 - [`TRef.get`](./m-tref-get.md): Reads the current value of the transactional reference within a transaction.
 - [`TRef.set`](./m-tref-set.md): Sets the value of the transactional reference within a transaction.
 - [`TRef.update`](./m-tref-update.md): Updates the value of the transactional reference within a transaction using the supplied function.

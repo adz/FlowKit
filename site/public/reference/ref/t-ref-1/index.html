@@ -19,21 +19,25 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Ref | FsFlow</title>
-<meta name="description" content="Represents a handle to a mutable reference that can be updated atomically.">
+<meta name="description" content="Represents a handle to a mutable reference that can be updated atomically.
+Signature type Ref&lt;&#39;T&gt; Type Parameters Name T Examples flow { let! r = Ref.make 0 do! Ref.set 1 r let! v = Ref.get r return v }">
 <meta property="og:url" content="http://localhost:3000/reference/ref/t-ref-1/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Ref">
-  <meta property="og:description" content="Represents a handle to a mutable reference that can be updated atomically.">
+  <meta property="og:description" content="Represents a handle to a mutable reference that can be updated atomically.
+Signature type Ref&lt;&#39;T&gt; Type Parameters Name T Examples flow { let! r = Ref.make 0 do! Ref.set 1 r let! v = Ref.get r return v }">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="reference">
 
   <meta itemprop="name" content="Ref">
-  <meta itemprop="description" content="Represents a handle to a mutable reference that can be updated atomically.">
-  <meta itemprop="wordCount" content="12">
+  <meta itemprop="description" content="Represents a handle to a mutable reference that can be updated atomically.
+Signature type Ref&lt;&#39;T&gt; Type Parameters Name T Examples flow { let! r = Ref.make 0 do! Ref.set 1 r let! v = Ref.get r return v }">
+  <meta itemprop="wordCount" content="39">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Ref">
-  <meta name="twitter:description" content="Represents a handle to a mutable reference that can be updated atomically.">
+  <meta name="twitter:description" content="Represents a handle to a mutable reference that can be updated atomically.
+Signature type Ref&lt;&#39;T&gt; Type Parameters Name T Examples flow { let! r = Ref.make 0 do! Ref.set 1 r let! v = Ref.get r return v }">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -507,7 +511,18 @@
 </div>
 
             <div class="td-toc" data-proofer-ignore>
-</div>
+<div class="td-toc-title">
+      <span class="td-toc-title__text">On this page</span>
+      <a class="td-toc-title__link" title="Top of page" href="#"></a>
+    </div>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#signature">Signature</a></li>
+    <li><a href="#type-parameters">Type Parameters</a></li>
+    <li><a href="#examples">Examples</a></li>
+  </ul>
+</nav>
+  </div>
 
             
 
@@ -531,6 +546,31 @@
 		
 </header>
 	<p>Represents a handle to a mutable reference that can be updated atomically.</p>
+<h2 id="signature">Signature</h2>
+<div class="fsdocs-usage">
+<code>type Ref<'T></code>
+</div>
+<h2 id="type-parameters">Type Parameters</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>T</code></td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<pre class="fssnip highlighted"><code lang="fsharp"> <span class="id">flow</span> <span class="pn">{</span>
+     <span class="k">let!</span> <span class="id">r</span> <span class="o">=</span> <span class="id">Ref</span><span class="pn">.</span><span class="id">make</span> <span class="n">0</span>
+     <span class="k">do!</span> <span class="id">Ref</span><span class="pn">.</span><span class="id">set</span> <span class="n">1</span> <span class="id">r</span>
+     <span class="k">let!</span> <span class="id">v</span> <span class="o">=</span> <span class="id">Ref</span><span class="pn">.</span><span class="id">get</span> <span class="id">r</span>
+     <span class="k">return</span> <span class="id">v</span>
+ <span class="pn">}</span>
+</code></pre>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/reference/ref/m-ref-modify/" aria-label="Previous - Ref.modify">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>

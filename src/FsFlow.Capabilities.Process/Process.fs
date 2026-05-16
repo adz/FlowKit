@@ -19,12 +19,23 @@ type ProcessResult =
 /// <summary>Provides asynchronous access to external process execution.</summary>
 type IProcess =
     /// <summary>Executes an external process and returns its result asynchronously.</summary>
+    /// <param name="fileName">The path to the executable file.</param>
+    /// <param name="arguments">The command-line arguments.</param>
+    /// <returns>A task that represents the execution result.</returns>
     abstract Execute : fileName: string * arguments: string -> Task<ProcessResult>
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 [<RequireQualifiedAccess>]
 module Process =
     /// <summary>Executes a process using the process environment and returns the result.</summary>
+    /// <param name="fileName">The path to the executable file.</param>
+    /// <param name="arguments">The command-line arguments.</param>
+    /// <returns>A flow that returns the process execution result.</returns>
+    /// <example>
+    /// <code>
+    /// let result = Process.execute "git" "status"
+    /// </code>
+    /// </example>
     let execute (fileName: string) (arguments: string) : Flow<'env, 'e, ProcessResult> when 'env :> IProcess =
         flow {
             let! (env: 'env) = Flow.env
@@ -33,6 +44,7 @@ module Process =
 
 #if !FABLE_COMPILER
     /// <summary>Creates a live process runner backed by <see cref="T:System.Diagnostics.Process" />.</summary>
+    /// <returns>An implementation of IProcess that uses the system process runner.</returns>
     let live : IProcess =
         { new IProcess with
             member _.Execute(fileName, arguments) =
