@@ -110,7 +110,7 @@ let pageSpecs = [
         Intro = "This page shows the `Flow<'env, 'error, 'value>` surface, the central workflow type in FsFlow. A flow is a cold description of work that reads an explicit environment, can fail with a typed error, and only runs when you call an execution function such as `Flow.run`. Use this page as the API map for building fail-fast workflows, reading dependencies from `env`, reshaping environments with `localEnv`, composing typed failures, and introducing concurrency with fibers, `zipPar`, or `race`. Start with `flow { }`, `Flow.read`, `Flow.bind`, and `Flow.map`; reach for runtime helpers and parallel orchestration only at the boundary where the workflow actually needs them."
         SymbolIds = [
             "Core type", ["T:FsFlow.Flow`3"]
-            "Module functions", ["M:FsFlow.Flow.run"; "M:FsFlow.Flow.ok"; "M:FsFlow.Flow.error"; "M:FsFlow.Flow.succeed"; "M:FsFlow.Flow.value"; "M:FsFlow.Flow.fail"; "M:FsFlow.Flow.fromResult"; "M:FsFlow.Flow.fromOption"; "M:FsFlow.Flow.fromValueOption"; "M:FsFlow.Flow.orElseFlow"; "M:FsFlow.Flow.env"; "M:FsFlow.Flow.read"; "M:FsFlow.Flow.map"; "M:FsFlow.Flow.bind"; "M:FsFlow.Flow.tap"; "M:FsFlow.Flow.tapError"; "M:FsFlow.Flow.mapError"; "M:FsFlow.Flow.catch"; "M:FsFlow.Flow.orElseWith"; "M:FsFlow.Flow.orElse"; "M:FsFlow.Flow.zip"; "M:FsFlow.Flow.map2"; "M:FsFlow.Flow.map3"; "M:FsFlow.Flow.apply"; "M:FsFlow.Flow.ignore"; "M:FsFlow.Flow.localEnv"; "M:FsFlow.Flow.provideLayer"; "M:FsFlow.Flow.delay"; "M:FsFlow.Flow.traverse"; "M:FsFlow.Flow.sequence"]
+            "Module functions", ["M:FsFlow.Flow.run"; "M:FsFlow.Flow.ok"; "M:FsFlow.Flow.error"; "M:FsFlow.Flow.succeed"; "M:FsFlow.Flow.value"; "M:FsFlow.Flow.fail"; "M:FsFlow.Flow.fromResult"; "M:FsFlow.Flow.fromOption"; "M:FsFlow.Flow.fromValueOption"; "M:FsFlow.Flow.orElseFlow"; "M:FsFlow.Flow.env"; "M:FsFlow.Flow.read"; "M:FsFlow.Flow.service"; "M:FsFlow.Flow.inject"; "M:FsFlow.Flow.map"; "M:FsFlow.Flow.bind"; "M:FsFlow.Flow.tap"; "M:FsFlow.Flow.tapError"; "M:FsFlow.Flow.mapError"; "M:FsFlow.Flow.catch"; "M:FsFlow.Flow.orElseWith"; "M:FsFlow.Flow.orElse"; "M:FsFlow.Flow.zip"; "M:FsFlow.Flow.map2"; "M:FsFlow.Flow.map3"; "M:FsFlow.Flow.apply"; "M:FsFlow.Flow.ignore"; "M:FsFlow.Flow.localEnv"; "M:FsFlow.Flow.provideLayer"; "M:FsFlow.Flow.delay"; "M:FsFlow.Flow.traverse"; "M:FsFlow.Flow.sequence"]
             "Concurrency", ["T:FsFlow.Fiber`2"; "M:FsFlow.Flow.fork"; "M:FsFlow.Flow.join"; "M:FsFlow.Flow.interrupt"]
             "Parallel orchestration", ["M:FsFlow.Flow.zipPar"; "M:FsFlow.Flow.race"]
         ]
@@ -229,12 +229,12 @@ let pageSpecs = [
     {
         OutPath = ["capability"; "_index.md"]
         Title = "Capability"
-        Description = "Source-documented dependency resolution and layers for FsFlow."
-        Intro = "This page shows the capability and layer helpers around FsFlow's environment model. In FsFlow, a capability is a named interface that describes what a flow needs from `env`; the workflow still receives an explicit environment, but the interface gives that dependency surface a stable name. Prefer small app contracts plus `Flow.read` for reusable workflow code. Keep runtime-owned services such as clock, logging, random, GUID generation, and environment-variable lookup in `FsFlow.Capabilities.Core`, where they can be read through runtime helpers and overridden with `Flow.withClock`, `Flow.withLog`, `Flow.withRandom`, `Flow.withGuid`, and `Flow.withEnvironmentVariables`. The `Resolver` helpers are edge and compatibility tools, not the default application model."
+        Description = "Source-documented capability contracts and dependency access helpers for FsFlow."
+        Intro = "This page shows the capability helpers around FsFlow's environment model. In FsFlow, a capability is a named interface that describes what a flow needs from `env`; the workflow still receives an explicit environment, but the interface gives that dependency surface a stable name. Prefer plain records plus `Flow.read` for local workflow code, use `IHas<'T>` plus `Flow.service` when reusable helpers need statically checked dependency contracts, and keep `Flow.inject` at .NET host boundaries where `IServiceProvider` interop is useful. Runtime-owned services such as clock, logging, random, GUID generation, and environment-variable lookup stay in `FsFlow.Capabilities.Core`, where they can be read through runtime helpers and overridden with `Flow.withClock`, `Flow.withLog`, `Flow.withRandom`, `Flow.withGuid`, and `Flow.withEnvironmentVariables`."
         SymbolIds = [
-            "Binding tokens", ["T:FsFlow.Requires`1"; "T:FsFlow.Resolve`1"; "T:FsFlow.Resolve`2"]
-            "Edge helpers", ["T:FsFlow.MissingCapability"; "M:FsFlow.Resolver.resolve"; "M:FsFlow.Resolver.fromProvider"]
-            "Layers", ["M:FsFlow.Layer.provideLayer"]
+            "Capability contracts", ["T:FsFlow.IHas`1"]
+            "Flow accessors", ["M:FsFlow.Flow.read"; "M:FsFlow.Flow.service"; "M:FsFlow.Flow.inject"]
+            "Edge helpers", ["T:FsFlow.MissingCapability"]
         ]
         Alias = None
     }

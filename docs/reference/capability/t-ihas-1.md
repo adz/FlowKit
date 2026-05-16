@@ -1,7 +1,6 @@
 ---
-title: "Requires"
-linkTitle: "Requires<dep>"
-type: docs
+title: "IHas"
+linkTitle: "IHas<service>"
 ---
 
 Compatibility contract for a single dependency.

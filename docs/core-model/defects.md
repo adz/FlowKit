@@ -43,7 +43,7 @@ While standard F# practice favors "just using exceptions" for defects, FsFlow tr
 In complex orchestration like `Flow.zipPar` (running two flows concurrently), the engine must coordinate the lifecycle of multiple fibers.
 
 *   **The Problem:** If a defect is just a thrown exception, it escapes the return value of the function. The engine would have to handle two disjoint failure paths: returning a failure value OR catching a thrown exception. This forces every combinator to use defensive `try...finally` blocks just to coordinate basic signaling.
-*   **The Solution:** By capturing defects into the `Exit` type, every flow execution is guaranteed to return a value. This makes the algebra "closed." If one branch dies, the engine receives it as data, immediately triggers cancellation for the other branches, and returns a single, structured outcome.
+*   **The Solution:** By capturing defects into the `Exit` type, every flow execution returns a value. This makes the algebra "closed." If one branch dies, the engine receives it as data, immediately triggers cancellation for the other branches, and returns a single, structured outcome.
 
 ### 2. Lossless Concurrency Coordination
 When a fiber fails, you often need to perform cleanup (e.g., `ensuring` or `onExit`). 
@@ -54,3 +54,4 @@ By reifying defects into `Cause.Die`, FsFlow passes the exact cause—including 
 The distinction between `Fail` and `Die` allows for smarter defaults:
 *   **Retries** should usually target `Fail` (e.g., a transient network error), but never `Die` (e.g., a `NullReferenceException`). Retrying a bug is usually a waste of resources.
 *   **Fallbacks** (`orElse`) usually target domain failures. If a workflow has a defect, it usually indicates a corrupted state that fallback logic wasn't designed to handle.
+ndle.

@@ -30,7 +30,7 @@
 
   <meta itemprop="name" content="Nominal Capability Contracts">
   <meta itemprop="description" content="Small named interfaces for reusable helpers and public capability boundaries.">
-  <meta itemprop="wordCount" content="648">
+  <meta itemprop="wordCount" content="449">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Nominal Capability Contracts">
   <meta name="twitter:description" content="Small named interfaces for reusable helpers and public capability boundaries.">
@@ -185,10 +185,10 @@
   </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id="m-docsmanaging-dependencies-li">
     <a href="http://localhost:3000/docs/managing-dependencies/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docsmanaging-dependencies"><span class="">Managing Dependencies</span></a>
     <ul class="ul-2 foldable">
-      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsmanaging-dependenciesprovider-edge-li">
-    <a href="http://localhost:3000/docs/managing-dependencies/provider-edge/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciesprovider-edge"><span class="">Standard .NET AppHost Plus DI</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child active-path" id="m-docsmanaging-dependenciescapability-contracts-li">
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child active-path" id="m-docsmanaging-dependenciescapability-contracts-li">
     <a href="http://localhost:3000/docs/managing-dependencies/capability-contracts/" class="align-left ps-0 active td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciescapability-contracts"><span class="td-sidebar-nav-active-item">Nominal Capability Contracts</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsmanaging-dependenciesprovider-edge-li">
+    <a href="http://localhost:3000/docs/managing-dependencies/provider-edge/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciesprovider-edge"><span class=""></span></a>
   </li>
     </ul>
   </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docsstate-concurrency-li">
@@ -251,15 +251,24 @@
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#the-contract">The Contract</a></li>
-    <li><a href="#reading-through-the-contract">Reading Through The Contract</a></li>
-    <li><a href="#why-use-a-contract">Why Use A Contract</a></li>
-    <li><a href="#what-a-record-gives-you">What A Record Gives You</a></li>
-    <li><a href="#what-a-contract-gives-you">What A Contract Gives You</a></li>
-    <li><a href="#binding-tokens">Binding Tokens</a></li>
-    <li><a href="#what-a-named-contract-gives-you">What A Named Contract Gives You</a></li>
-    <li><a href="#when-it-is-not-worth-it">When It Is Not Worth It</a></li>
-    <li><a href="#what-this-replaces">What This Replaces</a></li>
+    <li><a href="#level-1-records-the-pragmatic-way">Level 1: Records (The Pragmatic Way)</a>
+      <ul>
+        <li><a href="#accessing-via-flowread">Accessing via <code>Flow.read</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#level-2-nominal-capabilities-the-honest-way">Level 2: Nominal Capabilities (The Honest Way)</a>
+      <ul>
+        <li><a href="#the-ihast-pattern">The <code>IHas&lt;&#39;T&gt;</code> Pattern</a></li>
+        <li><a href="#accessing-via-flowservicet">Accessing via <code>Flow.service&lt;&#39;T&gt;()</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#level-3-dependency-injection-the-edge-way">Level 3: Dependency Injection (The Edge Way)</a>
+      <ul>
+        <li><a href="#accessing-via-flowinjectt">Accessing via <code>Flow.inject&lt;&#39;T&gt;()</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#the-honest-bridge">The &ldquo;Honest Bridge&rdquo;</a></li>
+    <li><a href="#summary-choosing-your-level">Summary: Choosing Your Level</a></li>
   </ul>
 </nav>
   </div>
@@ -285,106 +294,96 @@
 	<header class="article-meta">
 		
 </header>
-	<p>In FsFlow, a capability is a named interface that describes an application dependency in <code>env</code>.
-A capability contract puts that interface in the environment surface type.</p>
-<p>Using an interface through a capability contract makes the dependency visible in the type, so the
-compiler can check it, refactoring can move safely, and reusable helpers can advertise what they
-need.</p>
-<p>This page is for readers who want the app dependency surface to be part of the type:</p>
-<ul>
-<li>the record is getting too wide</li>
-<li>the dependency list is becoming boilerplate</li>
-<li>you want the compiler to notice when a refactor changes what an effect needs</li>
-<li>you want the effect signature to read like a dependency statement, not a plumbing report</li>
-</ul>
-<p>The contract should be small, named, and stable. When it grows, split the bundle into smaller app
-contracts or move the boundary back to a concrete record.</p>
-<h2 id="the-contract">The Contract</h2>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">IOrderRepository</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">abstract</span> <span style="color:#000">Save</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Order</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#204a87;font-weight:bold">unit</span>
+	<p>In FsFlow, the environment (<code>'env</code>) represents the &ldquo;world&rdquo; your effects need to run. Depending on the size of your application and your need for strictness, FsFlow provides three &ldquo;levels&rdquo; of environment access.</p>
+<h2 id="level-1-records-the-pragmatic-way">Level 1: Records (The Pragmatic Way)</h2>
+<p>For local logic or small applications, a plain F# record is often the best choice. It is direct, easy to mock, and requires zero ceremony.</p>
+<h3 id="accessing-via-flowread">Accessing via <code>Flow.read</code></h3>
+<p>Use <code>Flow.read</code> to project a specific property from your environment record.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">AppConfig</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#000">ConnectionString</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#204a87;font-weight:bold">string</span> <span style="color:#ce5c00;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">AppEnv</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#000">Config</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">AppConfig</span> <span style="color:#ce5c00;font-weight:bold">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">IEmailSender</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">abstract</span> <span style="color:#000">SendConfirmation</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Order</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#204a87;font-weight:bold">unit</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">getConnString</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">fun</span> <span style="color:#000">e</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#000">e</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Config</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">ConnectionString</span><span style="color:#ce5c00;font-weight:bold">)</span>
+</span></span></code></pre></div><p><strong>Full Example:</strong> <a href="https://github.com/adz/FsFlow/blob/main/examples/FsFlow.Examples/CapabilityExamples.fs" target="_blank" rel="noopener">CapabilityExamples.fs (Level 1)</a></p>
+<hr>
+<h2 id="level-2-nominal-capabilities-the-honest-way">Level 2: Nominal Capabilities (The Honest Way)</h2>
+<p>As your application grows, you may want &ldquo;Static Honesty&rdquo;—where the type signature of a function clearly advertises every external service it needs. This approach keeps dependencies explicit and verifiable by the compiler.</p>
+<h3 id="the-ihast-pattern">The <code>IHas&lt;'T&gt;</code> Pattern</h3>
+<p>Standardize on the <code>IHas&lt;'T&gt;</code> interface to &ldquo;slice&rdquo; your environment into specific capabilities.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">IOrderRepo</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">abstract</span> <span style="color:#204a87;font-weight:bold">member</span> <span style="color:#000">Save</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Order</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#204a87;font-weight:bold">unit</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">IOrderCaps</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">abstract</span> <span style="color:#000">Orders</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">IOrderRepository</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">abstract</span> <span style="color:#000">Email</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">IEmailSender</span>
-</span></span></code></pre></div><p>The contract is the application dependency surface, not the lookup mechanism.</p>
-<p>Runtime-owned services such as clock and logging are implicit in the flow runtime. They are not
-part of <code>env</code>, and they can be overridden with <code>Flow.withClock</code> / <code>Flow.withLog</code> when you need a
-deterministic test or a scoped local change.</p>
-<h2 id="reading-through-the-contract">Reading Through The Contract</h2>
-<p>Use the contract directly from workflows and helper functions.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">saveAndEmail</span> <span style="color:#000">order</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;#</span><span style="color:#000">IOrderCaps</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">AppError</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">unit</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">// A capability contract
+</span></span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">IHasOrders</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">inherit</span> <span style="color:#000">IHas</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">IOrderRepo</span><span style="color:#ce5c00;font-weight:bold">&gt;</span>
+</span></span></code></pre></div><h3 id="accessing-via-flowservicet">Accessing via <code>Flow.service&lt;'T&gt;()</code></h3>
+<p>Use <code>Flow.service</code> to request a capability. The compiler will automatically infer that the environment must implement <code>IHas&lt;'T&gt;</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">saveOrder</span> <span style="color:#000">order</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;#</span><span style="color:#000">IHasOrders</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">Error</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">unit</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">orders</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">Orders</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">email</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">Email</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#000">orders</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Save</span> <span style="color:#000">order</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#000">email</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">SendConfirmation</span> <span style="color:#000">order</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">repo</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">service</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">IOrderRepo</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#ce5c00;font-weight:bold">_,</span> <span style="color:#ce5c00;font-weight:bold">_&gt;</span><span style="color:#3465a4">()</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">repo</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Save</span> <span style="color:#000">order</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span></code></pre></div><p>In practice, the contract often comes from a concrete record or adapter type that implements the
-interface.</p>
-<h2 id="why-use-a-contract">Why Use A Contract</h2>
-<p>Capability contracts give you:</p>
-<ul>
-<li>compiler checks on the app dependency surface</li>
-<li>refactor safety when a helper changes what it needs</li>
-<li>workflow signatures that read as “this effect needs logging, clock, and db”</li>
-<li>reusable helpers that advertise what they depend on</li>
-<li>programming to interfaces, but for effects</li>
-</ul>
-<p>That makes app effects visible in the flow without forcing every boundary to become a big record.
-If the boundary is already obvious, a record already gives you direct access. A contract adds a
-type-level name that the compiler checks and that helpers can reuse across flows.</p>
-<h2 id="what-a-record-gives-you">What A Record Gives You</h2>
-<p>A record gives you:</p>
-<ul>
-<li>a short dependency list with direct fields</li>
-<li>a boundary that stays local to one area</li>
-<li>a shape that is easy to reuse as data</li>
-<li>no extra interface for a structure that is already simple</li>
-</ul>
-<h2 id="what-a-contract-gives-you">What A Contract Gives You</h2>
-<p>A contract gives you:</p>
-<ul>
-<li>the same dependency shape named once and reused across flows or helpers</li>
-<li>compiler errors at the call site when a dependency changes</li>
-<li>a flow that advertises its capabilities directly</li>
-<li>a readable type instead of a long parameter bag</li>
-</ul>
-<h2 id="binding-tokens">Binding Tokens</h2>
-<p><code>Requires&lt;'dep&gt;</code>, <code>Resolve&lt;'dep&gt;</code>, and <code>Resolve&lt;'dep, 'value&gt;</code> are compatibility binding tokens
-for single-dependency projections.</p>
-<p>Use <code>Flow.read</code> and small app contracts first. Reach for these tokens only when a single dependency
-request is clearer than naming a broader app contract.</p>
-<h2 id="what-a-named-contract-gives-you">What A Named Contract Gives You</h2>
-<p>A named contract gives you:</p>
-<ul>
-<li>a helper shared across multiple areas</li>
-<li>a stable dependency shape with one name</li>
-<li>a signature that explains itself</li>
-<li>a reusable interface that justifies the extra type-level name</li>
-</ul>
-<h2 id="when-it-is-not-worth-it">When It Is Not Worth It</h2>
-<p>Do not add a named contract just to make the code look more abstract.</p>
-<p>A record keeps a concrete boundary direct.
-Runtime overrides separate operational services from the app environment, and you can override
-them in tests without changing the app contract.
-Standard <code>.NET</code> AppHost plus DI adapts the container once at the host edge.</p>
-<h2 id="what-this-replaces">What This Replaces</h2>
-<p>The current shape is simple:</p>
-<ul>
-<li>a concrete record boundary</li>
-<li>a small nominal interface</li>
-<li><code>Flow.read</code> for app dependencies</li>
-<li><code>Flow.withClock</code> / <code>Flow.withLog</code> / <code>Flow.withRandom</code> / <code>Flow.withGuid</code> for runtime-owned services</li>
-</ul>
-<p>See the <a href="http://localhost:3000/reference/capability/">Capability reference</a> for the compatibility binding tokens,
-edge helpers, and layer helper.</p>
+</span></span></code></pre></div><p><strong>Full Example:</strong> <a href="https://github.com/adz/FsFlow/blob/main/examples/FsFlow.Examples/CapabilityExamples.fs" target="_blank" rel="noopener">CapabilityExamples.fs (Level 2)</a></p>
+<hr>
+<h2 id="level-3-dependency-injection-the-edge-way">Level 3: Dependency Injection (The Edge Way)</h2>
+<p>At the application &ldquo;Edge&rdquo; (e.g., an ASP.NET Controller or an Azure Function), you are often working with a standard .NET <code>IServiceProvider</code>. FsFlow allows you to lean into this ecosystem without losing the benefits of an effect system.</p>
+<h3 id="accessing-via-flowinjectt">Accessing via <code>Flow.inject&lt;'T&gt;()</code></h3>
+<p>Use <code>Flow.inject</code> to pull a service directly from the DI container. This trades compile-time safety for maximum pragmatism at the host boundary.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">handleRequest</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">logger</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">inject</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">ILogger</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">MyController</span><span style="color:#ce5c00;font-weight:bold">&gt;,</span> <span style="color:#ce5c00;font-weight:bold">_,</span> <span style="color:#ce5c00;font-weight:bold">_&gt;</span><span style="color:#3465a4">()</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">db</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">inject</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">IDbContext</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#ce5c00;font-weight:bold">_,</span> <span style="color:#ce5c00;font-weight:bold">_&gt;</span><span style="color:#3465a4">()</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8f5902;font-style:italic">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">}</span>
+</span></span></code></pre></div><p><em>Note: If a service is missing from the DI container, <code>Flow.inject</code> will fail with a <strong>Defect (Die)</strong>, treating it as a developer configuration error.</em></p>
+<p><strong>Full Example:</strong> <a href="https://github.com/adz/FsFlow/blob/main/examples/FsFlow.Examples/CapabilityExamples.fs" target="_blank" rel="noopener">CapabilityExamples.fs (Level 3)</a></p>
+<hr>
+<h2 id="the-honest-bridge">The &ldquo;Honest Bridge&rdquo;</h2>
+<p>You can combine Level 2 and Level 3 using the &ldquo;Honest Bridge&rdquo; pattern. Your core logic stays &ldquo;Honest&rdquo; (Level 2), but your Application Edge satisfies those requirements using DI (Level 3).</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">// 1. Core Logic (Honest/Level 2)
+</span></span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">processOrder</span> <span style="color:#000">cmd</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">db</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">service</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">IOrderRepo</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#ce5c00;font-weight:bold">_,</span> <span style="color:#ce5c00;font-weight:bold">_&gt;</span><span style="color:#3465a4">()</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span><span style="color:#ce5c00;font-weight:bold">!</span> <span style="color:#000">db</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Save</span> <span style="color:#000">cmd</span>
+</span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">// 2. Host Edge (Bridge)
+</span></span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">AppEnv</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">sp</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">IServiceProvider</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">=</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">interface</span> <span style="color:#000">IHas</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">IOrderRepo</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#204a87;font-weight:bold">with</span> <span style="color:#204a87;font-weight:bold">member</span> <span style="color:#000">_</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">Service</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">sp</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">GetRequiredService</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">IOrderRepo</span><span style="color:#ce5c00;font-weight:bold">&gt;</span><span style="color:#3465a4">()</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">// 3. Running
+</span></span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">result</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">run</span> <span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">AppEnv</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">sp</span><span style="color:#ce5c00;font-weight:bold">))</span> <span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">processOrder</span> <span style="color:#000">myCmd</span><span style="color:#ce5c00;font-weight:bold">)</span>
+</span></span></code></pre></div><p><strong>Full Example:</strong> <a href="https://github.com/adz/FsFlow/blob/main/examples/FsFlow.Examples/CapabilityExamples.fs" target="_blank" rel="noopener">CapabilityExamples.fs (Honest Bridge)</a></p>
+<h2 id="summary-choosing-your-level">Summary: Choosing Your Level</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Level</th>
+          <th style="text-align: left">Name</th>
+          <th style="text-align: left">Primary Accessor</th>
+          <th style="text-align: left">Environment Requirement</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>1</strong></td>
+          <td style="text-align: left"><strong>Direct</strong></td>
+          <td style="text-align: left"><code>Flow.read</code></td>
+          <td style="text-align: left">Plain Record/Data</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>2</strong></td>
+          <td style="text-align: left"><strong>Honest</strong></td>
+          <td style="text-align: left"><code>Flow.service</code></td>
+          <td style="text-align: left"><code>IHas&lt;'T&gt;</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>3</strong></td>
+          <td style="text-align: left"><strong>Pragmatic</strong></td>
+          <td style="text-align: left"><code>Flow.inject</code></td>
+          <td style="text-align: left"><code>IServiceProvider</code></td>
+      </tr>
+  </tbody>
+</table>
 
-	<nav class="docs-page-nav docs-page-nav--prev-only"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/docs/managing-dependencies/provider-edge/" aria-label="Previous - Standard .NET AppHost Plus DI">
-    <span class="docs-page-nav__arrow" aria-hidden="true">←</span>
-    <span>Previous</span>
+	<nav class="docs-page-nav docs-page-nav--next-only"><a class="docs-home-cta docs-page-nav__link docs-page-nav__next" href="http://localhost:3000/docs/managing-dependencies/provider-edge/" aria-label="Next - ">
+    <span>Next</span>
+    <span class="docs-page-nav__arrow" aria-hidden="true">→</span>
   </a></nav>
 	
 </div>

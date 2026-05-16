@@ -210,6 +210,20 @@ module internal TaskFlow =
     let read (projection: 'env -> 'value) : TaskFlow<'env, 'error, 'value> =
         TaskFlow(fun environment _ -> Task.FromResult(Exit.Success(projection environment)))
 
+    /// <summary>Extracts a specific service from an environment that implements <c>IHas&lt;'service&gt;</c>.</summary>
+    let inline service<'service, 'env, 'error when 'env :> IHas<'service>> () : TaskFlow<'env, 'error, 'service> =
+        read (fun (env: 'env) -> env.Service)
+
+    /// <summary>Injects a service from a dynamic IServiceProvider environment.</summary>
+    let inline inject<'service, 'env, 'error when 'env :> IServiceProvider> () : TaskFlow<'env, 'error, 'service> =
+        read (fun (env: 'env) ->
+            let svc = env.GetService(typeof<'service>)
+            if isNull (box svc) then
+                failwith $"Service {typeof<'service>.Name} was not registered in the IServiceProvider."
+            else
+                unbox<'service> svc
+        )
+
     /// <summary>Maps the successful value of a task flow.</summary>
     /// <param name="mapper">A function of type <c>'value -> 'next</c> to transform the success value.</param>
     /// <param name="flow">The source task flow of type <see cref="T:FsFlow.TaskFlow`3" />.</param>

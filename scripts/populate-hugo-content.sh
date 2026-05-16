@@ -60,6 +60,10 @@ upsert_frontmatter "$ref_dir/check/_index.md" "weight" "40"
 upsert_frontmatter "$ref_dir/validation/_index.md" "weight" "60"
 upsert_frontmatter "$ref_dir/result/_index.md" "weight" "70"
 upsert_frontmatter "$ref_dir/diagnostics/_index.md" "weight" "80"
+upsert_frontmatter "$ref_dir/ref/_index.md" "weight" "90"
+upsert_frontmatter "$ref_dir/stm/_index.md" "weight" "100"
+upsert_frontmatter "$ref_dir/schedule/_index.md" "weight" "110"
+upsert_frontmatter "$ref_dir/stream/_index.md" "weight" "120"
 upsert_frontmatter "$ref_dir/capability/_index.md" "weight" "130"
 
 # Ensure all reference pages are marked as docs type
@@ -118,6 +122,12 @@ Welcome to the FsFlow guides. Choose a section from the sidebar or start with [G
 <span class=\"label\">Start</span>
 <h2><a href=\"./start/\">Getting oriented</a></h2>
 <p>Install the package, see tiny examples, and learn the validation-first path into real app boundaries.</p>
+</section>
+
+<section class=\"docs-card\">
+<span class=\"label\">Tutorials</span>
+<h2><a href=\"./tutorials/\">Step-by-step guides</a></h2>
+<p>Learn common setups for records, capabilities, and .NET host integration.</p>
 </section>
 
 <section class=\"docs-card\">

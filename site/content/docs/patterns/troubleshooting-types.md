@@ -45,9 +45,9 @@ let workflow : Flow<unit, string, int> =
 
 ## Error: The Flow Requires A Different Environment Type
 
-This usually means you wrote a smaller workflow against one env type and are trying to run it inside a larger env.
+This usually means you wrote a smaller workflow against one env type (or a specific capability) and are trying to run it inside a larger env.
 
-Example:
+Example 1: Records
 
 ```fsharp
 type SmallEnv = { Prefix: string }
@@ -58,14 +58,25 @@ let greet : Flow<SmallEnv, string, string> =
         let! prefix = Flow.read _.Prefix
         return $"{prefix} world"
     }
-```
 
-If you want to run it in `BigEnv`, derive the smaller local env from the outer one:
-
-```fsharp
+// Run in BigEnv using localEnv
 let greetInBigEnv : Flow<BigEnv, string, string> =
     greet |> Flow.localEnv _.App
 ```
+
+Example 2: Capabilities
+
+If a helper requires `IHas<IClock>` but you are running it in an environment that doesn't implement it, the compiler will error.
+
+```fsharp
+let helper : Flow<#IHas<IClock>, _, _> = ...
+
+// This fails if AppEnv doesn't implement IHas<IClock>
+let run (env: AppEnv) = Flow.run env helper
+```
+
+Fix it by implementing the interface on your environment type.
+
 
 ## Error: `Option` Or `ValueOption` Does Not Match Your Error Type
 

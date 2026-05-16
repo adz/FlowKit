@@ -18,22 +18,34 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-144x144.png" sizes="144x144">
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
-<title>Standard .NET AppHost Plus DI | FsFlow</title>
-<meta name="description" content="Using IServiceProvider only at the host boundary.">
+<title>FsFlow</title>
+<meta name="description" content="IServiceProvider belongs at the outer edge of the system.
+Using FsFlow with standard .NET Dependency Injection gives you:
+Host registrations that you can turn into typed values once. A familiar entry point for ASP.NET, Workers, and other DI-driven runtimes. A bridge from dynamic host registrations to typed, honest core logic. Pragmatic Access: Flow.inject Flow.inject&lt;&#39;T&gt;() pulls a service directly from the IServiceProvider in the environment.
+let handleRequest = flow { let! db = Flow.inject&lt;MyDbContext, _, _&gt;() let! api = Flow.inject&lt;IExternalApi, _, _&gt;() // ... } This is the most ergonomic way to use FsFlow inside existing .NET applications.">
 <meta property="og:url" content="http://localhost:3000/docs/managing-dependencies/provider-edge/">
   <meta property="og:site_name" content="FsFlow">
-  <meta property="og:title" content="Standard .NET AppHost Plus DI">
-  <meta property="og:description" content="Using IServiceProvider only at the host boundary.">
+  <meta property="og:title" content="FsFlow">
+  <meta property="og:description" content="IServiceProvider belongs at the outer edge of the system.
+Using FsFlow with standard .NET Dependency Injection gives you:
+Host registrations that you can turn into typed values once. A familiar entry point for ASP.NET, Workers, and other DI-driven runtimes. A bridge from dynamic host registrations to typed, honest core logic. Pragmatic Access: Flow.inject Flow.inject&lt;&#39;T&gt;() pulls a service directly from the IServiceProvider in the environment.
+let handleRequest = flow { let! db = Flow.inject&lt;MyDbContext, _, _&gt;() let! api = Flow.inject&lt;IExternalApi, _, _&gt;() // ... } This is the most ergonomic way to use FsFlow inside existing .NET applications.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="docs">
 
-  <meta itemprop="name" content="Standard .NET AppHost Plus DI">
-  <meta itemprop="description" content="Using IServiceProvider only at the host boundary.">
-  <meta itemprop="wordCount" content="299">
+  <meta itemprop="name" content="FsFlow">
+  <meta itemprop="description" content="IServiceProvider belongs at the outer edge of the system.
+Using FsFlow with standard .NET Dependency Injection gives you:
+Host registrations that you can turn into typed values once. A familiar entry point for ASP.NET, Workers, and other DI-driven runtimes. A bridge from dynamic host registrations to typed, honest core logic. Pragmatic Access: Flow.inject Flow.inject&lt;&#39;T&gt;() pulls a service directly from the IServiceProvider in the environment.
+let handleRequest = flow { let! db = Flow.inject&lt;MyDbContext, _, _&gt;() let! api = Flow.inject&lt;IExternalApi, _, _&gt;() // ... } This is the most ergonomic way to use FsFlow inside existing .NET applications.">
+  <meta itemprop="wordCount" content="349">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Standard .NET AppHost Plus DI">
-  <meta name="twitter:description" content="Using IServiceProvider only at the host boundary.">
+  <meta name="twitter:title" content="FsFlow">
+  <meta name="twitter:description" content="IServiceProvider belongs at the outer edge of the system.
+Using FsFlow with standard .NET Dependency Injection gives you:
+Host registrations that you can turn into typed values once. A familiar entry point for ASP.NET, Workers, and other DI-driven runtimes. A bridge from dynamic host registrations to typed, honest core logic. Pragmatic Access: Flow.inject Flow.inject&lt;&#39;T&gt;() pulls a service directly from the IServiceProvider in the environment.
+let handleRequest = flow { let! db = Flow.inject&lt;MyDbContext, _, _&gt;() let! api = Flow.inject&lt;IExternalApi, _, _&gt;() // ... } This is the most ergonomic way to use FsFlow inside existing .NET applications.">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -185,10 +197,10 @@
   </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id="m-docsmanaging-dependencies-li">
     <a href="http://localhost:3000/docs/managing-dependencies/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docsmanaging-dependencies"><span class="">Managing Dependencies</span></a>
     <ul class="ul-2 foldable">
-      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child active-path" id="m-docsmanaging-dependenciesprovider-edge-li">
-    <a href="http://localhost:3000/docs/managing-dependencies/provider-edge/" class="align-left ps-0 active td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciesprovider-edge"><span class="td-sidebar-nav-active-item">Standard .NET AppHost Plus DI</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsmanaging-dependenciescapability-contracts-li">
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsmanaging-dependenciescapability-contracts-li">
     <a href="http://localhost:3000/docs/managing-dependencies/capability-contracts/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciescapability-contracts"><span class="">Nominal Capability Contracts</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child active-path" id="m-docsmanaging-dependenciesprovider-edge-li">
+    <a href="http://localhost:3000/docs/managing-dependencies/provider-edge/" class="align-left ps-0 active td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciesprovider-edge"><span class="td-sidebar-nav-active-item"></span></a>
   </li>
     </ul>
   </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docsstate-concurrency-li">
@@ -240,7 +252,7 @@
 <a href="https://github.com/adz/FsFlow/tree/main/content/docs/managing-dependencies/provider-edge.md" class="td-page-meta--view td-page-meta__view" target="_blank" rel="noopener"><i class="fa-solid fa-file-lines fa-fw"></i> View page source</a>
   <a href="https://github.com/adz/FsFlow/edit/main/content/docs/managing-dependencies/provider-edge.md" class="td-page-meta--edit td-page-meta__edit" target="_blank" rel="noopener"><i class="fa-solid fa-pen-to-square fa-fw"></i> Edit this page</a>
   <a href="https://github.com/adz/FsFlow/new/main/content/docs/managing-dependencies?filename=change-me.md&amp;value=---%0Atitle%3A&#43;%22Long&#43;Page&#43;Title%22%0AlinkTitle%3A&#43;%22Short&#43;Nav&#43;Title%22%0Aweight%3A&#43;100%0Adescription%3A&#43;%3E-%0A&#43;&#43;&#43;&#43;&#43;Page&#43;description&#43;for&#43;heading&#43;and&#43;indexes.%0A---%0A%0A%23%23&#43;Heading%0A%0AEdit&#43;this&#43;template&#43;to&#43;create&#43;your&#43;new&#43;page.%0A%0A%2A&#43;Give&#43;it&#43;a&#43;good&#43;name%2C&#43;ending&#43;in&#43;%60.md%60&#43;-&#43;e.g.&#43;%60get-started.md%60%0A%2A&#43;Edit&#43;the&#43;%22front&#43;matter%22&#43;section&#43;at&#43;the&#43;top&#43;of&#43;the&#43;page&#43;%28weight&#43;controls&#43;how&#43;its&#43;ordered&#43;amongst&#43;other&#43;pages&#43;in&#43;the&#43;same&#43;directory%3B&#43;lowest&#43;number&#43;first%29.%0A%2A&#43;Add&#43;a&#43;good&#43;commit&#43;message&#43;at&#43;the&#43;bottom&#43;of&#43;the&#43;page&#43;%28%3C80&#43;characters%3B&#43;use&#43;the&#43;extended&#43;description&#43;field&#43;for&#43;more&#43;detail%29.%0A%2A&#43;Create&#43;a&#43;new&#43;branch&#43;so&#43;you&#43;can&#43;preview&#43;your&#43;new&#43;file&#43;and&#43;request&#43;a&#43;review&#43;via&#43;Pull&#43;Request.%0A" class="td-page-meta--child td-page-meta__child" target="_blank" rel="noopener"><i class="fa-solid fa-pen-to-square fa-fw"></i> Create child page</a>
-  <a href="https://github.com/adz/FsFlow/issues/new?title=Standard%20.NET%20AppHost%20Plus%20DI" class="td-page-meta--issue td-page-meta__issue" target="_blank" rel="noopener"><i class="fa-solid fa-list-check fa-fw"></i> Create documentation issue</a>
+  <a href="https://github.com/adz/FsFlow/issues/new?title=" class="td-page-meta--issue td-page-meta__issue" target="_blank" rel="noopener"><i class="fa-solid fa-list-check fa-fw"></i> Create documentation issue</a>
   
 </div>
 
@@ -251,10 +263,14 @@
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#the-lookup">The Lookup</a></li>
-    <li><a href="#the-tradeoff">The Tradeoff</a></li>
-    <li><a href="#host-to-boundary-record">Host To Boundary Record</a></li>
-    <li><a href="#when-not-to-use-it">When Not To Use It</a></li>
+    <li><a href="#pragmatic-access-flowinject">Pragmatic Access: <code>Flow.inject</code></a>
+      <ul>
+        <li><a href="#failure-behavior">Failure Behavior</a></li>
+      </ul>
+    </li>
+    <li><a href="#the-honest-bridge">The Honest Bridge</a></li>
+    <li><a href="#when-to-use-flowinject-directly">When to use <code>Flow.inject</code> Directly</a></li>
+    <li><a href="#summary">Summary</a></li>
   </ul>
 </nav>
   </div>
@@ -271,72 +287,70 @@
   <li class="breadcrumb-item">
     <a href="http://localhost:3000/docs/managing-dependencies/">Managing Dependencies</a></li>
   <li class="breadcrumb-item active" aria-current="page">
-    Standard .NET AppHost Plus DI</li>
+    </li>
   </ol>
 </nav>
 <div class="td-content">
-	<h1>Standard .NET AppHost Plus DI</h1>
-	<div class="lead">Using IServiceProvider only at the host boundary.</div>
+	<h1></h1>
+	
 	<header class="article-meta">
 		
 </header>
 	<p><code>IServiceProvider</code> belongs at the outer edge of the system.</p>
-<p>This gives you:</p>
+<p>Using FsFlow with standard .NET Dependency Injection gives you:</p>
 <ul>
-<li>host registrations that you can turn into typed values once</li>
-<li>a familiar entry point for ASP.NET, workers, and other DI-driven runtimes</li>
-<li>a boundary record or nominal contract that workflow code can consume without reaching back into
-<code>IServiceProvider</code></li>
+<li>Host registrations that you can turn into typed values once.</li>
+<li>A familiar entry point for ASP.NET, Workers, and other DI-driven runtimes.</li>
+<li>A bridge from dynamic host registrations to typed, honest core logic.</li>
 </ul>
-<p>This is not the primary dependency model for workflows. It is the bridge from host registrations
-to typed contracts.</p>
-<h2 id="the-lookup">The Lookup</h2>
-<p><code>Resolver.fromProvider</code> asks <code>IServiceProvider</code> for a service and fails with <code>MissingCapability</code>
-when the service is not registered.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">sendEmail</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">IServiceProvider</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">MissingCapability</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">IEmailSender</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">Resolver</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">fromProvider</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">IEmailSender</span><span style="color:#ce5c00;font-weight:bold">&gt;</span>
-</span></span></code></pre></div><p>That shape is acceptable at the edge because it preserves the failure in the type.</p>
-<h2 id="the-tradeoff">The Tradeoff</h2>
-<p>The win is ergonomics:</p>
-<ul>
-<li>very little boilerplate</li>
-<li>easy .NET host integration</li>
-<li>familiar to teams already using Microsoft DI</li>
-</ul>
-<p>The cost is honesty:</p>
-<ul>
-<li>the workflow is typed against the provider, not the exact service set</li>
-<li>missing registrations surface at runtime</li>
-</ul>
-<p>That is acceptable at the edge, not inside reusable helper code.</p>
-<h2 id="host-to-boundary-record">Host To Boundary Record</h2>
-<p>The strongest use of <code>IServiceProvider</code> access is to map it into a boundary record or adapter once
-and stop there.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">ApiDeps</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#000">Orders</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">IOrderRepository</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#000">Email</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">IEmailSender</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#000">Clock</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">IClock</span> <span style="color:#ce5c00;font-weight:bold">}</span>
+<h2 id="pragmatic-access-flowinject">Pragmatic Access: <code>Flow.inject</code></h2>
+<p><code>Flow.inject&lt;'T&gt;()</code> pulls a service directly from the <code>IServiceProvider</code> in the environment.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">handleRequest</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">db</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">inject</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">MyDbContext</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#ce5c00;font-weight:bold">_,</span> <span style="color:#ce5c00;font-weight:bold">_&gt;</span><span style="color:#3465a4">()</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">api</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">inject</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">IExternalApi</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#ce5c00;font-weight:bold">_,</span> <span style="color:#ce5c00;font-weight:bold">_&gt;</span><span style="color:#3465a4">()</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8f5902;font-style:italic">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">}</span>
+</span></span></code></pre></div><p>This is the most ergonomic way to use FsFlow inside existing .NET applications.</p>
+<p><strong>Full Example:</strong> <a href="https://github.com/adz/FsFlow/blob/main/examples/FsFlow.Examples/CapabilityExamples.fs" target="_blank" rel="noopener">CapabilityExamples.fs (Level 3)</a></p>
+<h3 id="failure-behavior">Failure Behavior</h3>
+<p>Unlike the honest <code>Flow.service</code>, <code>Flow.inject</code> assumes that your DI container is correctly configured. If a requested service is missing, it will fail with a <strong>Defect (Die)</strong>. This is idiomatic for .NET applications, where a missing registration is considered a developer configuration error that should be caught early.</p>
+<h2 id="the-honest-bridge">The Honest Bridge</h2>
+<p>The strongest architectural pattern is to use <code>Flow.inject</code> (or manual mapping) to satisfy strict <code>IHas&lt;'T&gt;</code> requirements at the host boundary.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">// 1. Core Logic (Honest)
+</span></span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">processOrder</span> <span style="color:#000">cmd</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">db</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">service</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">IOrderRepo</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#ce5c00;font-weight:bold">_,</span> <span style="color:#ce5c00;font-weight:bold">_&gt;</span><span style="color:#3465a4">()</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span><span style="color:#ce5c00;font-weight:bold">!</span> <span style="color:#000">db</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Save</span> <span style="color:#000">cmd</span>
+</span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">mapApiDeps</span> <span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">sp</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">IServiceProvider</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#000">Orders</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">sp</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">GetRequiredService</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">IOrderRepository</span><span style="color:#ce5c00;font-weight:bold">&gt;</span><span style="color:#3465a4">()</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#000">Email</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">sp</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">GetRequiredService</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">IEmailSender</span><span style="color:#ce5c00;font-weight:bold">&gt;</span><span style="color:#3465a4">()</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#000">Clock</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">sp</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">GetRequiredService</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">IClock</span><span style="color:#ce5c00;font-weight:bold">&gt;</span><span style="color:#3465a4">()</span> <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span></code></pre></div><p>Once you have the record, the rest of the workflow should usually stay on a named contract.</p>
-<h2 id="when-not-to-use-it">When Not To Use It</h2>
-<p>Do not use <code>IServiceProvider</code> as the default shape for reusable helpers.</p>
-<p>If a helper is reusable, use:</p>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">// 2. Host Edge (Bridge)
+</span></span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">AppEnv</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">sp</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">IServiceProvider</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">=</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">interface</span> <span style="color:#000">IHas</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">IOrderRepo</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#204a87;font-weight:bold">with</span> <span style="color:#204a87;font-weight:bold">member</span> <span style="color:#000">_</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">Service</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">sp</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">GetRequiredService</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">IOrderRepo</span><span style="color:#ce5c00;font-weight:bold">&gt;</span><span style="color:#3465a4">()</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">// 3. Application Host (e.g. ASP.NET Controller)
+</span></span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">[&lt;</span><span style="color:#000">HttpPost</span><span style="color:#ce5c00;font-weight:bold">&gt;]</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">member</span> <span style="color:#000">this</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">Post</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">cmd</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Command</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">=</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">env</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">AppEnv</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">this</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">HttpContext</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">RequestServices</span><span style="color:#ce5c00;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">run</span> <span style="color:#000">env</span> <span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">processOrder</span> <span style="color:#000">cmd</span><span style="color:#ce5c00;font-weight:bold">)</span>
+</span></span></code></pre></div><p><strong>Full Example:</strong> <a href="https://github.com/adz/FsFlow/blob/main/examples/FsFlow.Examples/CapabilityExamples.fs" target="_blank" rel="noopener">CapabilityExamples.fs (Honest Bridge)</a></p>
+<p>By using the bridge:</p>
+<ol>
+<li>Your <strong>Core Logic</strong> stays 100% testable and decoupled from DI.</li>
+<li>Your <strong>Host Edge</strong> remains pragmatic and lean.</li>
+<li>The <strong>Compiler</strong> verifies that every service required by your logic is actually provided by the host environment.</li>
+</ol>
+<h2 id="when-to-use-flowinject-directly">When to use <code>Flow.inject</code> Directly</h2>
+<p>Use <code>Flow.inject</code> directly when:</p>
 <ul>
-<li>a boundary record</li>
-<li>or a small nominal interface contract</li>
+<li>You are writing &ldquo;glue code&rdquo; at the application edge.</li>
+<li>You are prototyping quickly.</li>
+<li>You are inside a Controller or Middleware where the environment is already <code>IServiceProvider</code>.</li>
 </ul>
-<p>The host boundary is the edge, not the center. Keep it at the host boundary, adapt once, and then
-stop reaching back into the container from workflow code.</p>
-<p>See the <a href="http://localhost:3000/reference/capability/">Capability reference</a> for <code>Resolver.fromProvider</code> and
-<code>MissingCapability</code>.</p>
+<h2 id="summary">Summary</h2>
+<p>Keep <code>IServiceProvider</code> at the edge. Map it to strict <code>IHas&lt;'T&gt;</code> contracts or plain records as soon as you enter your core domain logic. This preserves the <strong>Effect Discipline</strong> of your application while taking full advantage of the .NET ecosystem.</p>
 
-	<nav class="docs-page-nav docs-page-nav--next-only"><a class="docs-home-cta docs-page-nav__link docs-page-nav__next" href="http://localhost:3000/docs/managing-dependencies/capability-contracts/" aria-label="Next - Nominal Capability Contracts">
-    <span>Next</span>
-    <span class="docs-page-nav__arrow" aria-hidden="true">→</span>
+	<nav class="docs-page-nav docs-page-nav--prev-only"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/docs/managing-dependencies/capability-contracts/" aria-label="Previous - Nominal Capability Contracts">
+    <span class="docs-page-nav__arrow" aria-hidden="true">←</span>
+    <span>Previous</span>
   </a></nav>
 	
 </div>

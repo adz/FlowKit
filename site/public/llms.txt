@@ -14,10 +14,11 @@ Data flows from left to right. Later stages can bind earlier stages directly.
 `Check` (unit error) -> `Result` (typed error) -> `Flow` (sync + env) -> `AsyncFlow` (async + env) -> `TaskFlow` (task + env)
 
 ## Capability Boundaries
-- Use `Requires<'dep>` to name a capability contract for a single dependency.
-- Use `Resolve<'dep>` to bind the dependency itself, and `Resolve<'dep, 'value>` to project from it.
-- Prefer named capability sets such as `TaskFlow<#LoginCapabilities, 'error, 'value>` when a larger runtime should satisfy a smaller workflow boundary.
-- Use `Resolver.resolve` and `Resolver.fromProvider` at the lookup edge, not as the primary model for every workflow.
+- Use `IHas<'T>` to name a capability contract for a single dependency.
+- Use `Flow.service<'T>()` to extract a nominal capability from an environment implementing `IHas<'T>`.
+- Use `Flow.inject<'T>()` to pull a dependency from a .NET `IServiceProvider` environment (Pragmatic/DI).
+- Use `Flow.read (env -> 'v)` for direct projection from plain environment records.
+- Prefer named capability sets such as `TaskFlow<#IAppCapabilities, 'error, 'value>` when a larger runtime should satisfy a smaller workflow boundary.
 - Keep `IServiceProvider` interop and runtime adapters at the edge; do not make them the primary public API.
 
 ## Core Patterns (Idiomatic Way)

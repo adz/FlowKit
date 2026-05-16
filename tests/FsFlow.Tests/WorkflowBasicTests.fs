@@ -199,15 +199,15 @@ module WorkflowBasicTests =
         let provider = RecordingServiceProvider(typeof<IDeviceClient>, app.DeviceClient :> obj) :> IServiceProvider
 
         let providerResult =
-            Resolver.fromProvider<IDeviceClient>
+            Flow.inject<IDeviceClient, _, _>()
             |> Flow.runSync provider
 
         let missingProviderResult =
-            Resolver.fromProvider<IDeviceClient>
+            Flow.inject<IDeviceClient, _, _>()
             |> Flow.runSync (RecordingServiceProvider(typeof<string>, "nope") :> IServiceProvider)
 
         let flowCapability : Flow<AppDependencies, string, IDeviceClient> =
-            Resolver.resolve _.DeviceClient
+            Flow.read _.DeviceClient
 
         let flowCapabilityResult =
             flowCapability
@@ -227,7 +227,11 @@ module WorkflowBasicTests =
 
         test <@ composedResult = Exit.Success "provider-client:10" @>
         test <@ providerResult = Exit.Success app.DeviceClient @>
-        test <@ missingProviderResult = Exit.Failure (Cause.Fail { CapabilityType = typeof<IDeviceClient> }) @>
+        
+        match missingProviderResult with
+        | Exit.Failure (Cause.Die ex) when ex.Message.Contains "IDeviceClient" -> ()
+        | _ -> failwithf "Expected Die failure for missing service, got %A" missingProviderResult
+
         test <@ flowCapabilityResult = Exit.Success app.DeviceClient @>
         test <@ flowLayerResult = Exit.Success "provider-client:10" @>
 
@@ -254,7 +258,7 @@ module WorkflowBasicTests =
         test <@ publicMethods |> Array.contains "ReturnFrom" @>
         test <@ publicMethods |> Array.exists (fun name -> name.StartsWith("Yield")) |> not @>
         test <@ publicMethods |> Array.contains "Run" @>
-        test <@ argumentTypeNames = [| "FSharpAsync`1"; "FSharpFunc`2"; "FSharpOption`1"; "FSharpResult`2"; "FSharpValueOption`1"; "Flow`3"; "Resolve`1"; "Resolve`2"; "Task"; "Task`1"; "ValueTask"; "ValueTask`1" |] @>
+        test <@ argumentTypeNames = [| "FSharpAsync`1"; "FSharpFunc`2"; "FSharpOption`1"; "FSharpResult`2"; "FSharpValueOption`1"; "Flow`3"; "Task"; "Task`1"; "ValueTask"; "ValueTask`1" |] @>
 
     [<Fact>]
     let ``flow lives in FsFlow and composes sync flows`` () =

@@ -1,80 +1,69 @@
----
-weight: 40
-title: "Standard .NET AppHost Plus DI"
-description: Using IServiceProvider only at the host boundary.
-type: docs
----
-
 
 `IServiceProvider` belongs at the outer edge of the system.
 
-This gives you:
+Using FsFlow with standard .NET Dependency Injection gives you:
 
-- host registrations that you can turn into typed values once
-- a familiar entry point for ASP.NET, workers, and other DI-driven runtimes
-- a boundary record or nominal contract that workflow code can consume without reaching back into
-  `IServiceProvider`
+- Host registrations that you can turn into typed values once.
+- A familiar entry point for ASP.NET, Workers, and other DI-driven runtimes.
+- A bridge from dynamic host registrations to typed, honest core logic.
 
-This is not the primary dependency model for workflows. It is the bridge from host registrations
-to typed contracts.
+## Pragmatic Access: `Flow.inject`
 
-## The Lookup
-
-`Resolver.fromProvider` asks `IServiceProvider` for a service and fails with `MissingCapability`
-when the service is not registered.
+`Flow.inject<'T>()` pulls a service directly from the `IServiceProvider` in the environment.
 
 ```fsharp
-let sendEmail : Flow<IServiceProvider, MissingCapability, IEmailSender> =
-    Resolver.fromProvider<IEmailSender>
+let handleRequest = flow {
+    let! db = Flow.inject<MyDbContext, _, _>()
+    let! api = Flow.inject<IExternalApi, _, _>()
+    // ...
+}
 ```
 
-That shape is acceptable at the edge because it preserves the failure in the type.
+This is the most ergonomic way to use FsFlow inside existing .NET applications.
 
-## The Tradeoff
+**Full Example:** [CapabilityExamples.fs (Level 3)](https://github.com/adz/FsFlow/blob/main/examples/FsFlow.Examples/CapabilityExamples.fs)
 
-The win is ergonomics:
+### Failure Behavior
 
-- very little boilerplate
-- easy .NET host integration
-- familiar to teams already using Microsoft DI
+Unlike the honest `Flow.service`, `Flow.inject` assumes that your DI container is correctly configured. If a requested service is missing, it will fail with a **Defect (Die)**. This is idiomatic for .NET applications, where a missing registration is considered a developer configuration error that should be caught early.
 
-The cost is honesty:
+## The Honest Bridge
 
-- the workflow is typed against the provider, not the exact service set
-- missing registrations surface at runtime
-
-That is acceptable at the edge, not inside reusable helper code.
-
-## Host To Boundary Record
-
-The strongest use of `IServiceProvider` access is to map it into a boundary record or adapter once
-and stop there.
+The strongest architectural pattern is to use `Flow.inject` (or manual mapping) to satisfy strict `IHas<'T>` requirements at the host boundary.
 
 ```fsharp
-type ApiDeps =
-    { Orders : IOrderRepository
-      Email : IEmailSender
-      Clock : IClock }
+// 1. Core Logic (Honest)
+let processOrder cmd = flow {
+    let! db = Flow.service<IOrderRepo, _, _>()
+    return! db.Save cmd
+}
 
-let mapApiDeps (sp: IServiceProvider) =
-    { Orders = sp.GetRequiredService<IOrderRepository>()
-      Email = sp.GetRequiredService<IEmailSender>()
-      Clock = sp.GetRequiredService<IClock>() }
+// 2. Host Edge (Bridge)
+type AppEnv(sp: IServiceProvider) =
+    interface IHas<IOrderRepo> with member _.Service = sp.GetRequiredService<IOrderRepo>()
+
+// 3. Application Host (e.g. ASP.NET Controller)
+[<HttpPost>]
+member this.Post(cmd: Command) =
+    let env = AppEnv(this.HttpContext.RequestServices)
+    Flow.run env (processOrder cmd)
 ```
 
-Once you have the record, the rest of the workflow should usually stay on a named contract.
+**Full Example:** [CapabilityExamples.fs (Honest Bridge)](https://github.com/adz/FsFlow/blob/main/examples/FsFlow.Examples/CapabilityExamples.fs)
 
-## When Not To Use It
 
-Do not use `IServiceProvider` as the default shape for reusable helpers.
+By using the bridge:
+1. Your **Core Logic** stays 100% testable and decoupled from DI.
+2. Your **Host Edge** remains pragmatic and lean.
+3. The **Compiler** verifies that every service required by your logic is actually provided by the host environment.
 
-If a helper is reusable, use:
+## When to use `Flow.inject` Directly
 
-- a boundary record
-- or a small nominal interface contract
+Use `Flow.inject` directly when:
+- You are writing "glue code" at the application edge.
+- You are prototyping quickly.
+- You are inside a Controller or Middleware where the environment is already `IServiceProvider`.
 
-The host boundary is the edge, not the center. Keep it at the host boundary, adapt once, and then
-stop reaching back into the container from workflow code.
+## Summary
 
-See the [Capability reference](../../reference/capability/) for `Resolver.fromProvider` and
-`MissingCapability`.
+Keep `IServiceProvider` at the edge. Map it to strict `IHas<'T>` contracts or plain records as soon as you enter your core domain logic. This preserves the **Effect Discipline** of your application while taking full advantage of the .NET ecosystem.

@@ -62,8 +62,6 @@
   </url><url>
     <loc>http://localhost:3000/docs/managing-dependencies/</loc>
   </url><url>
-    <loc>http://localhost:3000/docs/managing-dependencies/provider-edge/</loc>
-  </url><url>
     <loc>http://localhost:3000/docs/state-concurrency/stream/</loc>
   </url><url>
     <loc>http://localhost:3000/docs/tutorials/app-host/</loc>
@@ -84,7 +82,17 @@
   </url><url>
     <loc>http://localhost:3000/reference/diagnostics/</loc>
   </url><url>
+    <loc>http://localhost:3000/reference/ref/</loc>
+  </url><url>
+    <loc>http://localhost:3000/reference/stm/</loc>
+  </url><url>
+    <loc>http://localhost:3000/reference/schedule/</loc>
+  </url><url>
+    <loc>http://localhost:3000/reference/stream/</loc>
+  </url><url>
     <loc>http://localhost:3000/reference/capability/</loc>
+  </url><url>
+    <loc>http://localhost:3000/docs/managing-dependencies/provider-edge/</loc>
   </url><url>
     <loc>http://localhost:3000/reference/check/m-check-and/</loc>
   </url><url>
@@ -188,8 +196,6 @@
   </url><url>
     <loc>http://localhost:3000/reference/check/m-check-frompredicate/</loc>
   </url><url>
-    <loc>http://localhost:3000/reference/capability/m-resolver-fromprovider/</loc>
-  </url><url>
     <loc>http://localhost:3000/reference/flow/m-flow-fromresult/</loc>
   </url><url>
     <loc>http://localhost:3000/reference/validation/m-validation-fromresult/</loc>
@@ -208,7 +214,13 @@
   </url><url>
     <loc>http://localhost:3000/reference/validation/m-validation-ignore/</loc>
   </url><url>
+    <loc>http://localhost:3000/reference/capability/t-ihas-1/</loc>
+  </url><url>
     <loc>http://localhost:3000/reference/validation/m-validation-index/</loc>
+  </url><url>
+    <loc>http://localhost:3000/reference/capability/m-flow-inject/</loc>
+  </url><url>
+    <loc>http://localhost:3000/reference/flow/m-flow-inject/</loc>
   </url><url>
     <loc>http://localhost:3000/reference/flow/m-flow-interrupt/</loc>
   </url><url>
@@ -312,29 +324,19 @@
   </url><url>
     <loc>http://localhost:3000/reference/diagnostics/t-pathsegment/</loc>
   </url><url>
-    <loc>http://localhost:3000/reference/capability/m-layer-providelayer/</loc>
-  </url><url>
     <loc>http://localhost:3000/reference/flow/m-flow-providelayer/</loc>
   </url><url>
     <loc>http://localhost:3000/reference/flow/m-flow-race/</loc>
+  </url><url>
+    <loc>http://localhost:3000/reference/capability/m-flow-read/</loc>
   </url><url>
     <loc>http://localhost:3000/reference/flow/m-flow-read/</loc>
   </url><url>
     <loc>http://localhost:3000/reference/schedule/m-schedule-recurs/</loc>
   </url><url>
-    <loc>http://localhost:3000/reference/ref/</loc>
-  </url><url>
     <loc>http://localhost:3000/reference/ref/t-ref-1/</loc>
   </url><url>
     <loc>http://localhost:3000/reference/schedule/m-flowschedule-repeat/</loc>
-  </url><url>
-    <loc>http://localhost:3000/reference/capability/t-requires-1/</loc>
-  </url><url>
-    <loc>http://localhost:3000/reference/capability/m-resolver-resolve/</loc>
-  </url><url>
-    <loc>http://localhost:3000/reference/capability/t-resolve-2/</loc>
-  </url><url>
-    <loc>http://localhost:3000/reference/capability/t-resolve-1/</loc>
   </url><url>
     <loc>http://localhost:3000/reference/result/builders-result/</loc>
   </url><url>
@@ -348,13 +350,15 @@
   </url><url>
     <loc>http://localhost:3000/docs/patterns/examples/</loc>
   </url><url>
-    <loc>http://localhost:3000/reference/schedule/</loc>
-  </url><url>
     <loc>http://localhost:3000/reference/schedule/t-schedule-3/</loc>
   </url><url>
     <loc>http://localhost:3000/reference/flow/m-flow-sequence/</loc>
   </url><url>
     <loc>http://localhost:3000/reference/validation/m-validation-sequence/</loc>
+  </url><url>
+    <loc>http://localhost:3000/reference/capability/m-flow-service/</loc>
+  </url><url>
+    <loc>http://localhost:3000/reference/flow/m-flow-service/</loc>
   </url><url>
     <loc>http://localhost:3000/reference/ref/m-ref-set/</loc>
   </url><url>
@@ -364,13 +368,9 @@
   </url><url>
     <loc>http://localhost:3000/reference/schedule/m-schedule-spaced/</loc>
   </url><url>
-    <loc>http://localhost:3000/reference/stm/</loc>
-  </url><url>
     <loc>http://localhost:3000/reference/stm/p-stm-stm/</loc>
   </url><url>
     <loc>http://localhost:3000/reference/stm/t-stm-1/</loc>
-  </url><url>
-    <loc>http://localhost:3000/reference/stream/</loc>
   </url><url>
     <loc>http://localhost:3000/reference/flow/m-flow-succeed/</loc>
   </url><url>

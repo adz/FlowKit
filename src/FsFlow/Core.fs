@@ -222,7 +222,7 @@ module RetryPolicy =
 /// Prefer nominal capability interfaces for public workflows. This helper remains for lower-level
 /// binding machinery that still needs to work with a single dependency directly.
 /// </remarks>
-/// <typeparam name="dep">The dependency type exposed by the environment.</typeparam>
+/// <typeparam name="service">The dependency type exposed by the environment.</typeparam>
 /// <example>
 /// <code>
 /// type IClock =
@@ -238,63 +238,8 @@ module RetryPolicy =
 ///     }
 /// </code>
 /// </example>
-type Requires<'dep> =
-    abstract Dep : 'dep
-
-/// <summary>Request token for binding a whole dependency inside a workflow.</summary>
-/// <remarks>
-/// Use this token when a workflow needs the dependency itself rather than a value projected from
-/// that dependency. The <c>flow {}</c> builder and its compatibility helpers read it from any
-/// environment that exposes the dependency directly or through a nominal capability contract.
-/// </remarks>
-/// <typeparam name="dep">The dependency type to read from the environment.</typeparam>
-/// <example>
-/// <code>
-/// type IClock =
-///     abstract UtcNow : unit -&gt; DateTimeOffset
-///
-/// type ClockRequires =
-///     inherit Requires&lt;IClock&gt;
-///     abstract Clock : IClock
-///
-/// let readClock : Flow&lt;#ClockRequires, unit, IClock&gt; =
-///     flow {
-///         let! clock = Resolve&lt;IClock&gt;
-///         return clock
-///     }
-/// </code>
-/// </example>
-[<Struct>]
-type Resolve<'dep> =
-    | Resolve
-
-/// <summary>Request token for projecting a value from a dependency.</summary>
-/// <remarks>
-/// Builders read the dependency from the environment, apply the projection, and then reuse the
-/// existing lift/bind behavior for the projected value. If the projection returns a
-/// <c>Result</c>, <c>Async</c>, <c>Task</c>, <c>ValueTask</c>, <c>ColdTask</c>, <c>option</c>, or
-/// <c>voption</c>, the existing workflow rules still apply.
-/// </remarks>
-/// <typeparam name="dep">The dependency type to read from the environment.</typeparam>
-/// <typeparam name="value">The projected value type.</typeparam>
-/// <example>
-/// <code>
-/// type IClock =
-///     abstract UtcNow : unit -&gt; DateTimeOffset
-///
-/// type Runtime =
-///     { Clock : IClock }
-///
-/// let readClockNow : Flow&lt;Runtime, unit, DateTimeOffset&gt; =
-///     flow {
-///         let! now = Flow.read (fun runtime -> runtime.Clock.UtcNow())
-///         return now
-///     }
-/// </code>
-/// </example>
-[<Struct>]
-type Resolve<'dep, 'value> =
-    | Resolve of ('dep -> 'value)
+type IHas<'service> =
+    abstract Service : 'service
 
 /// <summary>Describes a missing service-provider capability.</summary>
 type MissingCapability =

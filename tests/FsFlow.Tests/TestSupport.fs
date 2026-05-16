@@ -127,6 +127,7 @@ module TestSupport =
                         FileName = "bash",
                         Arguments = $"\"{scriptPath}\"",
                         RedirectStandardOutput = true,
+                        RedirectStandardError = true,
                         UseShellExecute = false
                     )
             )
@@ -136,10 +137,22 @@ module TestSupport =
 
         childProcess.Start() |> ignore
 
-        let standardOutput = childProcess.StandardOutput.ReadToEnd()
-        childProcess.WaitForExit()
+        let standardOutput = childProcess.StandardOutput.ReadToEndAsync()
+        let standardError = childProcess.StandardError.ReadToEndAsync()
+        let completed = childProcess.WaitForExit(TimeSpan.FromMinutes(2.0))
 
-        childProcess.ExitCode, standardOutput
+        if not completed then
+            try
+                childProcess.Kill(entireProcessTree = true)
+            with _ ->
+                ()
+
+        Task.WhenAll(standardOutput, standardError).Wait(TimeSpan.FromSeconds(5.0)) |> ignore
+
+        if completed then
+            childProcess.ExitCode, standardOutput.Result + standardError.Result
+        else
+            124, standardOutput.Result + standardError.Result + $"{Environment.NewLine}Timed out waiting for {scriptPath}."
 
     type SingleConsumptionValueTaskSource<'value>(value: 'value) as this =
         let consumptionCount = ref 0

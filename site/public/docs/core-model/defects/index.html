@@ -30,7 +30,7 @@
 
   <meta itemprop="name" content="Defects and Exceptions">
   <meta itemprop="description" content="Why FsFlow separates domain failures, interruptions, and defects.">
-  <meta itemprop="wordCount" content="402">
+  <meta itemprop="wordCount" content="400">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Defects and Exceptions">
   <meta name="twitter:description" content="Why FsFlow separates domain failures, interruptions, and defects.">
@@ -185,10 +185,10 @@
   </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docsmanaging-dependencies-li">
     <a href="http://localhost:3000/docs/managing-dependencies/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docsmanaging-dependencies"><span class="">Managing Dependencies</span></a>
     <ul class="ul-2 foldable">
-      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docsmanaging-dependenciesprovider-edge-li">
-    <a href="http://localhost:3000/docs/managing-dependencies/provider-edge/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciesprovider-edge"><span class="">Standard .NET AppHost Plus DI</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docsmanaging-dependenciescapability-contracts-li">
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docsmanaging-dependenciescapability-contracts-li">
     <a href="http://localhost:3000/docs/managing-dependencies/capability-contracts/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciescapability-contracts"><span class="">Nominal Capability Contracts</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docsmanaging-dependenciesprovider-edge-li">
+    <a href="http://localhost:3000/docs/managing-dependencies/provider-edge/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciesprovider-edge"><span class=""></span></a>
   </li>
     </ul>
   </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docsstate-concurrency-li">
@@ -336,7 +336,7 @@
 <p>In complex orchestration like <code>Flow.zipPar</code> (running two flows concurrently), the engine must coordinate the lifecycle of multiple fibers.</p>
 <ul>
 <li><strong>The Problem:</strong> If a defect is just a thrown exception, it escapes the return value of the function. The engine would have to handle two disjoint failure paths: returning a failure value OR catching a thrown exception. This forces every combinator to use defensive <code>try...finally</code> blocks just to coordinate basic signaling.</li>
-<li><strong>The Solution:</strong> By capturing defects into the <code>Exit</code> type, every flow execution is guaranteed to return a value. This makes the algebra &ldquo;closed.&rdquo; If one branch dies, the engine receives it as data, immediately triggers cancellation for the other branches, and returns a single, structured outcome.</li>
+<li><strong>The Solution:</strong> By capturing defects into the <code>Exit</code> type, every flow execution returns a value. This makes the algebra &ldquo;closed.&rdquo; If one branch dies, the engine receives it as data, immediately triggers cancellation for the other branches, and returns a single, structured outcome.</li>
 </ul>
 <h3 id="2-lossless-concurrency-coordination">2. Lossless Concurrency Coordination</h3>
 <p>When a fiber fails, you often need to perform cleanup (e.g., <code>ensuring</code> or <code>onExit</code>).</p>
@@ -345,7 +345,8 @@
 <p>The distinction between <code>Fail</code> and <code>Die</code> allows for smarter defaults:</p>
 <ul>
 <li><strong>Retries</strong> should usually target <code>Fail</code> (e.g., a transient network error), but never <code>Die</code> (e.g., a <code>NullReferenceException</code>). Retrying a bug is usually a waste of resources.</li>
-<li><strong>Fallbacks</strong> (<code>orElse</code>) usually target domain failures. If a workflow has a defect, it usually indicates a corrupted state that fallback logic wasn&rsquo;t designed to handle.</li>
+<li><strong>Fallbacks</strong> (<code>orElse</code>) usually target domain failures. If a workflow has a defect, it usually indicates a corrupted state that fallback logic wasn&rsquo;t designed to handle.
+ndle.</li>
 </ul>
 
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/docs/core-model/semantics/" aria-label="Previous - Execution Semantics">

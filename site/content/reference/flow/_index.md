@@ -27,6 +27,8 @@ This page shows the `Flow<'env, 'error, 'value>` surface, the central workflow t
 - [`Flow.orElseFlow`](./m-flow-orelseflow.md): Turns a pure validation result into a synchronous flow with environment-provided failure.
 - [`Flow.env`](./m-flow-env.md): Reads the current environment as the successful flow value.
 - [`Flow.read`](./m-flow-read.md): Projects one value from the current environment.
+- [`Flow.service`](./m-flow-service.md): Extracts a specific service from an environment that implements <code>IHas&lt;&#39;service&gt;</code>.
+- [`Flow.inject`](./m-flow-inject.md): Injects a service from a dynamic IServiceProvider environment.
 - [`Flow.map`](./m-flow-map.md): Transforms the successful value of a flow.
 - [`Flow.bind`](./m-flow-bind.md): Sequences a dependent flow after a successful value.
 - [`Flow.tap`](./m-flow-tap.md): Runs an effect on success and preserves the original value.

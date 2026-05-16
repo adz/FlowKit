@@ -4,128 +4,108 @@ title: "Nominal Capability Contracts"
 description: Small named interfaces for reusable helpers and public capability boundaries.
 ---
 
-# Nominal Capability Contracts
+# Environment and Capability Models
 
-In FsFlow, a capability is a named interface that describes an application dependency in `env`.
-A capability contract puts that interface in the environment surface type.
+In FsFlow, the environment (`'env`) represents the "world" your effects need to run. Depending on the size of your application and your need for strictness, FsFlow provides three "levels" of environment access.
 
-Using an interface through a capability contract makes the dependency visible in the type, so the
-compiler can check it, refactoring can move safely, and reusable helpers can advertise what they
-need.
+## Level 1: Records (The Pragmatic Way)
 
-This page is for readers who want the app dependency surface to be part of the type:
+For local logic or small applications, a plain F# record is often the best choice. It is direct, easy to mock, and requires zero ceremony.
 
-- the record is getting too wide
-- the dependency list is becoming boilerplate
-- you want the compiler to notice when a refactor changes what an effect needs
-- you want the effect signature to read like a dependency statement, not a plumbing report
+### Accessing via `Flow.read`
 
-The contract should be small, named, and stable. When it grows, split the bundle into smaller app
-contracts or move the boundary back to a concrete record.
-
-## The Contract
+Use `Flow.read` to project a specific property from your environment record.
 
 ```fsharp
-type IOrderRepository =
-    abstract Save : Order -> unit
+type AppConfig = { ConnectionString: string }
+type AppEnv = { Config: AppConfig }
 
-type IEmailSender =
-    abstract SendConfirmation : Order -> unit
-
-type IOrderCaps =
-    abstract Orders : IOrderRepository
-    abstract Email : IEmailSender
+let getConnString = Flow.read (fun e -> e.Config.ConnectionString)
 ```
 
-The contract is the application dependency surface, not the lookup mechanism.
+**Full Example:** [CapabilityExamples.fs (Level 1)](https://github.com/adz/FsFlow/blob/main/examples/FsFlow.Examples/CapabilityExamples.fs)
 
-Runtime-owned services such as clock and logging are implicit in the flow runtime. They are not
-part of `env`, and they can be overridden with `Flow.withClock` / `Flow.withLog` when you need a
-deterministic test or a scoped local change.
+---
 
-## Reading Through The Contract
+## Level 2: Nominal Capabilities (The Honest Way)
 
-Use the contract directly from workflows and helper functions.
+As your application grows, you may want "Static Honesty"—where the type signature of a function clearly advertises every external service it needs. This approach keeps dependencies explicit and verifiable by the compiler.
+
+### The `IHas<'T>` Pattern
+
+Standardize on the `IHas<'T>` interface to "slice" your environment into specific capabilities.
 
 ```fsharp
-let saveAndEmail order : Flow<#IOrderCaps, AppError, unit> =
+type IOrderRepo = abstract member Save : Order -> unit
+
+// A capability contract
+type IHasOrders = inherit IHas<IOrderRepo>
+```
+
+### Accessing via `Flow.service<'T>()`
+
+Use `Flow.service` to request a capability. The compiler will automatically infer that the environment must implement `IHas<'T>`.
+
+```fsharp
+let saveOrder order : Flow<#IHasOrders, Error, unit> =
     flow {
-        let! orders = Flow.read _.Orders
-        let! email = Flow.read _.Email
-        orders.Save order
-        email.SendConfirmation order
+        let! repo = Flow.service<IOrderRepo, _, _>()
+        repo.Save order
     }
 ```
 
-In practice, the contract often comes from a concrete record or adapter type that implements the
-interface.
+**Full Example:** [CapabilityExamples.fs (Level 2)](https://github.com/adz/FsFlow/blob/main/examples/FsFlow.Examples/CapabilityExamples.fs)
 
-## Why Use A Contract
+---
 
-Capability contracts give you:
+## Level 3: Dependency Injection (The Edge Way)
 
-- compiler checks on the app dependency surface
-- refactor safety when a helper changes what it needs
-- workflow signatures that read as “this effect needs logging, clock, and db”
-- reusable helpers that advertise what they depend on
-- programming to interfaces, but for effects
+At the application "Edge" (e.g., an ASP.NET Controller or an Azure Function), you are often working with a standard .NET `IServiceProvider`. FsFlow allows you to lean into this ecosystem without losing the benefits of an effect system.
 
-That makes app effects visible in the flow without forcing every boundary to become a big record.
-If the boundary is already obvious, a record already gives you direct access. A contract adds a
-type-level name that the compiler checks and that helpers can reuse across flows.
+### Accessing via `Flow.inject<'T>()`
 
-## What A Record Gives You
+Use `Flow.inject` to pull a service directly from the DI container. This trades compile-time safety for maximum pragmatism at the host boundary.
 
-A record gives you:
+```fsharp
+let handleRequest = flow {
+    let! logger = Flow.inject<ILogger<MyController>, _, _>()
+    let! db = Flow.inject<IDbContext, _, _>()
+    // ...
+}
+```
 
-- a short dependency list with direct fields
-- a boundary that stays local to one area
-- a shape that is easy to reuse as data
-- no extra interface for a structure that is already simple
+*Note: If a service is missing from the DI container, `Flow.inject` will fail with a **Defect (Die)**, treating it as a developer configuration error.*
 
-## What A Contract Gives You
+**Full Example:** [CapabilityExamples.fs (Level 3)](https://github.com/adz/FsFlow/blob/main/examples/FsFlow.Examples/CapabilityExamples.fs)
 
-A contract gives you:
+---
 
-- the same dependency shape named once and reused across flows or helpers
-- compiler errors at the call site when a dependency changes
-- a flow that advertises its capabilities directly
-- a readable type instead of a long parameter bag
+## The "Honest Bridge"
 
-## Binding Tokens
+You can combine Level 2 and Level 3 using the "Honest Bridge" pattern. Your core logic stays "Honest" (Level 2), but your Application Edge satisfies those requirements using DI (Level 3).
 
-`Requires<'dep>`, `Resolve<'dep>`, and `Resolve<'dep, 'value>` are compatibility binding tokens
-for single-dependency projections.
+```fsharp
+// 1. Core Logic (Honest/Level 2)
+let processOrder cmd = flow {
+    let! db = Flow.service<IOrderRepo, _, _>() 
+    return! db.Save cmd
+}
 
-Use `Flow.read` and small app contracts first. Reach for these tokens only when a single dependency
-request is clearer than naming a broader app contract.
+// 2. Host Edge (Bridge)
+type AppEnv(sp: IServiceProvider) =
+    interface IHas<IOrderRepo> with member _.Service = sp.GetRequiredService<IOrderRepo>()
 
-## What A Named Contract Gives You
+// 3. Running
+let result = Flow.run (AppEnv(sp)) (processOrder myCmd)
+```
 
-A named contract gives you:
+**Full Example:** [CapabilityExamples.fs (Honest Bridge)](https://github.com/adz/FsFlow/blob/main/examples/FsFlow.Examples/CapabilityExamples.fs)
 
-- a helper shared across multiple areas
-- a stable dependency shape with one name
-- a signature that explains itself
-- a reusable interface that justifies the extra type-level name
 
-## When It Is Not Worth It
+## Summary: Choosing Your Level
 
-Do not add a named contract just to make the code look more abstract.
-
-A record keeps a concrete boundary direct.
-Runtime overrides separate operational services from the app environment, and you can override
-them in tests without changing the app contract.
-Standard `.NET` AppHost plus DI adapts the container once at the host edge.
-
-## What This Replaces
-
-The current shape is simple:
-
-- a concrete record boundary
-- a small nominal interface
-- `Flow.read` for app dependencies
-- `Flow.withClock` / `Flow.withLog` / `Flow.withRandom` / `Flow.withGuid` for runtime-owned services
-
-See the [Capability reference](../../reference/capability/) for the compatibility binding tokens,
-edge helpers, and layer helper.
+| Level | Name | Primary Accessor | Environment Requirement |
+| :--- | :--- | :--- | :--- |
+| **1** | **Direct** | `Flow.read` | Plain Record/Data |
+| **2** | **Honest** | `Flow.service` | `IHas<'T>` |
+| **3** | **Pragmatic**| `Flow.inject` | `IServiceProvider` |

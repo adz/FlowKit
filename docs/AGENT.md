@@ -64,27 +64,26 @@ domain dependencies.
 
 | Boundary Shape | Idiomatic Pattern |
 | :--- | :--- |
-| Named contract | `type LoginCaps = abstract Users : IUserStore` |
-| Projected value | `let! users = Flow.read _.Users` |
-| Runtime clock | `let! now = Clock.now` |
-| Runtime override | `workflow |> Flow.withClock fixedClock` |
-| Flexible public API | `let login : Flow<#LoginCaps, _, _> = ...` |
+| **Honest** | `let! db = Flow.service<IDb, _, _>()` |
+| **Direct** | `let! port = Flow.read _.Port` |
+| **Pragmatic** | `let! svc = Flow.inject<IMyService, _, _>()` |
+| **Runtime clock** | `let! now = Clock.now` |
+| **Flexible API** | `let login : Flow<#IHasUsers, _, _> = ...` |
 
-Prefer this over raw `IServiceProvider` lookup or exact app runtime types when callers may provide
-a larger app environment. Use `Resolve<'dep>` only as a compatibility token for single-dependency
-projection shapes.
+Prefer these over exact app runtime types when callers may provide a larger app environment.
 
 ### 6. Rosetta Stone
 Translate common patterns from other libraries into idiomatic FsFlow.
 
 | If you use... | Do this in FsFlow |
 | :--- | :--- |
-| `FsToolkit: AsyncResult.requireSome` | `let! x = opt |> Guard.Of e` |
-| `FsToolkit: Result.requireTrue` | `Check.okIf cond |> Check.orError e` |
-| `Guard: getOrFail` | `let! x = opt |> Guard.Of e` |
-| `Capability lookup` | `let! s = Resolver.resolve _.Service` |
-| `Manual: match x with Some v...` | `let! v = x |> Guard.Of e` |
-| `Manual: Result.mapError mapper` | `let! x = result |> Guard.MapError mapper` |
+| `requireSome` | `let! x = opt |> Guard.Of e` |
+| `requireTrue` | `Check.okIf cond |> Check.orError e` |
+| `ZIO.service` | `let! s = Flow.service<T, _, _>()` |
+| `inject(T)` | `let! s = Flow.inject<T, _, _>()` |
+| `match x with Some...` | `let! v = x |> Guard.Of e` |
+| `Result.mapError` | `let! x = result |> Guard.MapError mapper` |
+
 
 ## Hierarchy of Effects
 

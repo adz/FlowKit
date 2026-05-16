@@ -16,6 +16,12 @@ Welcome to the FsFlow guides. Choose a section from the sidebar or start with [G
 </section>
 
 <section class="docs-card">
+<span class="label">Tutorials</span>
+<h2><a href="./tutorials/">Step-by-step guides</a></h2>
+<p>Learn common setups for records, capabilities, and .NET host integration.</p>
+</section>
+
+<section class="docs-card">
 <span class="label">Validation & Results</span>
 <h2><a href="./validation-results/">Pure Checks and Results</a></h2>
 <p>Overview of the FsFlow validation stack, from pure checks to structured diagnostics.</p>

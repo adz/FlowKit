@@ -451,6 +451,22 @@ module Flow =
     let read (projection: 'env -> 'value) : Flow<'env, 'error, 'value> =
         Flow(fun environment _ -> EffectFlow.ofValue (projection environment))
 
+    /// <summary>Extracts a specific service from an environment that implements <c>IHas&lt;'service&gt;</c>.</summary>
+    /// <remarks>This is the statically honest way to access dependencies.</remarks>
+    let inline service<'service, 'env, 'error when 'env :> IHas<'service>> () : Flow<'env, 'error, 'service> =
+        read (fun (env: 'env) -> env.Service)
+
+    /// <summary>Injects a service from a dynamic IServiceProvider environment.</summary>
+    /// <remarks>Trades compile-time safety for pragmatic .NET interop.</remarks>
+    let inline inject<'service, 'env, 'error when 'env :> IServiceProvider> () : Flow<'env, 'error, 'service> =
+        read (fun (env: 'env) ->
+            let svc = env.GetService(typeof<'service>)
+            if isNull (box svc) then
+                failwith $"Service {typeof<'service>.Name} was not registered in the IServiceProvider."
+            else
+                unbox<'service> svc
+        )
+
     /// <summary>Transforms the successful value of a flow.</summary>
     /// <remarks>
     /// If the source <paramref name="flow" /> fails, the <paramref name="mapper" /> is not executed.

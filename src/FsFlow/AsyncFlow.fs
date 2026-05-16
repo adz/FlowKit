@@ -154,6 +154,20 @@ module internal AsyncFlow =
     let read (projection: 'env -> 'value) : AsyncFlow<'env, 'error, 'value> =
         AsyncFlow(fun environment -> async.Return(Exit.Success(projection environment)))
 
+    /// <summary>Extracts a specific service from an environment that implements <c>IHas&lt;'service&gt;</c>.</summary>
+    let inline service<'service, 'env, 'error when 'env :> IHas<'service>> () : AsyncFlow<'env, 'error, 'service> =
+        read (fun (env: 'env) -> env.Service)
+
+    /// <summary>Injects a service from a dynamic IServiceProvider environment.</summary>
+    let inline inject<'service, 'env, 'error when 'env :> IServiceProvider> () : AsyncFlow<'env, 'error, 'service> =
+        read (fun (env: 'env) ->
+            let svc = env.GetService(typeof<'service>)
+            if isNull (box svc) then
+                failwith $"Service {typeof<'service>.Name} was not registered in the IServiceProvider."
+            else
+                unbox<'service> svc
+        )
+
     /// <summary>Maps the successful value of an async flow.</summary>
     let map
         (mapper: 'value -> 'next)

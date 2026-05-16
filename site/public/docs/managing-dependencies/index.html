@@ -20,20 +20,20 @@
 <link rel="icon" type="image/png" href="http://localhost:3000/favicons/android-192x192.png" sizes="192x192">
 
 <title>Managing Dependencies | FsFlow</title>
-<meta name="description" content="How FsFlow models dependency boundaries after the Registry / Scope / Layer foundation.">
+<meta name="description" content="How FsFlow models dependency boundaries with records, nominal contracts, and host DI.">
 <meta property="og:url" content="http://localhost:3000/docs/managing-dependencies/">
   <meta property="og:site_name" content="FsFlow">
   <meta property="og:title" content="Managing Dependencies">
-  <meta property="og:description" content="How FsFlow models dependency boundaries after the Registry / Scope / Layer foundation.">
+  <meta property="og:description" content="How FsFlow models dependency boundaries with records, nominal contracts, and host DI.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="website">
 
   <meta itemprop="name" content="Managing Dependencies">
-  <meta itemprop="description" content="How FsFlow models dependency boundaries after the Registry / Scope / Layer foundation.">
-  <meta itemprop="wordCount" content="1386">
+  <meta itemprop="description" content="How FsFlow models dependency boundaries with records, nominal contracts, and host DI.">
+  <meta itemprop="wordCount" content="433">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Managing Dependencies">
-  <meta name="twitter:description" content="How FsFlow models dependency boundaries after the Registry / Scope / Layer foundation.">
+  <meta name="twitter:description" content="How FsFlow models dependency boundaries with records, nominal contracts, and host DI.">
 <link href="http://localhost:3000/scss/main.css" rel="stylesheet">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -185,10 +185,10 @@
   </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id="m-docsmanaging-dependencies-li">
     <a href="http://localhost:3000/docs/managing-dependencies/" class="align-left ps-0 active td-sidebar-link td-sidebar-link__section" id="m-docsmanaging-dependencies"><span class="td-sidebar-nav-active-item">Managing Dependencies</span></a>
     <ul class="ul-2 foldable">
-      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsmanaging-dependenciesprovider-edge-li">
-    <a href="http://localhost:3000/docs/managing-dependencies/provider-edge/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciesprovider-edge"><span class="">Standard .NET AppHost Plus DI</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsmanaging-dependenciescapability-contracts-li">
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsmanaging-dependenciescapability-contracts-li">
     <a href="http://localhost:3000/docs/managing-dependencies/capability-contracts/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciescapability-contracts"><span class="">Nominal Capability Contracts</span></a>
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsmanaging-dependenciesprovider-edge-li">
+    <a href="http://localhost:3000/docs/managing-dependencies/provider-edge/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciesprovider-edge"><span class=""></span></a>
   </li>
     </ul>
   </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docsstate-concurrency-li">
@@ -251,20 +251,10 @@
     </div>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#read-in-order">Read In Order</a></li>
-    <li><a href="#start-with-a-record">Start With A Record</a></li>
-    <li><a href="#support-for-records">Support For Records</a></li>
-    <li><a href="#when-caps-help">When Caps Help</a></li>
-    <li><a href="#more-direct-dependency-management">More Direct Dependency Management</a></li>
-    <li><a href="#choosing-a-shape">Choosing A Shape</a></li>
-    <li><a href="#architectural-styles">Architectural Styles</a>
-      <ul>
-        <li><a href="#1-booted-app-environment">1. Booted App Environment</a></li>
-        <li><a href="#2-explicit-dependencies-plus-context">2. Explicit Dependencies Plus Context</a></li>
-        <li><a href="#3-runtime-owned-services">3. Runtime-Owned Services</a></li>
-        <li><a href="#4-standard-net-apphost-plus-di">4. Standard <code>.NET</code> AppHost Plus DI</a></li>
-      </ul>
-    </li>
+    <li><a href="#the-three-levels-of-dependency-access">The Three Levels of Dependency Access</a></li>
+    <li><a href="#1-level-1-records-the-pragmatic-way">1. Level 1: Records (The Pragmatic Way)</a></li>
+    <li><a href="#2-level-2-nominal-capabilities-the-honest-way">2. Level 2: Nominal Capabilities (The Honest Way)</a></li>
+    <li><a href="#3-level-3-dependency-injection-the-edge-way">3. Level 3: Dependency Injection (The Edge Way)</a></li>
     <li><a href="#how-the-pieces-fit-together">How The Pieces Fit Together</a></li>
   </ul>
 </nav>
@@ -285,265 +275,91 @@
 </nav>
 <div class="td-content">
 	<h1>Managing Dependencies</h1>
-  <div class="lead">How FsFlow models dependency boundaries after the Registry / Scope / Layer foundation.</div>
+  <div class="lead">How FsFlow models dependency boundaries with records, nominal contracts, and host DI.</div>
 	<header class="article-meta">
 		
 </header>
-	<p>In FsFlow, <code>env</code> can be any type you want. Within a <code>flow {}</code>, <code>Flow.env</code> gives you the whole
-environment value, and <code>Flow.read</code> projects the piece you need from it. That is the basic shape of
-dependency handling in FsFlow: keep the environment explicit, and read only what the flow actually
-needs.</p>
+	<p>In FsFlow, the environment (<code>'env</code>) represents the &ldquo;world&rdquo; your effects need to run. Keeping the environment explicit is the foundation of <strong>Effect Discipline</strong>, allowing you to write testable, refactor-safe, and honest code.</p>
 <blockquote>
 <p><strong>Tutorials Available:</strong> For step-by-step guides on setting up these patterns, see the Tutorials section.</p>
 </blockquote>
-<p>In practice, that <code>env</code> often becomes a record. Records are easy to construct, easy to pass around,
-and easy to understand at the boundary of an application.</p>
-<p>FsFlow also supports these shapes:</p>
-<ul>
-<li>a nominal capability puts a name on the app dependency surface so the compiler can check it and
-helper signatures can advertise it</li>
-<li>runtime-owned services like clock, logging, random, and guid are implicit in the runtime, stay
-outside the visible environment, and can be overridden with <code>Flow.withClock</code>, <code>Flow.withLog</code>,
-<code>Flow.withRandom</code>, and <code>Flow.withGuid</code></li>
-<li>standard <code>.NET</code> AppHost plus DI adapts the host container into a boundary record or nominal
-contract once, then workflow code stays on typed values</li>
-</ul>
-<p>These are different shapes for different dependency boundaries. None of them is “more real” than
-the others.</p>
-<h2 id="read-in-order">Read In Order</h2>
+<p>FsFlow provides three primary ways to model and access dependencies, ranging from direct pragmatism to strict architectural honesty.</p>
+<h2 id="the-three-levels-of-dependency-access">The Three Levels of Dependency Access</h2>
 <table>
   <thead>
       <tr>
-          <th style="text-align: left">Step</th>
-          <th style="text-align: left">Shape</th>
-          <th style="text-align: left">When to use</th>
-          <th style="text-align: left">Tutorial</th>
-          <th style="text-align: left">Main APIs</th>
+          <th style="text-align: left">Level</th>
+          <th style="text-align: left">Name</th>
+          <th style="text-align: left">Best For</th>
+          <th style="text-align: left">Requirement</th>
+          <th style="text-align: left">Main API</th>
       </tr>
   </thead>
   <tbody>
       <tr>
-          <td style="text-align: left">1</td>
-          <td style="text-align: left">Environment + record</td>
-          <td style="text-align: left">One record gives you an explicit boundary, direct field access, and easy construction</td>
-          <td style="text-align: left"><strong><a href="http://localhost:3000/docs/tutorials/app-record/">AppRecord</a></strong></td>
-          <td style="text-align: left"><code>Flow.env</code>, <code>Flow.read</code>, <code>Flow.localEnv</code></td>
+          <td style="text-align: left"><strong>1</strong></td>
+          <td style="text-align: left"><strong>Direct</strong></td>
+          <td style="text-align: left">Local logic, small apps</td>
+          <td style="text-align: left">Plain Record</td>
+          <td style="text-align: left"><code>Flow.read</code></td>
       </tr>
       <tr>
-          <td style="text-align: left">2</td>
-          <td style="text-align: left"><a href="http://localhost:3000/docs/managing-dependencies/capability-contracts/">Nominal capability contracts</a></td>
-          <td style="text-align: left">An interface through a capability contract puts the dependency surface in the type, so the compiler checks it and helpers advertise it</td>
-          <td style="text-align: left"><strong><a href="http://localhost:3000/docs/tutorials/capabilities/">Capabilities</a></strong></td>
-          <td style="text-align: left">interfaces, <code>Flow.read</code></td>
+          <td style="text-align: left"><strong>2</strong></td>
+          <td style="text-align: left"><strong>Honest</strong></td>
+          <td style="text-align: left">Shared logic, large apps</td>
+          <td style="text-align: left"><code>IHas&lt;'T&gt;</code></td>
+          <td style="text-align: left"><code>Flow.service</code></td>
       </tr>
       <tr>
-          <td style="text-align: left">3</td>
-          <td style="text-align: left">Runtime overrides</td>
-          <td style="text-align: left">Operational services stay runtime-owned and are supplied at execution time</td>
-          <td style="text-align: left"><strong><a href="http://localhost:3000/docs/tutorials/app-host/">AppHost</a></strong></td>
-          <td style="text-align: left"><code>Flow.withClock</code>, <code>Flow.withLog</code>, <code>Flow.withRandom</code>, <code>Flow.withGuid</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">4</td>
-          <td style="text-align: left"><a href="http://localhost:3000/docs/managing-dependencies/provider-edge/">Standard .NET AppHost Plus DI</a></td>
-          <td style="text-align: left">Host registrations become a boundary record or nominal contract once, and workflow code stays on typed values</td>
-          <td style="text-align: left"><strong><a href="http://localhost:3000/docs/tutorials/app-host/">AppHost</a></strong></td>
-          <td style="text-align: left"><code>Resolver.fromProvider</code>, <code>MissingCapability</code></td>
+          <td style="text-align: left"><strong>3</strong></td>
+          <td style="text-align: left"><strong>Pragmatic</strong></td>
+          <td style="text-align: left">Edge integration, Host DI</td>
+          <td style="text-align: left"><code>IServiceProvider</code></td>
+          <td style="text-align: left"><code>Flow.inject</code></td>
       </tr>
   </tbody>
 </table>
-<h2 id="start-with-a-record">Start With A Record</h2>
-<p>Records keep the boundary concrete. They are easy to read, easy to construct, and easy to pass
-around.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">ApiDeps</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#000">Orders</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">IOrderRepository</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#000">Email</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">IEmailSender</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#000">Clock</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">IClock</span> <span style="color:#ce5c00;font-weight:bold">}</span>
+<hr>
+<h2 id="1-level-1-records-the-pragmatic-way">1. Level 1: Records (The Pragmatic Way)</h2>
+<p>Plain F# records are the default choice for most logic. They are easy to construct, mock, and understand.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">ApiDeps</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#000">Orders</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">IOrderRepo</span><span style="color:#ce5c00;font-weight:bold">;</span> <span style="color:#000">Email</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">IEmailSender</span> <span style="color:#ce5c00;font-weight:bold">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">workflow</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">ApiDeps</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">OrderId</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">workflow</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">ApiDeps</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">string</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">unit</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">deps</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">env</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">email</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">Email</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">created</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">deps</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Orders</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Create</span><span style="color:#3465a4">()</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">do</span><span style="color:#ce5c00;font-weight:bold">!</span> <span style="color:#000">email</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">SendConfirmation</span> <span style="color:#000">created</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">created</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Id</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">do</span><span style="color:#ce5c00;font-weight:bold">!</span> <span style="color:#000">email</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">SendConfirmation</span><span style="color:#3465a4">()</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span></code></pre></div><p>The record gives the flow a named boundary, and <code>Flow.read</code> keeps each access local to the piece
-the flow actually needs.</p>
-<p>Records start to get noisy when:</p>
-<ul>
-<li>every helper takes a bigger and bigger parameter bag</li>
-<li>you keep threading the same deps through unrelated steps</li>
-<li>the dependency surface matters more than the actual data</li>
-<li>the code wants to say “this effect needs logging, clock, and db” instead of “it needs a blob”</li>
-</ul>
-<p>At that point a named cap gives the compiler a dependency surface to check and gives the reader a
-sentence instead of a bag of fields.</p>
-<h2 id="support-for-records">Support For Records</h2>
-<p>FsFlow supports records directly through the same <code>Flow</code> helpers:</p>
-<ul>
-<li><code>Flow.env</code> to get the whole record</li>
-<li><code>Flow.read</code> to project a single field or computed value</li>
-<li><code>Flow.localEnv</code> to reshape the record for a smaller scope</li>
-<li><code>Flow.provideLayer</code> when a downstream flow should run against a derived environment</li>
-</ul>
-<p>That means records stay a direct, supported shape for dependency handling in <code>env</code>.</p>
-<h2 id="when-caps-help">When Caps Help</h2>
-<p>A capability contract puts a name on the dependency surface and keeps it in the type:</p>
-<ul>
-<li>it makes the effect’s requirements visible in the type</li>
-<li>it gives refactoring a boundary the compiler can check</li>
-<li>it behaves like programming to interfaces, but for effects</li>
-<li>it keeps flow code honest about what it depends on</li>
-</ul>
-<p>That makes caps attractive even when a record would still work.</p>
-<h2 id="more-direct-dependency-management">More Direct Dependency Management</h2>
-<p>Two mechanisms stay deliberately separate:</p>
-<ul>
-<li><code>env</code> carries the application dependency shape that workflow code reads with <code>Flow.env</code> and
-<code>Flow.read</code>.</li>
-<li>runtime overrides carry operational services such as clock, logging, random, GUID generation,
-and environment-variable lookup.</li>
-</ul>
-<p>The internal registry, scope, adapter, and runtime layer machinery support hosting and generated
-reference behavior. They are not the public dependency model for ordinary workflows. User code
-should normally choose between a record, a nominal capability contract, and a host-edge adapter.</p>
-<h2 id="choosing-a-shape">Choosing A Shape</h2>
-<p>The record shape gives you a concrete boundary and direct field access.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">ApiDeps</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#000">Orders</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">IOrderRepository</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#000">Email</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">IEmailSender</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#000">Clock</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">IClock</span> <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span></code></pre></div><p>Runtime overrides keep clock, logging, and similar services out of the visible environment. They
-are implicit in normal flows, and test code can override them locally.</p>
-<p>Standard <code>.NET</code> AppHost plus DI adapts the container into a boundary record or nominal contract
-once, then workflow code stays on typed values.</p>
-<p>Nominal capability contracts let a helper or workflow name the capabilities it needs and give the
-compiler a surface to check.</p>
-<h2 id="architectural-styles">Architectural Styles</h2>
-<p>All of these styles are still about <code>env</code>.</p>
-<p>The question is not whether FsFlow uses <code>env</code>. The question is which shape makes the dependency
-boundary easiest to read, test, and evolve.</p>
-<h3 id="1-booted-app-environment">1. Booted App Environment</h3>
-<p>This style keeps <code>env</code> as one concrete record that holds the dependencies for the whole app.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">AppEnv</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#000">Db</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">IDb</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#000">Log</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#204a87;font-weight:bold">string</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#204a87;font-weight:bold">unit</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#000">Config</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">AppConfig</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#000">Billing</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">IBillingClient</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#000">Cache</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">ICache</span> <span style="color:#ce5c00;font-weight:bold">}</span>
+</span></span></code></pre></div><p><strong>Why use it?</strong> It requires zero extra boilerplate (no interfaces needed) and keeps the boundary concrete.</p>
+<hr>
+<h2 id="2-level-2-nominal-capabilities-the-honest-way">2. Level 2: Nominal Capabilities (The Honest Way)</h2>
+<p>As your application grows, you may want function signatures that clearly advertise every service they need. This is the &ldquo;Nominal Capability&rdquo; model.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">IOrderRepo</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">abstract</span> <span style="color:#204a87;font-weight:bold">member</span> <span style="color:#000">Save</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Order</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#204a87;font-weight:bold">unit</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">IHasOrders</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">inherit</span> <span style="color:#000">IHas</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">IOrderRepo</span><span style="color:#ce5c00;font-weight:bold">&gt;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">handle</span> <span style="color:#000">command</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">AppEnv</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">AppError</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">ResultValue</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">saveOrder</span> <span style="color:#000">order</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;#</span><span style="color:#000">IHasOrders</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#ce5c00;font-weight:bold">_,</span> <span style="color:#ce5c00;font-weight:bold">_&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">env</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">env</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#000">env</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Log</span> <span style="color:#4e9a06">&#34;handling command&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span><span style="color:#ce5c00;font-weight:bold">!</span> <span style="color:#000">runWorkflow</span> <span style="color:#000">env</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Db</span> <span style="color:#000">env</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Billing</span> <span style="color:#000">command</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">repo</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">service</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">IOrderRepo</span><span style="color:#ce5c00;font-weight:bold">&gt;</span><span style="color:#3465a4">()</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">repo</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Save</span> <span style="color:#000">order</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span></code></pre></div><p>This style gives you:</p>
-<ul>
-<li>controllers and endpoints</li>
-<li>handlers</li>
-<li>persistence workflows</li>
-<li>infrastructure-heavy orchestration</li>
-<li>integration tests</li>
-</ul>
-<p>The benefit is directness: the workflow sees one concrete application environment and the host
-construction stays obvious.</p>
-<h3 id="2-explicit-dependencies-plus-context">2. Explicit Dependencies Plus Context</h3>
-<p>This style keeps the request or execution context small and passes the real dependencies as named
-inputs.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">PlaceOrderDeps</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#000">LoadCart</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">CartId</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">RequestContext</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">AppError</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">Cart</span><span style="color:#ce5c00;font-weight:bold">&gt;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#000">SaveOrder</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Order</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">RequestContext</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">AppError</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">unit</span><span style="color:#ce5c00;font-weight:bold">&gt;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#000">PublishEvent</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">OrderPlaced</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">RequestContext</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">AppError</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">unit</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">RequestContext</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#000">TraceId</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#204a87;font-weight:bold">string</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#000">UserId</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#204a87;font-weight:bold">string</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#000">Deadline</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">System</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">DateTimeOffset</span> <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">placeOrder</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">deps</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">PlaceOrderDeps</span><span style="color:#ce5c00;font-weight:bold">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">input</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">PlaceOrderInput</span><span style="color:#ce5c00;font-weight:bold">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">RequestContext</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">AppError</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">OrderId</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">ctx</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">env</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">cart</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">deps</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">LoadCart</span> <span style="color:#000">input</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">CartId</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">order</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Order</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">create</span> <span style="color:#000">ctx</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">UserId</span> <span style="color:#000">cart</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">do</span><span style="color:#ce5c00;font-weight:bold">!</span> <span style="color:#000">deps</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">SaveOrder</span> <span style="color:#000">order</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">do</span><span style="color:#ce5c00;font-weight:bold">!</span> <span style="color:#000">deps</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">PublishEvent</span> <span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">OrderPlaced</span> <span style="color:#000">order</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Id</span><span style="color:#ce5c00;font-weight:bold">)</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">order</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">Id</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span></code></pre></div><p>This style gives you:</p>
-<ul>
-<li>use cases</li>
-<li>domain orchestration</li>
-<li>workflow modules</li>
-<li>highly testable feature logic</li>
-</ul>
-<p>The benefit is locality: each helper says what it needs, and the request or execution context stays
-small and focused.</p>
-<p>This style maps well to nominal capability contracts because the type itself carries the dependency
-surface. It maps to a concrete record when the dependency list is local and obvious.</p>
-<h3 id="3-runtime-owned-services">3. Runtime-Owned Services</h3>
-<p>This style keeps operational services out of the visible environment and supplies them at the
-execution boundary.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">handle</span> <span style="color:#000">command</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">env</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">env</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">do</span><span style="color:#ce5c00;font-weight:bold">!</span> <span style="color:#000">Log</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">info</span> <span style="color:#ce5c00;font-weight:bold">$</span><span style="color:#4e9a06">&#34;handling {command.Id}&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">now</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Clock</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">now</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span><span style="color:#ce5c00;font-weight:bold">!</span> <span style="color:#000">runWorkflow</span> <span style="color:#000">env</span> <span style="color:#000">command</span> <span style="color:#000">now</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">|&gt;</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">withClock</span> <span style="color:#000">Clock</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">live</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">|&gt;</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">withLog</span> <span style="color:#000">Log</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">live</span>
-</span></span></code></pre></div><p>This style gives you:</p>
-<ul>
-<li>runtime-owned clock, logging, random, and guid services</li>
-<li>a clean app environment that stays focused on business dependencies</li>
-<li>local overrides for tests and scoped changes</li>
-</ul>
-<p>The benefit is separation: the app sees only its own dependencies, while the runtime owns the
-operational services and tests can swap them without changing the app environment.</p>
-<h3 id="4-standard-net-apphost-plus-di">4. Standard <code>.NET</code> AppHost Plus DI</h3>
-<p>This style keeps the host conventional and turns registrations into a boundary record or nominal
-contract once.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">RuntimeServices</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#000">Logger</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">ILogger</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">ShipOrderWorkflow</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">AppEnv</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#000">Gateway</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">IShippingGateway</span> <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">type</span> <span style="color:#000">ShipOrderWorkflow</span><span style="color:#3465a4">()</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">member</span> <span style="color:#000">_</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">Run</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">input</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">ShipOrderInput</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">Flow</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">AppEnv</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">AppError</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">ShipmentId</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#ce5c00;font-weight:bold">=</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">gateway</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">read</span> <span style="color:#ce5c00;font-weight:bold">_.</span><span style="color:#000">Gateway</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#204a87;font-weight:bold">do</span><span style="color:#ce5c00;font-weight:bold">!</span> <span style="color:#000">Log</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">info</span> <span style="color:#ce5c00;font-weight:bold">$</span><span style="color:#4e9a06">&#34;shipping order {input.OrderId}&#34;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">shipmentId</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">gateway</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">CreateShipment</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">input</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">OrderId</span><span style="color:#ce5c00;font-weight:bold">)</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">shipmentId</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ce5c00;font-weight:bold">}</span>
-</span></span></code></pre></div><p>This style gives you:</p>
-<ul>
-<li>mixed C# and F# teams</li>
-<li>enterprise <code>.NET</code> apps</li>
-<li>incremental adoption</li>
-</ul>
-<p>The benefit is that the host remains familiar while workflow code can still use explicit contracts
-and runtime overrides where they fit.</p>
-<p>This style maps directly onto standard <code>.NET</code> AppHost Plus DI because the host container can be
-adapted into typed values once. It maps into nominal capability contracts when the workflow code
-should speak in named capabilities rather than container lookups.</p>
+</span></span></code></pre></div><p><strong>Why use it?</strong> It behavior like &ldquo;programming to interfaces,&rdquo; but for effects. It makes the effect’s requirements visible in the type and gives refactoring a boundary the compiler can check.</p>
+<hr>
+<h2 id="3-level-3-dependency-injection-the-edge-way">3. Level 3: Dependency Injection (The Edge Way)</h2>
+<p>At the application host boundary (e.g., ASP.NET), you can lean into the .NET ecosystem using <code>IServiceProvider</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fsharp" data-lang="fsharp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">handleRequest</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">flow</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">let!</span> <span style="color:#000">db</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Flow</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">inject</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">MyDbContext</span><span style="color:#ce5c00;font-weight:bold">&gt;</span><span style="color:#3465a4">()</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8f5902;font-style:italic">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">}</span>
+</span></span></code></pre></div><p><strong>Why use it?</strong> It allows you to use FsFlow inside existing .NET apps with minimal ceremony.</p>
+<hr>
 <h2 id="how-the-pieces-fit-together">How The Pieces Fit Together</h2>
-<p>The dependency story is:</p>
+<p>The FsFlow dependency story follows these principles:</p>
 <ul>
-<li>host registrations are adapted into a boundary record or nominal contract at the edge</li>
-<li>public workflows consume <code>env</code> or app capability contracts, not lookup machinery</li>
-<li>runtime overrides carry operational services that should not widen <code>env</code></li>
-<li><code>Resolver.fromProvider</code> is an edge binding helper, not the main application shape</li>
-<li><code>Layer.provideLayer</code> derives one <code>env</code> from another; it is not a service container</li>
+<li><strong>Implicit Infrastructure</strong>: Operational services like <code>Clock</code>, <code>Log</code>, and <code>Random</code> stay in the ambient runtime to avoid cluttering type signatures. They are overridable via <code>Flow.withClock</code>, etc.</li>
+<li><strong>Explicit Domain</strong>: Business services (DB, API, Email) are kept explicit in the <code>'env</code> type using either records (Level 1) or <code>IHas&lt;'T&gt;</code> (Level 2).</li>
+<li><strong>The Honest Bridge</strong>: Use <code>Flow.inject</code> or manual mapping at the host edge to satisfy strict Level 2 requirements from a Level 3 DI container.</li>
+<li><strong>Progressive Honesty</strong>: Start with <code>Flow.inject</code> for fast prototyping, then refactor to <code>Flow.service</code> for static verification.</li>
 </ul>
-<p>That is the shape the rest of the dependency docs follow.</p>
+<p>This architecture provides a flexible path from rapid prototyping to strict architectural honesty, while maintaining compatibility with the broader .NET ecosystem.</p>
 
 	<div class="section-index">
     
@@ -551,15 +367,15 @@ should speak in named capabilities rather than container lookups.</p>
     <hr class="panel-line">
         <div class="entry">
                 <h5>
-                    <a href="http://localhost:3000/docs/managing-dependencies/provider-edge/">Standard .NET AppHost Plus DI</a>
-                </h5>
-                <p>Using IServiceProvider only at the host boundary.</p>
-            </div>
-        <div class="entry">
-                <h5>
                     <a href="http://localhost:3000/docs/managing-dependencies/capability-contracts/">Nominal Capability Contracts</a>
                 </h5>
                 <p>Small named interfaces for reusable helpers and public capability boundaries.</p>
+            </div>
+        <div class="entry">
+                <h5>
+                    <a href="http://localhost:3000/docs/managing-dependencies/provider-edge/"></a>
+                </h5>
+                <p></p>
             </div>
         </div>
 </div>

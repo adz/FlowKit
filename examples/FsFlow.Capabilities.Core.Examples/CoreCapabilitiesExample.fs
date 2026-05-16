@@ -12,10 +12,10 @@ module CoreCapabilitiesExample =
             Guid: IGuid
             EnvVars: IEnvironmentVariables
         }
-        interface Requires<IClock> with member this.Dep = this.Clock
-        interface Requires<IRandom> with member this.Dep = this.Random
-        interface Requires<IGuid> with member this.Dep = this.Guid
-        interface Requires<IEnvironmentVariables> with member this.Dep = this.EnvVars
+        interface IHas<IClock> with member this.Service = this.Clock
+        interface IHas<IRandom> with member this.Service = this.Random
+        interface IHas<IGuid> with member this.Service = this.Guid
+        interface IHas<IEnvironmentVariables> with member this.Service = this.EnvVars
 
     let private renderExit formatter result =
         match result with
