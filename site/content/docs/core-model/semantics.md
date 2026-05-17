@@ -59,7 +59,7 @@ FsFlow distinguishes between expected failures, administrative signals, and unex
 
 ## Interruption and Cancellation
 
-FsFlow supports algebraic interruption. When a fiber is interrupted (e.g., via `Flow.interrupt` or a `CancellationToken` trigger), the flow stops executing and returns `Exit.Failure Cause.Interrupt`.
+FsFlow supports algebraic interruption. When a [**Fiber**]({{< relref "fibers.md" >}}) is interrupted (e.g., via `Flow.interrupt` or a `CancellationToken` trigger), the flow stops executing and returns `Exit.Failure Cause.Interrupt`.
 
 ## Environments
 

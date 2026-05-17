@@ -40,7 +40,7 @@ let safeParse id =
 While standard F# practice favors "just using exceptions" for defects, FsFlow treats them as first-class data in the `Exit` type for three critical reasons.
 
 ### 1. Structural Integrity (The "Closed" Algebra)
-In complex orchestration like `Flow.zipPar` (running two flows concurrently), the engine must coordinate the lifecycle of multiple fibers.
+In complex orchestration like `Flow.zipPar` (running two flows concurrently), the engine must coordinate the lifecycle of multiple [**fibers**]({{< relref "fibers.md" >}}).
 
 *   **The Problem:** If a defect is just a thrown exception, it escapes the return value of the function. The engine would have to handle two disjoint failure paths: returning a failure value OR catching a thrown exception. This forces every combinator to use defensive `try...finally` blocks just to coordinate basic signaling.
 *   **The Solution:** By capturing defects into the `Exit` type, every flow execution returns a value. This makes the algebra "closed." If one branch dies, the engine receives it as data, immediately triggers cancellation for the other branches, and returns a single, structured outcome.
