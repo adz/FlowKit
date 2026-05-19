@@ -1,6 +1,7 @@
 ---
 title: "Flow.succeed"
 linkTitle: "succeed"
+weight: 2302
 ---
 
 Alias for <code>ok</code> that reads well in some call sites.

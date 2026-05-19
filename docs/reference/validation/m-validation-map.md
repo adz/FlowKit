@@ -1,6 +1,7 @@
 ---
 title: "Validation.map"
 linkTitle: "map"
+weight: 2106
 ---
 
 Maps the successful value of a validation.

@@ -1,6 +1,7 @@
 ---
 title: "Flow.error"
 linkTitle: "error"
+weight: 2301
 ---
 
 Creates a failing synchronous flow.

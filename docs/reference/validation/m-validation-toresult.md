@@ -1,6 +1,7 @@
 ---
 title: "Validation.toResult"
 linkTitle: "toResult"
+weight: 2100
 ---
 
 Converts a <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a> into a standard <a href="https://learn.microsoft.com/dotnet/api/system.result-2">Result</a>.

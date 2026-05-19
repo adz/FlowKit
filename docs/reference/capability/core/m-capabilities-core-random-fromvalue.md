@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Core.Random.fromValue"
 linkTitle: "fromValue"
+weight: 2202
 ---
 
 Creates a deterministic random generator that always returns the supplied value.

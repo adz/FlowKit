@@ -1,6 +1,7 @@
 ---
 title: "Flow.fromResult"
 linkTitle: "fromResult"
+weight: 2305
 ---
 
 Lifts a <a href="https://learn.microsoft.com/dotnet/api/system.result-2">Result</a> into a synchronous flow.

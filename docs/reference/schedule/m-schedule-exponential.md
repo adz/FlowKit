@@ -1,6 +1,7 @@
 ---
 title: "Schedule.exponential"
 linkTitle: "exponential"
+weight: 2102
 ---
 
 Creates a schedule that recurs with exponential backoff.

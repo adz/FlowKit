@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Console.Console.live"
 linkTitle: "live"
+weight: 2102
 ---
 
 Creates a live console backed by <a href="https://learn.microsoft.com/dotnet/api/system.console">Console</a>.

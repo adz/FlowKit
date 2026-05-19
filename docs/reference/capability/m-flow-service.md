@@ -1,6 +1,7 @@
 ---
 title: "Flow.service"
 linkTitle: "service"
+weight: 2101
 ---
 
 Extracts a specific service from an environment that implements <code>IHas&lt;&#39;service&gt;</code>.

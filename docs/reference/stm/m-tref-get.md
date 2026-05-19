@@ -1,6 +1,7 @@
 ---
 title: "TRef.get"
 linkTitle: "get"
+weight: 2101
 ---
 
 Reads the current value of the transactional reference within a transaction.

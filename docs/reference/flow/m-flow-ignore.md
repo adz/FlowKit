@@ -1,6 +1,7 @@
 ---
 title: "Flow.ignore"
 linkTitle: "ignore"
+weight: 2325
 ---
 
 Maps the successful value of a synchronous flow to <code>unit</code>.

@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Console.IConsole"
 linkTitle: "IConsole"
+weight: 1000
 type: docs
 ---
 

@@ -6,40 +6,57 @@ type: docs
 ---
 
 
-In FsFlow, a **Fiber** is a lightweight, logical thread of execution. It represents a running [**`Flow`**]({{< relref "/reference/flow/t-flow.md" >}}) that has been started and is operating in the background.
+This page shows how FsFlow represents running child workflows with fibers.
+
+In FsFlow, a **Fiber** is a handle to a running [**`Flow`**]({{< relref "/reference/flow/t-flow.md" >}}). A flow is a cold description of work. A fiber is the hot execution that exists after that work has been started in the background.
 
 ## The Mental Model
 
 While a `Flow` is **cold** (a description of work that hasn't started yet), a **Fiber** is **hot** (the work is currently being executed).
 
-When you "fork" a flow, you are effectively saying: "Start this work in the background, give me a handle to it, and let me continue with my own work." That handle is the Fiber.
+When you fork a flow, you are saying: start this work now, give me a typed handle to it, and let the current workflow continue. That handle is the fiber.
+
+```fsharp
+let loadBoth left right =
+    flow {
+        let! leftFiber = Flow.fork left
+        let! rightValue = right
+        let! leftValue = Flow.join leftFiber
+        return leftValue, rightValue
+    }
+```
+
+The example starts `left` in the background, runs `right` in the current workflow, then joins the child fiber before returning.
 
 ## Structured Concurrency
 
 Fibers are the foundation of **Structured Concurrency** in FsFlow. Unlike "fire-and-forget" background tasks, Fibers allow you to maintain a parent-child relationship between workflows, ensuring that background work is always accounted for and safely cleaned up.
 
-The three primary operations for managing Fibers are:
+The three primary operations for managing fibers are:
 
-- [**`Flow.fork`**]({{< relref "/reference/flow/m-flow-fork.md" >}}): Starts a flow in the background and returns a `Fiber` handle.
-- [**`Flow.join`**]({{< relref "/reference/flow/m-flow-join.md" >}}): Suspends the current flow until the fiber completes, returning its final outcome.
-- [**`Flow.interrupt`**]({{< relref "/reference/flow/m-flow-interrupt.md" >}}): Signals a fiber to stop immediately and waits for it to finish its cleanup.
+- [**`Flow.fork`**]({{< relref "/reference/flow/m-flow-fork.md" >}}): starts a flow in the background and returns a `Fiber<'error, 'value>` handle.
+- [**`Flow.join`**]({{< relref "/reference/flow/m-flow-join.md" >}}): waits for the fiber and resumes with its successful value or typed failure.
+- [**`Flow.interrupt`**]({{< relref "/reference/flow/m-flow-interrupt.md" >}}): asks the fiber to stop, then waits for the child workflow to report its final `Exit`.
 
 ## Why Fibers?
 
-Fibers provide several critical advantages over raw `Task` or `Async` objects:
+Fibers provide several advantages over raw `Task` or `Async` values:
 
-### 1. Algebraic Interruption
-In standard .NET development, cancellation requires manually passing a `CancellationToken` through every function. In FsFlow, interruption is built into the model. When a Fiber is interrupted, the engine ensures that the workflow stops at the next available yield point and—crucially—runs all registered cleanup logic (via `ensuring` or `onExit`).
+### Interruption
 
-### 2. Typed Outcomes
-A `Fiber<'error, 'value>` is generic. It "remembers" the error type and success type of the workflow it is running. When you `join` a fiber, the compiler ensures that you handle its potential failures just as you would with any other `Flow`.
+In ordinary .NET code, cancellation often depends on manually threading a `CancellationToken` through every layer. In FsFlow, interruption is part of the execution model. `Flow.interrupt` signals the child fiber and waits for it to finish, so callers can observe the final `Exit<'value, 'error>`.
 
-### 3. Safety and Leak Prevention
-Because Fibers are tied to the FsFlow execution engine, they respect the lifecycle of their parent. This makes it easier to avoid "orphan" background tasks that continue to consume resources after the main application has moved on or failed.
+### Typed Outcomes
+
+A `Fiber<'error, 'value>` remembers the error type and success type of the workflow it is running. When you `Flow.join` a fiber, the joined flow has the same typed failure channel as the child.
+
+### Clear Ownership
+
+Fibers make background work visible in the workflow that started it. If the parent needs the result, it joins. If the parent no longer needs the result, it interrupts. That is different from launching an untracked task and hoping some other layer notices when it fails.
 
 ## Underlying Implementation
 
-On .NET, a Fiber is essentially a wrapper around a `Task<Exit<'value, 'error>>` and a `CancellationTokenSource`. On Fable (JavaScript), it wraps an `Async<Exit<'value, 'error>>`.
+On .NET, a fiber is a small record around a `Task<Exit<'value, 'error>>` and a `CancellationTokenSource`. On Fable, it wraps an `Async<Exit<'value, 'error>>`.
 
 ```fsharp
 type Fiber<'error, 'value> =
@@ -49,12 +66,13 @@ type Fiber<'error, 'value> =
     }
 ```
 
-This abstraction allows FsFlow to provide a unified concurrency model that works identically across different platforms while respecting their native execution primitives.
+This keeps the public model the same while still using the platform's native execution primitive underneath.
 
 ## Concurrency Primitives
 
-Most of the time, you won't manage Fibers manually. Instead, you will use high-level parallel combinators that use Fibers under the hood:
+Most code should not manage fibers manually. Prefer high-level parallel combinators when they express the whole relationship:
 
 - `Flow.zipPar`: Runs two flows concurrently in separate fibers and waits for both.
 - `Flow.race`: Runs two flows concurrently and returns the result of the winner, interrupting the loser.
-- `Flow.collectPar`: Runs a collection of flows in parallel.
+
+Use explicit fibers when the parent workflow needs to start child work, do something else, and decide later whether to join or interrupt it.

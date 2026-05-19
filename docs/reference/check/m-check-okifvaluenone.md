@@ -1,6 +1,7 @@
 ---
 title: "Check.okIfValueNone"
 linkTitle: "okIfValueNone"
+weight: 2113
 ---
 
 Returns success when the value option is <code>ValueNone</code>.

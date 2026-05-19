@@ -1,6 +1,7 @@
 ---
 title: "Check.failIfSome"
 linkTitle: "failIfSome"
+weight: 2110
 type: docs
 ---
 

@@ -1,6 +1,7 @@
 ---
 title: "Validation.merge"
 linkTitle: "merge"
+weight: 2118
 ---
 
 Merges two validations into a validation of a tuple.

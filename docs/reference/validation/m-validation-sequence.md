@@ -1,6 +1,7 @@
 ---
 title: "Validation.sequence"
 linkTitle: "sequence"
+weight: 2116
 ---
 
 Transforms a sequence of validations into a validation of a list.

@@ -1,6 +1,7 @@
 ---
 title: "Flow.Runtime.catchCancellation"
 linkTitle: "catchCancellation"
+weight: 2001
 type: docs
 ---
 

@@ -1,6 +1,7 @@
 ---
 title: "FlowStream.runForEach"
 linkTitle: "runForEach"
+weight: 2102
 ---
 
 Executes the stream and performs a synchronous action for each successful value.

@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.FileSystem.FileSystem.exists"
 linkTitle: "exists"
+weight: 2102
 ---
 
 Checks if a file exists using the file system environment.

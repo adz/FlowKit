@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Core.EnvironmentVariableErrors.describe"
 linkTitle: "describe"
+weight: 2408
 ---
 
 Formats a human-readable description for an error.

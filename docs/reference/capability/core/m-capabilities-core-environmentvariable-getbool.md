@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Core.EnvironmentVariable.getBool"
 linkTitle: "getBool"
+weight: 2407
 ---
 
 Reads a boolean environment variable from the ambient runtime.

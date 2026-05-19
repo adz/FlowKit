@@ -1,6 +1,7 @@
 ---
 title: "Flow.sequence"
 linkTitle: "sequence"
+weight: 2330
 type: docs
 ---
 

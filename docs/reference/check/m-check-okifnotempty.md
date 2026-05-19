@@ -1,6 +1,7 @@
 ---
 title: "Check.okIfNotEmpty"
 linkTitle: "okIfNotEmpty"
+weight: 2120
 ---
 
 Returns the sequence when it is not empty.

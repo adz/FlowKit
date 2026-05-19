@@ -1,6 +1,7 @@
 ---
 title: "Schedule.recurs"
 linkTitle: "recurs"
+weight: 2100
 ---
 
 Creates a schedule that recurs a fixed number of times.

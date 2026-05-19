@@ -105,19 +105,25 @@ module Exit =
         | Exit.Failure Cause.Interrupt -> raise (OperationCanceledException("Workflow was interrupted"))
 
 /// <summary>
-/// Represents a handle to a running workflow.
+/// Represents a handle to a workflow that has already been started.
 /// </summary>
+/// <remarks>
+/// A fiber is the hot counterpart to a cold <c>Flow</c>. It keeps the running
+/// work's typed failure and success channels available through <c>Flow.join</c>,
+/// and it carries an interruption source so parent workflows can ask the child
+/// to stop and then wait for cleanup to finish.
+/// </remarks>
 /// <typeparam name="error">The failure type of the running workflow.</typeparam>
 /// <typeparam name="value">The success type of the running workflow.</typeparam>
 type Fiber<'error, 'value> =
     {
-        /// <summary>The task that completes when the workflow finishes execution.</summary>
+        /// <summary>The asynchronous operation that completes with the workflow's final exit outcome.</summary>
 #if FABLE_COMPILER
         ExitTask: Async<Exit<'value, 'error>>
 #else
         ExitTask: Task<Exit<'value, 'error>>
 #endif
-        /// <summary>The source used to signal interruption to the running workflow.</summary>
+        /// <summary>The cancellation source used by <c>Flow.interrupt</c> to signal interruption.</summary>
         InterruptSource: CancellationTokenSource
     }
 
@@ -257,12 +263,9 @@ module RetryPolicy =
 ///
 /// type AppEnv =
 ///     { Database : IDb }
+///     interface IHas&lt;IDb&gt; with member x.Service = x.Database
 ///
-/// let readDb : Flow&lt;AppEnv, unit, IDb&gt; =
-///     flow {
-///         let! db = Flow.read _.Database
-///         return db
-///     }
+/// let db = Flow.service&lt;IDb, AppEnv, unit&gt;()
 /// </code>
 /// </example>
 type IHas<'service> =

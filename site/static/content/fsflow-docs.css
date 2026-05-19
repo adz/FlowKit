@@ -515,6 +515,34 @@ code {
     grid-column: span 12;
 }
 
+.fsflow-sidebar-collapse-toggle {
+    width: 100%;
+    margin: 0.35rem 0 0.75rem;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--fsflow-border);
+    border-radius: 8px;
+    color: var(--fsflow-muted);
+    background: rgba(255, 255, 255, 0.68);
+    font: 600 0.78rem/1.2 var(--fsflow-sans-font);
+    text-align: left;
+    text-decoration: none;
+}
+
+.fsflow-sidebar-collapse-toggle::before {
+    content: "v";
+    display: inline-block;
+    width: 1rem;
+    color: var(--fsflow-accent);
+}
+
+.fsflow-sidebar-collapse-toggle[aria-expanded="false"]::before {
+    content: ">";
+}
+
+.td-sidebar {
+    overflow-y: auto;
+}
+
 @media (max-width: 1240px) {
     body {
         grid-template-columns: minmax(0, 240px) minmax(0, 1fr);

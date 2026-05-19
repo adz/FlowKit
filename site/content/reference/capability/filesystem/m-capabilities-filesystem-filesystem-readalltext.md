@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.FileSystem.FileSystem.readAllText"
 linkTitle: "readAllText"
+weight: 2100
 type: docs
 ---
 

@@ -1,6 +1,7 @@
 ---
 title: "Flow.Runtime.useWithAcquireRelease"
 linkTitle: "useWithAcquireRelease"
+weight: 2009
 ---
 
 Acquires a resource, uses it, and always runs the release action.

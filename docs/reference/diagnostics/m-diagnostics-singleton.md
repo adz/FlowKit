@@ -1,6 +1,7 @@
 ---
 title: "Diagnostics.singleton"
 linkTitle: "singleton"
+weight: 2101
 ---
 
 Creates a diagnostics graph containing exactly one error at the root.

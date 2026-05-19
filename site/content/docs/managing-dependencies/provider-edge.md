@@ -1,3 +1,10 @@
+---
+weight: 60
+title: Standard .NET AppHost Plus DI
+description: Using IServiceProvider at the application edge while keeping workflows typed.
+type: docs
+---
+
 
 `IServiceProvider` belongs at the outer edge of the system.
 

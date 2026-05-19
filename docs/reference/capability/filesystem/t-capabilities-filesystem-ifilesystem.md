@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.FileSystem.IFileSystem"
 linkTitle: "IFileSystem"
+weight: 1000
 ---
 
 Provides synchronous access to file system operations.

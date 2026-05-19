@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Core.Clock.fromValue"
 linkTitle: "fromValue"
+weight: 2102
 ---
 
 Creates a deterministic clock that always returns the supplied instant.

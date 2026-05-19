@@ -1,6 +1,7 @@
 ---
 title: "Diagnostic<_>.Path"
 linkTitle: "Path"
+weight: 1001
 ---
 
 The path to the source of the error.

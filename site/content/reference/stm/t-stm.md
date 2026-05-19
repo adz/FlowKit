@@ -1,6 +1,7 @@
 ---
 title: "STM"
 linkTitle: "STM<T>"
+weight: 1001
 type: docs
 ---
 
@@ -19,4 +20,10 @@ type: docs
 | Name |
 | --- |
 | `T` |
+
+## Union Cases
+
+| Case | Description |
+| --- | --- |
+| `STM` |  |
 

@@ -1,6 +1,7 @@
 ---
 title: "Check.failIfEqual"
 linkTitle: "failIfEqual"
+weight: 2126
 ---
 
 Returns success when the values are equal.

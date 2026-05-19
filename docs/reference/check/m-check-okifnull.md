@@ -1,6 +1,7 @@
 ---
 title: "Check.okIfNull"
 linkTitle: "okIfNull"
+weight: 2117
 ---
 
 Returns success when the value is null.

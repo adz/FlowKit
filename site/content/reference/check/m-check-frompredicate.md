@@ -1,6 +1,7 @@
 ---
 title: "Check.fromPredicate"
 linkTitle: "fromPredicate"
+weight: 2100
 type: docs
 ---
 

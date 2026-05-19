@@ -22,7 +22,7 @@
       <description>&lt;p&gt;In FsFlow, the environment (&lt;code&gt;&#39;env&lt;/code&gt;) represents the &amp;ldquo;world&amp;rdquo; your effects need to run. Depending on the size of your application and your need for strictness, FsFlow provides three &amp;ldquo;levels&amp;rdquo; of environment access.&lt;/p&gt;&#xA;&lt;h2 id=&#34;level-1-records-the-pragmatic-way&#34;&gt;Level 1: Records (The Pragmatic Way)&lt;/h2&gt;&#xA;&lt;p&gt;For local logic or small applications, a plain F# record is often the best choice. It is direct, easy to mock, and requires zero ceremony.&lt;/p&gt;&#xA;&lt;h3 id=&#34;accessing-via-flowread&#34;&gt;Accessing via &lt;code&gt;Flow.read&lt;/code&gt;&lt;/h3&gt;&#xA;&lt;p&gt;Use &lt;code&gt;Flow.read&lt;/code&gt; to project a specific property from your environment record.&lt;/p&gt;</description>
     </item>
     <item>
-      <title></title>
+      <title>Standard .NET AppHost Plus DI</title>
       <link>http://localhost:3000/docs/managing-dependencies/provider-edge/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>http://localhost:3000/docs/managing-dependencies/provider-edge/</guid>

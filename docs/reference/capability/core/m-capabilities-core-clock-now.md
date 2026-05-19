@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Core.Clock.now"
 linkTitle: "now"
+weight: 2100
 ---
 
 Reads the current UTC timestamp from the ambient runtime.

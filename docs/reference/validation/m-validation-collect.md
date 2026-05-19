@@ -1,6 +1,7 @@
 ---
 title: "Validation.collect"
 linkTitle: "collect"
+weight: 2115
 ---
 
 Collects a sequence of validations into a single validation of a list.

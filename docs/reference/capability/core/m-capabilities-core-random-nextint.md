@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Core.Random.nextInt"
 linkTitle: "nextInt"
+weight: 2200
 ---
 
 Reads a random integer from the ambient runtime.

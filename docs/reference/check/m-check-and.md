@@ -1,6 +1,7 @@
 ---
 title: "Check.``and``"
 linkTitle: "``and``"
+weight: 2102
 ---
 
 Returns success when both checks succeed.

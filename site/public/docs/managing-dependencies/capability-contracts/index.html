@@ -1,10 +1,10 @@
 <!doctype html>
 <html itemscope itemtype="http://schema.org/WebPage" lang="en" class="no-js">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=3000&amp;path=livereload" data-no-instant defer></script>
+  <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow">
 
 
 <link rel="shortcut icon" href="http://localhost:3000/favicons/favicon.ico" >
@@ -34,7 +34,8 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Nominal Capability Contracts">
   <meta name="twitter:description" content="Small named interfaces for reusable helpers and public capability boundaries.">
-<link href="http://localhost:3000/scss/main.css" rel="stylesheet">
+<link rel="preload" href="http://localhost:3000/scss/main.min.c2e6489a9d8ef949a0dead85d2b883caca7e8cf3176c0e7ff6ff57d94fff640c.css" as="style" integrity="sha256-wuZImp2O&#43;Umg3q2F0riDysp&#43;jPMXbA5/9v9X2U//ZAw=" crossorigin="anonymous">
+<link href="http://localhost:3000/scss/main.min.c2e6489a9d8ef949a0dead85d2b883caca7e8cf3176c0e7ff6ff57d94fff640c.css" rel="stylesheet" integrity="sha256-wuZImp2O&#43;Umg3q2F0riDysp&#43;jPMXbA5/9v9X2U//ZAw=" crossorigin="anonymous">
 <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
   integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
@@ -91,7 +92,7 @@
     aria-label='Search this site…'
     autocomplete="off"
     
-    data-offline-search-index-json-src="http://localhost:3000/offline-search-index.json"
+    data-offline-search-index-json-src="http://localhost:3000/offline-search-index.152d3a8195c3b05e80270a1402841d44.json"
     data-offline-search-base-href="http://localhost:3000/"
     data-offline-search-max-results="10"
   >
@@ -108,8 +109,14 @@
 </div>
 
         <div class="row flex-xl-nowrap">
-          <aside class="col-12 col-md-3 col-xl-2 td-sidebar d-print-none">
-            <div id="td-sidebar-menu" class="td-sidebar__inner">
+          <aside class="col-12 col-md-3 col-xl-2 td-sidebar d-print-none" id="fsflow-docs-sidebar">
+            <button class="btn btn-link fsflow-sidebar-collapse-toggle" type="button"
+              data-bs-toggle="collapse" data-bs-target="#fsflow-sidebar-body"
+              aria-controls="fsflow-sidebar-body" aria-expanded="true">
+              Toggle menu
+            </button>
+            <div id="fsflow-sidebar-body" class="collapse show">
+              <div id="td-sidebar-menu" class="td-sidebar__inner">
   <form class="td-sidebar__search d-flex align-items-center">
     <div class="td-search td-search--offline">
   <div class="td-search__icon"></div>
@@ -121,7 +128,7 @@
     aria-label='Search this site…'
     autocomplete="off"
     
-    data-offline-search-index-json-src="http://localhost:3000/offline-search-index.json"
+    data-offline-search-index-json-src="http://localhost:3000/offline-search-index.152d3a8195c3b05e80270a1402841d44.json"
     data-offline-search-base-href="http://localhost:3000/"
     data-offline-search-max-results="10"
   >
@@ -129,107 +136,181 @@
     <button class="btn btn-link td-sidebar__toggle" type="button" data-bs-toggle="collapse" data-bs-target="#td-section-nav" aria-controls="td-section-nav" aria-expanded="false" aria-label="Toggle section navigation">
     </button>
   </form>
-  <nav class="td-sidebar-nav collapse" id="td-section-nav">
+  <nav class="td-sidebar-nav collapse foldable-nav" id="td-section-nav">
     <ul class="td-sidebar-nav__section pe-md-3 ul-0">
       <li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id="m-docs-li">
     <a href="http://localhost:3000/docs/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section tree-root" id="m-docs"><span class="">Docs</span></a>
     <ul class="ul-1">
       <li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docsstart-li">
-    <a href="http://localhost:3000/docs/start/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docsstart"><span class="">Start</span></a>
+    <input type="checkbox" id="m-docsstart-check"/>
+    <label for="m-docsstart-check"><a href="http://localhost:3000/docs/start/" class="align-left ps-0  td-sidebar-link td-sidebar-link__section" id="m-docsstart"><span class="">Start</span></a></label>
+    
     <ul class="ul-2 foldable">
-      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docsstartgetting-started-li">
-    <a href="http://localhost:3000/docs/start/getting-started/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsstartgetting-started"><span class="">Getting Started</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docsstartexecution-and-outcomes-li">
-    <a href="http://localhost:3000/docs/start/execution-and-outcomes/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsstartexecution-and-outcomes"><span class="">Execution and Outcomes</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docsstartbasic-examples-li">
-    <a href="http://localhost:3000/docs/start/basic-examples/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsstartbasic-examples"><span class="">Straightforward Examples</span></a>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsstartgetting-started-li">
+    <input type="checkbox" id="m-docsstartgetting-started-check"/>
+    <label for="m-docsstartgetting-started-check"><a href="http://localhost:3000/docs/start/getting-started/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docsstartgetting-started"><span class="">Getting Started</span></a></label>
+    
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsstartexecution-and-outcomes-li">
+    <input type="checkbox" id="m-docsstartexecution-and-outcomes-check"/>
+    <label for="m-docsstartexecution-and-outcomes-check"><a href="http://localhost:3000/docs/start/execution-and-outcomes/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docsstartexecution-and-outcomes"><span class="">Execution and Outcomes</span></a></label>
+    
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsstartbasic-examples-li">
+    <input type="checkbox" id="m-docsstartbasic-examples-check"/>
+    <label for="m-docsstartbasic-examples-check"><a href="http://localhost:3000/docs/start/basic-examples/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docsstartbasic-examples"><span class="">Straightforward Examples</span></a></label>
+    
   </li>
     </ul>
   </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docstutorials-li">
-    <a href="http://localhost:3000/docs/tutorials/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docstutorials"><span class="">Tutorials</span></a>
+    <input type="checkbox" id="m-docstutorials-check"/>
+    <label for="m-docstutorials-check"><a href="http://localhost:3000/docs/tutorials/" class="align-left ps-0  td-sidebar-link td-sidebar-link__section" id="m-docstutorials"><span class="">Tutorials</span></a></label>
+    
     <ul class="ul-2 foldable">
-      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docstutorialsapp-record-li">
-    <a href="http://localhost:3000/docs/tutorials/app-record/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docstutorialsapp-record"><span class="">Tutorial: AppRecord</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docstutorialscapabilities-li">
-    <a href="http://localhost:3000/docs/tutorials/capabilities/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docstutorialscapabilities"><span class="">Tutorial: Capabilities</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docstutorialsapp-host-li">
-    <a href="http://localhost:3000/docs/tutorials/app-host/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docstutorialsapp-host"><span class="">Tutorial: AppHost</span></a>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docstutorialsapp-record-li">
+    <input type="checkbox" id="m-docstutorialsapp-record-check"/>
+    <label for="m-docstutorialsapp-record-check"><a href="http://localhost:3000/docs/tutorials/app-record/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docstutorialsapp-record"><span class="">Tutorial: AppRecord</span></a></label>
+    
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docstutorialscapabilities-li">
+    <input type="checkbox" id="m-docstutorialscapabilities-check"/>
+    <label for="m-docstutorialscapabilities-check"><a href="http://localhost:3000/docs/tutorials/capabilities/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docstutorialscapabilities"><span class="">Tutorial: Capabilities</span></a></label>
+    
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docstutorialsapp-host-li">
+    <input type="checkbox" id="m-docstutorialsapp-host-check"/>
+    <label for="m-docstutorialsapp-host-check"><a href="http://localhost:3000/docs/tutorials/app-host/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docstutorialsapp-host"><span class="">Tutorial: AppHost</span></a></label>
+    
   </li>
     </ul>
   </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docsvalidation-results-li">
-    <a href="http://localhost:3000/docs/validation-results/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docsvalidation-results"><span class="">Validation &amp; Results</span></a>
+    <input type="checkbox" id="m-docsvalidation-results-check"/>
+    <label for="m-docsvalidation-results-check"><a href="http://localhost:3000/docs/validation-results/" class="align-left ps-0  td-sidebar-link td-sidebar-link__section" id="m-docsvalidation-results"><span class="">Validation &amp; Results</span></a></label>
+    
     <ul class="ul-2 foldable">
-      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docsvalidation-resultschecks-li">
-    <a href="http://localhost:3000/docs/validation-results/checks/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsvalidation-resultschecks"><span class="">Pure Checks</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docsvalidation-resultsresult-ce-li">
-    <a href="http://localhost:3000/docs/validation-results/result-ce/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsvalidation-resultsresult-ce"><span class="">Result CE</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docsvalidation-resultsguard-li">
-    <a href="http://localhost:3000/docs/validation-results/guard/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsvalidation-resultsguard"><span class="">The Guard</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docsvalidation-resultsvalidate-ce-li">
-    <a href="http://localhost:3000/docs/validation-results/validate-ce/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsvalidation-resultsvalidate-ce"><span class="">Validate CE</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docsvalidation-resultsdiagnostics-li">
-    <a href="http://localhost:3000/docs/validation-results/diagnostics/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsvalidation-resultsdiagnostics"><span class="">Diagnostics Graph</span></a>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsvalidation-resultschecks-li">
+    <input type="checkbox" id="m-docsvalidation-resultschecks-check"/>
+    <label for="m-docsvalidation-resultschecks-check"><a href="http://localhost:3000/docs/validation-results/checks/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docsvalidation-resultschecks"><span class="">Pure Checks</span></a></label>
+    
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsvalidation-resultsresult-ce-li">
+    <input type="checkbox" id="m-docsvalidation-resultsresult-ce-check"/>
+    <label for="m-docsvalidation-resultsresult-ce-check"><a href="http://localhost:3000/docs/validation-results/result-ce/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docsvalidation-resultsresult-ce"><span class="">Result CE</span></a></label>
+    
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsvalidation-resultsguard-li">
+    <input type="checkbox" id="m-docsvalidation-resultsguard-check"/>
+    <label for="m-docsvalidation-resultsguard-check"><a href="http://localhost:3000/docs/validation-results/guard/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docsvalidation-resultsguard"><span class="">The Guard</span></a></label>
+    
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsvalidation-resultsvalidate-ce-li">
+    <input type="checkbox" id="m-docsvalidation-resultsvalidate-ce-check"/>
+    <label for="m-docsvalidation-resultsvalidate-ce-check"><a href="http://localhost:3000/docs/validation-results/validate-ce/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docsvalidation-resultsvalidate-ce"><span class="">Validate CE</span></a></label>
+    
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsvalidation-resultsdiagnostics-li">
+    <input type="checkbox" id="m-docsvalidation-resultsdiagnostics-check"/>
+    <label for="m-docsvalidation-resultsdiagnostics-check"><a href="http://localhost:3000/docs/validation-results/diagnostics/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docsvalidation-resultsdiagnostics"><span class="">Diagnostics Graph</span></a></label>
+    
   </li>
     </ul>
   </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docscore-model-li">
-    <a href="http://localhost:3000/docs/core-model/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docscore-model"><span class="">The FsFlow Model</span></a>
+    <input type="checkbox" id="m-docscore-model-check"/>
+    <label for="m-docscore-model-check"><a href="http://localhost:3000/docs/core-model/" class="align-left ps-0  td-sidebar-link td-sidebar-link__section" id="m-docscore-model"><span class="">The FsFlow Model</span></a></label>
+    
     <ul class="ul-2 foldable">
-      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docscore-modelsemantics-li">
-    <a href="http://localhost:3000/docs/core-model/semantics/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docscore-modelsemantics"><span class="">Execution Semantics</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docscore-modelfibers-li">
-    <a href="http://localhost:3000/docs/core-model/fibers/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docscore-modelfibers"><span class="">Fibers</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docscore-modeldefects-li">
-    <a href="http://localhost:3000/docs/core-model/defects/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docscore-modeldefects"><span class="">Defects and Exceptions</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docscore-modeltask-async-interop-li">
-    <a href="http://localhost:3000/docs/core-model/task-async-interop/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docscore-modeltask-async-interop"><span class="">Task and Async Interop</span></a>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docscore-modelsemantics-li">
+    <input type="checkbox" id="m-docscore-modelsemantics-check"/>
+    <label for="m-docscore-modelsemantics-check"><a href="http://localhost:3000/docs/core-model/semantics/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docscore-modelsemantics"><span class="">Execution Semantics</span></a></label>
+    
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docscore-modelfibers-li">
+    <input type="checkbox" id="m-docscore-modelfibers-check"/>
+    <label for="m-docscore-modelfibers-check"><a href="http://localhost:3000/docs/core-model/fibers/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docscore-modelfibers"><span class="">Fibers</span></a></label>
+    
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docscore-modeldefects-li">
+    <input type="checkbox" id="m-docscore-modeldefects-check"/>
+    <label for="m-docscore-modeldefects-check"><a href="http://localhost:3000/docs/core-model/defects/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docscore-modeldefects"><span class="">Defects and Exceptions</span></a></label>
+    
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docscore-modeltask-async-interop-li">
+    <input type="checkbox" id="m-docscore-modeltask-async-interop-check"/>
+    <label for="m-docscore-modeltask-async-interop-check"><a href="http://localhost:3000/docs/core-model/task-async-interop/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docscore-modeltask-async-interop"><span class="">Task and Async Interop</span></a></label>
+    
   </li>
     </ul>
   </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id="m-docsmanaging-dependencies-li">
-    <a href="http://localhost:3000/docs/managing-dependencies/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docsmanaging-dependencies"><span class="">Managing Dependencies</span></a>
+    <input type="checkbox" id="m-docsmanaging-dependencies-check" checked/>
+    <label for="m-docsmanaging-dependencies-check"><a href="http://localhost:3000/docs/managing-dependencies/" class="align-left ps-0  td-sidebar-link td-sidebar-link__section" id="m-docsmanaging-dependencies"><span class="">Managing Dependencies</span></a></label>
+    
     <ul class="ul-2 foldable">
       <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsmanaging-dependenciesruntime-vs-environment-li">
-    <a href="http://localhost:3000/docs/managing-dependencies/runtime-vs-environment/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciesruntime-vs-environment"><span class="">Runtime vs Environment</span></a>
+    <input type="checkbox" id="m-docsmanaging-dependenciesruntime-vs-environment-check"/>
+    <label for="m-docsmanaging-dependenciesruntime-vs-environment-check"><a href="http://localhost:3000/docs/managing-dependencies/runtime-vs-environment/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciesruntime-vs-environment"><span class="">Runtime vs Environment</span></a></label>
+    
   </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child active-path" id="m-docsmanaging-dependenciescapability-contracts-li">
-    <a href="http://localhost:3000/docs/managing-dependencies/capability-contracts/" class="align-left ps-0 active td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciescapability-contracts"><span class="td-sidebar-nav-active-item">Nominal Capability Contracts</span></a>
+    <input type="checkbox" id="m-docsmanaging-dependenciescapability-contracts-check" checked/>
+    <label for="m-docsmanaging-dependenciescapability-contracts-check"><a href="http://localhost:3000/docs/managing-dependencies/capability-contracts/" class="align-left ps-0  active td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciescapability-contracts"><span class="td-sidebar-nav-active-item">Nominal Capability Contracts</span></a></label>
+    
   </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsmanaging-dependenciesprovider-edge-li">
-    <a href="http://localhost:3000/docs/managing-dependencies/provider-edge/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciesprovider-edge"><span class=""></span></a>
+    <input type="checkbox" id="m-docsmanaging-dependenciesprovider-edge-check"/>
+    <label for="m-docsmanaging-dependenciesprovider-edge-check"><a href="http://localhost:3000/docs/managing-dependencies/provider-edge/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docsmanaging-dependenciesprovider-edge"><span class="">Standard .NET AppHost Plus DI</span></a></label>
+    
   </li>
     </ul>
   </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docsstate-concurrency-li">
-    <a href="http://localhost:3000/docs/state-concurrency/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docsstate-concurrency"><span class="">State and Concurrency</span></a>
+    <input type="checkbox" id="m-docsstate-concurrency-check"/>
+    <label for="m-docsstate-concurrency-check"><a href="http://localhost:3000/docs/state-concurrency/" class="align-left ps-0  td-sidebar-link td-sidebar-link__section" id="m-docsstate-concurrency"><span class="">State and Concurrency</span></a></label>
+    
     <ul class="ul-2 foldable">
-      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docsstate-concurrencyref-li">
-    <a href="http://localhost:3000/docs/state-concurrency/ref/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsstate-concurrencyref"><span class="">Ref (Atomic References)</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docsstate-concurrencyschedule-li">
-    <a href="http://localhost:3000/docs/state-concurrency/schedule/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsstate-concurrencyschedule"><span class="">Schedule (Retry &amp; Repeat)</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docsstate-concurrencystm-li">
-    <a href="http://localhost:3000/docs/state-concurrency/stm/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsstate-concurrencystm"><span class="">STM (Software Transactional Memory)</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docsstate-concurrencystream-li">
-    <a href="http://localhost:3000/docs/state-concurrency/stream/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsstate-concurrencystream"><span class="">Stream (FlowStream)</span></a>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsstate-concurrencyref-li">
+    <input type="checkbox" id="m-docsstate-concurrencyref-check"/>
+    <label for="m-docsstate-concurrencyref-check"><a href="http://localhost:3000/docs/state-concurrency/ref/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docsstate-concurrencyref"><span class="">Ref (Atomic References)</span></a></label>
+    
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsstate-concurrencyschedule-li">
+    <input type="checkbox" id="m-docsstate-concurrencyschedule-check"/>
+    <label for="m-docsstate-concurrencyschedule-check"><a href="http://localhost:3000/docs/state-concurrency/schedule/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docsstate-concurrencyschedule"><span class="">Schedule (Retry &amp; Repeat)</span></a></label>
+    
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsstate-concurrencystm-li">
+    <input type="checkbox" id="m-docsstate-concurrencystm-check"/>
+    <label for="m-docsstate-concurrencystm-check"><a href="http://localhost:3000/docs/state-concurrency/stm/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docsstate-concurrencystm"><span class="">STM (Software Transactional Memory)</span></a></label>
+    
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsstate-concurrencystream-li">
+    <input type="checkbox" id="m-docsstate-concurrencystream-check"/>
+    <label for="m-docsstate-concurrencystream-check"><a href="http://localhost:3000/docs/state-concurrency/stream/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docsstate-concurrencystream"><span class="">Stream (FlowStream)</span></a></label>
+    
   </li>
     </ul>
   </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docspatterns-li">
-    <a href="http://localhost:3000/docs/patterns/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docspatterns"><span class="">Patterns</span></a>
+    <input type="checkbox" id="m-docspatterns-check"/>
+    <label for="m-docspatterns-check"><a href="http://localhost:3000/docs/patterns/" class="align-left ps-0  td-sidebar-link td-sidebar-link__section" id="m-docspatterns"><span class="">Patterns</span></a></label>
+    
     <ul class="ul-2 foldable">
-      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docspatternstroubleshooting-types-li">
-    <a href="http://localhost:3000/docs/patterns/troubleshooting-types/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docspatternstroubleshooting-types"><span class="">Troubleshooting Types</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docspatternsbenchmarks-li">
-    <a href="http://localhost:3000/docs/patterns/benchmarks/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docspatternsbenchmarks"><span class="">Benchmarks</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docspatternsexamples-li">
-    <a href="http://localhost:3000/docs/patterns/examples/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docspatternsexamples"><span class="">Runnable Examples</span></a>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docspatternstroubleshooting-types-li">
+    <input type="checkbox" id="m-docspatternstroubleshooting-types-check"/>
+    <label for="m-docspatternstroubleshooting-types-check"><a href="http://localhost:3000/docs/patterns/troubleshooting-types/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docspatternstroubleshooting-types"><span class="">Troubleshooting Types</span></a></label>
+    
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docspatternsbenchmarks-li">
+    <input type="checkbox" id="m-docspatternsbenchmarks-check"/>
+    <label for="m-docspatternsbenchmarks-check"><a href="http://localhost:3000/docs/patterns/benchmarks/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docspatternsbenchmarks"><span class="">Benchmarks</span></a></label>
+    
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docspatternsexamples-li">
+    <input type="checkbox" id="m-docspatternsexamples-check"/>
+    <label for="m-docspatternsexamples-check"><a href="http://localhost:3000/docs/patterns/examples/" class="align-left ps-0  td-sidebar-link td-sidebar-link__section" id="m-docspatternsexamples"><span class="">Runnable Examples</span></a></label>
+    
   </li>
     </ul>
   </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id="m-docsecosystem-li">
-    <a href="http://localhost:3000/docs/ecosystem/" class="align-left ps-0 td-sidebar-link td-sidebar-link__section" id="m-docsecosystem"><span class="">Comparisons and Integrations</span></a>
+    <input type="checkbox" id="m-docsecosystem-check"/>
+    <label for="m-docsecosystem-check"><a href="http://localhost:3000/docs/ecosystem/" class="align-left ps-0  td-sidebar-link td-sidebar-link__section" id="m-docsecosystem"><span class="">Comparisons and Integrations</span></a></label>
+    
     <ul class="ul-2 foldable">
-      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docsecosystemintegrations-fstoolkit-li">
-    <a href="http://localhost:3000/docs/ecosystem/integrations-fstoolkit/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsecosystemintegrations-fstoolkit"><span class="">FsToolkit.ErrorHandling</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docsecosystemintegrations-validus-li">
-    <a href="http://localhost:3000/docs/ecosystem/integrations-validus/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsecosystemintegrations-validus"><span class="">Validus Integration</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docsecosystemintegrations-fsharpplus-li">
-    <a href="http://localhost:3000/docs/ecosystem/integrations-fsharpplus/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsecosystemintegrations-fsharpplus"><span class="">FSharpPlus Integration</span></a>
-  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child collapse" id="m-docsecosystemeffect-ts-comparison-li">
-    <a href="http://localhost:3000/docs/ecosystem/effect-ts-comparison/" class="align-left ps-0 td-sidebar-link td-sidebar-link__page" id="m-docsecosystemeffect-ts-comparison"><span class="">Effect-TS Comparison</span></a>
+      <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsecosystemintegrations-fstoolkit-li">
+    <input type="checkbox" id="m-docsecosystemintegrations-fstoolkit-check"/>
+    <label for="m-docsecosystemintegrations-fstoolkit-check"><a href="http://localhost:3000/docs/ecosystem/integrations-fstoolkit/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docsecosystemintegrations-fstoolkit"><span class="">FsToolkit.ErrorHandling</span></a></label>
+    
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsecosystemintegrations-validus-li">
+    <input type="checkbox" id="m-docsecosystemintegrations-validus-check"/>
+    <label for="m-docsecosystemintegrations-validus-check"><a href="http://localhost:3000/docs/ecosystem/integrations-validus/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docsecosystemintegrations-validus"><span class="">Validus Integration</span></a></label>
+    
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsecosystemintegrations-fsharpplus-li">
+    <input type="checkbox" id="m-docsecosystemintegrations-fsharpplus-check"/>
+    <label for="m-docsecosystemintegrations-fsharpplus-check"><a href="http://localhost:3000/docs/ecosystem/integrations-fsharpplus/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docsecosystemintegrations-fsharpplus"><span class="">FSharpPlus Integration</span></a></label>
+    
+  </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id="m-docsecosystemeffect-ts-comparison-li">
+    <input type="checkbox" id="m-docsecosystemeffect-ts-comparison-check"/>
+    <label for="m-docsecosystemeffect-ts-comparison-check"><a href="http://localhost:3000/docs/ecosystem/effect-ts-comparison/" class="align-left ps-0  td-sidebar-link td-sidebar-link__page" id="m-docsecosystemeffect-ts-comparison"><span class="">Effect-TS Comparison</span></a></label>
+    
   </li>
     </ul>
   </li>
@@ -238,6 +319,7 @@
     </ul>
   </nav>
 </div>
+            </div>
           </aside>
           <aside class="td-sidebar-toc">
             <div class="td-page-meta ms-2 pb-1 pt-2 mb-0">
@@ -388,7 +470,7 @@
 	<nav class="docs-page-nav"><a class="docs-home-cta docs-page-nav__link docs-page-nav__prev" href="http://localhost:3000/docs/managing-dependencies/runtime-vs-environment/" aria-label="Previous - Runtime vs Environment">
     <span class="docs-page-nav__arrow" aria-hidden="true">←</span>
     <span>Previous</span>
-  </a><a class="docs-home-cta docs-page-nav__link docs-page-nav__next" href="http://localhost:3000/docs/managing-dependencies/provider-edge/" aria-label="Next - ">
+  </a><a class="docs-home-cta docs-page-nav__link docs-page-nav__next" href="http://localhost:3000/docs/managing-dependencies/provider-edge/" aria-label="Next - Standard .NET AppHost Plus DI">
     <span>Next</span>
     <span class="docs-page-nav__arrow" aria-hidden="true">→</span>
   </a></nav>
@@ -399,34 +481,10 @@
           </main>
         </div>
       </div>
-      <footer class="td-footer row d-print-none">
-  <div class="container-fluid">
-    <div class="row mx-md-2">
-      <div class="td-footer__left col-6 col-sm-4 order-sm-1">
-        <ul class="td-footer__links-list">
-  
-  <li class="td-footer__links-item" data-bs-toggle="tooltip" title="GitHub" aria-label="GitHub">
-    <a href="https://github.com/adz/FsFlow" aria-label="GitHub" target="_blank" rel="noopener">
-      <i class="fab fa-github"></i>
-    </a>
-  </li>
-  
-</ul>
-
-      </div><div class="td-footer__right col-6 col-sm-4 order-sm-3">
-        
-      </div><div class="td-footer__center col-12 col-sm-4 py-2 order-sm-2">
-        <span class="td-footer__copyright">&copy;
-    2026
-    <span class="td-footer__authors">Adam Davies</span></span><span class="td-footer__all_rights_reserved">All Rights Reserved</span>
-      </div>
+      
     </div>
-  </div>
-</footer>
-
-    </div>
-    <script src="http://localhost:3000/js/main.js"></script>
-<script defer src="http://localhost:3000/js/click-to-copy.js" crossorigin="anonymous"></script>
+    <script src="http://localhost:3000/js/main.min.c60de03ed52a34012f330c3e18c526426ec97efa9822bedfadbf14ffe917bc3e.js" integrity="sha256-xg3gPtUqNAEvMww&#43;GMUmQm7JfvqYIr7frb8U/&#43;kXvD4=" crossorigin="anonymous"></script>
+<script defer src="http://localhost:3000/js/click-to-copy.min.24576ff9fe9f85bb1948ecae52ce227cafce53757a3ad52301f2a79260f6b97d.js" integrity="sha256-JFdv&#43;f6fhbsZSOyuUs4ifK/OU3V6OtUjAfKnkmD2uX0=" crossorigin="anonymous"></script>
 <script src='http://localhost:3000/js/tabpane-persist.js'></script>
 
   </body>

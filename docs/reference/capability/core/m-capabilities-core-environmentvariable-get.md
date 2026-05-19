@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Core.EnvironmentVariable.get"
 linkTitle: "get"
+weight: 2404
 ---
 
 Reads a raw string environment variable from the ambient runtime.

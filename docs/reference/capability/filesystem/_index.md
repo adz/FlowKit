@@ -1,5 +1,6 @@
 ---
 title: "Capabilities FileSystem"
+weight: 30
 ---
 
 This page shows the file-system capability package. `IFileSystem` names the small set of file operations currently supported by FsFlow examples and app workflows: reading text, writing text, and existence checks. Use it when file access is part of a workflow boundary but you still want tests to provide an in-memory or fake implementation. The live provider belongs at the composition root; reusable workflow code should depend on the interface.

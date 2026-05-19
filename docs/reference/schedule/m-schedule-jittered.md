@@ -1,6 +1,7 @@
 ---
 title: "Schedule.jittered"
 linkTitle: "jittered"
+weight: 2103
 ---
 
 Adds random jitter to a schedule&#39;s delay.

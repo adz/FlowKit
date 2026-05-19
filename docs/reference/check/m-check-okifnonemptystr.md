@@ -1,6 +1,7 @@
 ---
 title: "Check.okIfNonEmptyStr"
 linkTitle: "okIfNonEmptyStr"
+weight: 2128
 ---
 
 Returns the string when it is not null or empty.

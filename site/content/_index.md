@@ -7,9 +7,13 @@ description: FsFlow technical guides, semantics, and API reference.
 
 <div class="docs-home-hero">
 
-<div class="docs-home-copy"><span class="eyebrow">Structured composition over normal F#/.NET code</span>
+<div class="docs-home-copy"><span class="eyebrow">
+A coherent application architecture model for F# on .NET.
+</span>
 
-<h1>A coherent application architecture model for F# on .NET.</h1>
+<h1>
+Structured composition over normal F#/.NET code
+</h1>
 
 <div class="lede">
 FsFlow is a unified model for building robust, Result-based programs. Write predicate checks once, keep fail-fast logic in <code>Result</code>, accumulate sibling failures with <a href="{{< relref "/reference/validation/" >}}"><code>Validation</code></a>, then lift the same logic into <a href="{{< relref "/reference/flow/" >}}"><code>Flow</code></a> when the boundary needs environment access, async work, task interop, cancellation, or runtime policy.

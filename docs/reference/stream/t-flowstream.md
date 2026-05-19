@@ -1,6 +1,7 @@
 ---
 title: "FlowStream"
 linkTitle: "FlowStream<env, error, value>"
+weight: 1000
 ---
 
 
@@ -21,4 +22,10 @@ linkTitle: "FlowStream<env, error, value>"
 | `env` |
 | `error` |
 | `value` |
+
+## Union Cases
+
+| Case | Description |
+| --- | --- |
+| `FlowStream` |  |
 

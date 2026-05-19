@@ -1,6 +1,7 @@
 ---
 title: "IRandom"
 linkTitle: "IRandom"
+weight: 1001
 type: docs
 ---
 

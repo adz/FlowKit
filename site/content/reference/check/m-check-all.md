@@ -1,6 +1,7 @@
 ---
 title: "Check.all"
 linkTitle: "all"
+weight: 2104
 type: docs
 ---
 

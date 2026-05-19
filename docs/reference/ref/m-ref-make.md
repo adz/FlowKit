@@ -1,6 +1,7 @@
 ---
 title: "Ref.make"
 linkTitle: "make"
+weight: 2100
 ---
 
 Creates a new <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-ref-1.html">Ref</a> with the initial value.

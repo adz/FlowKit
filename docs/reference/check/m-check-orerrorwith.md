@@ -1,6 +1,7 @@
 ---
 title: "Check.orErrorWith"
 linkTitle: "orErrorWith"
+weight: 2139
 ---
 
 Maps a unit error into an application error produced on demand.

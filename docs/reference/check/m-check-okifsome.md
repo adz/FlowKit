@@ -1,6 +1,7 @@
 ---
 title: "Check.okIfSome"
 linkTitle: "okIfSome"
+weight: 2108
 ---
 
 Returns the value when the option is <code>Some</code>.

@@ -1,6 +1,7 @@
 ---
 title: "Validation.collect"
 linkTitle: "collect"
+weight: 2115
 type: docs
 ---
 

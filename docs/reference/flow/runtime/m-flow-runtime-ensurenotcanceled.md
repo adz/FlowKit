@@ -1,6 +1,7 @@
 ---
 title: "Flow.Runtime.ensureNotCanceled"
 linkTitle: "ensureNotCanceled"
+weight: 2002
 ---
 
 Returns a typed error immediately when the runtime token is already canceled.

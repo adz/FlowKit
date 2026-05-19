@@ -1,6 +1,7 @@
 ---
 title: "Flow.Runtime.newGuid"
 linkTitle: "newGuid"
+weight: 2006
 type: docs
 ---
 

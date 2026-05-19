@@ -46,7 +46,9 @@ module OptionFlow =
         | ValueSome innerValue -> Ok innerValue
         | ValueNone -> Error error
 
-[<EditorBrowsable(EditorBrowsableState.Never)>]
+/// <summary>
+/// Core functions for working with the portable <see cref="T:FsFlow.Effect`2" /> shape.
+/// </summary>
 module EffectFlow =
     let mapBoth
         (onSuccess: 'value -> 'next)

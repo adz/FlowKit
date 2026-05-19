@@ -1,6 +1,7 @@
 ---
 title: "Ref.get"
 linkTitle: "get"
+weight: 2101
 ---
 
 Reads the current value of the reference.

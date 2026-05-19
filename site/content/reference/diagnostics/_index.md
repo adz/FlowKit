@@ -1,6 +1,6 @@
 ---
 title: "Diagnostics"
-weight: 80
+weight: 90
 type: docs
 ---
 

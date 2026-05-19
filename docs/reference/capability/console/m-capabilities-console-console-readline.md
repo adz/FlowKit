@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Console.Console.readLine"
 linkTitle: "readLine"
+weight: 2100
 ---
 
 Reads a line from the console environment.

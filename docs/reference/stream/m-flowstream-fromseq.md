@@ -1,6 +1,7 @@
 ---
 title: "FlowStream.fromSeq"
 linkTitle: "fromSeq"
+weight: 2100
 ---
 
 Creates a stream from a synchronous sequence of values.

@@ -1,6 +1,7 @@
 ---
 title: "Check.``or``"
 linkTitle: "``or``"
+weight: 2103
 ---
 
 Returns success when either check succeeds.

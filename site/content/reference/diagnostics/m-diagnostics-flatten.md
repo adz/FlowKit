@@ -1,6 +1,7 @@
 ---
 title: "Diagnostics.flatten"
 linkTitle: "flatten"
+weight: 2104
 type: docs
 ---
 

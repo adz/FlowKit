@@ -1,6 +1,7 @@
 ---
 title: "Check.okIfSome"
 linkTitle: "okIfSome"
+weight: 2108
 type: docs
 ---
 

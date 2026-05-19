@@ -1,6 +1,7 @@
 ---
 title: "Ref.modify"
 linkTitle: "modify"
+weight: 2104
 ---
 
 Updates the value of the reference using the supplied function and returns a derived value.

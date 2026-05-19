@@ -1,6 +1,7 @@
 ---
 title: "Diagnostic"
 linkTitle: "Diagnostic<error>"
+weight: 1002
 type: docs
 ---
 
@@ -17,6 +18,13 @@ A single failure item attached to a path in a validation graph.
 | Name |
 | --- |
 | `error` |
+
+## Record Fields
+
+| Field | Description |
+| --- | --- |
+| `Path` | The path to the source of the error. |
+| `Error` | The application-specific error value of type <code>&#39;error</code>. |
 
 ## Examples
 

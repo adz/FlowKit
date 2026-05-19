@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Core.Guid.live"
 linkTitle: "live"
+weight: 2301
 ---
 
 Creates a live GUID generator backed by <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-capabilities-core-guid.html">Guid.NewGuid</a>.

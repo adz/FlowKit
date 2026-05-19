@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Process.IProcess"
 linkTitle: "IProcess"
+weight: 1000
 type: docs
 ---
 

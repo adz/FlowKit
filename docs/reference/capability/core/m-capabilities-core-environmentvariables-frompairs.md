@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Core.EnvironmentVariables.fromPairs"
 linkTitle: "fromPairs"
+weight: 2402
 ---
 
 Creates a deterministic provider from a fixed set of name/value pairs.

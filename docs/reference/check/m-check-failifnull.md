@@ -1,6 +1,7 @@
 ---
 title: "Check.failIfNull"
 linkTitle: "failIfNull"
+weight: 2119
 ---
 
 Returns the value when it is null.

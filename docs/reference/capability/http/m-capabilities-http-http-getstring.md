@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Http.Http.getString"
 linkTitle: "getString"
+weight: 2100
 ---
 
 Sends a GET request using the HTTP environment and returns the response body.

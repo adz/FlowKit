@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Core.Guid.fromValue"
 linkTitle: "fromValue"
+weight: 2302
 ---
 
 Creates a deterministic GUID generator that always returns the supplied value.

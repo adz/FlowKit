@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Core.Guid.newGuid"
 linkTitle: "newGuid"
+weight: 2300
 ---
 
 Reads a GUID from the ambient runtime.

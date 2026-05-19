@@ -1,6 +1,7 @@
 ---
 title: "Diagnostics"
 linkTitle: "Diagnostics<error>"
+weight: 1003
 type: docs
 ---
 
@@ -19,6 +20,13 @@ type: docs
 | Name |
 | --- |
 | `error` |
+
+## Record Fields
+
+| Field | Description |
+| --- | --- |
+| `Errors` | Errors that occurred exactly at this node in the graph. |
+| `Children` | Nested diagnostic branches, keyed by <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-pathsegment.html">PathSegment</a>. |
 
 ## Remarks
 

@@ -1,6 +1,7 @@
 ---
 title: "Flow.provideLayer"
 linkTitle: "provideLayer"
+weight: 2327
 type: docs
 ---
 

@@ -1,6 +1,7 @@
 ---
 title: "Flow.delay"
 linkTitle: "delay"
+weight: 2328
 ---
 
 Defers flow construction until execution time.

@@ -10,6 +10,8 @@ This page shows the generated API reference for FsFlow core and the standard cap
 Start with [`Flow`](./flow/) if you are writing application workflows. It is the central execution
 type: a cold computation that reads `env`, returns a typed failure or success value, and preserves
 interruption and defects. Use [`flow { }`](./flow/builders-flow/) for normal orchestration syntax.
+Use [`Fiber`](./fiber/) when you need the handle returned by `Flow.fork`: it represents running child
+work that can be joined or interrupted.
 
 Use [`Check`](./check/) and [`Validation`](./validation/) before reaching for `Flow` when the code is
 still pure. `Check` is for reusable boolean-like predicates; `Validation` is for accumulating
@@ -26,3 +28,7 @@ Use [`Ref`](./ref/), [`STM`](./stm/), [`Schedule`](./schedule/), and [`Stream`](
 runtime concerns: mutable references, transactional state, retry/repeat policy, and pull-based
 streams. These modules are useful, but they are not the starting point for ordinary application
 code.
+
+Finally, understand the core model outcomes: [`Exit`](./exit/) represents the final result of a flow,
+[`Cause`](./cause/) explains why a flow failed, and [`Effect`](./effect/) provides the low-level
+execution algebra.

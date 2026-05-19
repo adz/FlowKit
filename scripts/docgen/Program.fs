@@ -133,7 +133,7 @@ let qualifyUsageHtml usageName (html: string) =
                 
     result
 
-let renderMemberPage (m: ApiDocMember) =
+let renderMemberPage (weight: int) (m: ApiDocMember) =
     let fullName = logicalName m.Symbol
     let qualifiedName = cleanName fullName
     let shortName = cleanName m.Name
@@ -147,7 +147,7 @@ let renderMemberPage (m: ApiDocMember) =
         else shortName
 
     let mutable content = 
-        $"---\ntitle: \"{qualifiedName}\"\nlinkTitle: \"{linkTitle}\"\n---\n\n"
+        $"---\ntitle: \"{qualifiedName}\"\nlinkTitle: \"{linkTitle}\"\nweight: {weight}\n---\n\n"
     
     // Description
     content <- content + m.Comment.Summary.HtmlText + "\n\n"
@@ -205,13 +205,13 @@ let renderMemberPage (m: ApiDocMember) =
 
     content
 
-let renderEntityPage (e: ApiDocEntity) =
+let renderEntityPage (weight: int) (e: ApiDocEntity) =
     let fullName = safeFullName e.Symbol
     let qualifiedName = cleanName fullName
     let shortName = cleanName e.Name
     
     let mutable content = 
-        $"---\ntitle: \"{qualifiedName}\"\nlinkTitle: \"{shortName}\"\n---\n\n"
+        $"---\ntitle: \"{qualifiedName}\"\nlinkTitle: \"{shortName}\"\nweight: {weight}\n---\n\n"
     
     // Construct signature
     let signature = 
@@ -237,8 +237,24 @@ let renderEntityPage (e: ApiDocEntity) =
             content <- content + "| --- |\n"
             for tp in ent.GenericParameters do
                 content <- content + $"| `{tp.DisplayName}` |\n"
-                // FSharpEntity.GenericParameters doesn't easily give us the XML doc for the type parameter
-                // without more work, but DisplayName is a start.
+            content <- content + "\n"
+
+        if e.UnionCases.Length > 0 then
+            content <- content + "## Union Cases\n\n"
+            content <- content + "| Case | Description |\n"
+            content <- content + "| --- | --- |\n"
+            for c in e.UnionCases do
+                let summary = c.Comment.Summary.HtmlText
+                content <- content + $"| `{c.Name}` | {summary} |\n"
+            content <- content + "\n"
+
+        if e.RecordFields.Length > 0 then
+            content <- content + "## Record Fields\n\n"
+            content <- content + "| Field | Description |\n"
+            content <- content + "| --- | --- |\n"
+            for f in e.RecordFields do
+                let summary = f.Comment.Summary.HtmlText
+                content <- content + $"| `{f.Name}` | {summary} |\n"
             content <- content + "\n"
     | _ -> ()
 
@@ -261,10 +277,54 @@ let pageSpecs = [
         Intro = "This page shows the `Flow<'env, 'error, 'value>` surface, the central workflow type in FsFlow. A flow is a cold description of work that reads an explicit environment, can fail with a typed error, and only runs when you call an execution function such as `Flow.run`. Use this page as the API map for building fail-fast workflows, reading dependencies from `env`, reshaping environments with `localEnv`, composing typed failures, and introducing concurrency with fibers, `zipPar`, or `race`. Start with `flow { }`, `Flow.read`, `Flow.bind`, and `Flow.map`; reach for [runtime helpers](./runtime/) and parallel orchestration only at the boundary where the workflow actually needs them. \n\nNote that common extensions such as `Flow.Retry` and `Flow.Repeat` are available as soon as you `open FsFlow` because their modules are marked with `[<AutoOpen>]`."
         SymbolIds = [
             "Core type", ["T:FsFlow.Flow`3"]
-            "Module functions", ["M:FsFlow.Flow.run"; "M:FsFlow.Flow.ok"; "M:FsFlow.Flow.error"; "M:FsFlow.Flow.succeed"; "M:FsFlow.Flow.value"; "M:FsFlow.Flow.fail"; "M:FsFlow.Flow.fromResult"; "M:FsFlow.Flow.fromOption"; "M:FsFlow.Flow.fromValueOption"; "M:FsFlow.Flow.orElseFlow"; "M:FsFlow.Flow.env"; "M:FsFlow.Flow.read"; "M:FsFlow.Flow.service"; "M:FsFlow.Flow.inject"; "M:FsFlow.Flow.map"; "M:FsFlow.Flow.bind"; "M:FsFlow.Flow.tap"; "M:FsFlow.Flow.tapError"; "M:FsFlow.Flow.mapError"; "M:FsFlow.Flow.catch"; "M:FsFlow.Flow.orElseWith"; "M:FsFlow.Flow.orElse"; "M:FsFlow.Flow.zip"; "M:FsFlow.Flow.map2"; "M:FsFlow.Flow.map3"; "M:FsFlow.Flow.apply"; "M:FsFlow.Flow.ignore"; "M:FsFlow.Flow.localEnv"; "M:FsFlow.Flow.provideLayer"; "M:FsFlow.Flow.delay"; "M:FsFlow.Flow.traverse"; "M:FsFlow.Flow.sequence"]
-            "Concurrency", ["T:FsFlow.Fiber`2"; "M:FsFlow.Flow.fork"; "M:FsFlow.Flow.join"; "M:FsFlow.Flow.interrupt"]
+            "Fiber operations", ["M:FsFlow.Flow.fork"; "M:FsFlow.Flow.join"; "M:FsFlow.Flow.interrupt"]
+            "Execution", ["M:FsFlow.Flow.run"; "M:FsFlow.Flow.runFull"; "M:FsFlow.Flow.toAsync"; "M:FsFlow.Flow.toAsyncResult"; "M:FsFlow.Flow.toTask"; "M:FsFlow.Flow.toTaskResult"; "M:FsFlow.Flow.toTaskWithToken"; "M:FsFlow.Flow.toTaskResultWithToken"; "M:FsFlow.Flow.toValueTaskResult"; "M:FsFlow.Flow.toValueTaskResultWithToken"; "M:FsFlow.Flow.toResult"]
+            "Module functions", ["M:FsFlow.Flow.ok"; "M:FsFlow.Flow.error"; "M:FsFlow.Flow.succeed"; "M:FsFlow.Flow.value"; "M:FsFlow.Flow.fail"; "M:FsFlow.Flow.fromResult"; "M:FsFlow.Flow.fromOption"; "M:FsFlow.Flow.fromValueOption"; "M:FsFlow.Flow.orElseFlow"; "M:FsFlow.Flow.env"; "M:FsFlow.Flow.read"; "M:FsFlow.Flow.service"; "M:FsFlow.Flow.inject"; "M:FsFlow.Flow.map"; "M:FsFlow.Flow.bind"; "M:FsFlow.Flow.tap"; "M:FsFlow.Flow.tapError"; "M:FsFlow.Flow.mapError"; "M:FsFlow.Flow.catch"; "M:FsFlow.Flow.orElseWith"; "M:FsFlow.Flow.orElse"; "M:FsFlow.Flow.zip"; "M:FsFlow.Flow.map2"; "M:FsFlow.Flow.map3"; "M:FsFlow.Flow.apply"; "M:FsFlow.Flow.ignore"; "M:FsFlow.Flow.localEnv"; "M:FsFlow.Flow.provideLayer"; "M:FsFlow.Flow.delay"; "M:FsFlow.Flow.traverse"; "M:FsFlow.Flow.sequence"]
             "Parallel orchestration", ["M:FsFlow.Flow.zipPar"; "M:FsFlow.Flow.race"]
             "Scheduling", ["M:FsFlow.FlowScheduleExtensions.Retry"; "M:FsFlow.FlowScheduleExtensions.Repeat"]
+        ]
+        Alias = None
+    }
+    {
+        OutPath = ["fiber"; "_index.md"]
+        Title = "Fiber"
+        Description = "Source-documented handle for running workflows."
+        Intro = "This page shows the `Fiber<'error, 'value>` handle used by FsFlow concurrency. A fiber represents a flow that has already been started in the background; it keeps the workflow's typed error and success values attached to the running work. The operations that create and consume fibers are still part of the [`Flow`](../flow/) API: use [`Flow.fork`](../flow/m-flow-fork/), [`Flow.join`](../flow/m-flow-join/), and [`Flow.interrupt`](../flow/m-flow-interrupt/) when a workflow needs explicit child execution. Prefer higher-level helpers such as `Flow.zipPar` or `Flow.race` when the code only needs parallel composition."
+        SymbolIds = [
+            "Core type", ["T:FsFlow.Fiber`2"]
+        ]
+        Alias = None
+    }
+    {
+        OutPath = ["exit"; "_index.md"]
+        Title = "Exit"
+        Description = "Documentation for the Exit workflow outcome."
+        Intro = "This page shows the `Exit<'value, 'error>` type, which represents the final outcome of an FsFlow execution. Every flow eventually resolves to either a success or a failure cause. Use the `Exit` module functions to transform outcomes without manually pattern matching at every boundary."
+        SymbolIds = [
+            "Core type", ["T:FsFlow.Exit`2"]
+            "Module functions", ["M:FsFlow.Exit.map"; "M:FsFlow.Exit.bind"; "M:FsFlow.Exit.mapError"; "M:FsFlow.Exit.mapBoth"; "M:FsFlow.Exit.fromResult"; "M:FsFlow.Exit.toResult"]
+        ]
+        Alias = None
+    }
+    {
+        OutPath = ["cause"; "_index.md"]
+        Title = "Cause"
+        Description = "Documentation for the Cause of workflow failure."
+        Intro = "This page shows the `Cause<'error>` type, which distinguishes between expected domain failures, unexpected technical defects (exceptions), and administrative interruptions (cancellation). Understanding the cause allows FsFlow's runtime to make smart decisions about retries, cleanup, and observability."
+        SymbolIds = [
+            "Core type", ["T:FsFlow.Cause`1"]
+            "Module functions", ["M:FsFlow.Cause.map"]
+        ]
+        Alias = None
+    }
+    {
+        OutPath = ["effect"; "_index.md"]
+        Title = "Effect"
+        Description = "Documentation for the Effect execution shape."
+        Intro = "This page shows the `Effect<'value, 'error>` shape and the `EffectFlow` module. An effect is the deferred execution handle returned by `Flow.run`; on .NET it is a `ValueTask<Exit<'v, 'e>>` and on Fable it is an `Async<Exit<'v, 'e>>`. Use the `EffectFlow` functions for low-level algebra and for bridging between the unified flow surface and platform-native async primitives."
+        SymbolIds = [
+            "Core type", ["T:FsFlow.Effect"]
+            "Module functions", ["M:FsFlow.EffectFlow.ofValue"; "M:FsFlow.EffectFlow.ofError"; "M:FsFlow.EffectFlow.ofExit"; "M:FsFlow.EffectFlow.ofCause"; "M:FsFlow.EffectFlow.ofDie"; "M:FsFlow.EffectFlow.ofInterrupt"; "M:FsFlow.EffectFlow.ofResult"; "M:FsFlow.EffectFlow.fold"; "M:FsFlow.EffectFlow.mapBoth"]
         ]
         Alias = None
     }
@@ -466,6 +526,39 @@ let rec collectAllEntities (e: ApiDocEntity) =
             yield! collectAllEntities n
     }
 
+let pageWeight (spec: PageSpec) =
+    match spec.OutPath with
+    | ["flow"; "_index.md"] -> 10
+    | ["flow"; "runtime"; "_index.md"] -> 10
+    | ["flow"; "builders-flow.md"] -> 2000
+    | ["fiber"; "_index.md"] -> 20
+    | ["exit"; "_index.md"] -> 30
+    | ["cause"; "_index.md"] -> 40
+    | ["effect"; "_index.md"] -> 50
+    | ["result"; "_index.md"] -> 60
+    | ["check"; "_index.md"] -> 70
+    | ["validation"; "_index.md"] -> 80
+    | ["diagnostics"; "_index.md"] -> 90
+    | ["schedule"; "_index.md"] -> 100
+    | ["ref"; "_index.md"] -> 110
+    | ["stm"; "_index.md"] -> 120
+    | ["stream"; "_index.md"] -> 130
+    | ["capability"; "_index.md"] -> 140
+    | ["validation"; "builders-validate.md"] -> 2000
+    | ["result"; "builders-result.md"] -> 2000
+    | ["capability"; "core"; "_index.md"] -> 10
+    | ["capability"; "console"; "_index.md"] -> 20
+    | ["capability"; "filesystem"; "_index.md"] -> 30
+    | ["capability"; "http"; "_index.md"] -> 40
+    | ["capability"; "process"; "_index.md"] -> 50
+    | _ -> 500
+
+let childPageWeight (id: string) (sectionOrdinal: int) (itemOrdinal: int) =
+    let ordinal = sectionOrdinal * 100 + itemOrdinal
+    match id.[0] with
+    | 'T' -> 1000 + ordinal
+    | _ -> 2000 + ordinal
+
 [<EntryPoint>]
 let main argv =
     let root = Path.GetFullPath(Path.Combine(__SOURCE_DIRECTORY__, "../.."))
@@ -505,17 +598,20 @@ let main argv =
         |> Seq.map (fun ei -> ei.Entity)
         |> Seq.collect collectAllEntities
         |> Seq.toList
+    
+    // Debug: print all entity names
+    // for e in allEntities do printfn "Entity: %s" (safeFullName e.Symbol)
 
     for spec in pageSpecs do
         let outPath = Path.Combine(outRoot, Path.Combine(Array.ofList spec.OutPath))
         Directory.CreateDirectory(Path.GetDirectoryName(outPath)) |> ignore
         
         let mutable indexContent = 
-            $"---\ntitle: \"{spec.Title}\"\n---\n\n{spec.Intro}\n\n"
+            $"---\ntitle: \"{spec.Title}\"\nweight: {pageWeight spec}\n---\n\n{spec.Intro}\n\n"
             
-        for sectionTitle, ids in spec.SymbolIds do
+        for sectionOrdinal, (sectionTitle, ids) in spec.SymbolIds |> List.indexed do
             indexContent <- indexContent + $"## {sectionTitle}\n\n"
-            for id in ids do
+            for itemOrdinal, id in ids |> List.indexed do
                 let idNorm = normalize (id.Substring(2))
                 
                 let foundFinal = 
@@ -539,7 +635,7 @@ let main argv =
                     let qualifier = memberQualifier m
                     let linkText = if String.IsNullOrEmpty qualifier then m.Name else qualifier + "." + m.Name
                     indexContent <- indexContent + $"- [`{linkText}`](./{pageName}): {m.Comment.Summary.HtmlText}\n"
-                    let memberPageContent = renderMemberPage m
+                    let memberPageContent = renderMemberPage (childPageWeight id sectionOrdinal itemOrdinal) m
                     File.WriteAllText(Path.Combine(Path.GetDirectoryName(outPath), pageName), memberPageContent)
                     
                     match spec.Alias with
@@ -551,7 +647,7 @@ let main argv =
                     let eFullName = safeFullName e.Symbol
                     let linkText = cleanName eFullName
                     indexContent <- indexContent + $"- [`{linkText}`](./{pageName}): {e.Comment.Summary.HtmlText}\n"
-                    let entityPageContent = renderEntityPage e
+                    let entityPageContent = renderEntityPage (childPageWeight id sectionOrdinal itemOrdinal) e
                     File.WriteAllText(Path.Combine(Path.GetDirectoryName(outPath), pageName), entityPageContent)
                 | _ -> 
                     printfn "Warning: symbol not found: %s" id

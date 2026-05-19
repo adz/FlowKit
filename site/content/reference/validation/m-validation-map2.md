@@ -1,6 +1,7 @@
 ---
 title: "Validation.map2"
 linkTitle: "map2"
+weight: 2109
 type: docs
 ---
 

@@ -1,6 +1,7 @@
 ---
 title: "FlowStream.fromSeq"
 linkTitle: "fromSeq"
+weight: 2100
 type: docs
 ---
 

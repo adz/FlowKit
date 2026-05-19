@@ -1,6 +1,7 @@
 ---
 title: "Check.okIf"
 linkTitle: "okIf"
+weight: 2106
 ---
 
 Returns success when the condition is true.

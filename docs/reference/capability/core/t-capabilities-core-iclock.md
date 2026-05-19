@@ -1,6 +1,7 @@
 ---
 title: "IClock"
 linkTitle: "IClock"
+weight: 1000
 ---
 
 Provides synchronous access to the current UTC clock.

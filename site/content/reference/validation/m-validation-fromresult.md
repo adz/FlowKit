@@ -1,6 +1,7 @@
 ---
 title: "Validation.fromResult"
 linkTitle: "fromResult"
+weight: 2105
 type: docs
 ---
 

@@ -75,6 +75,104 @@ module Flow =
     let run (environment: 'env) (flow: Flow<'env, 'error, 'value>) : Effect<'value, 'error> =
         runEffect environment CancellationToken.None flow
 
+    /// <summary>Executes a flow and returns an async that resolves to the final exit outcome, observing the ambient cancellation token.</summary>
+    /// <param name="environment">The environment required by the flow.</param>
+    /// <param name="flow">The workflow to execute.</param>
+    /// <returns>An async that completes with the fiber's final outcome.</returns>
+    let toAsync (environment: 'env) (flow: Flow<'env, 'error, 'value>) : Async<Exit<'value, 'error>> =
+        async {
+            let! ct = Async.CancellationToken
+            #if FABLE_COMPILER
+            return! runFull environment ct flow
+            #else
+            return! (runFull environment ct flow).AsTask() |> Async.AwaitTask
+            #endif
+        }
+
+    /// <summary>Executes a flow and returns an async that resolves to a standard result, observing the ambient cancellation token.</summary>
+    /// <param name="environment">The environment required by the flow.</param>
+    /// <param name="flow">The workflow to execute.</param>
+    /// <returns>An async that completes with a <see cref="T:System.Result`2" /> representing the successful value or domain failure.</returns>
+    /// <remarks>Interruption signals and defects are raised as exceptions in the caller's context.</remarks>
+    let toAsyncResult (environment: 'env) (flow: Flow<'env, 'error, 'value>) : Async<Result<'value, 'error>> =
+        async {
+            let! exit = toAsync environment flow
+            return Exit.toResult exit
+        }
+
+    /// <summary>Executes a flow and returns a task that resolves to the final exit outcome.</summary>
+    /// <param name="environment">The environment required by the flow.</param>
+    /// <param name="flow">The workflow to execute.</param>
+    /// <returns>A task that completes with the fiber's final outcome.</returns>
+    let toTask (environment: 'env) (flow: Flow<'env, 'error, 'value>) : Task<Exit<'value, 'error>> =
+        #if FABLE_COMPILER
+        Async.StartAsTask (run environment flow)
+        #else
+        (run environment flow).AsTask()
+        #endif
+
+    /// <summary>Executes a flow and returns a task that resolves to the final exit outcome with an explicit cancellation token.</summary>
+    /// <param name="environment">The environment required by the flow.</param>
+    /// <param name="cancellationToken">The token used to signal cancellation.</param>
+    /// <param name="flow">The workflow to execute.</param>
+    /// <returns>A task that completes with the fiber's final outcome.</returns>
+    let toTaskWithToken (environment: 'env) (cancellationToken: CancellationToken) (flow: Flow<'env, 'error, 'value>) : Task<Exit<'value, 'error>> =
+        #if FABLE_COMPILER
+        Async.StartAsTask (runFull environment cancellationToken flow, cancellationToken = cancellationToken)
+        #else
+        (runFull environment cancellationToken flow).AsTask()
+        #endif
+
+    /// <summary>Executes a flow and returns a task that resolves to a standard result.</summary>
+    /// <param name="environment">The environment required by the flow.</param>
+    /// <param name="flow">The workflow to execute.</param>
+    /// <returns>A task that completes with a <see cref="T:System.Result`2" /> representing the successful value or domain failure.</returns>
+    /// <remarks>Interruption signals and defects are raised as exceptions in the caller's context.</remarks>
+    let toTaskResult (environment: 'env) (flow: Flow<'env, 'error, 'value>) : Task<Result<'value, 'error>> =
+        task {
+            let! exit = toTask environment flow
+            return Exit.toResult exit
+        }
+
+    /// <summary>Executes a flow and returns a task that resolves to a standard result with an explicit cancellation token.</summary>
+    /// <param name="environment">The environment required by the flow.</param>
+    /// <param name="cancellationToken">The token used to signal cancellation.</param>
+    /// <param name="flow">The workflow to execute.</param>
+    /// <returns>A task that completes with a <see cref="T:System.Result`2" /> representing the successful value or domain failure.</returns>
+    /// <remarks>Interruption signals and defects are raised as exceptions in the caller's context.</remarks>
+    let toTaskResultWithToken (environment: 'env) (cancellationToken: CancellationToken) (flow: Flow<'env, 'error, 'value>) : Task<Result<'value, 'error>> =
+        task {
+            let! exit = toTaskWithToken environment cancellationToken flow
+            return Exit.toResult exit
+        }
+
+    #if !FABLE_COMPILER
+    /// <summary>Executes a flow and returns a value task that resolves to a standard result.</summary>
+    /// <param name="environment">The environment required by the flow.</param>
+    /// <param name="flow">The workflow to execute.</param>
+    /// <returns>A value task that completes with a <see cref="T:System.Result`2" /> representing the successful value or domain failure.</returns>
+    /// <remarks>Interruption signals and defects are raised as exceptions in the caller's context.</remarks>
+    let toValueTaskResult (environment: 'env) (flow: Flow<'env, 'error, 'value>) : ValueTask<Result<'value, 'error>> =
+        ValueTask<Result<'value, 'error>>(
+            task {
+                let! exit = run environment flow
+                return Exit.toResult exit
+            })
+
+    /// <summary>Executes a flow and returns a value task that resolves to a standard result with an explicit cancellation token.</summary>
+    /// <param name="environment">The environment required by the flow.</param>
+    /// <param name="cancellationToken">The token used to signal cancellation.</param>
+    /// <param name="flow">The workflow to execute.</param>
+    /// <returns>A value task that completes with a <see cref="T:System.Result`2" /> representing the successful value or domain failure.</returns>
+    /// <remarks>Interruption signals and defects are raised as exceptions in the caller's context.</remarks>
+    let toValueTaskResultWithToken (environment: 'env) (cancellationToken: CancellationToken) (flow: Flow<'env, 'error, 'value>) : ValueTask<Result<'value, 'error>> =
+        ValueTask<Result<'value, 'error>>(
+            task {
+                let! exit = runFull environment cancellationToken flow
+                return Exit.toResult exit
+            })
+    #endif
+
     /// <summary>Creates a successful synchronous flow.</summary>
     /// <param name="value">The value to wrap in a successful flow.</param>
     /// <returns>A flow that always succeeds with the provided value.</returns>
@@ -496,6 +594,11 @@ module Flow =
             loop 1
 
     /// <summary>Starts a flow in a new fiber without waiting for it to complete.</summary>
+    /// <remarks>
+    /// Forking turns a cold flow description into hot child work and returns a handle
+    /// that can later be joined or interrupted. Prefer <c>zipPar</c> or <c>race</c>
+    /// when the caller only needs a simple parallel composition.
+    /// </remarks>
     /// <param name="flow">The flow to fork.</param>
     /// <returns>A flow that produces a <see cref="T:FsFlow.Fiber`2" /> handle.</returns>
     let fork (flow: Flow<'env, 'error, 'value>) : Flow<'env, 'none, Fiber<'error, 'value>> =
@@ -527,7 +630,12 @@ module Flow =
             #endif
         )
 
-    /// <summary>Waits for a fiber to complete and returns its final outcome.</summary>
+    /// <summary>Waits for a fiber to complete and returns its successful value or typed failure.</summary>
+    /// <remarks>
+    /// Joining preserves the child workflow's error channel. If the child failed with
+    /// <c>Cause.Fail</c>, the joined flow fails with the same typed error; interruption
+    /// and defects remain interruption and defects.
+    /// </remarks>
     /// <param name="fiber">The fiber to join.</param>
     /// <returns>A flow that completes with the fiber's outcome.</returns>
     let join (fiber: Fiber<'error, 'value>) : Flow<'env, 'error, 'value> =
@@ -551,6 +659,11 @@ module Flow =
     #endif
 
     /// <summary>Signals a fiber to stop and waits for it to finish its cleanup.</summary>
+    /// <remarks>
+    /// Interruption requests cooperative cancellation through the fiber's cancellation
+    /// source and then waits for the child operation to report its final
+    /// <see cref="T:FsFlow.Exit`2" />.
+    /// </remarks>
     /// <param name="fiber">The fiber to interrupt.</param>
     /// <returns>A flow that completes with the fiber's final outcome after interruption.</returns>
     let interrupt (fiber: Fiber<'error, 'value>) : Flow<'env, 'none, Exit<'value, 'error>> =

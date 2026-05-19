@@ -1,6 +1,7 @@
 ---
 title: "Flow.zipPar"
 linkTitle: "zipPar"
+weight: 2400
 ---
 
 Combines two flows into a tuple of their values, running them concurrently.

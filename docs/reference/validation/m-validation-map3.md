@@ -1,6 +1,7 @@
 ---
 title: "Validation.map3"
 linkTitle: "map3"
+weight: 2110
 ---
 
 Combines three validations, accumulating errors when any input fails.

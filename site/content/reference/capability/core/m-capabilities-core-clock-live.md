@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Core.Clock.live"
 linkTitle: "live"
+weight: 2101
 type: docs
 ---
 

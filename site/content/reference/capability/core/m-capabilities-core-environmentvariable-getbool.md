@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Core.EnvironmentVariable.getBool"
 linkTitle: "getBool"
+weight: 2407
 type: docs
 ---
 

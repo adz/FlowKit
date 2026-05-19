@@ -1,6 +1,7 @@
 ---
 title: "Validation.bind"
 linkTitle: "bind"
+weight: 2107
 ---
 
 Sequences a validation-producing continuation.

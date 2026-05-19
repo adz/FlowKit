@@ -1,6 +1,6 @@
 ---
 title: "Schedule"
-weight: 110
+weight: 100
 type: docs
 ---
 

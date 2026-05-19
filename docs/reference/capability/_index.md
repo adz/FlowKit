@@ -1,5 +1,6 @@
 ---
 title: "Capability"
+weight: 140
 ---
 
 This page shows the capability helpers around FsFlow's environment model. In FsFlow, a capability is a named interface that describes what a flow needs from `env`; the workflow still receives an explicit environment, but the interface gives that dependency surface a stable name. Prefer plain records plus `Flow.read` for local workflow code, use `IHas<'T>` plus `Flow.service` when reusable helpers need statically checked dependency contracts, and keep `Flow.inject` at .NET host boundaries where `IServiceProvider` interop is useful. Runtime-owned services such as clock, logging, random, GUID generation, and environment-variable lookup stay in `FsFlow.Capabilities.Core`, where they can be read through runtime helpers and overridden with `Flow.withClock`, `Flow.withLog`, `Flow.withRandom`, `Flow.withGuid`, and `Flow.withEnvironmentVariables`. 

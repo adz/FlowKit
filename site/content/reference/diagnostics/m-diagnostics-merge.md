@@ -1,6 +1,7 @@
 ---
 title: "Diagnostics.merge"
 linkTitle: "merge"
+weight: 2102
 type: docs
 ---
 

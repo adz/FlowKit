@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Core.EnvironmentVariable.getInt"
 linkTitle: "getInt"
+weight: 2405
 ---
 
 Reads an integer environment variable from the ambient runtime.

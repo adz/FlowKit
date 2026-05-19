@@ -1,6 +1,7 @@
 ---
 title: "Flow.inject"
 linkTitle: "inject"
+weight: 2312
 type: docs
 ---
 

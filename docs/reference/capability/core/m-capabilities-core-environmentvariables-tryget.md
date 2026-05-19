@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Core.EnvironmentVariables.tryGet"
 linkTitle: "tryGet"
+weight: 2400
 ---
 
 Reads a raw environment-variable value from the ambient runtime.

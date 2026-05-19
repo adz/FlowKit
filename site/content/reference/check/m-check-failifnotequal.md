@@ -1,6 +1,7 @@
 ---
 title: "Check.failIfNotEqual"
 linkTitle: "failIfNotEqual"
+weight: 2127
 type: docs
 ---
 

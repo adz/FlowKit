@@ -1,6 +1,7 @@
 ---
 title: "Validation.apply"
 linkTitle: "apply"
+weight: 2111
 ---
 
 Applies a validation-wrapped function to a validation-wrapped value.

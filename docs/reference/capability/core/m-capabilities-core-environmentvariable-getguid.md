@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Core.EnvironmentVariable.getGuid"
 linkTitle: "getGuid"
+weight: 2406
 ---
 
 Reads a GUID environment variable from the ambient runtime.

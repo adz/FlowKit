@@ -1,6 +1,7 @@
 ---
 title: "Flow.value"
 linkTitle: "value"
+weight: 2303
 type: docs
 ---
 

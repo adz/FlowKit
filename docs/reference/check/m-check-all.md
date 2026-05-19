@@ -1,6 +1,7 @@
 ---
 title: "Check.all"
 linkTitle: "all"
+weight: 2104
 ---
 
 Returns success when every check in the sequence succeeds.

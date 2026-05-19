@@ -1,6 +1,7 @@
 ---
 title: "PathSegment"
 linkTitle: "PathSegment"
+weight: 1000
 type: docs
 ---
 
@@ -11,6 +12,14 @@ Location markers used to describe where a diagnostic belongs in a validation gra
 <div class="fsdocs-usage">
 <code>type PathSegment</code>
 </div>
+
+## Union Cases
+
+| Case | Description |
+| --- | --- |
+| `Key` | A string-based key, usually for map or record fields. |
+| `Index` | A zero-based integer index, usually for lists or arrays. |
+| `Name` | A descriptive name for a property or field. |
 
 ## Examples
 

@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Core.Clock.now"
 linkTitle: "now"
+weight: 2100
 type: docs
 ---
 

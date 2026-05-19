@@ -1,5 +1,6 @@
 ---
 title: "Flow"
+weight: 10
 ---
 
 This page shows the `Flow<'env, 'error, 'value>` surface, the central workflow type in FsFlow. A flow is a cold description of work that reads an explicit environment, can fail with a typed error, and only runs when you call an execution function such as `Flow.run`. Use this page as the API map for building fail-fast workflows, reading dependencies from `env`, reshaping environments with `localEnv`, composing typed failures, and introducing concurrency with fibers, `zipPar`, or `race`. Start with `flow { }`, `Flow.read`, `Flow.bind`, and `Flow.map`; reach for [runtime helpers](./runtime/) and parallel orchestration only at the boundary where the workflow actually needs them. 
@@ -13,9 +14,28 @@ Note that common extensions such as `Flow.Retry` and `Flow.Repeat` are available
  explicitly through <code>Flow.run</code>.
  
 
-## Module functions
+## Fiber operations
+
+- [`Flow.fork`](./m-flow-fork.md): Starts a flow in a new fiber without waiting for it to complete.
+- [`Flow.join`](./m-flow-join.md): Waits for a fiber to complete and returns its successful value or typed failure.
+- [`Flow.interrupt`](./m-flow-interrupt.md): Signals a fiber to stop and waits for it to finish its cleanup.
+
+## Execution
 
 - [`Flow.run`](./m-flow-run.md): Executes a flow with the provided environment and the default cancellation token.
+- [`Flow.runFull`](./m-flow-runfull.md): Executes a flow with an explicit cancellation token.
+- [`Flow.toAsync`](./m-flow-toasync.md): Executes a flow and returns an async that resolves to the final exit outcome, observing the ambient cancellation token.
+- [`Flow.toAsyncResult`](./m-flow-toasyncresult.md): Executes a flow and returns an async that resolves to a standard result, observing the ambient cancellation token.
+- [`Flow.toTask`](./m-flow-totask.md): Executes a flow and returns a task that resolves to the final exit outcome.
+- [`Flow.toTaskResult`](./m-flow-totaskresult.md): Executes a flow and returns a task that resolves to a standard result.
+- [`Flow.toTaskWithToken`](./m-flow-totaskwithtoken.md): Executes a flow and returns a task that resolves to the final exit outcome with an explicit cancellation token.
+- [`Flow.toTaskResultWithToken`](./m-flow-totaskresultwithtoken.md): Executes a flow and returns a task that resolves to a standard result with an explicit cancellation token.
+- [`Flow.toValueTaskResult`](./m-flow-tovaluetaskresult.md): Executes a flow and returns a value task that resolves to a standard result.
+- [`Flow.toValueTaskResultWithToken`](./m-flow-tovaluetaskresultwithtoken.md): Executes a flow and returns a value task that resolves to a standard result with an explicit cancellation token.
+- [`Flow.toResult`](./m-flow-toresult.md): Executes a flow and converts the final <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-exit-2.html">Exit</a> into a standard <a href="https://learn.microsoft.com/dotnet/api/system.result-2">Result</a>.
+
+## Module functions
+
 - [`Flow.ok`](./m-flow-ok.md): Creates a successful synchronous flow.
 - [`Flow.error`](./m-flow-error.md): Creates a failing synchronous flow.
 - [`Flow.succeed`](./m-flow-succeed.md): Alias for <code>ok</code> that reads well in some call sites.
@@ -47,15 +67,6 @@ Note that common extensions such as `Flow.Retry` and `Flow.Repeat` are available
 - [`Flow.delay`](./m-flow-delay.md): Defers flow construction until execution time.
 - [`Flow.traverse`](./m-flow-traverse.md): Transforms a sequence of values into a flow and stops at the first failure.
 - [`Flow.sequence`](./m-flow-sequence.md): Transforms a sequence of flows into a flow of a sequence and stops at the first failure.
-
-## Concurrency
-
-- [`Fiber`](./t-fiber.md): 
- Represents a handle to a running workflow.
- 
-- [`Flow.fork`](./m-flow-fork.md): Starts a flow in a new fiber without waiting for it to complete.
-- [`Flow.join`](./m-flow-join.md): Waits for a fiber to complete and returns its final outcome.
-- [`Flow.interrupt`](./m-flow-interrupt.md): Signals a fiber to stop and waits for it to finish its cleanup.
 
 ## Parallel orchestration
 

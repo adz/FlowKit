@@ -1,5 +1,6 @@
 ---
 title: "Capabilities Console"
+weight: 20
 ---
 
 This page shows the console capability package. `IConsole` is a small app capability for workflows that need standard input or output without depending directly on `System.Console`. Use it at command-line boundaries, examples, and simple interactive tools. Keep business logic typed against the interface, provide `Console.live` only at the edge, and replace it with a test implementation when you need deterministic input or captured output.

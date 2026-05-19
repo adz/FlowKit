@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Core.Clock.fromValue"
 linkTitle: "fromValue"
+weight: 2102
 type: docs
 ---
 

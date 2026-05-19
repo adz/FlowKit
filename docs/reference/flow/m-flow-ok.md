@@ -1,6 +1,7 @@
 ---
 title: "Flow.ok"
 linkTitle: "ok"
+weight: 2300
 ---
 
 Creates a successful synchronous flow.

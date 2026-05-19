@@ -1,6 +1,7 @@
 ---
 title: "TRef.set"
 linkTitle: "set"
+weight: 2102
 ---
 
 Sets the value of the transactional reference within a transaction.

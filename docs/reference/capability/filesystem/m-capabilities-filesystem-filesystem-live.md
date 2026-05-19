@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.FileSystem.FileSystem.live"
 linkTitle: "live"
+weight: 2103
 ---
 
 Creates a live file system backed by <a href="https://learn.microsoft.com/dotnet/api/system.io.file">File</a>.

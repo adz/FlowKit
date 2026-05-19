@@ -1,6 +1,7 @@
 ---
 title: "Validation.traverseIndexed"
 linkTitle: "traverseIndexed"
+weight: 2117
 ---
 
 Maps a sequence into validations while prefixing each item with its index.

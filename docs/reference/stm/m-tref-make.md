@@ -1,6 +1,7 @@
 ---
 title: "TRef.make"
 linkTitle: "make"
+weight: 2100
 ---
 
 Creates a new <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-tref-1.html">TRef</a> with the initial value within an STM transaction.

@@ -1,6 +1,7 @@
 ---
 title: "Capabilities.Core.Guid.live"
 linkTitle: "live"
+weight: 2301
 type: docs
 ---
 

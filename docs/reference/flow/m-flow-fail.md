@@ -1,6 +1,7 @@
 ---
 title: "Flow.fail"
 linkTitle: "fail"
+weight: 2304
 ---
 
 Alias for <code>error</code> that reads well in some call sites.

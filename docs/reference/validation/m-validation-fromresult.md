@@ -1,6 +1,7 @@
 ---
 title: "Validation.fromResult"
 linkTitle: "fromResult"
+weight: 2105
 ---
 
 Lifts a standard <a href="https://learn.microsoft.com/dotnet/api/system.result-2">Result</a> into the <a href="https://adz.github.io/FsFlow/reference/FsFlow/fsflow-validation-2.html">Validation</a> context.

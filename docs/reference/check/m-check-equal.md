@@ -1,6 +1,7 @@
 ---
 title: "Check.equal"
 linkTitle: "equal"
+weight: 2142
 ---
 
 Returns success when the values are equal.

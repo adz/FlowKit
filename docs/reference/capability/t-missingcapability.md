@@ -1,6 +1,7 @@
 ---
 title: "MissingCapability"
 linkTitle: "MissingCapability"
+weight: 1200
 ---
 
 Describes a missing service-provider capability.
@@ -10,4 +11,10 @@ Describes a missing service-provider capability.
 <div class="fsdocs-usage">
 <code>type MissingCapability</code>
 </div>
+
+## Record Fields
+
+| Field | Description |
+| --- | --- |
+| `CapabilityType` |  |
 

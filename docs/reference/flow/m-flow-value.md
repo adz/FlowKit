@@ -1,6 +1,7 @@
 ---
 title: "Flow.value"
 linkTitle: "value"
+weight: 2303
 ---
 
 Alias for <code>ok</code> that reads well in some call sites.

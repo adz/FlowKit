@@ -1,6 +1,7 @@
 ---
 title: "Ref.update"
 linkTitle: "update"
+weight: 2103
 ---
 
 Updates the value of the reference using the supplied function.

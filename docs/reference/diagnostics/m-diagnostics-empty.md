@@ -1,6 +1,7 @@
 ---
 title: "Diagnostics.empty"
 linkTitle: "empty"
+weight: 2100
 ---
 
 Creates an empty diagnostics graph with no errors.
